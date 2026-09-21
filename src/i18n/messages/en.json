@@ -88,5 +88,64 @@
     "checkin": "Review",
     "missed": "Open",
     "sleep": "Sleep"
+  },
+  "toolbar": {
+    "search": "Search or run a command",
+    "newProgramme": "+ New programme",
+    "addClient": "+ Add client",
+    "addClientHint": "“Add client” sends an invite code and waits for their onboarding"
+  },
+  "detail": {
+    "pickClient": "Pick a client from the list.",
+    "pushWeek": "Push week",
+    "tabs": {
+      "overview": "Overview",
+      "history": "History",
+      "checkins": "Check-ins",
+      "cycle": "Cycle",
+      "steps": "Steps",
+      "file": "File"
+    },
+    "adherence": "Adherence",
+    "sessions": "Sessions",
+    "sleep": "Sleep",
+    "steps": "Steps",
+    "adherenceSub": "4-wk rolling",
+    "sessionsSub": "this week",
+    "sleepSub": "avg {avg}",
+    "stepsSub": "of {target}",
+    "sleepSeven": "Sleep · 7 nights",
+    "thisWeek": "This week",
+    "noData": "Nothing to show yet",
+    "noSleep": "No nights entered this week.",
+    "noWeek": "No week pushed.",
+    "cycleOn": "Cycle tracking and phase levers are available for this client.",
+    "cycleOff": "Cycle tracking is not enabled for this client.",
+    "logged": "logged",
+    "inProgress": "in progress",
+    "scheduled": "scheduled",
+    "rest": "Rest"
+  },
+  "invite": {
+    "title": "Invite a client",
+    "created": "Code created: {code}",
+    "pending": "{count, plural, =1 {1 invitation pending} other {# invitations pending}}",
+    "expires": "expires {date}"
+  },
+  "prose": {
+    "sleep": "{under, plural, =0 {No nights} =1 {1 night} other {# nights}} under {target}, averaging {avg}.",
+    "sleepNoTarget": "Averaging {avg} over {nights, plural, =1 {1 night entered} other {# nights entered}}.",
+    "lutealTrim": " Luteal load is already trimmed {pct}% — trim a set before you add one.",
+    "intensityLift": " Ovulatory phase: load lifted {pct}%.",
+    "intensityDrop": " Menstrual phase: load dropped {pct}%."
+  },
+  "record": {
+    "title": "Record",
+    "goal": "Goal",
+    "injuries": "Injuries",
+    "equipment": "Equipment",
+    "days": "Days",
+    "sleepTarget": "Sleep target",
+    "none": "—"
   }
 }

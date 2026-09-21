@@ -143,3 +143,61 @@ body {
   outline-offset: 2px;
   border-radius: var(--r1);
 }
+
+/* ---------------------------------------------------------------
+   Atmosphere. The prototype sits on a slow-moving glow rather than
+   a flat fill; without it the glass surfaces have nothing to catch.
+   --------------------------------------------------------------- */
+
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.atmosphere::before,
+.atmosphere::after {
+  content: "";
+  position: absolute;
+  width: 62vw;
+  height: 62vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+}
+
+.atmosphere::before {
+  top: -18vw;
+  left: -10vw;
+  background: radial-gradient(circle, var(--a1), transparent 68%);
+  animation: atmos-a 44s ease-in-out infinite;
+}
+
+.atmosphere::after {
+  right: -16vw;
+  bottom: -22vw;
+  background: radial-gradient(circle, var(--a2), transparent 68%);
+  animation: atmos-b 58s ease-in-out infinite;
+}
+
+@keyframes atmos-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(7vw, 5vh, 0) scale(1.15); }
+}
+
+@keyframes atmos-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50%      { transform: translate3d(-6vw, -5vh, 0) scale(0.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmosphere::before,
+  .atmosphere::after { animation: none; }
+}
+
+/* Metric cards carry a wash of the accent they belong to. */
+.wash-1 { background: color-mix(in oklab, var(--a1) 13%, var(--glass)); }
+.wash-2 { background: color-mix(in oklab, var(--a2) 13%, var(--glass)); }
+.wash-3 { background: color-mix(in oklab, var(--a3) 13%, var(--glass)); }

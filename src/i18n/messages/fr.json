@@ -88,5 +88,64 @@
     "checkin": "Relire",
     "missed": "Voir",
     "sleep": "Sommeil"
+  },
+  "toolbar": {
+    "search": "Rechercher ou lancer une commande",
+    "newProgramme": "+ Nouveau programme",
+    "addClient": "+ Ajouter une cliente",
+    "addClientHint": "« Ajouter une cliente » envoie un code d’invitation et attend son onboarding"
+  },
+  "detail": {
+    "pickClient": "Choisis une cliente dans la liste.",
+    "pushWeek": "Pousser la semaine",
+    "tabs": {
+      "overview": "Vue d’ensemble",
+      "history": "Historique",
+      "checkins": "Bilans",
+      "cycle": "Cycle",
+      "steps": "Pas",
+      "file": "Fiche"
+    },
+    "adherence": "Adhérence",
+    "sessions": "Séances",
+    "sleep": "Sommeil",
+    "steps": "Pas",
+    "adherenceSub": "sur 4 semaines",
+    "sessionsSub": "cette semaine",
+    "sleepSub": "moyenne {avg}",
+    "stepsSub": "sur {target}",
+    "sleepSeven": "Sommeil · 7 nuits",
+    "thisWeek": "Cette semaine",
+    "noData": "Rien à afficher pour l’instant",
+    "noSleep": "Aucune nuit saisie cette semaine.",
+    "noWeek": "Aucune semaine poussée.",
+    "cycleOn": "Le suivi de cycle et les leviers de phase sont disponibles pour cette cliente.",
+    "cycleOff": "Le suivi de cycle n’est pas activé pour cette cliente.",
+    "logged": "faite",
+    "inProgress": "en cours",
+    "scheduled": "prévue",
+    "rest": "Repos"
+  },
+  "invite": {
+    "title": "Inviter une cliente",
+    "created": "Code créé : {code}",
+    "pending": "{count, plural, =1 {1 invitation en attente} other {# invitations en attente}}",
+    "expires": "expire le {date}"
+  },
+  "prose": {
+    "sleep": "{under, plural, =0 {Aucune nuit} =1 {1 nuit} other {# nuits}} sous {target}, moyenne {avg}.",
+    "sleepNoTarget": "Moyenne {avg} sur {nights, plural, =1 {1 nuit saisie} other {# nuits saisies}}.",
+    "lutealTrim": " Charge lutéale déjà réduite de {pct} % — retire une série avant d’en ajouter une.",
+    "intensityLift": " Phase ovulatoire : charge relevée de {pct} %.",
+    "intensityDrop": " Phase menstruelle : charge abaissée de {pct} %."
+  },
+  "record": {
+    "title": "Fiche",
+    "goal": "Objectif",
+    "injuries": "Blessures",
+    "equipment": "Matériel",
+    "days": "Jours",
+    "sleepTarget": "Sommeil visé",
+    "none": "—"
   }
 }
