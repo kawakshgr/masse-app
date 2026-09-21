@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* Fallbacks only when this DC is opened on its own; inside Masse the host's [data-theme] block wins. */
+  :root:not([data-theme]) {
+    --bg:#05121b; --deep:#020a10; --ink:#f3fcfb; --ink2:rgba(243,252,251,.74); --ink3:rgba(243,252,251,.48);
+    --glass:rgba(255,255,255,.09); --glass2:rgba(255,255,255,.17); --edge:rgba(255,255,255,.17); --hair:rgba(255,255,255,.10);
+    --a1:#5fe3d2; --a2:#9c86ff; --a3:#ff8069; --onA:#022b2a;
+    --b1:#0f6f80; --b2:#4b2fa8;
+    --spec:inset 0 1px 0 rgba(255,255,255,.26), inset 0 -1px 0 rgba(0,0,0,.22);
+  }
+  body { margin:0; background:#020a10; font-family:"Instrument Sans", system-ui, sans-serif; }
+  a { color:var(--a1); text-decoration:none; }
+  a:hover { color:var(--a2); }
+  input { font-family: inherit; }
+  @keyframes drift1 { 0%{transform:translate3d(0,0,0) scale(1)} 33%{transform:translate3d(6vw,4vh,0) scale(1.18)} 66%{transform:translate3d(-4vw,8vh,0) scale(.9)} 100%{transform:translate3d(0,0,0) scale(1)} }
+  @keyframes drift2 { 0%{transform:translate3d(0,0,0) scale(1.05)} 40%{transform:translate3d(-8vw,-6vh,0) scale(.86)} 75%{transform:translate3d(5vw,3vh,0) scale(1.2)} 100%{transform:translate3d(0,0,0) scale(1.05)} }
+  @keyframes goo { 0%{border-radius:46% 54% 58% 42%/48% 44% 56% 52%} 25%{border-radius:58% 42% 44% 56%/56% 58% 42% 44%} 50%{border-radius:42% 58% 52% 48%/42% 52% 48% 58%} 75%{border-radius:54% 46% 46% 54%/58% 42% 58% 42%} 100%{border-radius:46% 54% 58% 42%/48% 44% 56% 52%} }
+  @keyframes spin { to { transform:rotate(360deg) } }
+  @keyframes onbrise { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+  /* Tablet: same flow, one font-size step up, copy and controls side by side. */
+  [data-onb="ipad"] { font-size:19px; }
+  /* Inline styles win on specificity, so the tablet overrides have to shout. */
+  [data-onb="ipad"] [data-onb-pad] { padding:40px 56px 34px !important; gap:20px !important; }
+  [data-onb="ipad"] [data-onb-cols] { display:grid !important; grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr); gap:44px !important; align-items:start; align-content:center; }
+  [data-onb="ipad"] [data-onb-hero] { width:156px !important; height:156px !important; align-self:flex-start !important; margin:0 0 6px !important; }
+  [data-onb="ipad"] [data-onb-cta] { max-width:660px; align-self:center; width:100%; }
+  [data-onb="ipad"] [data-onb-chips] { max-width:620px; }
+</style>
+</helmet>
+
+<div data-onb="{{ device }}" style="height:100%; display:flex; flex-direction:column; background:var(--deep); color:var(--ink); position:relative; overflow:hidden;">
+
+  <div style="position:absolute; inset:0; pointer-events:none; filter:blur(48px); opacity:.6;">
+    <div style="position:absolute; top:-8%; left:-14%; width:72%; height:36%; background:var(--b1); border-radius:50%; animation:drift1 24s ease-in-out infinite;"></div>
+    <div style="position:absolute; bottom:4%; right:-18%; width:68%; height:32%; background:var(--b2); border-radius:50%; animation:drift2 29s ease-in-out infinite;"></div>
+  </div>
+
+  <div data-onb-pad style="position:relative; z-index:2; flex:1; min-height:0; display:flex; flex-direction:column; gap:14px; padding:58px 18px 22px; box-sizing:border-box;">
+
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="flex:1; min-width:0; display:flex; gap:3px;">
+        <sc-for list="{{ pips }}" as="pp" hint-placeholder-count="9">
+          <div style="flex:1; height:4px; border-radius:999px; background: {{ pp.bg }}; transition:background .4s;"></div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ canSkip }}" hint-placeholder-val="{{ true }}">
+        <span onClick="{{ skip }}" style="flex:none; font-size:.66em; font-weight:650; color:var(--ink3); cursor:pointer;">Skip setup</span>
+      </sc-if>
+    </div>
+
+    <div data-onb-cols style="flex:1; min-height:0; overflow:auto; display:flex; flex-direction:column; justify-content:center; gap:15px; padding-top:6px;">
+
+      <div style="display:flex; flex-direction:column; gap:15px; min-width:0;">
+      <sc-if value="{{ isHero }}" hint-placeholder-val="{{ true }}">
+        <div data-onb-hero style="align-self:center; position:relative; width:108px; height:108px; display:flex; align-items:center; justify-content:center; margin:6px 0 2px;">
+          <div style="position:absolute; inset:0; background:linear-gradient(140deg,var(--a1),var(--a2)); animation:goo 7s ease-in-out infinite; opacity:.95;"></div>
+          <div style="position:absolute; inset:0; border-radius:50%; border:2px solid var(--edge); animation: {{ ringAnim }};"></div>
+          <span style="position:relative; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:30px; color:var(--onA);">{{ glyph }}</span>
+        </div>
+      </sc-if>
+
+      <div style="display:flex; flex-direction:column; gap:7px;">
+        <span style="font-size:.6em; letter-spacing:.16em; text-transform:uppercase; color:var(--ink3);">{{ kicker }}</span>
+        <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:1.55em; letter-spacing:-.03em; line-height:1.12; text-wrap:pretty;">{{ title }}</span>
+        <span style="font-size:.8em; color:var(--ink2); line-height:1.5; text-wrap:pretty;">{{ body }}</span>
+      </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:15px; min-width:0;">
+      <sc-if value="{{ isCode }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <span style="font-size:.62em; letter-spacing:.16em; text-transform:uppercase; color:var(--ink2);">your invite code</span>
+          <input value="{{ code }}" onChange="{{ setCode }}" placeholder="{{ codePlaceholder }}" style="width:100%; box-sizing:border-box; min-height:52px; padding:0 16px; border-radius:18px; background:var(--glass); border:1px solid {{ codeEdge }}; color:var(--ink); font-family:inherit; font-size:.92em; font-weight:700; letter-spacing:.08em; outline:none;" />
+          <span style="font-size:.7em; color: {{ codeNoteInk }}; line-height:1.45;">{{ codeNote }}</span>
+          <sc-if value="{{ codeHasFill }}" hint-placeholder-val="{{ true }}">
+            <div onClick="{{ codeFill }}" style="align-self:flex-start; margin-top:2px; min-height:38px; display:flex; align-items:center; gap:7px; padding:0 13px; border-radius:999px; background:var(--glass2); border:1px solid var(--edge); font-size:.68em; font-weight:650; color:var(--ink2); cursor:pointer;" style-active="transform:scale(.96)">
+              <span style="font-size:.9em;">⧉</span>
+              <span>Paste from the email</span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isOptions }}" hint-placeholder-val="{{ false }}">
+        <div data-onb-chips style="display:flex; flex-wrap:wrap; gap:8px;">
+          <sc-for list="{{ options }}" as="op" hint-placeholder-count="4">
+            <div onClick="{{ op.pick }}" style="min-height:44px; display:flex; align-items:center; padding:0 15px; border-radius: {{ op.radius }}; background: {{ op.bg }}; color: {{ op.ink }}; border:1px solid {{ op.edge }}; box-shadow: {{ op.shadow }}; font-size:.76em; font-weight:650; cursor:pointer; transition:all .28s cubic-bezier(.2,.9,.2,1);" style-active="transform:scale(.95)">{{ op.label }}</div>
+          </sc-for>
+        </div>
+        <span style="font-size:.68em; color:var(--ink3); line-height:1.45;">{{ optionNote }}</span>
+      </sc-if>
+
+      <sc-if value="{{ isIntake }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <sc-for list="{{ steppers }}" as="sp" hint-placeholder-count="3">
+            <div style="display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:22px; background:var(--glass); border:1px solid var(--edge);">
+              <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:.6em; letter-spacing:.14em; text-transform:uppercase; color:var(--ink2);">{{ sp.label }}</span>
+                <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:1.15em; letter-spacing:-.02em; font-variant-numeric:tabular-nums;">{{ sp.value }}</span>
+              </div>
+              <div onClick="{{ sp.dec }}" style="width:44px; height:44px; flex:none; border-radius:15px; background:var(--glass2); border:1px solid var(--edge); display:flex; align-items:center; justify-content:center; font-size:1.05em; cursor:pointer;" style-active="transform:scale(.92)">−</div>
+              <div onClick="{{ sp.inc }}" style="width:44px; height:44px; flex:none; border-radius:15px; background:var(--glass2); border:1px solid var(--edge); display:flex; align-items:center; justify-content:center; font-size:1.05em; cursor:pointer;" style-active="transform:scale(.92)">+</div>
+            </div>
+          </sc-for>
+          <span style="font-size:.62em; letter-spacing:.16em; text-transform:uppercase; color:var(--ink2); padding-top:3px;">anything to work around</span>
+          <div style="display:flex; flex-wrap:wrap; gap:7px;">
+            <sc-for list="{{ injuries }}" as="ij" hint-placeholder-count="5">
+              <div onClick="{{ ij.pick }}" style="min-height:44px; display:flex; align-items:center; padding:0 14px; border-radius: {{ ij.radius }}; background: {{ ij.bg }}; color: {{ ij.ink }}; border:1px solid {{ ij.edge }}; font-size:.74em; font-weight:650; cursor:pointer;" style-active="transform:scale(.95)">{{ ij.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSleep }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:12px; padding:16px; border-radius:26px; background:var(--glass); border:1px solid var(--edge);">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px;">
+            <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:1.7em; letter-spacing:-.03em; font-variant-numeric:tabular-nums;">{{ sleepLabel }}</span>
+            <span style="font-size:.66em; letter-spacing:.14em; text-transform:uppercase; color:var(--ink2);">on a normal night</span>
+          </div>
+          <input type="range" min="4" max="10" step="0.25" value="{{ sleep }}" onChange="{{ setSleep }}" style="width:100%; accent-color:var(--a1); height:30px;" />
+          <span style="font-size:.72em; color:var(--ink2); line-height:1.5;">{{ sleepNote }}</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isCycle }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <sc-for list="{{ cycleToggles }}" as="ct" hint-placeholder-count="2">
+            <div onClick="{{ ct.toggle }}" style="display:flex; align-items:center; gap:12px; padding:13px 14px; border-radius:22px; background:var(--glass); border:1px solid var(--edge); cursor:pointer;">
+              <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;">
+                <span style="font-size:.82em; font-weight:700; line-height:1.3;">{{ ct.label }}</span>
+                <span style="font-size:.7em; color:var(--ink2); line-height:1.45;">{{ ct.sub }}</span>
+              </div>
+              <div style="width:46px; height:28px; flex:none; border-radius:999px; background: {{ ct.track }}; border:1px solid var(--edge); position:relative; transition:background .3s;">
+                <div style="position:absolute; top:3px; left: {{ ct.knob }}; width:20px; height:20px; border-radius:50%; background:var(--deep); transition:left .3s cubic-bezier(.4,1.5,.3,1);"></div>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ track }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; flex-direction:column; gap:10px; padding:15px; border-radius:24px; background:var(--glass); border:1px solid var(--edge);">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px;">
+                <span style="font-size:.8em; font-weight:700;">{{ dayLabel }}</span>
+                <span style="font-size:.68em; color:var(--ink2);">{{ phaseName }}</span>
+              </div>
+              <input type="range" min="1" max="35" step="1" value="{{ day }}" onChange="{{ setDay }}" style="width:100%; accent-color:var(--a1); height:30px;" />
+              <span style="font-size:.72em; color:var(--ink2); line-height:1.5;">{{ phaseNote }}</span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPerms }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <sc-for list="{{ perms }}" as="pm" hint-placeholder-count="2">
+            <div onClick="{{ pm.toggle }}" style="display:flex; align-items:center; gap:12px; padding:13px 14px; border-radius:22px; background:var(--glass); border:1px solid var(--edge); cursor:pointer;">
+              <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;">
+                <span style="font-size:.82em; font-weight:700; line-height:1.3;">{{ pm.label }}</span>
+                <span style="font-size:.7em; color:var(--ink2); line-height:1.45;">{{ pm.sub }}</span>
+              </div>
+              <div style="width:46px; height:28px; flex:none; border-radius:999px; background: {{ pm.track }}; border:1px solid var(--edge); position:relative; transition:background .3s;">
+                <div style="position:absolute; top:3px; left: {{ pm.knob }}; width:20px; height:20px; border-radius:50%; background:var(--deep); transition:left .3s cubic-bezier(.4,1.5,.3,1);"></div>
+              </div>
+            </div>
+          </sc-for>
+          <span style="font-size:.68em; color:var(--ink3); line-height:1.5;">{{ permNote }}</span>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isImport }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <sc-for list="{{ imported }}" as="iw" hint-placeholder-count="3">
+            <div style="display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:18px; background:var(--glass); border:1px solid var(--edge); animation:rise .4s cubic-bezier(.2,.9,.2,1);">
+              <span style="width:8px; height:8px; flex:none; border-radius:50%; background:var(--a1);"></span>
+              <span style="flex:1; min-width:0; font-size:.78em; font-weight:650;">{{ iw.name }}</span>
+              <span style="flex:none; font-size:.7em; color:var(--ink2);">{{ iw.when }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <sc-for list="{{ summary }}" as="sm" hint-placeholder-count="5">
+            <div style="padding:13px 15px; border-radius:22px; background:linear-gradient(150deg,var(--glass2),var(--glass)); border:1px solid var(--edge); display:flex; flex-direction:column; gap:3px;">
+              <span style="font-size:.6em; letter-spacing:.14em; text-transform:uppercase; color:var(--ink2);">{{ sm.label }}</span>
+              <span style="font-size:.84em; font-weight:700; line-height:1.4;">{{ sm.value }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      </div>
+
+    </div>
+
+    <div data-onb-cta style="flex:none; display:flex; align-items:center; gap:9px;">
+      <sc-if value="{{ canBack }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ back }}" style="width:52px; height:52px; flex:none; border-radius: {{ ctaRadius }}; background:var(--glass2); border:1px solid var(--edge); display:flex; align-items:center; justify-content:center; font-size:1em; cursor:pointer;" style-active="transform:scale(.94)">‹</div>
+      </sc-if>
+      <div onClick="{{ next }}" style="flex:1; min-height:52px; display:flex; align-items:center; justify-content:center; border-radius: {{ ctaRadius }}; background:linear-gradient(120deg,var(--a1),var(--a2)); color:var(--onA); font-weight:700; font-size:.92em; letter-spacing: {{ ctaTrack }}; text-transform: {{ ctaCase }}; cursor:pointer; box-shadow:var(--lift); opacity: {{ ctaOp }}; transition:opacity .3s;" style-active="transform:scale(.97)">{{ cta }}</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:402,&quot;height&quot;:874},&quot;platform&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ios&quot;,&quot;android&quot;,&quot;ipad&quot;],&quot;default&quot;:&quot;ios&quot;,&quot;tsType&quot;:&quot;'ios' | 'android' | 'ipad'&quot;,&quot;section&quot;:&quot;Platform&quot;},&quot;onDone&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(answers: object) =&gt; void&quot;},&quot;onSkip&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onPaint&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;codes&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;{ code: string; state: 'sent' | 'opened' | 'joined' | 'expired' | 'revoked'; who?: string }[]&quot;,&quot;section&quot;:&quot;Coach&quot;},&quot;onCodeOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(code: string) =&gt; void&quot;},&quot;coachFirst&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lucie&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Coach&quot;},&quot;coachName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Lucie Merlet&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Coach&quot;},&quot;coachThey&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;she&quot;,&quot;he&quot;],&quot;default&quot;:&quot;she&quot;,&quot;tsType&quot;:&quot;'she' | 'he'&quot;,&quot;section&quot;:&quot;Coach&quot;},&quot;askCycle&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Coach&quot;}}">
+class Component extends DCLogic {
+  state = {
+    step:0, code:'', goal:'Get stronger', days:['Mon', 'Tue', 'Thu', 'Sat'], gear:['Full gym'],
+    h:168, w:67.1, born:1994, injury:['Knee'], sleep:6.5,
+    track:true, share:true, day:17, notif:true, health:true,
+  };
+
+  // The step index is tracked on the instance: the hook receives prevProps only.
+  componentDidUpdate() {
+    // The host paints French over the DOM after its own renders; our steps are invisible to it.
+    if (this.props.onPaint) this.props.onPaint();
+    // A recognised code is an event on the coach's side too: their row flips to Opened.
+    const chk = this.codeCheck();
+    if (chk.ok && chk.hit && this.reported !== chk.hit.code) {
+      this.reported = chk.hit.code;
+      if (this.props.onCodeOpen) this.props.onCodeOpen(chk.hit.code);
+    }
+    const step = this.state.step;
+    if (step === this.lastStep) return;
+    this.lastStep = step;
+    clearTimeout(this.imp);
+    const cur = this.steps()[step];
+    if (cur && cur.id === 'import') {
+      this.imp = setTimeout(() => this.setState(p => ({ step:p.step + 1 })), 2400);
+    }
+  }
+
+  componentDidMount() { if (this.props.onPaint) this.props.onPaint(); }
+  componentWillUnmount() { clearTimeout(this.imp); }
+
+  // The coach is one person — she or he — set by whoever sent the invite.
+  co() {
+    const he = this.props.coachThey === 'he';
+    return { first:this.props.coachFirst || 'Lucie', they:he ? 'he' : 'she',
+      them:he ? 'him' : 'her', their:he ? 'his' : 'her',
+      writes:'writes', sees:'sees', puts:'puts', can:'can' };
+  }
+  askCycle() { return this.props.askCycle !== false; }
+  // The code is not a formality: it is checked against the codes the coach actually issued,
+  // so a revoked or spent one fails here the way it would fail in the real front door.
+  codeList() { return Array.isArray(this.props.codes) ? this.props.codes : []; }
+  pendingCode() { return this.codeList().filter(c => c.state === 'sent' || c.state === 'opened')[0]; }
+  typed() { return (this.state.code || '').toUpperCase().replace(/\s+/g, ''); }
+  codeSample() {
+    const p = this.pendingCode();
+    if (p) return p.code;
+    const parts = (this.props.coachName || 'Lucie Merlet').trim().split(/\s+/);
+    return (parts[parts.length - 1] || 'MERLET').toUpperCase() + '-MAYA-27';
+  }
+  codeCheck() {
+    const t = this.typed(), list = this.codeList();
+    if (t.length < 4) return { ok:false, kind:'empty' };
+    if (!list.length) return { ok:true, kind:'ok' };
+    const hit = list.filter(c => (c.code || '').toUpperCase() === t)[0];
+    if (!hit) return { ok:false, kind:'unknown' };
+    if (hit.state === 'revoked') return { ok:false, kind:'revoked', hit };
+    if (hit.state === 'expired') return { ok:false, kind:'expired', hit };
+    if (hit.state === 'joined') return { ok:false, kind:'used', hit };
+    return { ok:true, kind:'ok', hit };
+  }
+  android() { return this.props.platform === 'android'; }
+  tablet() { return this.props.platform === 'ipad'; }
+
+  steps() {
+    const a = this.android(), c = this.co();
+    const list = [
+      { id:'code', kicker:'invited by your coach', title:c.first + ' coaches here', hero:true, glyph:'~', cta:'Get started',
+        body:'Two minutes of setup and your first week is written before you put the phone down.' },
+      { id:'goal', title:'What are you here for?', cta:'Next',
+        body:c.first + ' still writes the program — this only sets the emphasis ' + c.they + ' starts from.' },
+      { id:'days', title:'Which days can you train?', cta:'Next',
+        body:'Pick the days you can realistically show up. Four is plenty; three is a real plan.' },
+      { id:'gear', title:'What do you lift with?', cta:'Next',
+        body:'Everything you can get to in a normal week — ' + c.first + ' programs to the gap, not the ideal.' },
+      { id:'intake', title:'A few numbers', cta:'Next',
+        body:'Only the ones that change the program. All of it is editable later in settings.' },
+      { id:'sleep', title:'How much do you actually sleep?', cta:'Next',
+        body:'Not the goal — the honest average. It sets the recovery baseline your sleep card scores against.' },
+      { id:'cycle', title:'Train with your cycle?', cta:'Next',
+        body:'Phase-aware training scales load and carbs across the month instead of guessing. Off is fine — you can switch it on any time.' },
+      { id:'perms', title:'What Masse may use', cta:a ? 'Continue' : 'Next',
+        body:a ? 'Two switches. Android asks again in its own dialog, and either can go off in settings.'
+          : 'Two switches. iOS asks again in its own sheet, and either can go off in settings.' },
+      { id:'import', title:'Pulling your training history', hero:true, glyph:'~', spin:true, cta:'Almost there',
+        body:'Reading 18 months of sessions, PRs and bodyweight entries from Hevy so week 1 starts from what you actually lifted.' },
+      { id:'done', kicker:'you are set up', title:'Week 1 is ready', cta:'Start week 1',
+        body:c.first + ' reviews it tonight and adjusts before Monday. Nothing here is locked in.' },
+    ].filter(x => x.id !== 'cycle' || this.askCycle());
+    const numbered = list.filter(x => !x.kicker).length;
+    let n = 0;
+    return list.map(x => x.kicker ? x : Object.assign({}, x, { kicker:'step ' + (++n) + ' of ' + numbered }));
+  }
+
+  phaseFor(d) {
+    return d <= 5 ? ['Menstrual', 'Load −10%, extra carbs around training. Week one is for showing up.']
+      : d <= 13 ? ['Follicular', 'The window for heavy top sets. Load +5% while it lasts.']
+      : d <= 16 ? ['Ovulatory', 'Peak output. ' + this.co().first + ' ' + this.co().puts + ' PR attempts here when ' + this.co().they + ' can.']
+      : ['Luteal', 'Sets trimmed before intensity, carbs up 25g. Sleep matters more this week.'];
+  }
+
+  chipStyle(on) {
+    const a = this.android();
+    return {
+      radius:a ? '10px' : '999px',
+      bg:on ? (a ? 'color-mix(in oklab, var(--a1) 26%, var(--deep))' : 'linear-gradient(120deg,var(--a1),var(--a2))') : 'var(--glass)',
+      ink:on ? (a ? 'var(--ink)' : 'var(--onA)') : 'var(--ink2)',
+      edge:on ? (a ? 'var(--a1)' : 'transparent') : 'var(--edge)',
+      shadow:on && !a ? 'var(--spec)' : 'none',
+    };
+  }
+
+  pickSet(key, label, multi, exclusive) {
+    return () => this.setState(p => {
+      if (!multi) return { [key]:label };
+      if (exclusive && label === exclusive) return { [key]:p[key].indexOf(exclusive) >= 0 ? [] : [exclusive] };
+      const base = exclusive ? p[key].filter(x => x !== exclusive) : p[key];
+      return { [key]:base.indexOf(label) >= 0 ? base.filter(x => x !== label) : base.concat(label) };
+    });
+  }
+
+  optionSet(cur) {
+    const s = this.state;
+    if (cur.id === 'goal') return { items:['Get stronger', 'Build muscle', 'Feel better through my cycle', 'Lean out'], on:l => s.goal === l, key:'goal', multi:false,
+      note:'One focus to start. ' + this.co().first + ' can change the emphasis mid-block without rebuilding anything.' };
+    if (cur.id === 'days') return { items:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], on:l => s.days.indexOf(l) >= 0, key:'days', multi:true,
+      note:s.days.length ? s.days.length + ' sessions a week · ' + s.days.join(' · ') : 'Pick at least one day to continue.' };
+    if (cur.id === 'gear') return { items:['Full gym', 'Home rack', 'Dumbbells', 'Kettlebells', 'Bands', 'Bodyweight only'], on:l => s.gear.indexOf(l) >= 0, key:'gear', multi:true,
+      note:'Travel weeks get a swapped version of the same week — you never lose the block.' };
+    return null;
+  }
+
+  stepper(label, value, dec, inc) { return { label, value, dec, inc }; }
+
+  blocked(cur) {
+    const s = this.state;
+    if (cur.id === 'code') return !this.codeCheck().ok;
+    if (cur.id === 'days') return s.days.length === 0;
+    return false;
+  }
+
+  next(cur, last) {
+    return () => {
+      if (this.blocked(cur)) return;
+      if (this.state.step >= last) {
+        const s = this.state;
+        if (this.props.onDone) this.props.onDone({
+          goal:s.goal, days:s.days, gear:s.gear, h:s.h, w:s.w, born:s.born, injury:s.injury,
+          sleep:s.sleep, share:s.share, day:s.day, notif:s.notif, health:s.health,
+          track:this.askCycle() ? s.track : false, code:this.typed(),
+        });
+        return;
+      }
+      this.setState(p => ({ step:p.step + 1 }));
+    };
+  }
+
+  renderVals() {
+    const s = this.state, a = this.android(), c = this.co();
+    const steps = this.steps(), last = steps.length - 1;
+    const chk = this.codeCheck();
+    const cur = steps[Math.min(s.step, last)];
+    const os = this.optionSet(cur);
+    const ph = this.phaseFor(s.day);
+    const healthName = a ? 'Health Connect' : 'Apple Health';
+
+    return {
+      pips:steps.map((x, i) => ({ bg:i <= s.step ? 'linear-gradient(90deg,var(--a1),var(--a2))' : 'var(--hair)' })),
+      canSkip:cur.id !== 'done' && cur.id !== 'import',
+      skip:() => { if (this.props.onSkip) this.props.onSkip(); },
+      kicker:cur.kicker, title:cur.title, body:cur.body,
+      isHero:!!cur.hero, glyph:cur.glyph || '~',
+      ringAnim:cur.spin ? 'spin 3s linear infinite' : 'none',
+
+      isCode:cur.id === 'code',
+      code:s.code,
+      setCode:e => this.setState({ code:e.target.value.toUpperCase() }),
+      codePlaceholder:this.codeSample(),
+      codeEdge:chk.ok ? 'var(--a1)' : chk.kind === 'empty' ? 'var(--edge)' : 'var(--a3)',
+      codeNoteInk:chk.ok ? 'var(--a1)' : chk.kind === 'empty' ? 'var(--ink2)' : 'var(--a3)',
+      codeNote:{
+        ok:'Code recognised — ' + (this.props.coachName || 'Lucie Merlet') + ', strength and cycle coaching, Paris.',
+        empty:'It is in the welcome email from your coach. Try ' + this.codeSample() + '.',
+        unknown:'No invite matches that code. Codes look like ' + this.codeSample() + '.',
+        revoked:c.first + ' turned this code off. Ask ' + c.them + ' for a new one.',
+        expired:'This code expired — they die 14 days after they are issued. Ask ' + c.first + ' to re-send.',
+        used:'Already claimed. A code works once, so ask ' + c.first + ' for a fresh one.',
+      }[chk.kind],
+      codeHasFill:!!this.pendingCode() && !chk.ok,
+      codeFill:() => this.setState({ code:this.codeSample() }),
+
+      isOptions:!!os,
+      options:os ? os.items.map(l => {
+        const st = this.chipStyle(os.on(l));
+        return { label:l, radius:st.radius, bg:st.bg, ink:st.ink, edge:st.edge, shadow:st.shadow,
+          pick:this.pickSet(os.key, l, os.multi, l === 'Bodyweight only' ? 'Bodyweight only' : null) };
+      }) : [],
+      optionNote:os ? os.note : '',
+
+      isIntake:cur.id === 'intake',
+      steppers:[
+        this.stepper('height', s.h + ' cm',
+          () => this.setState(p => ({ h:Math.max(140, p.h - 1) })),
+          () => this.setState(p => ({ h:Math.min(210, p.h + 1) }))),
+        this.stepper('bodyweight this morning', s.w.toFixed(1) + ' kg',
+          () => this.setState(p => ({ w:Math.max(35, Math.round((p.w - 0.1) * 10) / 10) })),
+          () => this.setState(p => ({ w:Math.min(200, Math.round((p.w + 0.1) * 10) / 10) }))),
+        this.stepper('born', String(s.born),
+          () => this.setState(p => ({ born:Math.max(1940, p.born - 1) })),
+          () => this.setState(p => ({ born:Math.min(2010, p.born + 1) }))),
+      ],
+      injuries:['Knee', 'Shoulder', 'Lower back', 'Wrist', 'Nothing'].map(l => {
+        const st = this.chipStyle(s.injury.indexOf(l) >= 0);
+        return { label:l, radius:st.radius, bg:st.bg, ink:st.ink, edge:st.edge,
+          pick:this.pickSet('injury', l, true, 'Nothing') };
+      }),
+
+      isSleep:cur.id === 'sleep',
+      sleep:s.sleep,
+      sleepLabel:Math.floor(s.sleep) + 'h' + String(Math.round((s.sleep % 1) * 60)).padStart(2, '0'),
+      setSleep:e => this.setState({ sleep:parseFloat(e.target.value) }),
+      sleepNote:s.sleep >= 7.5
+        ? 'Comfortable. Your sleep card will only speak up when a week drops below this.'
+        : s.sleep >= 6.5
+          ? 'Workable. ' + c.first + ' trims volume rather than intensity on the weeks you fall short.'
+          : 'Low. Week 1 starts one set lighter on the main lifts — recovery first, load second.',
+
+      isCycle:cur.id === 'cycle',
+      track:s.track,
+      cycleToggles:[
+        { k:'track', label:'Track my cycle', sub:'Log your period and Masse adapts training and food across the month.' },
+        { k:'share', label:'Share my phase with ' + c.first, sub:c.they.charAt(0).toUpperCase() + c.they.slice(1) + ' ' + c.sees + ' the phase and the adapted targets — never your symptom notes.' },
+      ].map(t => ({
+        label:t.label, sub:t.sub,
+        track:s[t.k] ? 'linear-gradient(120deg,var(--a1),var(--a2))' : 'var(--hair)',
+        knob:s[t.k] ? '22px' : '3px',
+        toggle:() => this.setState(p => ({ [t.k]:!p[t.k] })),
+      })),
+      day:s.day,
+      dayLabel:'Day ' + s.day + ' today',
+      phaseName:ph[0],
+      phaseNote:ph[1],
+      setDay:e => this.setState({ day:parseInt(e.target.value, 10) }),
+
+      isPerms:cur.id === 'perms',
+      perms:[
+        { k:'notif', label:'Session and check-in reminders',
+          sub:'One push on session mornings, one on Sunday for the check-in. Nothing else, ever.' },
+        { k:'health', label:'Read steps, sleep and workouts',
+          sub:'Read-only from ' + healthName + '. Masse never writes back and reads nothing else.' },
+      ].map(t => ({
+        label:t.label, sub:t.sub,
+        track:s[t.k] ? 'linear-gradient(120deg,var(--a1),var(--a2))' : 'var(--hair)',
+        knob:s[t.k] ? '22px' : '3px',
+        toggle:() => this.setState(p => ({ [t.k]:!p[t.k] })),
+      })),
+      permNote:a ? 'Android shows its own permission dialog next — declining it leaves the rest of the app working.'
+        : 'iOS shows its own permission sheet next — declining it leaves the rest of the app working.',
+
+      isImport:cur.id === 'import',
+      imported:[
+        { name:'Lower — Hinge Focus', when:'2 days ago' },
+        { name:'Upper Push A', when:'4 days ago' },
+        { name:'Deadlift 100 kg × 3 · PR', when:'3 weeks ago' },
+      ],
+
+      isDone:cur.id === 'done',
+      summary:[
+        { label:'focus', value:s.goal },
+        { label:'week shape', value:(s.days.length || 0) + ' sessions · ' + (s.days.length ? s.days.join(' · ') : 'none picked') },
+        { label:'equipment', value:s.gear.length ? s.gear.join(' · ') : 'bodyweight only' },
+        { label:'starting point', value:s.h + ' cm · ' + s.w.toFixed(1) + ' kg · ' + (s.injury.length && s.injury.indexOf('Nothing') < 0 ? s.injury.join(' and ').toLowerCase() + ' to work around' : 'nothing to work around') },
+        { label:'cycle', value:s.track ? ph[0].toLowerCase() + ' · day ' + s.day + (s.share ? ' · shared with ' + c.first : ' · private to you') : 'not tracked — targets stay flat all month' },
+        { label:'monday, week 1', value:'Lower — hinge focus' + (s.track ? ', ' + ph[0].toLowerCase() + '-adjusted' : '') + ' · sleep target ' + Math.floor(s.sleep) + 'h' + String(Math.round((s.sleep % 1) * 60)).padStart(2, '0') },
+      ],
+
+      device:this.props.platform || 'ios',
+      canBack:s.step > 0 && cur.id !== 'import',
+      back:() => this.setState(p => ({ step:Math.max(0, p.step - 1) })),
+      cta:cur.cta,
+      ctaOp:this.blocked(cur) ? 0.45 : 1,
+      ctaRadius:a ? '16px' : '999px',
+      ctaTrack:a ? '.02em' : 'normal',
+      ctaCase:a ? 'none' : 'none',
+      next:this.next(cur, last),
+    };
+  }
+}
+</script>
+</body>
+</html>

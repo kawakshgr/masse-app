@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  doc-page:not(:defined) { visibility:hidden; }
+  body { margin:0; font-family:"Instrument Sans", system-ui, sans-serif; }
+  a { color:#0f766e; }
+  a:hover { color:#5b21b6; }
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+
+<doc-page size="a4" margin="0.8in">
+
+  <div style="display:flex; align-items:baseline; gap:12px; padding-bottom:10px; border-bottom:2px solid #0f172a;">
+    <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:15pt; letter-spacing:-.02em; color:#0f172a;">Masse</span>
+    <span style="font-size:9.5pt; letter-spacing:.14em; text-transform:uppercase; color:#64748b;">Note de cadrage · v1 web</span>
+  </div>
+
+  <h1 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:26pt; letter-spacing:-.03em; line-height:1.08; color:#0f172a; margin:26px 0 14px;">Ce qu'il faut décider avant d'écrire une ligne de code</h1>
+
+  <p style="font-size:11.5pt; line-height:1.6; color:#334155; margin:0 0 22px;">Tu as coché huit briques sur neuf, avec un budget « le moins cher possible » et aucun développeur identifié. Ces trois réponses ne peuvent pas coexister. Cette note dit laquelle céder — et pourquoi ce n'est pas celle qu'on croit.</p>
+
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:15pt; letter-spacing:-.02em; color:#0f172a; margin:30px 0 10px; break-after:avoid;">1. Le périmètre : cinq briques, pas huit</h2>
+
+  <p style="font-size:11pt; line-height:1.6; color:#334155; margin:0 0 14px;">Le prototype montre un produit fini. Une v1 n'est pas un produit fini, c'est <strong>la plus petite boucle qu'une coach peut faire tourner une semaine entière sans sortir de l'app</strong>. Voici mon découpage, avec le raisonnement de coupe.</p>
+
+  <table style="width:100%; border-collapse:collapse; font-size:10.5pt; margin:0 0 8px;">
+    <thead>
+      <tr>
+        <th style="text-align:left; padding:8px 10px 8px 0; border-bottom:1.5px solid #0f172a; font-size:9pt; letter-spacing:.1em; text-transform:uppercase; color:#475569;">Brique</th>
+        <th style="text-align:left; padding:8px 10px; border-bottom:1.5px solid #0f172a; font-size:9pt; letter-spacing:.1em; text-transform:uppercase; color:#475569; width:64px;">v1</th>
+        <th style="text-align:left; padding:8px 0 8px 10px; border-bottom:1.5px solid #0f172a; font-size:9pt; letter-spacing:.1em; text-transform:uppercase; color:#475569;">Pourquoi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">Inscription par code</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#0f766e;">Oui</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">C'est aussi ton système d'authentification. Gratuit à construire, tu ne peux pas t'en passer.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">Programmes</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#0f766e;">Oui</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Le métier de la coach. Sans ça il n'y a pas de produit.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">Séances loggées</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#0f766e;">Oui</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Sans le retour, la coach écrit à l'aveugle et l'app ne vaut pas le tableur.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">Bilan hebdo</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#0f766e;">Oui</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Quatre questions et un poids. C'est ce qui ferme la boucle de la semaine, pour un coût quasi nul.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">Suivi de cycle</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#0f766e;">Oui</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Contre-intuitif, mais : c'est ton seul vrai différenciateur, et réduit à l'essentiel (dates de règles → phase → coefficient de charge) c'est une journée de travail. Pas les notes de symptômes, pas les graphiques.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#94a3b8;">Messagerie</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#b45309;">Non</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">La plus trompeuse. Un fil de discussion crédible demande temps réel, états de lecture, notifications push, envoi de vidéo. C'est un mois de travail pour faire moins bien que WhatsApp, que tes coachs ont déjà. On laisse WhatsApp à côté en v1 — et on l'assume comme un choix.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#94a3b8;">Nutrition</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#b45309;">Non</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Une base alimentaire, des portions, des macros : c'est un deuxième produit. En v1 la coach écrit ses cibles en texte dans le programme.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#94a3b8;">Facturation</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:700; color:#b45309;">Non</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">À l'échelle d'une dizaine de coachs — l'ordre de grandeur que tu visais dans le keynote, à confirmer — un tableur suffit. Et dès qu'on touche à l'argent des clientes, on ouvre un dossier réglementaire dont tu n'as pas besoin ce trimestre.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:10.5pt; line-height:1.55; color:#475569; margin:14px 0 0; padding:12px 14px; background:#f1f5f9; border-radius:8px; break-inside:avoid;"><strong style="color:#0f172a;">La règle de coupe :</strong> on garde ce qui fait tourner la semaine et ce qui te distingue. On coupe ce qui a son propre modèle de données, sa propre question de prix, ou son propre problème de confiance.</p>
+
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:15pt; letter-spacing:-.02em; color:#0f172a; margin:30px 0 10px; break-after:avoid;">2. Les données de santé : ce qui est défendable</h2>
+
+  <p style="font-size:11pt; line-height:1.6; color:#334155; margin:0 0 14px;">Le cycle menstruel et les symptômes sont des <strong>données concernant la santé</strong> au sens de l'article 9 du RGPD — catégorie particulière, consentement explicite obligatoire, et une responsabilité réelle en cas de fuite. Ce n'est pas un détail d'hébergement : c'est ce qui décide où vit ton serveur.</p>
+
+  <p style="font-size:11pt; line-height:1.6; color:#334155; margin:0 0 12px;">La position que je défends, et qui a le mérite d'être déjà celle que le prototype promet à l'écran :</p>
+
+  <div style="display:flex; flex-direction:column; gap:10px; margin:0 0 16px;">
+    <div style="padding:13px 15px; border-radius:10px; background:#ecfdf8; border:1px solid #99f6e4; break-inside:avoid;">
+      <div style="font-size:11pt; font-weight:700; color:#0f172a; margin-bottom:4px;">Les notes de symptômes ne quittent jamais le téléphone</div>
+      <div style="font-size:10.5pt; line-height:1.55; color:#475569;">Stockage local sur l'appareil de la cliente, jamais envoyé au serveur. Tu ne peux pas perdre ce que tu n'as pas. C'est déjà ce que l'app affiche à la cliente — il faut juste que l'architecture tienne la promesse.</div>
+    </div>
+    <div style="padding:13px 15px; border-radius:10px; background:#ecfdf8; border:1px solid #99f6e4; break-inside:avoid;">
+      <div style="font-size:11pt; font-weight:700; color:#0f172a; margin-bottom:4px;">Les dates de règles, oui — hébergées en Europe</div>
+      <div style="font-size:10.5pt; line-height:1.55; color:#475569;">La phase doit être calculée côté serveur pour ajuster le programme. On stocke des dates, rien d'autre : pas de symptôme, pas d'humeur, pas de douleur. Serveur en Allemagne ou en France, isolation par cliente au niveau de la base.</div>
+    </div>
+    <div style="padding:13px 15px; border-radius:10px; background:#fffbeb; border:1px solid #fde68a; break-inside:avoid;">
+      <div style="font-size:11pt; font-weight:700; color:#0f172a; margin-bottom:4px;">Apple Santé et Health Connect : pas en v1</div>
+      <div style="font-size:10.5pt; line-height:1.55; color:#475569;">Le web ne peut de toute façon pas les lire. Et c'est là que se concentrent les validations de plateforme et l'exposition juridique. La cliente saisit son sommeil à la main — c'est trois champs, et ça t'achète six mois de tranquillité.</div>
+    </div>
+  </div>
+
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:15pt; letter-spacing:-.02em; color:#0f172a; margin:30px 0 10px; break-after:avoid;">3. La pile technique</h2>
+
+  <p style="font-size:11pt; line-height:1.6; color:#334155; margin:0 0 14px;">Tes trois intuitions — GitHub, Vercel, Supabase — sont les bonnes. Voici pourquoi, et ce que ça coûte réellement.</p>
+
+  <table style="width:100%; border-collapse:collapse; font-size:10.5pt; margin:0 0 14px;">
+    <thead>
+      <tr>
+        <th style="text-align:left; padding:8px 10px 8px 0; border-bottom:1.5px solid #0f172a; font-size:9pt; letter-spacing:.1em; text-transform:uppercase; color:#475569;">Couche</th>
+        <th style="text-align:left; padding:8px 10px; border-bottom:1.5px solid #0f172a; font-size:9pt; letter-spacing:.1em; text-transform:uppercase; color:#475569;">Choix</th>
+        <th style="text-align:left; padding:8px 10px; border-bottom:1.5px solid #0f172a; font-size:9pt; letter-spacing:.1em; text-transform:uppercase; color:#475569; width:90px;">Coût / mois</th>
+        <th style="text-align:left; padding:8px 0 8px 10px; border-bottom:1.5px solid #0f172a; font-size:9pt; letter-spacing:.1em; text-transform:uppercase; color:#475569;">Raison</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">Code</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:600;">GitHub</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#0f766e; font-weight:700;">0 €</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Non négociable, quel que soit le développeur. Le dépôt existe déjà et il est vide.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">App + hébergement</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:600;">Next.js sur Vercel</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#0f766e; font-weight:700;">0 €</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Le palier gratuit tient largement une dizaine de coachs et leurs clientes. Mise en ligne à chaque commit, sans serveur à administrer.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">Base + comptes</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:600;">Supabase, région Francfort</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#0f766e; font-weight:700;">0 puis 25 €</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Base européenne, isolation par ligne, et un système d'invitations qui correspond exactement au modèle par code du prototype. Gratuit jusqu'aux premières coachs payantes.</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 10px 9px 0; border-bottom:1px solid #e2e8f0; vertical-align:top;">iPhone</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; font-weight:600;">PWA d'abord</td>
+        <td style="padding:9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#0f766e; font-weight:700;">0 €</td>
+        <td style="padding:9px 0 9px 10px; border-bottom:1px solid #e2e8f0; vertical-align:top; color:#475569;">Installable depuis Safari, aucune validation App Store, aucun compte développeur. La vraie app iOS viendra partager la même base — plus tard, quand une coach paiera pour l'avoir.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:10.5pt; line-height:1.55; color:#475569; margin:0 0 6px; break-inside:avoid;"><strong style="color:#0f172a;">Écartés volontairement.</strong> Firebase : données hors Europe, dossier RGPD plus lourd pour zéro gain. Un backend sur mesure : deux mois perdus à refaire ce que Supabase donne en une journée. Le no-code type Bubble : la logique de phase de cycle y sera pénible, et tu devras tout réécrire au premier vrai client.</p>
+
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:15pt; letter-spacing:-.02em; color:#0f172a; margin:30px 0 10px; break-after:avoid;">4. Qui écrit le code — la vraie question</h2>
+
+  <p style="font-size:11pt; line-height:1.6; color:#334155; margin:0 0 14px;">Tu as répondu « je ne sais pas encore ». C'est la seule réponse qui bloque tout le reste : la pile ci-dessus est bonne dans les trois cas, mais le périmètre et le calendrier changent du tout au tout.</p>
+
+  <div style="display:flex; flex-direction:column; gap:10px; margin:0 0 16px;">
+    <div style="padding:13px 15px; border-radius:10px; background:#f8fafc; border:1px solid #e2e8f0; break-inside:avoid;">
+      <div style="font-size:11pt; font-weight:700; color:#0f172a; margin-bottom:4px;">Tu le construis toi-même</div>
+      <div style="font-size:10.5pt; line-height:1.55; color:#475569;">Cohérent avec « le moins cher possible », et cette pile est faite pour ça. Compte plusieurs mois à temps partiel pour les cinq briques, et accepte que la qualité du code ne soit pas le sujet — la v1 sert à savoir si des coachs paient. Le prototype te sert de spécification écran par écran.</div>
+    </div>
+    <div style="padding:13px 15px; border-radius:10px; background:#f8fafc; border:1px solid #e2e8f0; break-inside:avoid;">
+      <div style="font-size:11pt; font-weight:700; color:#0f172a; margin-bottom:4px;">Un freelance</div>
+      <div style="font-size:10.5pt; line-height:1.55; color:#475569;">Le plus rapide, et incompatible avec « le moins cher possible » : pour ce périmètre réduit, compte plusieurs milliers d'euros. L'avantage réel, c'est que le prototype divise le risque de devis — il n'y a presque rien à interpréter.</div>
+    </div>
+    <div style="padding:13px 15px; border-radius:10px; background:#f8fafc; border:1px solid #e2e8f0; break-inside:avoid;">
+      <div style="font-size:11pt; font-weight:700; color:#0f172a; margin-bottom:4px;">Un associé technique</div>
+      <div style="font-size:10.5pt; line-height:1.55; color:#475569;">Le meilleur résultat à un an, le plus lent à démarrer. À ne chercher qu'avec une preuve en main : trois coachs qui disent « je paierais pour ça » valent plus que n'importe quelle maquette.</div>
+    </div>
+  </div>
+
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:15pt; letter-spacing:-.02em; color:#0f172a; margin:30px 0 10px; break-after:avoid;">5. Ce que je ferais cette semaine</h2>
+
+  <p style="font-size:11pt; line-height:1.6; color:#334155; margin:0 0 12px;">Dans cet ordre, et sans écrire de code avant le point 3.</p>
+
+  <ol style="font-size:11pt; line-height:1.65; color:#334155; margin:0; padding-left:22px;">
+    <li style="margin-bottom:8px;"><strong>Montrer le prototype à trois coachs</strong> et écouter ce qu'elles demandent en premier. Si aucune ne cite le cycle, mon arbitrage du point 1 est à refaire.</li>
+    <li style="margin-bottom:8px;"><strong>Trancher le périmètre</strong> sur la base de ce qu'elles disent, pas de ce que le prototype sait faire.</li>
+    <li style="margin-bottom:8px;"><strong>Décider qui code</strong> — et si c'est toi, commencer par l'inscription par code : c'est la brique qui porte l'authentification, donc celle qui débloque toutes les autres.</li>
+    <li style="margin-bottom:8px;"><strong>Créer le projet Supabase en région européenne</strong> dès le premier jour. Migrer une base de production d'une région à l'autre plus tard est douloureux.</li>
+  </ol>
+
+  <p style="font-size:10pt; line-height:1.55; color:#64748b; margin:26px 0 0; padding-top:12px; border-top:1px solid #e2e8f0;">Les montants sont les paliers publics des prestataires cités à la date de cette note, pas un devis. Le dimensionnement suppose une dizaine de coachs — dis-moi ton vrai objectif si tu l'as en tête. Je peux préparer le dossier de passation technique — modèle de données, découpage des écrans, contenu du dépôt — dès que le point 3 est tranché.</p>
+
+</doc-page>
+</x-dc>
+</body>
+</html>
