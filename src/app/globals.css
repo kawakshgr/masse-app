@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Masse — design tokens.
+   Lifted verbatim from Masse.dc.html. Web uses the `regular` glass
+   level. Radius scale is 6 / 10 / 14 / 18 — nothing in between.
+   --------------------------------------------------------------- */
+
+:root,
+[data-theme="dark"] {
+  --bg: #05121b;
+  --deep: #020a10;
+  --ink: #f3fcfb;
+  --ink2: rgba(243, 252, 251, 0.74);
+  --ink3: rgba(243, 252, 251, 0.48);
+  --gw: 255, 255, 255;
+  --ew: 255, 255, 255;
+  --dw: 7, 18, 26;
+  --a1: #5fe3d2;
+  --a2: #9c86ff;
+  --a3: #ff8069;
+  --onA: #022b2a;
+  --b1: #0f6f80;
+  --b2: #4b2fa8;
+  --b3: #8f3a4f;
+  --sel: linear-gradient(180deg, color-mix(in oklab, var(--a1) 30%, rgba(4, 16, 22, 0.84)), color-mix(in oklab, var(--a2) 26%, rgba(4, 16, 22, 0.84)));
+  --spec: inset 0 1px 0 rgba(255, 255, 255, 0.26), inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+  --lift: 0 16px 40px rgba(0, 0, 0, 0.32);
+  --wash1: color-mix(in oklab, var(--a1) 20%, transparent);
+  --wash2: color-mix(in oklab, var(--a2) 20%, transparent);
+  --wash3: color-mix(in oklab, var(--a3) 20%, transparent);
+  /* regular glass */
+  --g1: 0.09;
+  --g2: 0.17;
+  --eg: 0.17;
+  --hr: 0.1;
+  --bl: 26px;
+  --sat: 165%;
+  --chA: 0.86;
+}
+
+[data-theme="light"] {
+  --bg: #e7f2f3;
+  --deep: #ffffff;
+  --ink: #05202a;
+  --ink2: rgba(5, 32, 42, 0.76);
+  --ink3: rgba(5, 32, 42, 0.52);
+  --gw: 255, 255, 255;
+  --ew: 5, 32, 42;
+  --dw: 252, 254, 254;
+  --a1: #0a8579;
+  --a2: #5636cf;
+  --a3: #c9452f;
+  --onA: #ffffff;
+  --b1: #9fe6dd;
+  --b2: #c9bcff;
+  --b3: #ffc9be;
+  --sel: linear-gradient(180deg, color-mix(in oklab, var(--a1) 17%, #fff), color-mix(in oklab, var(--a2) 14%, #fff));
+  --spec: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(5, 32, 42, 0.06);
+  --lift: 0 14px 36px rgba(5, 32, 42, 0.12);
+  --wash1: color-mix(in oklab, var(--a1) 14%, white);
+  --wash2: color-mix(in oklab, var(--a2) 14%, white);
+  --wash3: color-mix(in oklab, var(--a3) 14%, white);
+  --g1: 0.62;
+  --g2: 0.82;
+  --eg: 0.13;
+  --hr: 0.09;
+  --bl: 26px;
+  --sat: 160%;
+  --chA: 0.9;
+}
+
+:root {
+  --glass: rgba(var(--gw), var(--g1));
+  --glass2: rgba(var(--gw), var(--g2));
+  --edge: rgba(var(--ew), var(--eg));
+  --hair: rgba(var(--ew), var(--hr));
+  --chrome: rgba(var(--dw), var(--chA));
+  /* One radius scale. Do not invent intermediate values. */
+  --r1: 6px;
+  --r2: 10px;
+  --r3: 14px;
+  --r4: 18px;
+  /* Uniform row height in lists. A ragged list reads as noise. */
+  --row-h: 54px;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-deep: var(--deep);
+  --color-ink: var(--ink);
+  --color-ink2: var(--ink2);
+  --color-ink3: var(--ink3);
+  --color-a1: var(--a1);
+  --color-a2: var(--a2);
+  --color-a3: var(--a3);
+  --color-ona: var(--onA);
+  --color-glass: var(--glass);
+  --color-glass2: var(--glass2);
+  --color-edge: var(--edge);
+  --color-hair: var(--hair);
+  --radius-r1: var(--r1);
+  --radius-r2: var(--r2);
+  --radius-r3: var(--r3);
+  --radius-r4: var(--r4);
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-sans: var(--font-instrument), system-ui, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-instrument), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Every figure that changes gets tabular numerals. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--edge);
+  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+  box-shadow: var(--spec);
+}
+
+.lift {
+  box-shadow: var(--lift);
+}
+
+/* Focus must stay visible: the coach lives on the keyboard. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--a1);
+  outline-offset: 2px;
+  border-radius: var(--r1);
+}
