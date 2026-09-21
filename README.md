@@ -1,4 +1,4 @@
-# Handoff: Masse — v1 web (coach only)
+# Handoff: Masse — web app + native iOS
 
 ## Overview
 
@@ -17,8 +17,8 @@ client every week. The finished product replaces the five tools coaching lives i
 - **Nutrition and billing are out**, with no placeholder.
 
 The client is a real account with a real app from day one: she onboards through an
-invite code, sees her week, and logs her sets. **iOS comes after this**, sharing the
-same Supabase backend — see "Designing for the iOS phase" at the end.
+invite code, sees her week, and logs her sets. The native iOS client shares the same Supabase backend — see "Splitting the work
+between the two clients" at the end for what belongs to which target.
 
 ---
 
@@ -32,12 +32,21 @@ component with a platform switch. It is deliberately not the architecture you wa
 exists so every screen can be seen and clicked side by side. **For this v1, only the
 Mac and Web views matter** — switch the platform control at the top of the page.
 
-**Your task is to recreate the coach's screens in a real codebase:**
+**Your task is to recreate these designs across two real clients sharing one backend:**
 
-- **Next.js** (App Router) on Vercel
-- **Supabase** (Postgres + Auth) in an EU region — Frankfurt
-- Styling: the framework's own idioms. The prototype's inline styles are an artefact of
-  the prototyping environment, not a recommendation.
+| Target | Who it is for | Stack |
+|--------|---------------|-------|
+| **Web app** | The coach, plus any client on Android | Next.js (App Router) on Vercel |
+| **Native iOS** | The client, primarily | SwiftUI, iOS 17+ |
+| **Backend** | Both | Supabase — Postgres + Auth, EU region (Frankfurt) |
+
+The backend is the contract between them. Build it first, then the two clients in
+parallel. The iOS app talks to Supabase directly — there is no bespoke API layer in v1,
+which is why row-level security has to be right (see Health data).
+
+Styling: each platform's own idioms. The prototype's inline styles are an artefact of
+the prototyping environment, not a recommendation — use Tailwind or CSS modules on web,
+and native SwiftUI modifiers on iOS.
 
 **Repository:** `kawakshgr/masse-app` (currently empty).
 
@@ -415,19 +424,60 @@ Glass surfaces are alpha + blur driven. For the web, use the **regular** level:
 
 ---
 
-## Designing for the iOS phase
+## Splitting the work between the two clients
 
-Three decisions to make now, because they are cheap now and expensive later:
+**Web only** — these need a pointer, a keyboard and width:
 
-1. **EU Supabase region** (above).
-2. **Keep the API between the editor and the database clean** — the iOS app will read
-   `sessions` and `session_exercises` directly through Supabase. Do not bury programme
-   structure in UI-shaped JSON blobs; keep it relational as specified.
-3. **`assignments` is the delivery boundary.** In v1 it only records intent and export.
-   When the client app arrives, the same row becomes what she sees. Do not model
-   delivery as a side effect of export.
+- The **programme editor**: seven day columns, drag and drop between days, inline
+  editing of every exercise row.
+- The **roster** and the three-pane shell with resizable, position-persisting dividers.
+- The **⌘K command palette**.
+- The **check-in form the coach types into** (v1 only).
 
----
+**iOS only** — these are why a native app is worth building at all:
+
+- **Live Activity** for the running session: current exercise, sets done, rest
+  countdown, on the lock screen and in the Dynamic Island. The web PWA cannot do this,
+  and it is the single most-used surface for a client mid-session.
+- **Local notifications** for rest timers.
+- **Dynamic Type**: the client's screens reflow against the user's text size — they do
+  not scale. The prototype demonstrates the real iOS range.
+- **Offline set queue** in local storage, synced on reconnect.
+
+**Both, from the same rows** — build once in each, never diverge the model:
+
+- Invite-code onboarding (nine steps)
+- Today, session logging, cycle entry, weekly check-in as read
+
+**The Android client is the web PWA in v1.** The prototype's Android screens exist so
+the eventual native app has a spec; do not build it yet. What the prototype settles for
+that phase: an ongoing notification via foreground service rather than a Live Activity,
+Material 3 radii (8/12/16/28), text buttons instead of iOS pills, and a left-aligned
+status clock.
+
+## Contracts the two clients must agree on
+
+Decide these once, in the backend, or the clients will drift:
+
+1. **`assignments.pushed_at`** is the only thing that makes a week visible to a client.
+   Null means invisible. Neither client may read an unpushed week.
+2. **Phase and load coefficient are computed server-side** (a Postgres function or a
+   view), not in each client. Two implementations of the same arithmetic will disagree.
+3. **`set_logs.synced_at`** null means the row exists only on the device. Both clients
+   use the same convention so a coach sees the same "held" state whichever app the
+   client uses.
+4. **Programme structure stays relational.** Both clients decode the same
+   `sessions` / `session_exercises` rows — no UI-shaped JSON blob.
+5. **Symptom notes have no table.** Enforced by absence, not by policy.
+
+## App Store notes for the iOS phase
+
+- **No HealthKit entitlement in v1.** Cycle, sleep and steps are typed by hand. This
+  keeps the submission simple and defers the health-data review entirely.
+- Cycle tracking is opt-in and revocable; the privacy policy must say that symptom
+  notes never leave the device, because the app says so on screen.
+- The client app has no purchase flow: the coach bills her clients outside the app.
+  There is nothing for StoreKit to do in v1.
 
 ## Files in this bundle
 

@@ -1,44 +1,65 @@
-# Masse — v1 web
+# Masse — web app + native iOS
 
-Coaching software for strength coaches. **v1 is the web app only**; iOS follows,
-sharing the same Supabase backend.
+Coaching software for strength coaches. **Two clients, one backend.**
+
+| Target | Who | Stack |
+|--------|-----|-------|
+| **Web app** | The coach (and any client on Android) | Next.js App Router on Vercel |
+| **Native iOS** | The client, primarily | SwiftUI, iOS 17+ |
+| **Backend** | Both | Supabase — Postgres + Auth, **EU region (Frankfurt)** |
 
 Full design handoff: `README.md` (scope, data model, screens, tokens).
-Design reference: `Masse.dc.html` — switch the platform control to **Mac** or **Web**
-for the coach, **iPhone** for the client.
+Design reference: `Masse.dc.html` — switch the platform control to **Mac**/**Web** for
+the coach, **iPhone** for the client. `Onboarding.dc.html` is the nine-step flow.
 
-## Stack
+French UI first (`next-intl` on web, `String(localized:)` + `fr.lproj` on iOS);
+English second. The French copy in the `FR_*` dictionaries is reviewed — lift it
+verbatim, but **do not copy the prototype's DOM-translation mechanism**; it is a
+prototyping trick.
 
-- Next.js (App Router) on Vercel
-- Supabase — Postgres + Auth, **EU region (Frankfurt), from day one**
-- PWA for the client in v1; native iOS after
-- French UI first (`next-intl`); English second
+## Build order
+
+The backend is the contract. Build it once, then the two clients in parallel.
+
+1. **Supabase project + schema + RLS** — EU region, from day one.
+2. **Web: coach auth, roster, programme editor.** The coach's job is the product.
+3. **Web: client screens** as a PWA — this is also the Android client.
+4. **iOS: native client** — onboarding, Today, Train, Cycle. Reads the same tables.
+5. **iOS: Live Activity + rest timer** — the reason the native app exists at all.
+
+## What each target owns
+
+**Web only:** the programme editor (drag and drop between day columns, resizable panes,
+⌘K palette), the roster, the check-in form the coach types into.
+
+**iOS only:** Live Activity for the running session, local notifications for rest
+timers, Dynamic Type, offline set queue in local storage.
+
+**Both:** onboarding by invite code, Today, session logging, cycle entry, the weekly
+check-in as read.
 
 ## In v1
 
 - **Invite-code onboarding** — nine steps, ends with week 1 written. Carries auth.
-- **Roster** — the coach's client list, with the reason each client needs her.
-- **Programme editor** — weeks, seven day columns, sessions, ordered exercises, drag
-  between days, duplicate week, save as template, assign to clients.
-- **Session logging** — the client logs her sets; offline-first.
-- **Check-ins** — **entered by the coach in v1.** She asks by WhatsApp and types the
-  answers in. The client-submitted form comes later.
-- **Cycle** — **entered manually**, no Health import. Period start date + cycle length
-  → phase → load coefficient.
-- **Steps and sleep** — **entered manually**, no Health import.
-- **Messaging** — tab present, **inert**, labelled `soon`. See below.
+- **Roster** (web) — client list with the reason each client needs the coach.
+- **Programme editor** (web) — weeks, seven day columns, sessions, ordered exercises,
+  drag between days, duplicate week, save as template, push to clients.
+- **Session logging** (both) — offline-first.
+- **Check-ins** — **typed by the coach in v1.** She asks by WhatsApp and enters the
+  answers. `check_ins.author` is already in the schema; the client-submitted form later
+  only changes who writes the row.
+- **Cycle, sleep, steps** — **entered manually.** No HealthKit or Health Connect in v1.
+- **Messaging** — tab present, **inert**, badged `soon`.
 
 ## Deliberately not in v1
 
-- **Messaging implementation.** The tab renders greyed with a `soon` badge and a line
-  of copy explaining that WhatsApp stays where it is. This is a product decision, not
-  an oversight: a credible thread needs real time, read states, push and media upload —
-  a month of work to be worse than the tool coaches already have. Keep the tab so the
-  shape of the product is honest about what is coming.
+- **Messaging implementation.** A credible thread needs real time, read states, push and
+  media upload — a month of work to be worse than WhatsApp, which coaches already have.
+  Keep the tab so the product's shape is honest.
 - **Nutrition** — the coach writes targets as text in the programme.
 - **Billing** — a spreadsheet suffices at this scale.
-- **Apple Health / Health Connect** — the web cannot read them, and that is where
-  platform review and legal exposure live. Manual entry instead.
+- **HealthKit / Health Connect** — where platform review and legal exposure live.
+  On iOS this also keeps the App Store submission simple: **no health entitlements.**
 
 ## Ground rules
 
@@ -46,50 +67,53 @@ Each came out of a design decision or an audit. Not style preferences.
 
 1. **EU region on day one.** The database holds special-category health data (cycle
    dates) under GDPR Art. 9. Migrating regions later is painful.
-2. **Symptom notes never reach the server.** No table, ever. Local to the client's
-   device. The app promises this on screen.
-3. **Cycle data is dates only** — period start, cycle length. No symptom, mood or pain
-   score. Phase and load coefficient are derived at read time, never stored.
-4. **RLS on every table.** A coach reads only her clients; a client reads only her own
-   rows. Enforce at the database, not in the UI.
-5. **Derive prose from data.** Any sentence stating a number computes it from the same
+2. **Symptom notes never reach the server.** No table, ever. Local to the device —
+   `UserDefaults`/SwiftData on iOS, `localStorage` on web. The app promises this on
+   screen.
+3. **Cycle data is dates only** — period start, cycle length. Phase and load
+   coefficient are derived at read time, never stored.
+4. **RLS on every table.** A coach reads only her clients; a client only her own rows.
+   Enforce at the database — the iOS app talks to Supabase directly, so UI-layer checks
+   are worth nothing.
+5. **Keep programme structure relational.** No UI-shaped JSON blobs: both clients
+   decode the same `sessions` / `session_exercises` rows.
+6. **`assignments` is the delivery boundary.** `pushed_at` null means the client cannot
+   see it. Delivery is never a side effect of saving.
+7. **Derive prose from data.** Any sentence stating a number computes it from the same
    source the adjacent chart reads. The prototype had four bugs where a written summary
    contradicted the figures beside it.
-6. **Offline is a state, not an error.** Sets are written locally, labelled as held,
-   and synced on reconnect — with correct singular/plural in both languages.
-7. **Today is reported, never judged.** A day in progress gets a neutral treatment,
+8. **Offline is a state, not an error.** Sets are written locally, labelled as held,
+   synced on reconnect — correct singular/plural in both languages.
+9. **Today is reported, never judged.** A day in progress gets a neutral treatment,
    never a pass/fail colour.
-8. **Nothing is delivered automatically.** Pushing a week to a client is an explicit
-   act by the coach.
-9. **Uniform row heights in lists.** A ragged list reads as noise.
-10. **Empty states are designed, not blank** — no clients, no programmes, an empty day,
+10. **Uniform row heights in lists.** A ragged list reads as noise.
+11. **Empty states are designed, not blank** — no clients, no programmes, an empty day,
     nothing logged today. The prototype has all of them.
-11. **One radius scale per family.** Mac/Web 6/10/14/18; iOS 12/16/20/26; chart bars
-    `5px 5px 2px 2px`. Nothing in between.
-12. **Do not copy the prototype's DOM-translation mechanism.** Use `next-intl`. The
-    French copy in the `FR_*` dictionaries is reviewed and can be lifted verbatim.
-
-## Unimplemented features in the UI
-
-The pattern for anything deferred: **keep the navigation entry, render it inert.**
-
-- Greyed label (`--ink3`), badge reading `soon` in `--a2`, `cursor: default`.
-- Clicking it does not navigate; it reveals one line saying what is missing and what to
-  do meanwhile.
-- In the prototype this is the `SOON` array on the component — a single list drives the
-  sidebar, the tab bar and the iPad rail.
+12. **One radius scale per family.** Web 6/10/14/18; iOS 12/16/20/26 (sheets 38);
+    chart bars `5px 5px 2px 2px`. Nothing in between.
+13. **Deferred features keep their nav entry, rendered inert** — greyed label, `soon`
+    badge, one line of copy on tap. Driven by one list (`SOON` in the prototype), not
+    scattered conditions.
 
 ## Tables in v1
 
 `coaches`, `invite_codes`, `clients`, `programmes`, `programme_weeks`, `sessions`,
-`session_exercises`, `assignments`, `set_logs`, `check_ins`, `cycle_logs`.
+`session_exercises`, `assignments`, `set_logs`, `check_ins`, `cycle_logs`,
+`daily_metrics`.
 
 Do not create yet: `threads`, `messages`, `foods`, `meals`, `invoices`.
 
 ## Commands
 
 ```bash
+# web
 npm run dev
-npx supabase start
 npm run build
+
+# backend
+npx supabase start
+npx supabase db push
+
+# ios
+xcodebuild -scheme Masse -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
