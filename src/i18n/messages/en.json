@@ -147,5 +147,108 @@
     "days": "Days",
     "sleepTarget": "Sleep target",
     "none": "—"
+  },
+  "onboarding": {
+    "step": "Step {n} of 9",
+    "codeTitle": "Your invite code",
+    "codeLede": "Your coach sent it to you. It works once.",
+    "codePlaceholder": "MERLET-4K2P",
+    "codeBad": "That code is not valid. Check it, or ask your coach for a new one.",
+    "codeOk": "Welcome. {coach} is coaching you.",
+    "goalTitle": "Your goal",
+    "goalLede": "One only. It steers every session.",
+    "bodyTitle": "You, in three numbers",
+    "bodyLede": "To calibrate loads. Nothing more.",
+    "height": "Height (cm)",
+    "weight": "Weight (kg)",
+    "birthYear": "Birth year",
+    "injuriesTitle": "Any injuries?",
+    "injuriesLede": "What to work around. One per line, leave empty if none.",
+    "equipmentTitle": "Your equipment",
+    "equipmentLede": "What you have access to.",
+    "daysTitle": "Your week",
+    "daysLede": "The days you can train.",
+    "cycleTitle": "Cycle tracking",
+    "cycleLede": "Optional, and revocable at any time.",
+    "cyclePromise": "If you turn it on, only your period start date and cycle length are stored — in Europe. Your symptom notes never leave your phone: there is no table to hold them. Your coach sees a phase and an adapted load, never a symptom.",
+    "cycleOn": "Turn tracking on",
+    "cycleOff": "No tracking",
+    "sleepTitle": "A normal night",
+    "sleepLede": "How many hours, usually?",
+    "summaryTitle": "That is everything",
+    "summaryLede": "Check it, then create your account. Your first week is waiting.",
+    "emailLabel": "Your email address",
+    "finish": "Create my account",
+    "sent": "Link sent. Check your inbox to finish.",
+    "next": "Continue",
+    "back": "Back",
+    "skip": "Skip",
+    "finalising": "Finishing your sign-up…",
+    "failed": "Sign-up failed. Your code may already have been used."
+  },
+  "equipment": {
+    "gym": "Gym",
+    "rack": "Home rack",
+    "bands": "Bands",
+    "bodyweight": "Bodyweight only"
+  },
+  "today": {
+    "title": "Today",
+    "none": "No week pushed yet.",
+    "noneHint": "Your coach will send one; it shows up here.",
+    "rest": "Rest",
+    "week": "Your week",
+    "sets": "{count, plural, =1 {1 set} other {# sets}}",
+    "target": "Target",
+    "signOut": "Sign out"
+  },
+  "editor": {
+    "addWeek": "+ Week",
+    "duplicate": "Duplicate week",
+    "template": "Save as template",
+    "untemplate": "Stop being a template",
+    "emptyDay": "Empty day",
+    "addSession": "Add a session",
+    "sessionName": "Session name",
+    "addExercise": "+ Exercise",
+    "exName": "Exercise",
+    "scheme": "Scheme",
+    "cue": "Cue",
+    "remove": "Remove",
+    "assign": "Assign",
+    "assignLede": "Pushing makes the week visible. Nothing leaves without it.",
+    "startDate": "Starts",
+    "push": "Push to selected clients",
+    "pushed": "Pushed",
+    "noClients": "No clients to push to yet.",
+    "pickWeek": "Pick a programme on the left.",
+    "dropHere": "Drop here"
+  },
+  "goal": {
+    "Get stronger": "Get stronger",
+    "Build muscle": "Build muscle",
+    "Lean out": "Lean out",
+    "Move better": "Move better"
+  },
+  "feel": {
+    "Strong": "Strong",
+    "Steady": "Steady",
+    "Heavy": "Heavy"
+  },
+  "pain": {
+    "None": "None",
+    "Minor": "Minor",
+    "Need to talk": "Need to talk"
+  },
+  "adherence": {
+    "All of it": "All of it",
+    "Most": "Most",
+    "Struggled": "Struggled"
+  },
+  "phase": {
+    "menstrual": "menstrual",
+    "follicular": "follicular",
+    "ovulatory": "ovulatory",
+    "luteal": "luteal"
   }
 }

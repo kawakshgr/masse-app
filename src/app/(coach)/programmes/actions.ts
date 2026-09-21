@@ -1,0 +1,250 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+
+async function coachId() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user?.id ?? null;
+}
+
+export async function createProgramme(formData: FormData) {
+  const supabase = await createClient();
+  const id = await coachId();
+  if (!id) return;
+
+  const name = String(formData.get("name") ?? "").trim() || "Nouveau bloc";
+
+  const { data } = await supabase
+    .from("programmes")
+    .insert({ coach_id: id, name })
+    .select("id")
+    .single();
+
+  if (!data) return;
+
+  // A programme with no week cannot be edited, so week 1 comes with it.
+  await supabase
+    .from("programme_weeks")
+    .insert({ programme_id: data.id, week_number: 1 });
+
+  revalidatePath("/programmes");
+  redirect(`/programmes/${data.id}`);
+}
+
+export async function addWeek(programmeId: string) {
+  const supabase = await createClient();
+
+  const { data: last } = await supabase
+    .from("programme_weeks")
+    .select("week_number")
+    .eq("programme_id", programmeId)
+    .order("week_number", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  await supabase.from("programme_weeks").insert({
+    programme_id: programmeId,
+    week_number: (last?.week_number ?? 0) + 1,
+  });
+
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+/** The biggest time-saver: last week, copied forward, then edited. */
+export async function duplicateWeek(weekId: string, programmeId: string) {
+  const supabase = await createClient();
+
+  const { data: source } = await supabase
+    .from("programme_weeks")
+    .select("week_number, sessions(day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue))")
+    .eq("id", weekId)
+    .maybeSingle();
+
+  if (!source) return;
+
+  const { data: last } = await supabase
+    .from("programme_weeks")
+    .select("week_number")
+    .eq("programme_id", programmeId)
+    .order("week_number", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const { data: created } = await supabase
+    .from("programme_weeks")
+    .insert({ programme_id: programmeId, week_number: (last?.week_number ?? 0) + 1 })
+    .select("id")
+    .single();
+
+  if (!created) return;
+
+  const sessions = (source.sessions ?? []) as unknown as {
+    day_index: number;
+    name: string | null;
+    notes: string | null;
+    session_exercises: {
+      position: number;
+      name: string;
+      scheme: string | null;
+      target_sets: number | null;
+      target_reps: number | null;
+      target_weight_kg: number | null;
+      cue: string | null;
+    }[];
+  }[];
+
+  for (const session of sessions) {
+    const { data: newSession } = await supabase
+      .from("sessions")
+      .insert({
+        week_id: created.id,
+        day_index: session.day_index,
+        name: session.name,
+        notes: session.notes,
+      })
+      .select("id")
+      .single();
+
+    if (!newSession) continue;
+
+    const exercises = (session.session_exercises ?? []).map((e) => ({
+      ...e,
+      session_id: newSession.id,
+    }));
+
+    if (exercises.length > 0) {
+      await supabase.from("session_exercises").insert(exercises);
+    }
+  }
+
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+export async function toggleTemplate(programmeId: string, isTemplate: boolean) {
+  const supabase = await createClient();
+  await supabase
+    .from("programmes")
+    .update({ is_template: isTemplate })
+    .eq("id", programmeId);
+  revalidatePath(`/programmes/${programmeId}`);
+  revalidatePath("/programmes");
+}
+
+export async function addSession(weekId: string, dayIndex: number, programmeId: string) {
+  const supabase = await createClient();
+  await supabase.from("sessions").insert({ week_id: weekId, day_index: dayIndex });
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+export async function deleteSession(sessionId: string, programmeId: string) {
+  const supabase = await createClient();
+  await supabase.from("sessions").delete().eq("id", sessionId);
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+export async function renameSession(sessionId: string, name: string, programmeId: string) {
+  const supabase = await createClient();
+  await supabase.from("sessions").update({ name: name.trim() || null }).eq("id", sessionId);
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+export async function addExercise(sessionId: string, programmeId: string) {
+  const supabase = await createClient();
+
+  const { data: last } = await supabase
+    .from("session_exercises")
+    .select("position")
+    .eq("session_id", sessionId)
+    .order("position", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  await supabase.from("session_exercises").insert({
+    session_id: sessionId,
+    position: (last?.position ?? -1) + 1,
+    name: "Nouvel exercice",
+  });
+
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+export async function updateExercise(
+  exerciseId: string,
+  patch: { name?: string; scheme?: string | null; cue?: string | null },
+  programmeId: string,
+) {
+  const supabase = await createClient();
+  await supabase.from("session_exercises").update(patch).eq("id", exerciseId);
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+export async function deleteExercise(exerciseId: string, programmeId: string) {
+  const supabase = await createClient();
+  await supabase.from("session_exercises").delete().eq("id", exerciseId);
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+/** Reorders within a day, or moves the exercise to another day's session. */
+export async function moveExercise(
+  exerciseId: string,
+  toSessionId: string,
+  toPosition: number,
+  programmeId: string,
+) {
+  const supabase = await createClient();
+
+  const { data: siblings } = await supabase
+    .from("session_exercises")
+    .select("id, position")
+    .eq("session_id", toSessionId)
+    .order("position");
+
+  const remaining = (siblings ?? []).filter((s) => s.id !== exerciseId);
+  const ordered = [
+    ...remaining.slice(0, toPosition).map((s) => s.id),
+    exerciseId,
+    ...remaining.slice(toPosition).map((s) => s.id),
+  ];
+
+  await supabase
+    .from("session_exercises")
+    .update({ session_id: toSessionId })
+    .eq("id", exerciseId);
+
+  for (const [index, id] of ordered.entries()) {
+    await supabase.from("session_exercises").update({ position: index }).eq("id", id);
+  }
+
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+/**
+ * Pushing is always an explicit act, never a background sync — and it is the
+ * only moment anything becomes visible to a client.
+ */
+export async function pushWeek(
+  weekId: string,
+  clientIds: string[],
+  startDate: string,
+  programmeId: string,
+) {
+  const supabase = await createClient();
+  if (clientIds.length === 0) return;
+
+  const rows = clientIds.map((client_id) => ({
+    client_id,
+    week_id: weekId,
+    start_date: startDate,
+    pushed_at: new Date().toISOString(),
+  }));
+
+  await supabase.from("assignments").upsert(rows, { onConflict: "client_id,week_id" });
+
+  revalidatePath(`/programmes/${programmeId}`);
+  revalidatePath("/clients");
+}

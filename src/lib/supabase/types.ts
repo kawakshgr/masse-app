@@ -38,6 +38,7 @@ export type CoachRow = {
   first_name: string | null;
   pronoun: Pronoun;
   created_at: string;
+  suspended_at: string | null;
 };
 
 export type ClientRow = {
@@ -219,6 +220,49 @@ export type Database = {
       load_volume_coefficient: {
         Args: { p_phase: CyclePhase };
         Returns: number;
+      };
+      /** Validates a code before the client has an account. */
+      invite_preview: {
+        Args: { p_code: string };
+        Returns: {
+          valid: boolean;
+          coach_name: string | null;
+          ask_cycle: boolean;
+        }[];
+      };
+      /** Turns nine steps of answers into the client's record. */
+      claim_invite: {
+        Args: {
+          p_code: string;
+          p_name: string;
+          p_first_name: string | null;
+          p_goal: ClientGoal | null;
+          p_height_cm: number | null;
+          p_weight_kg: number | null;
+          p_birth_year: number | null;
+          p_injuries: string[];
+          p_equipment: string[];
+          p_session_days: number[];
+          p_sleep_target: number | null;
+          p_cycle_tracking: boolean;
+        };
+        Returns: string;
+      };
+      admin_coach_overview: {
+        Args: Record<string, never>;
+        Returns: {
+          coach_id: string;
+          name: string;
+          first_name: string | null;
+          suspended_at: string | null;
+          created_at: string;
+          client_count: number;
+          programme_count: number;
+        }[];
+      };
+      admin_set_coach_suspended: {
+        Args: { p_coach: string; p_suspended: boolean; p_reason: string };
+        Returns: undefined;
       };
     };
     Enums: {

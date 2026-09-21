@@ -19,7 +19,7 @@
     "clients": "Clients",
     "programmes": "Programmes",
     "soon": "bientôt",
-    "messaging": "Messages",
+    "messaging": "Inbox",
     "messagingSoon": "La messagerie est en développement. D'ici là, WhatsApp reste où il est.",
     "subtitle": "{clients, plural, =0 {Personne n'a besoin de toi} =1 {1 cliente a besoin de toi} other {# clientes ont besoin de toi}} · {checkins, plural, =0 {aucun bilan à relire} =1 {1 bilan à relire} other {# bilans à relire}}"
   },
@@ -147,5 +147,108 @@
     "days": "Jours",
     "sleepTarget": "Sommeil visé",
     "none": "—"
+  },
+  "onboarding": {
+    "step": "Étape {n} sur 9",
+    "codeTitle": "Ton code d’invitation",
+    "codeLede": "Ton coach te l’a envoyé. Il ne sert qu’une fois.",
+    "codePlaceholder": "MERLET-4K2P",
+    "codeBad": "Ce code n’est pas valable. Vérifie-le, ou demande-en un nouveau à ton coach.",
+    "codeOk": "Bienvenue. C’est {coach} qui t’accompagne.",
+    "goalTitle": "Ton objectif",
+    "goalLede": "Un seul. C’est lui qui oriente tes séances.",
+    "bodyTitle": "Toi, en trois chiffres",
+    "bodyLede": "Pour calibrer les charges. Rien de plus.",
+    "height": "Taille (cm)",
+    "weight": "Poids (kg)",
+    "birthYear": "Année de naissance",
+    "injuriesTitle": "Des blessures ?",
+    "injuriesLede": "Ce qu’il faut contourner. Une par ligne, laisse vide s’il n’y a rien.",
+    "equipmentTitle": "Ton matériel",
+    "equipmentLede": "Ce à quoi tu as accès.",
+    "daysTitle": "Ta semaine",
+    "daysLede": "Les jours où tu peux t’entraîner.",
+    "cycleTitle": "Suivi du cycle",
+    "cycleLede": "Optionnel, et révocable à tout moment.",
+    "cyclePromise": "Si tu l’actives, seules ta date de règles et la durée de ton cycle sont enregistrées — en Europe. Tes notes de symptômes ne quittent jamais ton téléphone : il n’existe aucune table pour les stocker. Ton coach voit une phase et une charge adaptée, jamais un symptôme.",
+    "cycleOn": "Activer le suivi",
+    "cycleOff": "Sans suivi",
+    "sleepTitle": "Une nuit normale",
+    "sleepLede": "Combien d’heures, d’habitude ?",
+    "summaryTitle": "Tout est là",
+    "summaryLede": "Vérifie, puis crée ton compte. Ta première semaine t’attend.",
+    "emailLabel": "Ton adresse e-mail",
+    "finish": "Créer mon compte",
+    "sent": "Lien envoyé. Ouvre ta boîte mail pour terminer.",
+    "next": "Continuer",
+    "back": "Retour",
+    "skip": "Passer",
+    "finalising": "On termine ton inscription…",
+    "failed": "L’inscription a échoué. Ton code est peut-être déjà utilisé."
+  },
+  "equipment": {
+    "gym": "Salle",
+    "rack": "Rack à la maison",
+    "bands": "Élastiques",
+    "bodyweight": "Poids du corps"
+  },
+  "today": {
+    "title": "Aujourd’hui",
+    "none": "Aucune semaine poussée pour l’instant.",
+    "noneHint": "Ton coach te l’enverra ; elle apparaîtra ici.",
+    "rest": "Repos",
+    "week": "Ta semaine",
+    "sets": "{count, plural, =1 {1 série} other {# séries}}",
+    "target": "Objectif",
+    "signOut": "Se déconnecter"
+  },
+  "editor": {
+    "addWeek": "+ Semaine",
+    "duplicate": "Dupliquer la semaine",
+    "template": "Enregistrer comme modèle",
+    "untemplate": "Ne plus être un modèle",
+    "emptyDay": "Jour vide",
+    "addSession": "Ajouter une séance",
+    "sessionName": "Nom de la séance",
+    "addExercise": "+ Exercice",
+    "exName": "Exercice",
+    "scheme": "Schéma",
+    "cue": "Consigne",
+    "remove": "Supprimer",
+    "assign": "Assigner",
+    "assignLede": "Pousser rend la semaine visible. Rien ne part sans ce geste.",
+    "startDate": "Début",
+    "push": "Pousser aux clientes sélectionnées",
+    "pushed": "Poussée",
+    "noClients": "Aucune cliente à qui pousser pour l’instant.",
+    "pickWeek": "Choisis un programme à gauche.",
+    "dropHere": "Déposer ici"
+  },
+  "goal": {
+    "Get stronger": "Devenir plus forte",
+    "Build muscle": "Prendre du muscle",
+    "Lean out": "S’affiner",
+    "Move better": "Mieux bouger"
+  },
+  "feel": {
+    "Strong": "En forme",
+    "Steady": "Stable",
+    "Heavy": "Lourde"
+  },
+  "pain": {
+    "None": "Aucune",
+    "Minor": "Légère",
+    "Need to talk": "Il faut en parler"
+  },
+  "adherence": {
+    "All of it": "Tout fait",
+    "Most": "L’essentiel",
+    "Struggled": "Difficile"
+  },
+  "phase": {
+    "menstrual": "menstruelle",
+    "follicular": "folliculaire",
+    "ovulatory": "ovulatoire",
+    "luteal": "lutéale"
   }
 }

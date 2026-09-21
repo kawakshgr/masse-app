@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
  * Deferred features keep their nav entry, rendered inert. One list drives it —
  * not a condition scattered across three components.
  */
-const SOON = ["messaging"] as const;
+const SOON = ["inbox"] as const;
 
 export function TabBar() {
   const t = useTranslations("shell");
@@ -20,7 +20,7 @@ export function TabBar() {
   const items = [
     { key: "clients", href: "/clients", label: t("clients"), chord: "⌘1" },
     { key: "programmes", href: "/programmes", label: t("programmes"), chord: "⌘2" },
-    { key: "messaging", href: "/messages", label: t("messaging"), chord: "⌘3" },
+    { key: "inbox", href: "/inbox", label: t("messaging"), chord: "⌘3" },
   ];
 
   return (

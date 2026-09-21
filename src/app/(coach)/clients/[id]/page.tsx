@@ -22,16 +22,18 @@ export default async function ClientDetailPage({
   const tProse = await getTranslations("prose");
   const tDays = await getTranslations("days");
   const tRecord = await getTranslations("record");
+  const tGoal = await getTranslations("goal");
+  const tPhase = await getTranslations("phase");
 
   const { client, sleep, steps, adherence, sessionsThisWeek, week } = detail;
 
   // The meta line states only what the data supports.
   const meta = [
-    client.goal,
+    client.goal && tGoal(client.goal),
     detail.blockLabel && detail.weekNumber
       ? `${detail.blockLabel} · sem. ${detail.weekNumber}`
       : detail.blockLabel,
-    detail.phase,
+    detail.phase && tPhase(detail.phase),
   ].filter(Boolean);
 
   // Every sentence here computes from the rows the chart beside it reads.
@@ -199,7 +201,7 @@ export default async function ClientDetailPage({
         </h3>
         <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-[11px]">
           {[
-            [tRecord("goal"), client.goal],
+            [tRecord("goal"), client.goal && tGoal(client.goal)],
             [tRecord("injuries"), client.injuries.join(", ")],
             [tRecord("equipment"), client.equipment.join(", ")],
             [tRecord("days"), client.session_days.map((d) => tDays(String(d)).slice(0, 3)).join(", ")],
