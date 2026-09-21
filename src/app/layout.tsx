@@ -20,6 +20,12 @@ const instrument = Instrument_Sans({
   display: "swap",
 });
 
+// Functions run in Frankfurt, beside the database. This is not a latency
+// preference: the database holds GDPR Article 9 data, and compute that touches
+// it should not sit in another jurisdiction. Pinned here rather than in a
+// dashboard setting so it survives a project being recreated.
+export const preferredRegion = "fra1";
+
 export const metadata: Metadata = {
   title: "Masse",
   description: "Le logiciel des coachs de force.",
