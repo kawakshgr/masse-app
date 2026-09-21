@@ -1,0 +1,237 @@
+/**
+ * Database types for the Masse backend.
+ *
+ * Shaped like `supabase gen types typescript` output but written by hand and
+ * trimmed: no Relationships arrays, no re-exported generic helpers. Regenerate
+ * with `npm run db:types` if the schema moves.
+ */
+
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[];
+
+/* ---------- enums ---------- */
+
+export type Pronoun = "she" | "he";
+export type InviteState = "sent" | "opened" | "joined" | "expired" | "revoked";
+export type ClientGoal =
+  | "Get stronger"
+  | "Build muscle"
+  | "Lean out"
+  | "Move better";
+export type ClientStatus = "active" | "paused";
+export type CheckinFeel = "Strong" | "Steady" | "Heavy";
+export type CheckinPain = "None" | "Minor" | "Need to talk";
+export type CheckinAdherence = "All of it" | "Most" | "Struggled";
+export type CheckinAuthor = "coach" | "client";
+export type CyclePhase = "menstrual" | "follicular" | "ovulatory" | "luteal";
+
+/* ---------- rows ---------- */
+
+export type CoachRow = {
+  id: string;
+  name: string;
+  first_name: string | null;
+  pronoun: Pronoun;
+  created_at: string;
+};
+
+export type ClientRow = {
+  id: string;
+  coach_id: string;
+  name: string;
+  first_name: string | null;
+  email: string | null;
+  slug: string | null;
+  height_cm: number | null;
+  birth_year: number | null;
+  start_weight_kg: number | null;
+  start_weight_date: string | null;
+  goal: ClientGoal | null;
+  injuries: string[];
+  equipment: string[];
+  session_days: number[];
+  sleep_target_h: number | null;
+  cycle_tracking: boolean;
+  status: ClientStatus;
+  created_at: string;
+};
+
+export type InviteCodeRow = {
+  id: string;
+  coach_id: string;
+  code: string;
+  state: InviteState;
+  issued_at: string;
+  expires_at: string;
+  claimed_by: string | null;
+  ask_cycle: boolean;
+};
+
+export type ProgrammeRow = {
+  id: string;
+  coach_id: string;
+  name: string;
+  is_template: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ProgrammeWeekRow = {
+  id: string;
+  programme_id: string;
+  week_number: number;
+};
+
+export type SessionRow = {
+  id: string;
+  week_id: string;
+  day_index: number;
+  name: string | null;
+  notes: string | null;
+};
+
+export type SessionExerciseRow = {
+  id: string;
+  session_id: string;
+  position: number;
+  name: string;
+  scheme: string | null;
+  target_sets: number | null;
+  target_reps: number | null;
+  target_weight_kg: number | null;
+  cue: string | null;
+};
+
+export type AssignmentRow = {
+  id: string;
+  client_id: string;
+  week_id: string;
+  start_date: string;
+  /** Null means the week is invisible to the client. The delivery boundary. */
+  pushed_at: string | null;
+};
+
+export type SetLogRow = {
+  id: string;
+  client_id: string;
+  session_exercise_id: string;
+  set_index: number;
+  reps: number | null;
+  weight_kg: number | null;
+  rpe: number | null;
+  logged_at: string;
+  /** Null means the row exists only on the device — held, not lost. */
+  synced_at: string | null;
+};
+
+export type CheckInRow = {
+  id: string;
+  client_id: string;
+  week_start_date: string;
+  feel: CheckinFeel | null;
+  pain: CheckinPain | null;
+  adherence: CheckinAdherence | null;
+  bodyweight_kg: number | null;
+  note: string | null;
+  author: CheckinAuthor;
+  submitted_at: string;
+  /** Null means the check-in is still waiting on the coach. */
+  reviewed_at: string | null;
+};
+
+/** Dates only. Never symptoms — there is no column for them and never will be. */
+export type CycleLogRow = {
+  id: string;
+  client_id: string;
+  period_start_date: string;
+  cycle_length_days: number;
+  logged_at: string;
+};
+
+export type DailyMetricRow = {
+  id: string;
+  client_id: string;
+  day: string;
+  sleep_h: number | null;
+  sleep_quality: number | null;
+  steps: number | null;
+};
+
+/* ---------- table shape ---------- */
+
+type Table<Row, Required extends keyof Row> = {
+  Row: Row;
+  Insert: Pick<Row, Required> & Partial<Omit<Row, Required>>;
+  Update: Partial<Row>;
+  Relationships: [];
+};
+
+export type Database = {
+  public: {
+    Tables: {
+      coaches: Table<CoachRow, "id" | "name">;
+      clients: Table<ClientRow, "id" | "coach_id" | "name">;
+      invite_codes: Table<InviteCodeRow, "coach_id" | "code">;
+      programmes: Table<ProgrammeRow, "coach_id" | "name">;
+      programme_weeks: Table<ProgrammeWeekRow, "programme_id" | "week_number">;
+      sessions: Table<SessionRow, "week_id" | "day_index">;
+      session_exercises: Table<
+        SessionExerciseRow,
+        "session_id" | "position" | "name"
+      >;
+      assignments: Table<AssignmentRow, "client_id" | "week_id" | "start_date">;
+      set_logs: Table<
+        SetLogRow,
+        "client_id" | "session_exercise_id" | "set_index"
+      >;
+      check_ins: Table<CheckInRow, "client_id" | "week_start_date">;
+      cycle_logs: Table<CycleLogRow, "client_id" | "period_start_date">;
+      daily_metrics: Table<DailyMetricRow, "client_id" | "day">;
+    };
+    Views: { [_ in never]: never };
+    Functions: {
+      /** The coach's only door to cycle data: phase and coefficients, no dates. */
+      client_cycle_state: {
+        Args: { p_client: string; p_on?: string };
+        Returns: {
+          phase: CyclePhase;
+          intensity_coefficient: number;
+          volume_coefficient: number;
+        }[];
+      };
+      cycle_day: {
+        Args: { p_period_start: string; p_cycle_length: number; p_on: string };
+        Returns: number;
+      };
+      cycle_phase_on: {
+        Args: { p_period_start: string; p_cycle_length: number; p_on: string };
+        Returns: CyclePhase;
+      };
+      load_intensity_coefficient: {
+        Args: { p_phase: CyclePhase };
+        Returns: number;
+      };
+      load_volume_coefficient: {
+        Args: { p_phase: CyclePhase };
+        Returns: number;
+      };
+    };
+    Enums: {
+      pronoun: Pronoun;
+      invite_state: InviteState;
+      client_goal: ClientGoal;
+      client_status: ClientStatus;
+      checkin_feel: CheckinFeel;
+      checkin_pain: CheckinPain;
+      checkin_adherence: CheckinAdherence;
+      checkin_author: CheckinAuthor;
+      cycle_phase: CyclePhase;
+    };
+    CompositeTypes: { [_ in never]: never };
+  };
+};

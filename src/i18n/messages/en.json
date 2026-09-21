@@ -1,0 +1,92 @@
+{
+  "app": {
+    "name": "Masse",
+    "tagline": "Coaching software for strength coaches"
+  },
+  "auth": {
+    "title": "Sign in",
+    "lede": "Enter your email. We send a link — no password to remember.",
+    "email": "Email address",
+    "emailPlaceholder": "lucie@example.com",
+    "send": "Send the link",
+    "sending": "Sending…",
+    "sent": "Link sent. Check your inbox — it expires in an hour.",
+    "error": "That failed to send. Try again in a moment.",
+    "signOut": "Sign out",
+    "callbackError": "That link is no longer valid. Ask for a new one."
+  },
+  "shell": {
+    "clients": "Clients",
+    "programmes": "Programmes",
+    "soon": "soon",
+    "messaging": "Inbox",
+    "messagingSoon": "Messaging is in development. Until it ships, WhatsApp stays where it is.",
+    "subtitle": "{clients, plural, =0 {Nobody needs you} =1 {1 client needs you} other {# clients need you}} · {checkins, plural, =0 {no check-ins to review} =1 {1 check-in to review} other {# check-ins to review}}"
+  },
+  "roster": {
+    "title": "Roster",
+    "count": "{count, plural, =0 {no clients} =1 {1 client} other {# clients}}",
+    "empty": "No clients yet.",
+    "emptyAction": "Invite your first client with a code — she signs herself up.",
+    "newInvite": "New invite code",
+    "remove": "Remove",
+    "needsYou": "needs you",
+    "noBlock": "No block running"
+  },
+  "programmes": {
+    "title": "Programmes",
+    "empty": "No programmes yet.",
+    "emptyAction": "Create a block, write its first week, then duplicate it.",
+    "new": "New programme",
+    "blank": "+ Blank programme",
+    "weeks": "{count, plural, =1 {1 week} other {# weeks}}",
+    "assigned": "{count, plural, =0 {assigned to nobody} =1 {assigned to 1 client} other {assigned to # clients}}",
+    "template": "template",
+    "week": "Week {number}",
+    "duplicateWeek": "Duplicate week",
+    "saveAsTemplate": "Save as template",
+    "emptyDay": "Empty day",
+    "addSession": "Add a session",
+    "push": "Push to clients",
+    "pushed": "Pushed on {date}",
+    "notPushed": "Never pushed — invisible to the client"
+  },
+  "days": {
+    "0": "Monday",
+    "1": "Tuesday",
+    "2": "Wednesday",
+    "3": "Thursday",
+    "4": "Friday",
+    "5": "Saturday",
+    "6": "Sunday"
+  },
+  "common": {
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "save": "Save",
+    "retry": "Retry"
+  },
+  "welcome": {
+    "title": "Welcome",
+    "lede": "Two fields, once. Your name goes on the programmes you send.",
+    "name": "Full name",
+    "namePlaceholder": "Lucie Merlet",
+    "firstName": "First name",
+    "firstNamePlaceholder": "Lucie",
+    "pronoun": "Refer to you as",
+    "she": "she",
+    "he": "he",
+    "submit": "Get started",
+    "error": "Could not save. Try again."
+  },
+  "attention": {
+    "checkin": "check-in to review",
+    "missed": "missed session",
+    "sleep": "short sleep"
+  },
+  "chip": {
+    "checkin": "Review",
+    "missed": "Open",
+    "sleep": "Sleep"
+  }
+}

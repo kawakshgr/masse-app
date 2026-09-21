@@ -1,0 +1,92 @@
+{
+  "app": {
+    "name": "Masse",
+    "tagline": "Le logiciel des coachs de force"
+  },
+  "auth": {
+    "title": "Connexion",
+    "lede": "Entre ton adresse e-mail. On t'envoie un lien, pas de mot de passe à retenir.",
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "lucie@exemple.fr",
+    "send": "Envoyer le lien",
+    "sending": "Envoi…",
+    "sent": "Lien envoyé. Ouvre ta boîte mail — il expire dans une heure.",
+    "error": "L'envoi a échoué. Réessaie dans un instant.",
+    "signOut": "Se déconnecter",
+    "callbackError": "Ce lien n'est plus valable. Demandes-en un nouveau."
+  },
+  "shell": {
+    "clients": "Clients",
+    "programmes": "Programmes",
+    "soon": "bientôt",
+    "messaging": "Messages",
+    "messagingSoon": "La messagerie est en développement. D'ici là, WhatsApp reste où il est.",
+    "subtitle": "{clients, plural, =0 {Personne n'a besoin de toi} =1 {1 cliente a besoin de toi} other {# clientes ont besoin de toi}} · {checkins, plural, =0 {aucun bilan à relire} =1 {1 bilan à relire} other {# bilans à relire}}"
+  },
+  "roster": {
+    "title": "Roster",
+    "count": "{count, plural, =0 {aucune cliente} =1 {1 cliente} other {# clientes}}",
+    "empty": "Aucune cliente pour l'instant.",
+    "emptyAction": "Invite ta première cliente avec un code — elle s'inscrit toute seule.",
+    "newInvite": "Nouveau code d'invitation",
+    "remove": "Retirer",
+    "needsYou": "a besoin de toi",
+    "noBlock": "Aucun bloc en cours"
+  },
+  "programmes": {
+    "title": "Programmes",
+    "empty": "Aucun programme pour l'instant.",
+    "emptyAction": "Crée un bloc, écris sa première semaine, puis duplique-la.",
+    "new": "Nouveau programme",
+    "blank": "+ Programme vierge",
+    "weeks": "{count, plural, =1 {1 semaine} other {# semaines}}",
+    "assigned": "{count, plural, =0 {assigné à personne} =1 {assigné à 1 cliente} other {assigné à # clientes}}",
+    "template": "modèle",
+    "week": "Semaine {number}",
+    "duplicateWeek": "Dupliquer la semaine",
+    "saveAsTemplate": "Enregistrer comme modèle",
+    "emptyDay": "Jour vide",
+    "addSession": "Ajouter une séance",
+    "push": "Pousser aux clientes",
+    "pushed": "Poussée le {date}",
+    "notPushed": "Jamais poussée — invisible pour la cliente"
+  },
+  "days": {
+    "0": "Lundi",
+    "1": "Mardi",
+    "2": "Mercredi",
+    "3": "Jeudi",
+    "4": "Vendredi",
+    "5": "Samedi",
+    "6": "Dimanche"
+  },
+  "common": {
+    "loading": "Chargement…",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "retry": "Réessayer"
+  },
+  "welcome": {
+    "title": "Bienvenue",
+    "lede": "Deux champs, une fois. Ton nom apparaît sur les programmes que tu envoies.",
+    "name": "Nom complet",
+    "namePlaceholder": "Lucie Merlet",
+    "firstName": "Prénom",
+    "firstNamePlaceholder": "Lucie",
+    "pronoun": "On parle de toi au",
+    "she": "féminin",
+    "he": "masculin",
+    "submit": "Commencer",
+    "error": "Impossible d’enregistrer. Réessaie."
+  },
+  "attention": {
+    "checkin": "bilan à relire",
+    "missed": "séance manquée",
+    "sleep": "sommeil court"
+  },
+  "chip": {
+    "checkin": "Relire",
+    "missed": "Voir",
+    "sleep": "Sommeil"
+  }
+}
