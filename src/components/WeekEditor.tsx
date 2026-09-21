@@ -66,12 +66,12 @@ export function WeekEditor({
   return (
     <div className={pending ? "opacity-70 transition-opacity" : ""}>
       {/* Seven day columns. Empty days are visibly empty and clickable. */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="grid grid-cols-7 gap-2 overflow-x-auto pb-2 [grid-auto-columns:minmax(0,1fr)]">
         {[0, 1, 2, 3, 4, 5, 6].map((day) => {
           const session = byDay(day);
 
           return (
-            <div key={day} className="flex w-[190px] shrink-0 flex-col">
+            <div key={day} className="flex min-w-0 flex-col">
               <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
                 {tDays(String(day))}
               </p>

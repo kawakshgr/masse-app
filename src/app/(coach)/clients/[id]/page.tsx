@@ -121,13 +121,13 @@ export default async function ClientDetailPage({
         <MetricCard
           label={t("sleep")}
           value={avgLabel ?? "—"}
-          sub={targetLabel && t("sleepSub", { avg: targetLabel })}
+          sub={targetLabel && t("sleepSub", { target: targetLabel })}
           wash="wash-3"
         />
         <MetricCard
           label={t("steps")}
           value={steps.latest == null ? "—" : steps.latest.toLocaleString("fr-FR")}
-          sub={steps.avg == null ? null : t("stepsSub", { target: steps.avg.toLocaleString("fr-FR") })}
+          sub={steps.avg == null ? null : t("stepsSub", { avg: steps.avg.toLocaleString("fr-FR") })}
           wash="wash-1"
         />
       </div>

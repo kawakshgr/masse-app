@@ -13,7 +13,8 @@
     "sent": "Lien envoyé. Ouvre ta boîte mail — il expire dans une heure.",
     "error": "L'envoi a échoué. Réessaie dans un instant.",
     "signOut": "Se déconnecter",
-    "callbackError": "Ce lien n'est plus valable. Demandes-en un nouveau."
+    "callbackError": "Ce lien n'est plus valable. Demandes-en un nouveau.",
+    "rateLimited": "Trop de liens demandés. Supabase limite les envois à quelques-uns par heure tant qu’aucun SMTP n’est configuré. Attends une heure, ou branche un vrai service d’e-mail."
   },
   "shell": {
     "clients": "Clients",
@@ -112,8 +113,8 @@
     "steps": "Pas",
     "adherenceSub": "sur 4 semaines",
     "sessionsSub": "cette semaine",
-    "sleepSub": "moyenne {avg}",
-    "stepsSub": "sur {target}",
+    "sleepSub": "objectif {target}",
+    "stepsSub": "moyenne {avg}",
     "sleepSeven": "Sommeil · 7 nuits",
     "thisWeek": "Cette semaine",
     "noData": "Rien à afficher pour l’instant",

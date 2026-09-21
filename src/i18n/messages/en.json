@@ -13,7 +13,8 @@
     "sent": "Link sent. Check your inbox — it expires in an hour.",
     "error": "That failed to send. Try again in a moment.",
     "signOut": "Sign out",
-    "callbackError": "That link is no longer valid. Ask for a new one."
+    "callbackError": "That link is no longer valid. Ask for a new one.",
+    "rateLimited": "Too many links requested. Supabase caps sends to a few per hour until you configure SMTP. Wait an hour, or connect a real email service."
   },
   "shell": {
     "clients": "Clients",
@@ -112,8 +113,8 @@
     "steps": "Steps",
     "adherenceSub": "4-wk rolling",
     "sessionsSub": "this week",
-    "sleepSub": "avg {avg}",
-    "stepsSub": "of {target}",
+    "sleepSub": "target {target}",
+    "stepsSub": "avg {avg}",
     "sleepSeven": "Sleep · 7 nights",
     "thisWeek": "This week",
     "noData": "Nothing to show yet",

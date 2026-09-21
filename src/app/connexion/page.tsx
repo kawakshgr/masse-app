@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-type State = "idle" | "sending" | "sent" | "error";
+type State = "idle" | "sending" | "sent" | "error" | "rate-limited";
 
 function SignInForm() {
   const t = useTranslations("auth");
@@ -30,7 +30,15 @@ function SignInForm() {
       },
     });
 
-    setState(error ? "error" : "sent");
+    if (!error) {
+      setState("sent");
+      return;
+    }
+    // An hourly cap is not a transient failure: "try again in a moment" would
+    // be wrong advice, so it gets its own message.
+    const limited =
+      error.status === 429 || /rate limit/i.test(error.message ?? "");
+    setState(limited ? "rate-limited" : "error");
   }
 
   return (
@@ -86,6 +94,11 @@ function SignInForm() {
         {state === "sent" && (
           <p role="status" className="mt-4 text-[13px] text-[var(--a1)]">
             {t("sent")}
+          </p>
+        )}
+        {state === "rate-limited" && (
+          <p role="alert" className="mt-4 text-[13px] leading-relaxed text-[var(--a3)]">
+            {t("rateLimited")}
           </p>
         )}
         {state === "error" && (
