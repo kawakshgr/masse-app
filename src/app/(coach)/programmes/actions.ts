@@ -335,3 +335,65 @@ export async function retractWeek(
   revalidatePath(`/programmes/${programmeId}`);
   revalidatePath("/clients");
 }
+
+/** Adds a catalogue exercise straight into a day, at the end or at a position. */
+export async function addExerciseNamed(
+  sessionId: string,
+  name: string,
+  programmeId: string,
+) {
+  const supabase = await createClient();
+  const clean = name.trim();
+  if (clean === "") return;
+
+  const { data: last } = await supabase
+    .from("session_exercises")
+    .select("position")
+    .eq("session_id", sessionId)
+    .order("position", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  await supabase.from("session_exercises").insert({
+    session_id: sessionId,
+    position: (last?.position ?? -1) + 1,
+    name: clean,
+  });
+
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+/**
+ * Creates the day if it has no session yet, then drops the exercise in. Lets a
+ * library item land on an empty column without two steps.
+ */
+export async function addExerciseToDay(
+  weekId: string,
+  dayIndex: number,
+  name: string,
+  programmeId: string,
+) {
+  const supabase = await createClient();
+
+  const { data: existing } = await supabase
+    .from("sessions")
+    .select("id")
+    .eq("week_id", weekId)
+    .eq("day_index", dayIndex)
+    .maybeSingle();
+
+  let sessionId = existing?.id;
+
+  if (!sessionId) {
+    const { data: created } = await supabase
+      .from("sessions")
+      .insert({ week_id: weekId, day_index: dayIndex })
+      .select("id")
+      .single();
+    sessionId = created?.id;
+  }
+
+  if (!sessionId) return;
+
+  await addExerciseNamed(sessionId, name, programmeId);
+}

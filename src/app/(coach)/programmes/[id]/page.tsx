@@ -73,7 +73,11 @@ export default async function ProgrammeEditorPage({
       .eq("status", "active")
       .order("name"),
     // Built-ins plus her own, in one list.
-    supabase.from("exercises").select("id, name").order("name").limit(500),
+    supabase
+      .from("exercises")
+      .select("id, name, muscle_group, coach_id")
+      .order("name")
+      .limit(500),
   ]);
 
   return (
@@ -185,7 +189,12 @@ export default async function ProgrammeEditorPage({
           sessions={sessions}
           clients={clients ?? []}
           assignedClientIds={assignedClientIds}
-          catalogue={(catalogue ?? []).map((e) => e.name)}
+          catalogue={(catalogue ?? []).map((e) => ({
+            id: e.id,
+            name: e.name,
+            muscleGroup: e.muscle_group,
+            mine: e.coach_id !== null,
+          }))}
         />
       ) : (
         <p className="text-[12px] text-[var(--ink3)]">{tProg("emptyAction")}</p>

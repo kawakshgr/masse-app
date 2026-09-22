@@ -1,9 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import {
+  ExerciseLibrary,
+  type CatalogueEntry,
+} from "@/components/ExerciseLibrary";
 import { useTranslations } from "next-intl";
 import {
   addExercise,
+  addExerciseToDay,
   addSession,
   deleteExercise,
   deleteSession,
@@ -13,6 +18,34 @@ import {
   retractWeek,
   updateExercise,
 } from "@/app/(coach)/programmes/actions";
+
+/** What a drag is carrying: an existing row, or a catalogue name. */
+type DragPayload =
+  | { kind: "move"; exerciseId: string }
+  | { kind: "new"; name: string };
+
+const DRAG_TYPE = "application/x-masse-exercise";
+
+function writeDrag(event: React.DragEvent, payload: DragPayload) {
+  // Without setData the browser cancels the drag outright — always on Firefox,
+  // intermittently elsewhere. This was why nothing could be dragged at all.
+  event.dataTransfer.setData(DRAG_TYPE, JSON.stringify(payload));
+  event.dataTransfer.setData(
+    "text/plain",
+    payload.kind === "new" ? payload.name : payload.exerciseId,
+  );
+  event.dataTransfer.effectAllowed = "copyMove";
+}
+
+function readDrag(event: React.DragEvent): DragPayload | null {
+  const raw = event.dataTransfer.getData(DRAG_TYPE);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as DragPayload;
+  } catch {
+    return null;
+  }
+}
 
 export type EditorExercise = {
   id: string;
@@ -42,14 +75,15 @@ export function WeekEditor({
   sessions: EditorSession[];
   clients: { id: string; name: string }[];
   assignedClientIds: string[];
-  catalogue: string[];
+  catalogue: CatalogueEntry[];
 }) {
   const t = useTranslations("editor");
   const tProgramme = useTranslations("programme");
+  const tEditor2 = useTranslations("editor2");
   const tDays = useTranslations("days");
   const [pending, startTransition] = useTransition();
   const [dragging, setDragging] = useState<string | null>(null);
-  const [overSession, setOverSession] = useState<string | null>(null);
+  const [overDay, setOverDay] = useState<number | null>(null);
   const [selected, setSelected] = useState<string[]>(assignedClientIds);
   const [startDate, setStartDate] = useState(() =>
     new Date().toISOString().slice(0, 10),
@@ -57,13 +91,41 @@ export function WeekEditor({
 
   const byDay = (day: number) => sessions.find((s) => s.day_index === day);
 
-  function drop(sessionId: string, position: number) {
-    if (!dragging) return;
-    const id = dragging;
+  function onDrop(
+    event: React.DragEvent,
+    day: number,
+    sessionId: string | null,
+    position: number,
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+    const payload = readDrag(event);
     setDragging(null);
-    setOverSession(null);
+    setOverDay(null);
+    if (!payload) return;
+
     startTransition(() => {
-      void moveExercise(id, sessionId, position, programmeId);
+      if (payload.kind === "new") {
+        void addExerciseToDay(weekId, day, payload.name, programmeId);
+      } else if (sessionId) {
+        void moveExercise(payload.exerciseId, sessionId, position, programmeId);
+      }
+    });
+  }
+
+  function allowDrop(event: React.DragEvent, day: number) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    setOverDay(day);
+  }
+
+  /** The reliable path: drag is a convenience, this always works. */
+  function moveToDay(exerciseId: string, day: number) {
+    const target = byDay(day);
+    startTransition(() => {
+      if (target) {
+        void moveExercise(exerciseId, target.id, target.exercises.length, programmeId);
+      }
     });
   }
 
@@ -72,10 +134,19 @@ export function WeekEditor({
       {/* Suggestions, never a restriction: any name she types is accepted, and
           a new one joins her library on save. */}
       <datalist id="masse-exercise-catalogue">
-        {catalogue.map((name) => (
-          <option key={name} value={name} />
+        {catalogue.map((entry) => (
+          <option key={entry.id} value={entry.name} />
         ))}
       </datalist>
+
+      <div className="mb-3">
+        <ExerciseLibrary
+          catalogue={catalogue}
+          weekId={weekId}
+          programmeId={programmeId}
+          daysWithSessions={sessions.map((s) => s.day_index)}
+        />
+      </div>
 
       {/* Seven day columns. Empty days are visibly empty and clickable. */}
       <div className="grid grid-cols-7 gap-2 overflow-x-auto pb-2 [grid-auto-columns:minmax(0,1fr)]">
@@ -91,26 +162,32 @@ export function WeekEditor({
               {!session ? (
                 <button
                   type="button"
+                  onDragOver={(event) => allowDrop(event, day)}
+                  onDragLeave={() => setOverDay(null)}
+                  onDrop={(event) => onDrop(event, day, null, 0)}
                   onClick={() =>
                     startTransition(() => {
                       void addSession(weekId, day, programmeId);
                     })
                   }
-                  className="flex h-24 flex-col items-center justify-center rounded-r3 border border-dashed border-[var(--edge)] text-[11px] text-[var(--ink3)] hover:text-[var(--accent)]"
+                  className={`flex h-24 flex-col items-center justify-center rounded-r3 border border-dashed text-[11px] text-[var(--ink3)] hover:text-[var(--accent)] ${
+                    overDay === day
+                      ? "border-[var(--accent)] text-[var(--accent)]"
+                      : "border-[var(--edge)]"
+                  }`}
                 >
                   <span>{t("emptyDay")}</span>
                   <span className="mt-1 text-[var(--accent)]">{t("addSession")}</span>
                 </button>
               ) : (
                 <div
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setOverSession(session.id);
-                  }}
-                  onDragLeave={() => setOverSession(null)}
-                  onDrop={() => drop(session.id, session.exercises.length)}
+                  onDragOver={(event) => allowDrop(event, day)}
+                  onDragLeave={() => setOverDay(null)}
+                  onDrop={(event) =>
+                    onDrop(event, day, session.id, session.exercises.length)
+                  }
                   className={`glass flex-1 rounded-r3 p-2 ${
-                    overSession === session.id ? "border-[var(--accent)]" : ""
+                    overDay === day ? "border-[var(--accent)]" : ""
                   }`}
                 >
                   <div className="flex items-center gap-1">
@@ -142,22 +219,36 @@ export function WeekEditor({
                     {session.exercises.map((exercise, index) => (
                       <li
                         key={exercise.id}
-                        draggable
-                        onDragStart={() => setDragging(exercise.id)}
-                        onDragEnd={() => setDragging(null)}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={(e) => {
-                          e.stopPropagation();
-                          drop(session.id, index);
+                        onDragOver={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
                         }}
+                        onDrop={(event) => onDrop(event, day, session.id, index)}
                         className={`rounded-r2 border border-[var(--hair)] bg-[var(--glass)] p-2 ${
                           dragging === exercise.id ? "opacity-40" : ""
                         }`}
                       >
                         <div className="flex items-start gap-1">
+                          {/* The handle carries the drag, not the row: the row
+                              is nearly all inputs, which swallow a grab. */}
                           <span
-                            aria-hidden
-                            className="cursor-grab pt-1 text-[10px] text-[var(--ink3)]"
+                            draggable
+                            role="button"
+                            tabIndex={0}
+                            aria-label={tEditor2("drag")}
+                            title={tEditor2("drag")}
+                            onDragStart={(event) => {
+                              writeDrag(event, {
+                                kind: "move",
+                                exerciseId: exercise.id,
+                              });
+                              setDragging(exercise.id);
+                            }}
+                            onDragEnd={() => {
+                              setDragging(null);
+                              setOverDay(null);
+                            }}
+                            className="-m-1 cursor-grab select-none p-1 text-[12px] leading-none text-[var(--ink3)] active:cursor-grabbing"
                           >
                             ⠿
                           </span>
@@ -221,6 +312,27 @@ export function WeekEditor({
                             ×
                           </button>
                         </div>
+
+                        <select
+                          aria-label={tEditor2("moveTo")}
+                          value=""
+                          onChange={(event) => {
+                            const target = Number(event.target.value);
+                            if (Number.isInteger(target)) {
+                              moveToDay(exercise.id, target);
+                            }
+                          }}
+                          className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[10px] text-[var(--ink3)]"
+                        >
+                          <option value="">{tEditor2("moveTo")}…</option>
+                          {[0, 1, 2, 3, 4, 5, 6]
+                            .filter((d) => d !== day && byDay(d))
+                            .map((d) => (
+                              <option key={d} value={d}>
+                                {tDays(String(d))}
+                              </option>
+                            ))}
+                        </select>
                       </li>
                     ))}
                   </ul>

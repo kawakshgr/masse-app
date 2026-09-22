@@ -527,5 +527,22 @@
     "import": "Add to my library",
     "none": "No results. You can still type it in by hand.",
     "per100": "per 100 g"
+  },
+  "library": {
+    "title": "Library",
+    "lede": "Drag an exercise onto a day, or click to add it to the chosen day.",
+    "search": "Filter…",
+    "target": "Add to",
+    "none": "No exercise matches.",
+    "builtin": "built-in",
+    "mine": "mine",
+    "count": "{count, plural, =1 {1 exercise} other {# exercises}}",
+    "hide": "Hide",
+    "show": "Library"
+  },
+  "editor2": {
+    "moveTo": "Move to",
+    "drag": "Drag",
+    "dropHint": "Drop here"
   }
 }

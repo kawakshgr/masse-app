@@ -527,5 +527,22 @@
     "import": "Ajouter à ma bibliothèque",
     "none": "Aucun résultat. Tu peux toujours le saisir à la main.",
     "per100": "pour 100 g"
+  },
+  "library": {
+    "title": "Bibliothèque",
+    "lede": "Glisse un exercice dans un jour, ou clique pour l’ajouter au jour choisi.",
+    "search": "Filtrer…",
+    "target": "Ajouter à",
+    "none": "Aucun exercice ne correspond.",
+    "builtin": "intégré",
+    "mine": "à moi",
+    "count": "{count, plural, =1 {1 exercice} other {# exercices}}",
+    "hide": "Masquer",
+    "show": "Bibliothèque"
+  },
+  "editor2": {
+    "moveTo": "Déplacer vers",
+    "drag": "Glisser",
+    "dropHint": "Déposer ici"
   }
 }
