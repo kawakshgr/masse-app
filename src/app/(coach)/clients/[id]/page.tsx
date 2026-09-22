@@ -12,6 +12,8 @@ import type { CheckInRow } from "@/lib/supabase/types";
 import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
 import { BarChart } from "@/components/BarChart";
 import { StrengthPanel } from "@/components/StrengthPanel";
+import { CyclePanel, type PhaseLevers } from "@/components/CyclePanel";
+import type { CyclePhase } from "@/lib/supabase/types";
 import { loadHistory, type Range } from "@/lib/history";
 import type { PhotoPose } from "@/lib/supabase/types";
 
@@ -41,7 +43,6 @@ export default async function ClientDetailPage({
   const tDays = await getTranslations("days");
   const tGoal = await getTranslations("goal");
   const tPhase = await getTranslations("phase");
-  const tCycle = await getTranslations("cycleTab");
   const tSteps = await getTranslations("stepsTab");
   const tNutrition = await getTranslations("nutritionTab");
 
@@ -114,41 +115,7 @@ export default async function ClientDetailPage({
         <NutritionTab clientId={id} tNutrition={tNutrition} />
       )}
 
-      {tab === "cycle" && (
-        <section className={panel}>
-          <h3 className={heading}>{tCycle("phase")}</h3>
-          {detail.phase == null ? (
-            <p className="mt-3 text-[12px] text-[var(--ink2)]">
-              {tCycle("noData")}
-            </p>
-          ) : (
-            <div className="mt-3 flex gap-3">
-              <MetricCard
-                label={tCycle("phase")}
-                value={tPhase(detail.phase)}
-                sub={null}
-                wash="wash-2"
-              />
-              <MetricCard
-                label={tCycle("intensity")}
-                value={`${Math.round((detail.intensityCoefficient ?? 1) * 100)}%`}
-                sub={null}
-                wash="wash-1"
-              />
-              <MetricCard
-                label={tCycle("volume")}
-                value={`${Math.round((detail.volumeCoefficient ?? 1) * 100)}%`}
-                sub={null}
-                wash="wash-1"
-              />
-            </div>
-          )}
-          {/* Stated plainly, because the database is what keeps it. */}
-          <p className="mt-4 text-[11px] leading-relaxed text-[var(--ink2)]">
-            {tCycle("promise")}
-          </p>
-        </section>
-      )}
+      {tab === "cycle" && <CycleTab clientId={id} />}
 
       {tab === "steps" && <StepsTab clientId={id} tSteps={tSteps} />}
 
@@ -456,6 +423,67 @@ async function HistoryTab({
         </section>
       </div>
     </div>
+  );
+}
+
+async function CycleTab({ clientId }: { clientId: string }) {
+  const supabase = await createClient();
+
+  const [clientRes, stateRes, adjRes] = await Promise.all([
+    supabase
+      .from("clients")
+      .select("first_name, name, cycle_tracking, cycle_mode, cycle_phase_manual")
+      .eq("id", clientId)
+      .maybeSingle(),
+    supabase.rpc("client_cycle_state", { p_client: clientId }),
+    supabase
+      .from("cycle_adjustments")
+      .select("*")
+      .eq("client_id", clientId),
+  ]);
+
+  const client = clientRes.data;
+  const state = (stateRes.data ?? [])[0] ?? null;
+  const saved = new Map((adjRes.data ?? []).map((row) => [row.phase, row]));
+
+  // Defaults come from the same functions the database falls back to, so an
+  // unconfigured column shows what is actually being applied — not a zero.
+  const PHASES: CyclePhase[] = ["menstrual", "follicular", "ovulatory", "luteal"];
+  const fallbackLoad: Record<CyclePhase, number> = {
+    menstrual: -10,
+    follicular: 0,
+    ovulatory: 5,
+    luteal: 0,
+  };
+
+  const levers = Object.fromEntries(
+    PHASES.map((phase) => {
+      const row = saved.get(phase);
+      return [
+        phase,
+        {
+          phase,
+          loadPct: row?.load_pct ?? fallbackLoad[phase],
+          rpeCap: row?.rpe_cap == null ? null : Number(row.rpe_cap),
+          setsDelta: row?.sets_delta ?? (phase === "luteal" ? -1 : 0),
+          kcalDelta: row?.kcal_delta ?? 0,
+          carbsDelta: row?.carbs_g_delta ?? 0,
+          configured: row != null,
+        } satisfies PhaseLevers,
+      ];
+    }),
+  ) as Record<CyclePhase, PhaseLevers>;
+
+  return (
+    <CyclePanel
+      clientId={clientId}
+      firstName={client?.first_name ?? client?.name?.split(/\s+/)[0] ?? ""}
+      tracking={client?.cycle_tracking ?? false}
+      mode={client?.cycle_mode ?? "log"}
+      currentPhase={state?.phase ?? null}
+      manualPhase={client?.cycle_phase_manual ?? null}
+      levers={levers}
+    />
   );
 }
 

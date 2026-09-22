@@ -632,5 +632,24 @@
     "records": "Records",
     "noRecords": "No records in range.",
     "reps": "×"
+  },
+  "cyc": {
+    "on": "Cycle tracking is on",
+    "lede": "{first} logs the period; the plan adjusts by phase. Symptom notes stay private.",
+    "off": "Cycle tracking is not enabled for this client.",
+    "mode": "Mode",
+    "followLog": "Follow the log",
+    "setPhase": "I set the phase",
+    "now": "now",
+    "defaults": "defaults",
+    "load": "Load",
+    "rpe": "RPE cap",
+    "sets": "Sets",
+    "kcal": "Calories",
+    "carbs": "Carbs",
+    "save": "Apply",
+    "noPhase": "No cycle data — nothing to adjust yet.",
+    "promise": "You see the phase and the levers you set. Period dates are never shown to you: the database refuses them, this is not the interface hiding them.",
+    "defaultNote": "Unset — the handoff defaults apply."
   }
 }

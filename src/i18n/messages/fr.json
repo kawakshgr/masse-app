@@ -632,5 +632,24 @@
     "records": "Records",
     "noRecords": "Aucun record sur la période.",
     "reps": "×"
+  },
+  "cyc": {
+    "on": "Le suivi de cycle est actif",
+    "lede": "{first} enregistre ses règles ; le plan s’ajuste selon la phase. Les notes de symptômes restent privées.",
+    "off": "Le suivi de cycle n’est pas activé pour cette cliente.",
+    "mode": "Mode",
+    "followLog": "Suivre le journal",
+    "setPhase": "Je fixe la phase",
+    "now": "actuelle",
+    "defaults": "valeurs par défaut",
+    "load": "Charge",
+    "rpe": "Plafond RPE",
+    "sets": "Séries",
+    "kcal": "Calories",
+    "carbs": "Glucides",
+    "save": "Appliquer",
+    "noPhase": "Aucune donnée de cycle — rien à ajuster pour l’instant.",
+    "promise": "Tu vois la phase et les leviers que tu as réglés. Les dates de règles ne te sont jamais montrées : la base les refuse, ce n’est pas l’interface qui les cache.",
+    "defaultNote": "Non réglé — les valeurs du handoff s’appliquent."
   }
 }

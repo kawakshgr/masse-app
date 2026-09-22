@@ -31,6 +31,7 @@ export type CheckinAuthor = "coach" | "client";
 export type CyclePhase = "menstrual" | "follicular" | "ovulatory" | "luteal";
 export type InvoiceStatus = "draft" | "sent" | "paid" | "void";
 export type PhotoPose = "front" | "side" | "back";
+export type CycleMode = "log" | "manual";
 export type AdminAction =
   | "read_client_record"
   | "read_client_cycle"
@@ -66,6 +67,9 @@ export type ClientRow = {
   session_days: number[];
   sleep_target_h: number | null;
   cycle_tracking: boolean;
+  cycle_mode: CycleMode;
+  /** Used only when cycle_mode is 'manual'. */
+  cycle_phase_manual: CyclePhase | null;
   status: ClientStatus;
   created_at: string;
 };
@@ -237,6 +241,17 @@ export type CheckInPhotoRow = {
   uploaded_at: string;
 };
 
+/** Per-phase levers a coach sets for one client. No dates live here. */
+export type CycleAdjustmentRow = {
+  client_id: string;
+  phase: CyclePhase;
+  load_pct: number;
+  rpe_cap: number | null;
+  sets_delta: number;
+  kcal_delta: number;
+  carbs_g_delta: number;
+};
+
 export type PlatformAdminRow = {
   user_id: string;
   granted_at: string;
@@ -300,6 +315,7 @@ export type Database = {
       invoices: Table<InvoiceRow, "coach_id" | "client_id" | "period_start">;
       allowed_coach_emails: Table<AllowedCoachEmailRow, "email">;
       check_in_photos: Table<CheckInPhotoRow, "check_in_id" | "client_id" | "storage_path">;
+      cycle_adjustments: Table<CycleAdjustmentRow, "client_id" | "phase">;
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
     };
@@ -312,6 +328,13 @@ export type Database = {
           phase: CyclePhase;
           intensity_coefficient: number;
           volume_coefficient: number;
+          load_pct: number;
+          rpe_cap: number | null;
+          sets_delta: number;
+          kcal_delta: number;
+          carbs_g_delta: number;
+          /** False when the handoff defaults are in play. */
+          configured: boolean;
         }[];
       };
       cycle_day: {
@@ -391,6 +414,7 @@ export type Database = {
       cycle_phase: CyclePhase;
       admin_action: AdminAction;
       photo_pose: PhotoPose;
+      cycle_mode: CycleMode;
       invoice_status: InvoiceStatus;
     };
     CompositeTypes: { [_ in never]: never };

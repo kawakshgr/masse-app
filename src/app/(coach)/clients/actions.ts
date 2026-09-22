@@ -8,6 +8,7 @@ import type {
   CheckinFeel,
   CheckinPain,
   ClientGoal,
+  CyclePhase,
   PhotoPose,
 } from "@/lib/supabase/types";
 
@@ -257,6 +258,66 @@ export async function deleteCheckInPhoto(formData: FormData) {
   if (photo?.storage_path) {
     await supabase.storage.from("check-in-photos").remove([photo.storage_path]);
   }
+
+  revalidatePath(`/clients/${clientId}`);
+}
+
+/* ---------- cycle levers ---------- */
+
+function intOr(value: FormDataEntryValue | null, fallback: number): number {
+  const n = Number(String(value ?? "").trim());
+  return Number.isFinite(n) ? Math.round(n) : fallback;
+}
+
+/**
+ * Programming settings, not cycle data — no date passes through here. The row
+ * is per client and per phase, so saving one phase leaves the others alone.
+ */
+export async function saveCycleAdjustment(formData: FormData) {
+  const supabase = await createClient();
+
+  const clientId = String(formData.get("client_id") ?? "");
+  const phase = String(formData.get("phase") ?? "") as CyclePhase;
+  if (!clientId || !["menstrual", "follicular", "ovulatory", "luteal"].includes(phase)) {
+    return;
+  }
+
+  const rpe = String(formData.get("rpe_cap") ?? "").trim();
+
+  await supabase.from("cycle_adjustments").upsert(
+    {
+      client_id: clientId,
+      phase,
+      load_pct: intOr(formData.get("load_pct"), 0),
+      rpe_cap: rpe === "" ? null : Number(rpe),
+      sets_delta: intOr(formData.get("sets_delta"), 0),
+      kcal_delta: intOr(formData.get("kcal_delta"), 0),
+      carbs_g_delta: intOr(formData.get("carbs_g_delta"), 0),
+    },
+    { onConflict: "client_id,phase" },
+  );
+
+  revalidatePath(`/clients/${clientId}`);
+}
+
+/** Follow the log, or name the phase by hand when the log is out of step. */
+export async function setCycleMode(formData: FormData) {
+  const supabase = await createClient();
+
+  const clientId = String(formData.get("client_id") ?? "");
+  const mode = String(formData.get("mode") ?? "");
+  if (!clientId || (mode !== "log" && mode !== "manual")) return;
+
+  const manual = String(formData.get("phase_manual") ?? "");
+
+  await supabase
+    .from("clients")
+    .update({
+      cycle_mode: mode,
+      cycle_phase_manual:
+        mode === "manual" && manual !== "" ? (manual as CyclePhase) : null,
+    })
+    .eq("id", clientId);
 
   revalidatePath(`/clients/${clientId}`);
 }
