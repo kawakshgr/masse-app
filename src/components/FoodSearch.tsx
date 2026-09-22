@@ -19,7 +19,7 @@ export function FoodSearch() {
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+      <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("title")}
       </h3>
       <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
@@ -38,12 +38,12 @@ export function FoodSearch() {
           onChange={(event) => setTerm(event.target.value)}
           placeholder={t("placeholder")}
           aria-label={t("search")}
-          className="h-9 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-3 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+          className="h-9 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
         />
         <button
           type="submit"
           disabled={pending || term.trim().length < 2}
-          className="h-9 shrink-0 rounded-rp bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)] disabled:opacity-50"
+          className="h-9 shrink-0 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)] disabled:opacity-50"
         >
           {pending ? t("searching") : t("search")}
         </button>
@@ -61,7 +61,7 @@ export function FoodSearch() {
               className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
             >
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[12px] font-semibold">
+                <span className="block truncate text-[12px] font-bold">
                   {candidate.name}
                 </span>
                 <span className="tnum block truncate text-[11px] text-[var(--ink3)]">
@@ -87,7 +87,7 @@ export function FoodSearch() {
                 <input type="hidden" name="fat_100g" value={candidate.fat100 ?? ""} />
                 <button
                   type="submit"
-                  className="rounded-rp border border-[var(--edge)] px-3 py-1 text-[10px] font-semibold text-[var(--ink2)]"
+                  className="rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 py-1 text-[10px] font-bold text-[var(--ink2)]"
                 >
                   {t("import")}
                 </button>

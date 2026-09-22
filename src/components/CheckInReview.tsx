@@ -51,7 +51,7 @@ function Measure({
         {value == null ? "—" : `${value} cm`}
         {change !== null && (
           <span
-            className={`ml-1.5 text-[11px] font-semibold ${
+            className={`ml-1.5 text-[11px] font-bold ${
               change === 0
                 ? "text-[var(--ink3)]"
                 : change < 0
@@ -146,7 +146,7 @@ function PhotoSlot({
       />
 
       <div className="mt-1.5 flex items-baseline justify-between gap-2">
-        <span className="truncate text-[11px] font-semibold">{caption}</span>
+        <span className="truncate text-[11px] font-bold">{caption}</span>
         <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">{weight}</span>
       </div>
     </div>
@@ -210,7 +210,7 @@ export function CheckInReview({
     <>
       {/* Which week is on screen — the whole panel follows this. */}
       <div className="flex flex-wrap items-center gap-1">
-        <span className="mr-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <span className="mr-1 text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("pickWeek")}
         </span>
         {weeks.slice(-6).map((week) => (
@@ -219,10 +219,10 @@ export function CheckInReview({
             type="button"
             aria-pressed={week.id === selected.id}
             onClick={() => setSelectedId(week.id)}
-            className={`tnum h-7 rounded-rp px-2.5 text-[11px] font-semibold ${
+            className={`tnum h-7 rounded-rp px-2.5 text-[11px] font-bold ${
               week.id === selected.id
                 ? "sel text-[var(--ink)]"
-                : "border border-[var(--edge)] text-[var(--ink2)]"
+                : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
             }`}
           >
             {t("week", { n: week.number })}
@@ -233,7 +233,7 @@ export function CheckInReview({
       <div className="flex flex-wrap gap-4">
         <section className="glass min-w-[280px] flex-1 rounded-r3 p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("photos")}
             </h3>
             <div className="flex gap-1">
@@ -243,10 +243,10 @@ export function CheckInReview({
                   type="button"
                   aria-pressed={p === pose}
                   onClick={() => setPose(p)}
-                  className={`h-7 rounded-rp px-2.5 text-[11px] font-semibold ${
+                  className={`h-7 rounded-rp px-2.5 text-[11px] font-bold ${
                     p === pose
                       ? "sel text-[var(--ink)]"
-                      : "border border-[var(--edge)] text-[var(--ink2)]"
+                      : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
                   }`}
                 >
                   {t(`poses.${p}`)}
@@ -289,14 +289,14 @@ export function CheckInReview({
 
         <div className="min-w-[280px] flex-1 space-y-4">
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("weight", { weeks: Math.min(8, weeks.length) })}
             </h3>
-            <p className="tnum mt-2 font-display text-[24px] font-extrabold leading-none tracking-[-.04em]">
+            <p className="tnum mt-2 font-display text-[24px] font-extrabold leading-none tracking-[-.03em]">
               {kg(selected.bodyweight)}
               {sinceBaseline !== null && sinceBaseline !== 0 && (
                 <span
-                  className={`ml-2 text-[13px] font-semibold ${
+                  className={`ml-2 text-[13px] font-bold ${
                     sinceBaseline < 0
                       ? "text-[var(--accent-soft)]"
                       : "text-[var(--a2)]"
@@ -314,7 +314,7 @@ export function CheckInReview({
           </section>
 
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("measures")}
             </h3>
             <div className="mt-3 grid grid-cols-2 gap-2">
@@ -326,7 +326,7 @@ export function CheckInReview({
           </section>
 
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("answers")}
             </h3>
             <ul className="mt-2">
@@ -344,7 +344,7 @@ export function CheckInReview({
                   <span className="min-w-0 flex-1 text-[11px] text-[var(--ink2)]">
                     {question}
                   </span>
-                  <span className="shrink-0 rounded-rp border border-[var(--edge)] px-2.5 py-0.5 text-[10px] font-semibold">
+                  <span className="shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2.5 py-0.5 text-[10px] font-bold">
                     {answer || t("noAnswer")}
                   </span>
                 </li>
@@ -364,7 +364,7 @@ export function CheckInReview({
           role="dialog"
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ background: "rgba(2, 10, 16, .88)" }}
+          style={{ background: "rgba(0, 0, 0, .88)" }}
           onClick={() => setZoom(null)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}

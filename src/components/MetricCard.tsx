@@ -25,17 +25,17 @@ export function MetricCard({
       className={`${wash} flex min-w-0 flex-1 flex-col justify-between rounded-r3 border border-[var(--edge)] p-4`}
       style={{ boxShadow: "var(--spec)" }}
     >
-      <p className="truncate text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+      <p className="truncate text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {label}
       </p>
-      <p className="tnum mt-3 font-display text-[24px] font-extrabold leading-none tracking-[-.04em]">
+      <p className="tnum mt-3 font-display text-[24px] font-extrabold leading-none tracking-[-.03em]">
         {value}
       </p>
-      <p className="tnum mt-1 truncate text-[11px] text-[var(--ink3)]">
+      <p className="tnum mt-1 truncate text-[11px] text-[var(--ink2)]">
         {sub ?? "—"}
       </p>
       {delta && (
-        <p className={`tnum mt-1 truncate text-[11px] font-semibold ${tone}`}>
+        <p className={`tnum mt-1 truncate text-[11px] font-bold ${tone}`}>
           {delta.direction === "up" ? "↑" : delta.direction === "down" ? "↓" : "="}{" "}
           {delta.text}
         </p>

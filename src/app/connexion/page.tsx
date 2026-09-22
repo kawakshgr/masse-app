@@ -44,10 +44,10 @@ function SignInForm() {
   return (
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="glass lift w-full max-w-[420px] rounded-r4 p-8">
-        <p className="font-display text-[13px] font-semibold tracking-[-.02em] text-[var(--accent)]">
+        <p className="font-display text-[13px] font-bold tracking-[-.02em] text-[var(--accent)]">
           {tApp("name")}
         </p>
-        <h1 className="mt-2 font-display text-[28px] font-extrabold tracking-[-.04em]">
+        <h1 className="mt-2 font-display text-[28px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h1>
         <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink2)]">
@@ -66,7 +66,7 @@ function SignInForm() {
         <form onSubmit={onSubmit} className="mt-6">
           <label
             htmlFor="email"
-            className="block text-[11px] font-semibold uppercase tracking-wide text-[var(--ink3)]"
+            className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]"
           >
             {t("email")}
           </label>
@@ -79,13 +79,13 @@ function SignInForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("emailPlaceholder")}
             disabled={state === "sending" || state === "sent"}
-            className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)] disabled:opacity-60"
+            className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)] disabled:opacity-60"
           />
 
           <button
             type="submit"
             disabled={state === "sending" || state === "sent"}
-            className="mt-4 h-11 w-full rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)] disabled:opacity-60"
+            className="mt-4 h-11 w-full rounded-r2 cta text-[14px] font-bold text-[var(--on-accent)] disabled:opacity-60"
           >
             {state === "sending" ? t("sending") : t("send")}
           </button>

@@ -149,7 +149,7 @@ export function SplitPane({
             nudge(step);
           }
         }}
-        className="w-px shrink-0 cursor-col-resize bg-[var(--hair)] transition-colors hover:bg-[var(--accent)]"
+        className="w-2 shrink-0 cursor-col-resize bg-[var(--hair)] transition-colors hover:bg-[var(--glass2)]"
       />
 
       <div className="min-w-0 flex-1 overflow-y-auto">{detail}</div>

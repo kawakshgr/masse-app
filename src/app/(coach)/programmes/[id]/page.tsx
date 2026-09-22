@@ -132,7 +132,7 @@ export default async function ProgrammeEditorPage({
               key={week.id}
               href={`/programmes/${programme.id}?semaine=${week.week_number}`}
               aria-current={active ? "page" : undefined}
-              className={`h-8 rounded-r2 px-3 text-[12px] font-semibold leading-8 ${
+              className={`h-8 rounded-r2 px-3 text-[12px] font-bold leading-8 ${
                 active
                   ? "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink)]"
                   : "text-[var(--ink2)] hover:bg-[var(--glass)]"

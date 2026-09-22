@@ -28,7 +28,7 @@ function initialsOf(name: string) {
 
 const panel = "glass rounded-r3 p-4";
 const heading =
-  "text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]";
+  "text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]";
 
 export default async function ClientDetailPage({
   params,
@@ -78,7 +78,7 @@ export default async function ClientDetailPage({
           {initialsOf(client.name)}
         </span>
         <div className="min-w-0 flex-1">
-          <h2 className="truncate font-display text-[22px] font-extrabold leading-tight tracking-[-.04em]">
+          <h2 className="truncate font-display text-[22px] font-extrabold leading-tight tracking-[-.03em]">
             {client.name}
           </h2>
           {meta.length > 0 && (
@@ -264,7 +264,7 @@ function OverviewTab({
                 <span className="w-10 shrink-0 text-[11px] text-[var(--ink3)]">
                   {tDays(String(day.dayIndex)).slice(0, 3)}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">
+                <span className="min-w-0 flex-1 truncate text-[12px] font-bold">
                   {day.sessionName ?? t("rest")}
                 </span>
                 {day.status !== "rest" && (
@@ -297,7 +297,7 @@ async function HistoryTab({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <span className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("longView")}
         </span>
         <div className="flex gap-1">
@@ -306,10 +306,10 @@ async function HistoryTab({
               key={r}
               href={`/clients/${clientId}?onglet=history&portee=${r}`}
               aria-current={r === range ? "page" : undefined}
-              className={`h-7 rounded-rp px-2.5 text-[11px] font-semibold leading-7 ${
+              className={`h-7 rounded-rp px-2.5 text-[11px] font-bold leading-7 ${
                 r === range
                   ? "sel text-[var(--ink)]"
-                  : "border border-[var(--edge)] text-[var(--ink2)]"
+                  : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
               }`}
             >
               {t(r === "12w" ? "r12w" : r === "6m" ? "r6m" : "r1y")}
@@ -403,14 +403,14 @@ async function HistoryTab({
                     ★
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[12px] font-semibold">
+                    <span className="block truncate text-[12px] font-bold">
                       {record.exercise}
                     </span>
-                    <span className="tnum block text-[10px] text-[var(--ink3)]">
+                    <span className="tnum block text-[10px] text-[var(--ink2)]">
                       {record.on}
                     </span>
                   </span>
-                  <span className="tnum shrink-0 text-right text-[12px] font-semibold">
+                  <span className="tnum shrink-0 text-right text-[12px] font-bold">
                     {record.weight} kg {t("reps")} {record.reps}
                     {record.gain !== null && record.gain > 0 && (
                       <span className="ml-1 text-[10px] font-normal text-[var(--accent-soft)]">

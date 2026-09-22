@@ -22,7 +22,7 @@ export function ClientTabs({
   const shown = CLIENT_TABS.filter((tab) => tab !== "cycle" || cycleTracking);
 
   return (
-    <nav className="flex flex-wrap gap-1">
+    <nav className="glass2 flex flex-wrap gap-0.5 self-start rounded-rp p-1" style={{ boxShadow: "var(--spec)" }}>
       {shown.map((tab) => {
         const active = tab === current;
         return (
@@ -30,11 +30,12 @@ export function ClientTabs({
             key={tab}
             href={`/clients/${clientId}?onglet=${tab}`}
             aria-current={active ? "page" : undefined}
-            className={`h-8 rounded-rp px-3 text-[12px] font-semibold leading-8 transition-colors ${
+            className={`h-7 rounded-rp px-3 text-[12.5px] font-bold leading-7 transition-colors ${
               active
                 ? "sel text-[var(--ink)]"
-                : "text-[var(--ink2)] hover:bg-[var(--glass)]"
+                : "text-[var(--ink2)] hover:text-[var(--ink)]"
             }`}
+            style={active ? { boxShadow: "var(--spec)" } : undefined}
           >
             {t(tab)}
           </Link>

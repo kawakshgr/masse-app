@@ -8,7 +8,7 @@ import {
 } from "./actions";
 
 const cell =
-  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
+  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
 
 function euros(cents: number): string {
   return (cents / 100).toLocaleString("fr-FR", {
@@ -54,7 +54,7 @@ export default async function BillingPage() {
   return (
     <div className="min-w-0 flex-1 overflow-y-auto p-5">
       <header className="mb-4">
-        <h2 className="font-display text-[20px] font-extrabold tracking-[-.04em]">
+        <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h2>
         <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
@@ -74,7 +74,7 @@ export default async function BillingPage() {
         <section className="glass rounded-r3 p-4">
           <form action={createInvoice} className="flex flex-wrap items-end gap-2">
             <label className="block min-w-[150px] flex-1">
-              <span className="block text-[10px] text-[var(--ink3)]">{t("client")}</span>
+              <span className="block text-[10px] text-[var(--ink2)]">{t("client")}</span>
               <select name="client_id" required className={`mt-1 ${cell}`}>
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -84,7 +84,7 @@ export default async function BillingPage() {
               </select>
             </label>
             <label className="block w-[140px]">
-              <span className="block text-[10px] text-[var(--ink3)]">{t("period")}</span>
+              <span className="block text-[10px] text-[var(--ink2)]">{t("period")}</span>
               <input
                 type="date"
                 name="period_start"
@@ -94,16 +94,16 @@ export default async function BillingPage() {
               />
             </label>
             <label className="block w-[110px]">
-              <span className="block text-[10px] text-[var(--ink3)]">{t("amount")}</span>
+              <span className="block text-[10px] text-[var(--ink2)]">{t("amount")}</span>
               <input name="amount" inputMode="decimal" className={`tnum mt-1 ${cell}`} />
             </label>
             <label className="block min-w-[140px] flex-1">
-              <span className="block text-[10px] text-[var(--ink3)]">{t("note")}</span>
+              <span className="block text-[10px] text-[var(--ink2)]">{t("note")}</span>
               <input name="note" className={`mt-1 ${cell}`} />
             </label>
             <button
               type="submit"
-              className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
+              className="h-8 shrink-0 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
             >
               {t("create")}
             </button>
@@ -113,7 +113,7 @@ export default async function BillingPage() {
 
       {invoices.length === 0 ? (
         <div className="mt-4 p-2">
-          <p className="text-[13px] font-semibold">{t("empty")}</p>
+          <p className="text-[13px] font-bold">{t("empty")}</p>
           <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("emptyHint")}</p>
         </div>
       ) : (
@@ -129,7 +129,7 @@ export default async function BillingPage() {
                   {invoice.period_end ? ` → ${invoice.period_end}` : ""}
                 </span>
                 <span
-                  className={`ml-auto text-[11px] font-semibold ${statusTone[invoice.status]}`}
+                  className={`ml-auto text-[11px] font-bold ${statusTone[invoice.status]}`}
                 >
                   {t(invoice.status)}
                 </span>

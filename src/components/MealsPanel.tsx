@@ -6,7 +6,7 @@ import { deleteMeal, logMeal } from "@/app/aujourdhui/actions";
 import type { FoodRow, MealRow } from "@/lib/supabase/types";
 
 const cell =
-  "h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
+  "h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
 
 export function MealsPanel({
   day,
@@ -34,7 +34,7 @@ export function MealsPanel({
   return (
     <section className="glass rounded-r3 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("title")}
         </h2>
         {meals.length > 0 && (
@@ -49,7 +49,7 @@ export function MealsPanel({
         <input type="hidden" name="day" value={day} />
 
         <label className="block min-w-[150px] flex-1">
-          <span className="block text-[10px] text-[var(--ink3)]">{t("pick")}</span>
+          <span className="block text-[10px] text-[var(--ink2)]">{t("pick")}</span>
           <select
             name="food_id"
             value={foodId}
@@ -67,7 +67,7 @@ export function MealsPanel({
         </label>
 
         <label className="block min-w-[140px] flex-1">
-          <span className="block text-[10px] text-[var(--ink3)]">{t("free")}</span>
+          <span className="block text-[10px] text-[var(--ink2)]">{t("free")}</span>
           <input
             name="name"
             required={foodId === ""}
@@ -77,18 +77,18 @@ export function MealsPanel({
         </label>
 
         <label className="block w-[110px]">
-          <span className="block text-[10px] text-[var(--ink3)]">{t("quantity")}</span>
+          <span className="block text-[10px] text-[var(--ink2)]">{t("quantity")}</span>
           <input name="quantity_g" inputMode="decimal" className={`tnum mt-1 ${cell}`} />
         </label>
 
         <label className="block w-[110px]">
-          <span className="block text-[10px] text-[var(--ink3)]">{t("slot")}</span>
+          <span className="block text-[10px] text-[var(--ink2)]">{t("slot")}</span>
           <input name="slot" className={`mt-1 ${cell}`} />
         </label>
 
         <button
           type="submit"
-          className="h-9 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
+          className="h-9 shrink-0 rounded-rp cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
         >
           {t("add")}
         </button>
@@ -104,7 +104,7 @@ export function MealsPanel({
               className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
             >
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[12px] font-semibold">
+                <span className="block truncate text-[12px] font-bold">
                   {meal.name}
                 </span>
                 <span className="tnum block truncate text-[11px] text-[var(--ink3)]">

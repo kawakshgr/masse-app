@@ -25,11 +25,11 @@ export function ProgrammeHeader({
             name="name"
             defaultValue={name}
             autoFocus
-            className="h-8 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[14px] font-bold text-[var(--ink)]"
+            className="h-8 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] font-bold text-[var(--ink)]"
           />
           <button
             type="submit"
-            className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-3 text-[11px] font-semibold text-[var(--on-accent)]"
+            className="h-8 shrink-0 rounded-r2 cta px-3 text-[11px] font-bold text-[var(--on-accent)]"
           >
             {t("rename")}
           </button>
@@ -43,7 +43,7 @@ export function ProgrammeHeader({
         </form>
       ) : (
         <div className="flex items-center gap-2">
-          <h2 className="min-w-0 flex-1 truncate font-display text-[20px] font-extrabold tracking-[-.04em]">
+          <h2 className="min-w-0 flex-1 truncate font-display text-[20px] font-extrabold tracking-[-.03em]">
             {name}
           </h2>
           <button
@@ -79,19 +79,19 @@ export function ProgrammeHeader({
             <input type="hidden" name="programme_id" value={programmeId} />
             <input type="hidden" name="expected" value={name} />
             <label className="block min-w-0 flex-1">
-              <span className="block text-[10px] text-[var(--ink3)]">
+              <span className="block text-[10px] text-[var(--ink2)]">
                 {t("confirmType")}
               </span>
               <input
                 name="confirm"
                 required
                 autoComplete="off"
-                className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+                className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
               />
             </label>
             <button
               type="submit"
-              className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[11px] font-semibold text-[var(--a3)]"
+              className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[11px] font-bold text-[var(--a3)]"
             >
               {t("confirm")}
             </button>

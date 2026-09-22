@@ -155,7 +155,7 @@ export function WeekEditor({
 
           return (
             <div key={day} className="flex min-w-0 flex-col">
-              <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+              <p className="mb-2 px-1 text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
                 {tDays(String(day))}
               </p>
 
@@ -224,7 +224,7 @@ export function WeekEditor({
                           event.stopPropagation();
                         }}
                         onDrop={(event) => onDrop(event, day, session.id, index)}
-                        className={`rounded-r2 border border-[var(--hair)] bg-[var(--glass)] p-2 ${
+                        className={`rounded-r2 border border-[var(--hair)] bg-[var(--glass2)] p-2 ${
                           dragging === exercise.id ? "opacity-40" : ""
                         }`}
                       >
@@ -266,7 +266,7 @@ export function WeekEditor({
                                   );
                                 })
                               }
-                              className="w-full rounded-r1 bg-transparent text-[12px] font-semibold text-[var(--ink)]"
+                              className="w-full rounded-r1 bg-transparent text-[12px] font-bold text-[var(--ink)]"
                             />
                             <input
                               defaultValue={exercise.scheme ?? ""}
@@ -357,7 +357,7 @@ export function WeekEditor({
 
       {/* The delivery boundary, made an explicit act. */}
       <section className="glass mt-4 rounded-r3 p-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("assign")}
         </h3>
         <p className="mt-1 text-[11px] text-[var(--ink2)]">{t("assignLede")}</p>
@@ -416,14 +416,14 @@ export function WeekEditor({
 
             <div className="mt-3 flex items-end gap-2">
               <label className="block">
-                <span className="block text-[10px] uppercase tracking-wide text-[var(--ink3)]">
+                <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("startDate")}
                 </span>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="tnum mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+                  className="tnum mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
                 />
               </label>
               <button
@@ -434,7 +434,7 @@ export function WeekEditor({
                     void pushWeek(weekId, selected, startDate, programmeId);
                   })
                 }
-                className="h-9 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)] disabled:opacity-40"
+                className="h-9 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)] disabled:opacity-40"
               >
                 {t("push")}
               </button>

@@ -50,7 +50,7 @@ export default async function AdminPage() {
   return (
     <div className="space-y-4 p-5">
       <header>
-        <h2 className="font-display text-[20px] font-extrabold tracking-[-.04em]">
+        <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h2>
         <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
@@ -59,19 +59,19 @@ export default async function AdminPage() {
       </header>
 
       <section className="glass rounded-r3 p-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("coaches")}
         </h3>
 
         <div className="mt-3 overflow-x-auto">
           <table className="w-full min-w-[620px] text-left text-[12px]">
             <thead>
-              <tr className="text-[10px] uppercase tracking-wide text-[var(--ink3)]">
-                <th className="pb-2 font-semibold">{t("coaches")}</th>
-                <th className="pb-2 text-right font-semibold">{t("clients")}</th>
-                <th className="pb-2 text-right font-semibold">{t("programmes")}</th>
-                <th className="pb-2 pl-4 font-semibold">{t("created")}</th>
-                <th className="pb-2 pl-4 font-semibold" />
+              <tr className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+                <th className="pb-2 font-bold">{t("coaches")}</th>
+                <th className="pb-2 text-right font-bold">{t("clients")}</th>
+                <th className="pb-2 text-right font-bold">{t("programmes")}</th>
+                <th className="pb-2 pl-4 font-bold">{t("created")}</th>
+                <th className="pb-2 pl-4 font-bold" />
               </tr>
             </thead>
             <tbody>
@@ -80,7 +80,7 @@ export default async function AdminPage() {
                 return (
                   <tr key={coach.coach_id} className="border-t border-[var(--hair)]">
                     <td className="py-2">
-                      <span className="block truncate font-semibold">{coach.name}</span>
+                      <span className="block truncate font-bold">{coach.name}</span>
                       <span
                         className={`text-[10px] ${
                           suspended ? "text-[var(--a3)]" : "text-[var(--ink3)]"
@@ -104,11 +104,11 @@ export default async function AdminPage() {
                           minLength={10}
                           placeholder={t("reasonPlaceholder")}
                           aria-label={t("reason")}
-                          className="h-8 w-[200px] rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[11px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+                          className="h-8 w-[200px] rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[11px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
                         />
                         <button
                           type="submit"
-                          className={`h-8 shrink-0 rounded-r2 border px-3 text-[11px] font-semibold ${
+                          className={`h-8 shrink-0 rounded-r2 border px-3 text-[11px] font-bold ${
                             suspended
                               ? "border-[var(--accent-soft)] text-[var(--accent-soft)]"
                               : "border-[var(--a3)] text-[var(--a3)]"
@@ -127,7 +127,7 @@ export default async function AdminPage() {
       </section>
 
       <section className="glass rounded-r3 p-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {tAllow("title")}
         </h3>
         <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
@@ -136,24 +136,24 @@ export default async function AdminPage() {
 
         <form action={allowCoachEmail} className="mt-3 flex flex-wrap items-end gap-2">
           <label className="block min-w-[200px] flex-1">
-            <span className="block text-[10px] text-[var(--ink3)]">{tAllow("email")}</span>
+            <span className="block text-[10px] text-[var(--ink2)]">{tAllow("email")}</span>
             <input
               name="email"
               type="email"
               required
-              className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+              className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
             />
           </label>
           <label className="block min-w-[140px] flex-1">
-            <span className="block text-[10px] text-[var(--ink3)]">{tAllow("note")}</span>
+            <span className="block text-[10px] text-[var(--ink2)]">{tAllow("note")}</span>
             <input
               name="note"
-              className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+              className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
             />
           </label>
           <button
             type="submit"
-            className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
+            className="h-8 shrink-0 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
           >
             {tAllow("add")}
           </button>
@@ -168,7 +168,7 @@ export default async function AdminPage() {
                 key={entry.email}
                 className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
               >
-                <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">
+                <span className="min-w-0 flex-1 truncate text-[12px] font-bold">
                   {entry.email}
                 </span>
                 <span className="min-w-0 truncate text-[11px] text-[var(--ink3)]">
@@ -190,7 +190,7 @@ export default async function AdminPage() {
       </section>
 
       <section className="glass rounded-r3 p-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("log")}
         </h3>
 
@@ -206,7 +206,7 @@ export default async function AdminPage() {
                 <span className="tnum shrink-0 text-[10px] text-[var(--ink3)]">
                   {entry.accessed_at.slice(0, 16).replace("T", " ")}
                 </span>
-                <span className="shrink-0 text-[11px] font-semibold">
+                <span className="shrink-0 text-[11px] font-bold">
                   {t(`action.${entry.action}`)}
                 </span>
                 <span className="min-w-0 flex-1 truncate text-[11px] text-[var(--ink2)]">

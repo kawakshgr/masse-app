@@ -104,7 +104,7 @@ export default async function TodayPage() {
 
       <header className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
-        <h1 className="font-display text-[26px] font-extrabold tracking-[-.04em]">
+        <h1 className="font-display text-[26px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h1>
         <p className="text-[12px] text-[var(--ink3)]">
@@ -125,7 +125,7 @@ export default async function TodayPage() {
         />
       ) : (
         <section className="glass rounded-r3 p-4">
-          <p className="text-[13px] font-semibold">
+          <p className="text-[13px] font-bold">
             {week ? tLog("noSession") : t("none")}
           </p>
           {!week && (
@@ -137,7 +137,7 @@ export default async function TodayPage() {
       {/* Sets that reached the server today, each removable. */}
       {(setsRes.data ?? []).length > 0 && (
         <section className="glass rounded-r3 p-4">
-          <h2 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+          <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {tLog("done")}
           </h2>
           <ul className="mt-2">
@@ -184,7 +184,7 @@ export default async function TodayPage() {
       {/* Her cycle entries, each removable: the erasure right on her own rows. */}
       {client.cycle_tracking && (cycleLogsRes.data ?? []).length > 0 && (
         <section className="glass rounded-r3 p-4">
-          <h2 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+          <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {tEntry("cycleTitle")}
           </h2>
           <ul className="mt-2">
@@ -213,7 +213,7 @@ export default async function TodayPage() {
 
       {week && (
         <section className="glass rounded-r3 p-4">
-          <h2 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+          <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("week")}
           </h2>
           <ul className="mt-2">

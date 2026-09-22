@@ -20,7 +20,7 @@ export type PhaseLevers = {
 };
 
 const field =
-  "tnum h-7 w-full rounded-r1 border border-[var(--edge)] bg-[var(--glass)] px-1.5 text-center text-[11px] text-[var(--ink)]";
+  "tnum h-7 w-full rounded-r1 border border-[var(--edge)] bg-[var(--glass2)] px-1.5 text-center text-[11px] text-[var(--ink)]";
 
 function Lever({
   label,
@@ -93,7 +93,7 @@ export function CyclePanel({
               <select
                 name="phase_manual"
                 defaultValue={manualPhase ?? "follicular"}
-                className="h-7 rounded-rp border border-[var(--edge)] bg-[var(--glass)] px-2 text-[11px] text-[var(--ink)]"
+                className="h-7 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[11px] text-[var(--ink)]"
               >
                 {PHASES.map((p) => (
                   <option key={p} value={p}>
@@ -104,9 +104,9 @@ export function CyclePanel({
             )}
             <button
               type="submit"
-              className={`h-7 rounded-rp px-2.5 text-[11px] font-semibold ${
+              className={`h-7 rounded-rp px-2.5 text-[11px] font-bold ${
                 mode === "log"
-                  ? "border border-[var(--edge)] text-[var(--ink2)]"
+                  ? "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
                   : "sel text-[var(--ink)]"
               }`}
             >
@@ -139,7 +139,7 @@ export function CyclePanel({
               <div className="flex items-baseline justify-between gap-2">
                 <span className="text-[12px] font-bold">{tPhase(phase)}</span>
                 {isNow && (
-                  <span className="rounded-rp bg-[var(--accent)] px-2 py-0.5 text-[9px] font-semibold text-[var(--on-accent)]">
+                  <span className="rounded-rp bg-[var(--accent)] px-2 py-0.5 text-[9px] font-bold text-[var(--on-accent)]">
                     {t("now")}
                   </span>
                 )}
@@ -161,7 +161,7 @@ export function CyclePanel({
 
               <button
                 type="submit"
-                className="mt-2 h-7 w-full rounded-rp bg-[var(--accent)] text-[11px] font-semibold text-[var(--on-accent)]"
+                className="mt-2 h-7 w-full rounded-r2 cta text-[11px] font-bold text-[var(--on-accent)]"
               >
                 {t("save")}
               </button>

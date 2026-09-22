@@ -25,7 +25,8 @@ export default async function CoachLayout({
   if (!coach) redirect("/bienvenue");
 
   const t = await getTranslations("shell");
-  const { entries, clientsNeedingYou, checkinsToReview } = await loadRoster(supabase);
+  const { entries, clientsNeedingYou, checkinsToReview } =
+    await loadRoster(supabase);
 
   // The Admin tab is only rendered for someone who can actually use it.
   const { data: admin } = await supabase
@@ -35,37 +36,34 @@ export default async function CoachLayout({
     .maybeSingle();
 
   return (
-    <>
-      <div className="atmosphere" aria-hidden />
-      <div className="flex h-dvh flex-col">
-        <header className="flex h-14 shrink-0 items-center gap-3 px-4">
-          <div className="min-w-0">
-            <h1 className="truncate font-display text-[14px] font-extrabold tracking-[-.03em]">
-              Masse — {coach.first_name ?? coach.name}
-            </h1>
-            {/* Derived from rows, with correct singular and plural. */}
-            <p className="tnum truncate text-[11px] text-[var(--ink3)]">
-              {t("subtitle", {
-                clients: clientsNeedingYou,
-                checkins: checkinsToReview,
-              })}
-            </p>
-          </div>
+    <div className="desk flex h-dvh flex-col">
+      <header className="topbar flex h-14 shrink-0 items-center gap-3 px-4">
+        <div className="min-w-0">
+          <h1 className="truncate font-display text-[14px] font-extrabold tracking-[-.03em]">
+            Masse — {coach.first_name ?? coach.name}
+          </h1>
+          {/* Derived from rows, with correct singular and plural. */}
+          <p className="tnum truncate text-[11px] text-[var(--ink2)]">
+            {t("subtitle", {
+              clients: clientsNeedingYou,
+              checkins: checkinsToReview,
+            })}
+          </p>
+        </div>
 
-          <div className="ml-auto">
-            <ThemeToggle />
-          </div>
-        </header>
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
+      </header>
 
-        <TabBar isPlatformAdmin={admin != null} />
+      <TabBar isPlatformAdmin={admin != null} />
 
-        <CommandPalette
-          clients={entries.map((e) => ({ id: e.id, name: e.name }))}
-          isPlatformAdmin={admin != null}
-        />
+      <CommandPalette
+        clients={entries.map((e) => ({ id: e.id, name: e.name }))}
+        isPlatformAdmin={admin != null}
+      />
 
-        <div className="flex min-h-0 flex-1">{children}</div>
-      </div>
-    </>
+      <div className="flex min-h-0 flex-1">{children}</div>
+    </div>
   );
 }

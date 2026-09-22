@@ -68,7 +68,7 @@ export function InviteDialog({
           setCreated(null);
           setOpen(true);
         }}
-        className="h-9 w-full rounded-rp text-[12px] font-semibold text-[var(--on-accent)]"
+        className="h-9 w-full rounded-rp text-[12px] font-bold text-[var(--on-accent)]"
         style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
       >
         {label}
@@ -77,7 +77,7 @@ export function InviteDialog({
       {open && (
         <div
           className="fixed inset-0 z-50 grid place-items-center p-4"
-          style={{ background: "rgba(2, 10, 16, .62)" }}
+          style={{ background: "rgba(0, 0, 0, .58)" }}
           onClick={(event) => {
             if (event.target === event.currentTarget) setOpen(false);
           }}
@@ -88,9 +88,9 @@ export function InviteDialog({
             aria-modal="true"
             aria-label={t("title")}
             tabIndex={-1}
-            className="glass lift w-full max-w-[460px] rounded-r4 p-6 outline-none"
+            className="chrome lift w-full max-w-[460px] rounded-r4 p-6 outline-none"
           >
-            <h2 className="font-display text-[20px] font-extrabold tracking-[-.04em]">
+            <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
               {t("title")}
             </h2>
             <p className="mt-2 text-[12px] leading-relaxed text-[var(--ink2)]">
@@ -107,7 +107,7 @@ export function InviteDialog({
                     className="mt-0.5 size-4 shrink-0 accent-[var(--a1)]"
                   />
                   <span className="min-w-0">
-                    <span className="block text-[12px] font-semibold">
+                    <span className="block text-[12px] font-bold">
                       {t("askCycle")}
                     </span>
                     <span className="block text-[11px] leading-snug text-[var(--ink3)]">
@@ -120,14 +120,14 @@ export function InviteDialog({
                   type="button"
                   onClick={onCreate}
                   disabled={pendingTransition}
-                  className="mt-5 h-10 w-full rounded-r2 bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)] disabled:opacity-60"
+                  className="mt-5 h-10 w-full rounded-r2 cta text-[13px] font-bold text-[var(--on-accent)] disabled:opacity-60"
                 >
                   {pendingTransition ? t("creating") : t("create")}
                 </button>
               </>
             ) : (
               <>
-                <p className="mt-5 text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+                <p className="mt-5 text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("yourCode")}
                 </p>
                 <p className="tnum mt-1 select-all break-all font-display text-[26px] font-extrabold tracking-[-.02em] text-[var(--accent)]">
@@ -143,7 +143,7 @@ export function InviteDialog({
                 <button
                   type="button"
                   onClick={() => copy(created.code)}
-                  className="mt-4 h-10 w-full rounded-r2 bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)]"
+                  className="mt-4 h-10 w-full rounded-r2 cta text-[13px] font-bold text-[var(--on-accent)]"
                 >
                   {copied === created.code ? t("copied") : t("copy")}
                 </button>
@@ -152,7 +152,7 @@ export function InviteDialog({
 
             {pending.length > 0 && (
               <div className="mt-5 border-t border-[var(--hair)] pt-3">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+                <p className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("pending", { count: pending.length })}
                 </p>
                 <ul className="mt-2">
@@ -161,7 +161,7 @@ export function InviteDialog({
                       key={invite.id}
                       className="flex items-center gap-2 border-b border-[var(--hair)] py-2 last:border-0"
                     >
-                      <span className="tnum min-w-0 flex-1 truncate text-[12px] font-semibold">
+                      <span className="tnum min-w-0 flex-1 truncate text-[12px] font-bold">
                         {invite.code}
                       </span>
                       <span className="tnum shrink-0 text-[10px] text-[var(--ink3)]">

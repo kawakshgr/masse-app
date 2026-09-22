@@ -150,6 +150,42 @@ body {
   box-shadow: var(--lift), var(--spec);
 }
 
+/* Second level. Anything sitting inside a glass panel — a segmented rail, a
+   chip, a nested card — steps up to --glass2. No blur: it is already behind
+   the panel's own, and stacking two reads as fog. */
+.glass2 {
+  background: var(--glass2);
+  border: 1px solid var(--edge);
+}
+
+/* The window titlebar. A glass strip with a hairline under it and no side or
+   top border, because it spans the window rather than sitting in it. Its own
+   class, not .glass plus border overrides: our surface classes are unlayered,
+   so they beat every Tailwind border utility whatever the source order. */
+.topbar {
+  background: var(--glass);
+  border-bottom: 1px solid var(--hair);
+  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+}
+
+/* Floating chrome — menus, the palette, dialogs, toasts — is NOT white-alpha
+   glass. It is --chrome: a near-opaque tint of --dw, so a layer above the page
+   reads as darker in dark mode and lighter in light mode rather than washing
+   out whatever it covers. The prototype uses it for every overlay. */
+.chrome {
+  background: var(--chrome);
+  border: 1px solid var(--edge);
+  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+  -webkit-backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+}
+
+/* The primary action is a teal-to-violet gradient, never a flat accent fill:
+   it is the one place both accents appear at once. */
+.cta {
+  background: linear-gradient(120deg, var(--a1), var(--a2));
+}
+
 /* Selection is a tinted gradient, not a flat fill. */
 .sel {
   background: var(--sel);
@@ -164,51 +200,62 @@ body {
 }
 
 /* ---------------------------------------------------------------
-   Atmosphere. The prototype sits on a slow-moving glow rather than
-   a flat fill; without it the glass surfaces have nothing to catch.
+   Atmosphere. Two solid blobs of the deep --b1 / --b2 pair, blurred
+   as a group — not the bright --a1 / --a2 accents, which are for ink
+   and fills and would oversaturate every glass surface above them.
+
+   It belongs to the phone screens and the standalone pages only. The
+   prototype's desktop shell has no glow inside it at all: the coach's
+   window is flat --deep, which is what lets one layer read as darker
+   than another. Geometry and timings are the prototype's.
    --------------------------------------------------------------- */
 
 .atmosphere {
   position: fixed;
   inset: 0;
   z-index: -1;
-  overflow: hidden;
   pointer-events: none;
+  filter: blur(48px);
+  opacity: 0.7;
 }
 
 .atmosphere::before,
 .atmosphere::after {
   content: "";
   position: absolute;
-  width: 62vw;
-  height: 62vw;
   border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.5;
 }
 
 .atmosphere::before {
-  top: -18vw;
-  left: -10vw;
-  background: radial-gradient(circle, var(--a2), transparent 68%);
-  animation: atmos-a 44s ease-in-out infinite;
+  top: -6%;
+  left: -14%;
+  width: 70%;
+  height: 34%;
+  background: var(--b1);
+  animation: drift1 24s ease-in-out infinite;
 }
 
 .atmosphere::after {
-  right: -16vw;
-  bottom: -22vw;
-  background: radial-gradient(circle, var(--a1), transparent 68%);
-  animation: atmos-b 58s ease-in-out infinite;
+  right: -16%;
+  bottom: 8%;
+  width: 66%;
+  height: 30%;
+  background: var(--b2);
+  animation: drift2 29s ease-in-out infinite;
 }
 
-@keyframes atmos-a {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50%      { transform: translate3d(7vw, 5vh, 0) scale(1.15); }
+@keyframes drift1 {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  33%  { transform: translate3d(6vw, 4vh, 0) scale(1.18); }
+  66%  { transform: translate3d(-4vw, 8vh, 0) scale(0.9); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
 }
 
-@keyframes atmos-b {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
-  50%      { transform: translate3d(-6vw, -5vh, 0) scale(0.9); }
+@keyframes drift2 {
+  0%   { transform: translate3d(0, 0, 0) scale(1.05); }
+  40%  { transform: translate3d(-8vw, -6vh, 0) scale(0.86); }
+  75%  { transform: translate3d(5vw, 3vh, 0) scale(1.2); }
+  100% { transform: translate3d(0, 0, 0) scale(1.05); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -216,10 +263,16 @@ body {
   .atmosphere::after { animation: none; }
 }
 
+/* The coach's window. Flat and dark, the way the prototype's desktop
+   shell is, so the glass above it has something to sit on. */
+.desk {
+  background: var(--deep);
+}
+
 /* Metric cards carry a wash of the accent they belong to. */
-.wash-1 { background: color-mix(in oklab, var(--a1) 13%, var(--glass)); }
-.wash-2 { background: color-mix(in oklab, var(--a2) 13%, var(--glass)); }
-.wash-3 { background: color-mix(in oklab, var(--a3) 13%, var(--glass)); }
+.wash-1 { background: var(--wash1); }
+.wash-2 { background: var(--wash2); }
+.wash-3 { background: var(--wash3); }
 
 /* Print: the week on paper, nothing else. */
 @media print {

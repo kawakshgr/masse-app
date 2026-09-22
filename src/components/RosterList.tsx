@@ -36,7 +36,7 @@ export function RosterList({
       </div>
 
       <div className="mt-3 flex h-10 shrink-0 items-center justify-between border-y border-[var(--hair)] px-3">
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <span className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("title")}
         </span>
         <span className="tnum text-[10px] text-[var(--ink3)]">
@@ -48,7 +48,7 @@ export function RosterList({
         {entries.length === 0 ? (
           // Empty states are designed, not blank.
           <div className="p-5">
-            <p className="text-[13px] font-semibold">{t("empty")}</p>
+            <p className="text-[13px] font-bold">{t("empty")}</p>
             <p className="mt-1 text-[12px] leading-relaxed text-[var(--ink2)]">
               {t("emptyAction")}
             </p>
@@ -99,7 +99,7 @@ export function RosterList({
                     </span>
 
                     {entry.attention && (
-                      <span className="shrink-0 rounded-rp border border-[var(--a3)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--a3)]">
+                      <span className="shrink-0 rounded-rp border border-[var(--a3)] px-2.5 py-0.5 text-[10px] font-bold text-[var(--a3)]">
                         {tChip(entry.attention)}
                       </span>
                     )}

@@ -94,7 +94,7 @@ export function MacroDonut({
             <span className="min-w-0 flex-1 truncate text-[11px] text-[var(--ink2)]">
               {slice.label}
             </span>
-            <span className="tnum shrink-0 text-[11px] font-semibold">
+            <span className="tnum shrink-0 text-[11px] font-bold">
               {Math.round((slice.value / total) * 100)}%
             </span>
           </li>

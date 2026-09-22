@@ -5,7 +5,7 @@ import { FoodSearch } from "@/components/FoodSearch";
 import { FoodForm } from "@/components/FoodForm";
 
 const cell =
-  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
+  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
 
 export default async function FoodsPage() {
   const t = await getTranslations("foods");
@@ -22,7 +22,7 @@ export default async function FoodsPage() {
     <div className="min-w-0 flex-1 overflow-y-auto p-5">
       <header className="mb-4">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 className="font-display text-[20px] font-extrabold tracking-[-.04em]">
+          <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
             {t("title")}
           </h2>
           <span className="tnum text-[11px] text-[var(--ink3)]">
@@ -46,7 +46,7 @@ export default async function FoodsPage() {
 
       {rows.length === 0 ? (
         <div className="mt-4 p-2">
-          <p className="text-[13px] font-semibold">{t("empty")}</p>
+          <p className="text-[13px] font-bold">{t("empty")}</p>
           <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("emptyHint")}</p>
         </div>
       ) : (

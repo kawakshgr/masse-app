@@ -72,7 +72,7 @@ export function CommandPalette({
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[14vh]"
-      style={{ background: "rgba(2, 10, 16, .62)" }}
+      style={{ background: "rgba(0, 0, 0, .58)" }}
       onClick={(event) => {
         if (event.target === event.currentTarget) setOpen(false);
       }}
@@ -81,7 +81,8 @@ export function CommandPalette({
         role="dialog"
         aria-modal="true"
         aria-label={t("title")}
-        className="glass lift w-full max-w-[520px] overflow-hidden rounded-r4"
+        className="chrome w-full max-w-[520px] overflow-hidden rounded-r3"
+        style={{ boxShadow: "0 40px 90px rgba(0, 0, 0, .6)" }}
       >
         <input
           ref={input}

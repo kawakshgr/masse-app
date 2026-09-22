@@ -9,7 +9,7 @@ const PAIN = ["None", "Minor", "Need to talk"] as const;
 const ADHERENCE = ["All of it", "Most", "Struggled"] as const;
 
 const cell =
-  "mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]";
+  "mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]";
 
 function mondayOf(date = new Date()): string {
   const d = new Date(
@@ -34,14 +34,14 @@ function Radios({
 }) {
   return (
     <fieldset className="min-w-[180px] flex-1">
-      <legend className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+      <legend className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {label}
       </legend>
       <div className="mt-1 flex gap-1">
         {values.map((value) => (
           <label
             key={value}
-            className="flex h-8 min-w-0 flex-1 cursor-pointer items-center justify-center rounded-rp border border-[var(--edge)] bg-[var(--glass)] px-1 text-[11px] text-[var(--ink2)] has-checked:border-[var(--accent)] has-checked:text-[var(--accent)]"
+            className="flex h-8 min-w-0 flex-1 cursor-pointer items-center justify-center rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-1 text-[11px] text-[var(--ink2)] has-checked:border-[var(--accent)] has-checked:text-[var(--accent)]"
           >
             <input
               type="radio"
@@ -74,7 +74,7 @@ export function CheckInPanel({
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+      <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("title")}
       </h3>
       <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
@@ -86,7 +86,7 @@ export function CheckInPanel({
 
         <div className="flex flex-wrap gap-3">
           <label className="block w-[150px]">
-            <span className="block text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("week")}
             </span>
             <input
@@ -97,7 +97,7 @@ export function CheckInPanel({
             />
           </label>
           <label className="block w-[120px]">
-            <span className="block text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("bodyweight")}
             </span>
             <input
@@ -126,7 +126,7 @@ export function CheckInPanel({
             ] as const
           ).map(([name, label, value]) => (
             <label key={name} className="block w-[104px]">
-              <span className="block text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+              <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
                 {label}
               </span>
               <input
@@ -140,7 +140,7 @@ export function CheckInPanel({
         </div>
 
         <label className="block">
-          <span className="block text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+          <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("note")}
           </span>
           <input name="note" defaultValue={current?.note ?? ""} className={cell} />
@@ -148,7 +148,7 @@ export function CheckInPanel({
 
         <button
           type="submit"
-          className="h-9 rounded-rp bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
+          className="h-9 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
         >
           {t("save")}
         </button>

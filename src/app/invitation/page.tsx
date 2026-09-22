@@ -19,12 +19,12 @@ function Field({
 }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="block">
-      <span className="block text-[11px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+      <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {label}
       </span>
       <input
         {...props}
-        className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+        className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
       />
     </label>
   );
@@ -47,7 +47,7 @@ function Choice({
       className={`h-11 rounded-r2 border px-3 text-[13px] transition-colors ${
         selected
           ? "border-[var(--accent)] bg-[var(--glass2)] text-[var(--accent)]"
-          : "border-[var(--edge)] bg-[var(--glass)] text-[var(--ink2)]"
+          : "border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
       }`}
     >
       {children}
@@ -114,13 +114,13 @@ export default function OnboardingPage() {
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="atmosphere" aria-hidden />
       <div className="glass lift w-full max-w-[520px] rounded-r4 p-8">
-        <p className="tnum text-[11px] font-semibold text-[var(--accent)]">
+        <p className="tnum text-[11px] font-bold text-[var(--accent)]">
           {t("step", { n: shownIndex })}
         </p>
 
         {step === 1 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("codeTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("codeLede")}</p>
@@ -129,7 +129,7 @@ export default function OnboardingPage() {
               onChange={(e) => set({ code: e.target.value.toUpperCase() })}
               placeholder={t("codePlaceholder")}
               aria-label={t("codeTitle")}
-              className="tnum mt-5 h-12 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-3 text-center text-[18px] font-bold tracking-widest text-[var(--ink)] placeholder:text-[var(--ink3)]"
+              className="tnum mt-5 h-12 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-center text-[18px] font-bold tracking-widest text-[var(--ink)] placeholder:text-[var(--ink3)]"
             />
             {codeBad && (
               <p role="alert" className="mt-3 text-[12px] text-[var(--a3)]">
@@ -140,7 +140,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={checkCode}
               disabled={checking || a.code.trim().length < 4}
-              className="mt-5 h-11 w-full rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)] disabled:opacity-50"
+              className="mt-5 h-11 w-full rounded-rp cta text-[14px] font-bold text-[var(--on-accent)] disabled:opacity-50"
             >
               {t("next")}
             </button>
@@ -149,7 +149,7 @@ export default function OnboardingPage() {
 
         {step === 2 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("goalTitle")}
             </h1>
             <p className="mt-1 text-[12px] text-[var(--accent)]">
@@ -168,7 +168,7 @@ export default function OnboardingPage() {
 
         {step === 3 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("bodyTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("bodyLede")}</p>
@@ -185,7 +185,7 @@ export default function OnboardingPage() {
 
         {step === 4 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("injuriesTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("injuriesLede")}</p>
@@ -194,14 +194,14 @@ export default function OnboardingPage() {
               onChange={(e) => set({ injuries: e.target.value })}
               rows={4}
               aria-label={t("injuriesTitle")}
-              className="mt-5 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] p-3 text-[14px] text-[var(--ink)]"
+              className="mt-5 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[14px] text-[var(--ink)]"
             />
           </>
         )}
 
         {step === 5 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("equipmentTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("equipmentLede")}</p>
@@ -227,7 +227,7 @@ export default function OnboardingPage() {
 
         {step === 6 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("daysTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("daysLede")}</p>
@@ -253,12 +253,12 @@ export default function OnboardingPage() {
 
         {step === 7 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("cycleTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("cycleLede")}</p>
             {/* The promise is stated plainly, because the architecture keeps it. */}
-            <p className="mt-4 rounded-r2 border border-[var(--edge)] bg-[var(--glass)] p-3 text-[12px] leading-relaxed text-[var(--ink2)]">
+            <p className="mt-4 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[12px] leading-relaxed text-[var(--ink2)]">
               {t("cyclePromise")}
             </p>
             <div className="mt-5 grid grid-cols-2 gap-2">
@@ -274,7 +274,7 @@ export default function OnboardingPage() {
 
         {step === 8 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("sleepTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("sleepLede")}</p>
@@ -291,12 +291,12 @@ export default function OnboardingPage() {
 
         {step === 9 && (
           <>
-            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
+            <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("summaryTitle")}
             </h1>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("summaryLede")}</p>
 
-            <dl className="mt-5 space-y-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass)] p-3 text-[12px]">
+            <dl className="mt-5 space-y-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[12px]">
               {[
                 ["Coach", a.coachName],
                 [t("goalTitle"), a.goal && tGoal(a.goal)],
@@ -327,7 +327,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={finish}
               disabled={sent || !email || !a.name.trim()}
-              className="mt-4 h-11 w-full rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)] disabled:opacity-50"
+              className="mt-4 h-11 w-full rounded-rp cta text-[14px] font-bold text-[var(--on-accent)] disabled:opacity-50"
             >
               {t("finish")}
             </button>
@@ -351,7 +351,7 @@ export default function OnboardingPage() {
             <button
               type="button"
               onClick={() => go(1)}
-              className="h-11 flex-1 rounded-r2 bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)]"
+              className="h-11 flex-1 rounded-rp cta text-[13px] font-bold text-[var(--on-accent)]"
             >
               {t("next")}
             </button>

@@ -18,7 +18,7 @@ export function StrengthPanel({
   if (names.length === 0 || !selected) {
     return (
       <section className="glass rounded-r3 p-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("strength")}
         </h3>
         <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("noStrength")}</p>
@@ -34,7 +34,7 @@ export function StrengthPanel({
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+      <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("strength")}
       </h3>
 
@@ -45,10 +45,10 @@ export function StrengthPanel({
             type="button"
             aria-pressed={name === selected}
             onClick={() => setSelected(name)}
-            className={`h-7 rounded-rp px-2.5 text-[11px] font-semibold ${
+            className={`h-7 rounded-rp px-2.5 text-[11px] font-bold ${
               name === selected
                 ? "sel text-[var(--ink)]"
-                : "border border-[var(--edge)] text-[var(--ink2)]"
+                : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
             }`}
           >
             {name}
@@ -57,12 +57,12 @@ export function StrengthPanel({
       </div>
 
       <div className="mt-3 flex flex-wrap items-baseline gap-2">
-        <span className="tnum font-display text-[24px] font-extrabold leading-none tracking-[-.04em]">
+        <span className="tnum font-display text-[24px] font-extrabold leading-none tracking-[-.03em]">
           {latest == null ? "—" : `${latest} kg`}
         </span>
         {gain !== null && gain !== 0 && (
           <span
-            className={`tnum text-[13px] font-semibold ${
+            className={`tnum text-[13px] font-bold ${
               gain > 0 ? "text-[var(--accent-soft)]" : "text-[var(--a3)]"
             }`}
           >

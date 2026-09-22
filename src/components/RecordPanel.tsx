@@ -27,7 +27,7 @@ export function RecordPanel({
     return (
       <section className="glass rounded-r3 p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+          <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("title")}
           </h3>
           <div className="flex gap-2">
@@ -81,19 +81,19 @@ export function RecordPanel({
               <input type="hidden" name="client_id" value={client.id} />
               <input type="hidden" name="expected" value={firstName} />
               <label className="block min-w-0 flex-1">
-                <span className="block text-[10px] text-[var(--ink3)]">
+                <span className="block text-[10px] text-[var(--ink2)]">
                   {tRemove("confirmType")}
                 </span>
                 <input
                   name="confirm"
                   required
                   autoComplete="off"
-                  className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+                  className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
                 />
               </label>
               <button
                 type="submit"
-                className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[11px] font-semibold text-[var(--a3)]"
+                className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[11px] font-bold text-[var(--a3)]"
               >
                 {tRemove("confirm")}
               </button>
@@ -113,7 +113,7 @@ export function RecordPanel({
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+      <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("title")}
       </h3>
 
@@ -121,20 +121,20 @@ export function RecordPanel({
         <input type="hidden" name="client_id" value={client.id} />
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink3)]">Nom</span>
+          <span className="block text-[10px] text-[var(--ink2)]">Nom</span>
           <input
             name="name"
             defaultValue={client.name}
-            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
           />
         </label>
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink3)]">{t("goal")}</span>
+          <span className="block text-[10px] text-[var(--ink2)]">{t("goal")}</span>
           <select
             name="goal"
             defaultValue={client.goal ?? ""}
-            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
           >
             <option value="">—</option>
             {GOALS.map((goal) => (
@@ -147,51 +147,51 @@ export function RecordPanel({
 
         <div className="flex gap-3">
           <label className="block flex-1">
-            <span className="block text-[10px] text-[var(--ink3)]">cm</span>
+            <span className="block text-[10px] text-[var(--ink2)]">cm</span>
             <input
               name="height_cm"
               inputMode="decimal"
               defaultValue={client.height_cm ?? ""}
-              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
             />
           </label>
           <label className="block flex-1">
-            <span className="block text-[10px] text-[var(--ink3)]">{t("sleepTarget")}</span>
+            <span className="block text-[10px] text-[var(--ink2)]">{t("sleepTarget")}</span>
             <input
               name="sleep_target_h"
               inputMode="decimal"
               defaultValue={client.sleep_target_h ?? ""}
-              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
             />
           </label>
           <label className="block flex-1">
-            <span className="block text-[10px] text-[var(--ink3)]">{t("days")}</span>
+            <span className="block text-[10px] text-[var(--ink2)]">{t("days")}</span>
             <input
               name="session_days"
               defaultValue={client.session_days.join(",")}
               placeholder="0,2,4"
-              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
             />
           </label>
         </div>
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink3)]">{t("injuries")}</span>
+          <span className="block text-[10px] text-[var(--ink2)]">{t("injuries")}</span>
           <textarea
             name="injuries"
             rows={2}
             defaultValue={client.injuries.join("\n")}
-            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] p-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[12px] text-[var(--ink)]"
           />
         </label>
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink3)]">{t("equipment")}</span>
+          <span className="block text-[10px] text-[var(--ink2)]">{t("equipment")}</span>
           <textarea
             name="equipment"
             rows={2}
             defaultValue={client.equipment.join("\n")}
-            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] p-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[12px] text-[var(--ink)]"
           />
         </label>
 
@@ -208,7 +208,7 @@ export function RecordPanel({
         <div className="flex gap-2">
           <button
             type="submit"
-            className="h-8 rounded-r2 bg-[var(--accent)] px-3 text-[11px] font-semibold text-[var(--on-accent)]"
+            className="h-8 rounded-r2 cta px-3 text-[11px] font-bold text-[var(--on-accent)]"
           >
             {t("save")}
           </button>

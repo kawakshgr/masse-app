@@ -53,7 +53,7 @@ export default function FinalisePage() {
           <p className="text-[13px] text-[var(--ink2)]">{t("finalising")}</p>
         ) : (
           <>
-            <p className="text-[13px] font-semibold text-[var(--a3)]">
+            <p className="text-[13px] font-bold text-[var(--a3)]">
               {failure === "no-answers" ? t("noAnswers") : t("failed")}
             </p>
             <p className="mt-2 text-[12px] leading-relaxed text-[var(--ink2)]">
@@ -61,7 +61,7 @@ export default function FinalisePage() {
             </p>
             <a
               href="/invitation"
-              className="mt-4 flex h-11 w-full items-center justify-center rounded-rp bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)]"
+              className="mt-4 flex h-11 w-full items-center justify-center rounded-rp cta text-[13px] font-bold text-[var(--on-accent)]"
             >
               {t("restart")}
             </a>
