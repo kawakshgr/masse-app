@@ -8,6 +8,7 @@ import { RecordPanel } from "@/components/RecordPanel";
 import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
+import type { PhotoView } from "@/components/CheckInPhotos";
 
 function initialsOf(name: string) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]!.toUpperCase()).join("");
@@ -316,13 +317,12 @@ async function HistoryTab({
     .select("id, reps, weight_kg, rpe, logged_at, session_exercises(name)")
     .eq("client_id", clientId)
     .order("logged_at", { ascending: false })
-    .limit(120);
+    .limit(600);
 
   const rows = (logs ?? []) as unknown as {
     id: string;
     reps: number | null;
     weight_kg: number | null;
-    rpe: number | null;
     logged_at: string;
     session_exercises: { name: string } | null;
   }[];
@@ -335,52 +335,110 @@ async function HistoryTab({
     );
   }
 
-  // Grouped by exercise, with volume summed from the very rows listed.
-  const byExercise = new Map<string, typeof rows>();
+  /** Monday of the week a set was logged in, so weeks line up across exercises. */
+  function weekOf(iso: string): string {
+    const d = new Date(iso);
+    const monday = new Date(
+      Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()),
+    );
+    monday.setUTCDate(monday.getUTCDate() - ((monday.getUTCDay() + 6) % 7));
+    return monday.toISOString().slice(0, 10);
+  }
+
+  type WeekStat = { week: string; sets: number; best: number; volume: number };
+
+  const byExercise = new Map<string, Map<string, WeekStat>>();
+
   for (const row of rows) {
     const name = row.session_exercises?.name ?? "—";
-    byExercise.set(name, [...(byExercise.get(name) ?? []), row]);
+    const week = weekOf(row.logged_at);
+    const weeks = byExercise.get(name) ?? new Map<string, WeekStat>();
+    const stat = weeks.get(week) ?? { week, sets: 0, best: 0, volume: 0 };
+
+    const weight = Number(row.weight_kg ?? 0);
+    const reps = Number(row.reps ?? 0);
+
+    stat.sets += 1;
+    stat.best = Math.max(stat.best, weight);
+    stat.volume += weight * reps;
+
+    weeks.set(week, stat);
+    byExercise.set(name, weeks);
   }
 
   return (
     <section className={panel}>
       <h3 className={heading}>{tHistory("title")}</h3>
+
       <ul className="mt-3 space-y-3">
-        {[...byExercise.entries()].map(([name, sets]) => {
-          const volume = sets.reduce(
-            (sum, s) => sum + Number(s.reps ?? 0) * Number(s.weight_kg ?? 0),
-            0,
+        {[...byExercise.entries()].map(([name, weeks]) => {
+          // Newest first, so the change reads against the week before it.
+          const ordered = [...weeks.values()].sort((a, b) =>
+            b.week.localeCompare(a.week),
           );
+
           return (
             <li key={name} className="rounded-r2 border border-[var(--hair)] p-3">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="text-[12px] font-bold">{name}</span>
-                <span className="tnum text-[11px] text-[var(--ink3)]">
-                  {tHistory("sets", { count: sets.length })} · {tHistory("volume")}{" "}
-                  {Math.round(volume).toLocaleString("fr-FR")} kg
-                </span>
-              </div>
-              <ul className="mt-2">
-                {sets.slice(0, 8).map((set) => (
-                  <li
-                    key={set.id}
-                    className="tnum flex items-center gap-3 border-b border-[var(--hair)] py-1 text-[11px] last:border-0"
-                  >
-                    <span className="w-24 shrink-0 text-[var(--ink3)]">
-                      {set.logged_at.slice(0, 10)}
-                    </span>
-                    <span className="min-w-0 flex-1 truncate">
-                      {[
-                        set.reps ? `${set.reps} reps` : null,
-                        set.weight_kg ? `${set.weight_kg} kg` : null,
-                        set.rpe ? `RPE ${set.rpe}` : null,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ") || "—"}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <p className="text-[12px] font-bold">{name}</p>
+
+              <table className="mt-2 w-full text-left text-[11px]">
+                <thead>
+                  <tr className="text-[10px] uppercase tracking-wide text-[var(--ink3)]">
+                    <th className="pb-1 font-semibold">{tHistory("week")}</th>
+                    <th className="pb-1 text-right font-semibold">
+                      {tHistory("sets", { count: 0 }).replace(/^\d+\s*/, "")}
+                    </th>
+                    <th className="pb-1 text-right font-semibold">
+                      {tHistory("last")}
+                    </th>
+                    <th className="pb-1 text-right font-semibold">
+                      {tHistory("volume")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ordered.slice(0, 8).map((stat, index) => {
+                    const previous = ordered[index + 1];
+                    const change =
+                      previous && previous.volume > 0
+                        ? Math.round(
+                            ((stat.volume - previous.volume) / previous.volume) * 100,
+                          )
+                        : null;
+
+                    return (
+                      <tr key={stat.week} className="border-t border-[var(--hair)]">
+                        <td className="tnum py-1">{stat.week}</td>
+                        <td className="tnum py-1 text-right">{stat.sets}</td>
+                        <td className="tnum py-1 text-right">
+                          {stat.best > 0 ? `${stat.best} kg` : "—"}
+                        </td>
+                        <td className="tnum py-1 text-right">
+                          {Math.round(stat.volume).toLocaleString("fr-FR")} kg
+                          {change !== null && change !== 0 && (
+                            <span
+                              className={`ml-1 font-semibold ${
+                                change > 0
+                                  ? "text-[var(--accent-soft)]"
+                                  : "text-[var(--a3)]"
+                              }`}
+                            >
+                              {change > 0 ? "+" : ""}
+                              {change}%
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+
+              {ordered.length < 2 && (
+                <p className="mt-1 text-[10px] text-[var(--ink3)]">
+                  {tHistory("noCompare")}
+                </p>
+              )}
             </li>
           );
         })}
@@ -398,7 +456,44 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
     .order("week_start_date", { ascending: false })
     .limit(12);
 
-  return <CheckInPanel clientId={clientId} checkIns={(data ?? []) as CheckInRow[]} />;
+  const checkIns = (data ?? []) as CheckInRow[];
+
+  const { data: photos } = await supabase
+    .from("check_in_photos")
+    .select("id, check_in_id, storage_path")
+    .eq("client_id", clientId)
+    .order("uploaded_at");
+
+  // The bucket is private, so each file is served through a short-lived signed
+  // URL rather than a public path.
+  const paths = (photos ?? []).map((p) => p.storage_path);
+  const signed =
+    paths.length === 0
+      ? []
+      : ((
+          await supabase.storage
+            .from("check-in-photos")
+            .createSignedUrls(paths, 3600)
+        ).data ?? []);
+
+  const urlByPath = new Map(
+    signed.map((entry) => [entry.path ?? "", entry.signedUrl ?? null]),
+  );
+
+  const photosByCheckIn: Record<string, PhotoView[]> = {};
+  for (const photo of photos ?? []) {
+    const list = photosByCheckIn[photo.check_in_id] ?? [];
+    list.push({ id: photo.id, url: urlByPath.get(photo.storage_path) ?? null });
+    photosByCheckIn[photo.check_in_id] = list;
+  }
+
+  return (
+    <CheckInPanel
+      clientId={clientId}
+      checkIns={checkIns}
+      photosByCheckIn={photosByCheckIn}
+    />
+  );
 }
 
 async function NutritionTab({

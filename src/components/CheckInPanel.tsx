@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import type { CheckInRow } from "@/lib/supabase/types";
+import { CheckInPhotos, type PhotoView } from "@/components/CheckInPhotos";
 import {
   deleteCheckIn,
   markCheckInReviewed,
@@ -62,14 +63,17 @@ function Radios({
 export function CheckInPanel({
   clientId,
   checkIns,
+  photosByCheckIn,
 }: {
   clientId: string;
   checkIns: CheckInRow[];
+  photosByCheckIn: Record<string, PhotoView[]>;
 }) {
   const t = useTranslations("checkin");
   const tFeel = useTranslations("feel");
   const tPain = useTranslations("pain");
   const tAdh = useTranslations("adherence");
+  const tCompare = useTranslations("compare");
 
   const week = mondayOf();
   const current = checkIns.find((c) => c.week_start_date === week) ?? null;
@@ -142,14 +146,44 @@ export function CheckInPanel({
             {t("history")}
           </h4>
           <ul className="mt-2">
-            {checkIns.map((entry) => (
+            {checkIns.map((entry, index) => {
+              // checkIns arrive newest first, so the next one is the older one.
+              const previous = checkIns[index + 1];
+              const here = entry.bodyweight_kg == null ? null : Number(entry.bodyweight_kg);
+              const before =
+                previous?.bodyweight_kg == null ? null : Number(previous.bodyweight_kg);
+              const change =
+                here != null && before != null
+                  ? Math.round((here - before) * 10) / 10
+                  : null;
+
+              return (
               <li
                 key={entry.id}
-                className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
+                className="border-b border-[var(--hair)] py-2 last:border-0"
               >
+                <div className="flex items-center gap-3">
                 <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
                   {entry.week_start_date}
                 </span>
+
+                {here != null && (
+                  <span className="tnum shrink-0 text-[11px] font-semibold">
+                    {here} kg
+                    {change !== null && change !== 0 && (
+                      <span
+                        className={`ml-1 font-normal ${
+                          change > 0 ? "text-[var(--a2)]" : "text-[var(--accent-soft)]"
+                        }`}
+                        title={tCompare("vsLast")}
+                      >
+                        {change > 0 ? "+" : ""}
+                        {change}
+                      </span>
+                    )}
+                  </span>
+                )}
+
                 <span className="min-w-0 flex-1 truncate text-[11px] text-[var(--ink2)]">
                   {[
                     entry.feel && tFeel(entry.feel),
@@ -188,8 +222,16 @@ export function CheckInPanel({
                     ×
                   </button>
                 </form>
+                </div>
+
+                <CheckInPhotos
+                  checkInId={entry.id}
+                  clientId={clientId}
+                  photos={photosByCheckIn[entry.id] ?? []}
+                />
               </li>
-            ))}
+              );
+            })}
           </ul>
         </div>
       )}

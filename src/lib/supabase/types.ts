@@ -222,6 +222,15 @@ export type AllowedCoachEmailRow = {
   added_by: string | null;
 };
 
+export type CheckInPhotoRow = {
+  id: string;
+  check_in_id: string;
+  client_id: string;
+  storage_path: string;
+  note: string | null;
+  uploaded_at: string;
+};
+
 export type PlatformAdminRow = {
   user_id: string;
   granted_at: string;
@@ -284,6 +293,7 @@ export type Database = {
       meals: Table<MealRow, "client_id" | "day" | "name">;
       invoices: Table<InvoiceRow, "coach_id" | "client_id" | "period_start">;
       allowed_coach_emails: Table<AllowedCoachEmailRow, "email">;
+      check_in_photos: Table<CheckInPhotoRow, "check_in_id" | "client_id" | "storage_path">;
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
     };

@@ -488,11 +488,12 @@
   "history": {
     "title": "History",
     "none": "No sets logged yet.",
-    "week": "Week of",
+    "week": "Week",
     "sets": "{count, plural, =1 {1 set} other {# sets}}",
     "volume": "Volume",
     "exercise": "Exercise",
-    "last": "Last"
+    "last": "Last",
+    "noCompare": "Only one week so far — nothing to compare."
   },
   "cycleTab": {
     "none": "Cycle tracking is not enabled for this client.",
@@ -544,5 +545,29 @@
     "moveTo": "Move to",
     "drag": "Drag",
     "dropHint": "Drop here"
+  },
+  "compare": {
+    "vsLastWeek": "vs last week",
+    "vsLast": "vs previous",
+    "noCompare": "nothing to compare",
+    "week": "Week",
+    "best": "Best set",
+    "volume": "Volume",
+    "progress": "Progress",
+    "noHistory": "Not enough weeks yet to compare."
+  },
+  "photos": {
+    "title": "Photos",
+    "add": "Add a photo",
+    "uploading": "Uploading…",
+    "none": "No photos.",
+    "remove": "Delete",
+    "hint": "Stored privately, visible only to her and you.",
+    "tooBig": "File too large (8 MB maximum).",
+    "failed": "Upload failed."
+  },
+  "checkin2": {
+    "bodyweight": "Bodyweight",
+    "delta": "change"
   }
 }

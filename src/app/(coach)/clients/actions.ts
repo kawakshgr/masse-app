@@ -198,3 +198,43 @@ export async function deleteCheckIn(formData: FormData) {
   revalidatePath(`/clients/${clientId}`);
   revalidatePath("/clients");
 }
+
+/** Records a photo that the browser already put in the private bucket. */
+export async function attachCheckInPhoto(
+  checkInId: string,
+  clientId: string,
+  storagePath: string,
+) {
+  const supabase = await createClient();
+  if (!checkInId || !clientId || !storagePath) return;
+
+  await supabase.from("check_in_photos").insert({
+    check_in_id: checkInId,
+    client_id: clientId,
+    storage_path: storagePath,
+  });
+
+  revalidatePath(`/clients/${clientId}`);
+}
+
+/** Removes the row and the file; a dangling object is still a stored photo. */
+export async function deleteCheckInPhoto(formData: FormData) {
+  const supabase = await createClient();
+  const id = String(formData.get("photo_id") ?? "");
+  const clientId = String(formData.get("client_id") ?? "");
+  if (!id) return;
+
+  const { data: photo } = await supabase
+    .from("check_in_photos")
+    .select("storage_path")
+    .eq("id", id)
+    .maybeSingle();
+
+  await supabase.from("check_in_photos").delete().eq("id", id);
+
+  if (photo?.storage_path) {
+    await supabase.storage.from("check-in-photos").remove([photo.storage_path]);
+  }
+
+  revalidatePath(`/clients/${clientId}`);
+}

@@ -488,11 +488,12 @@
   "history": {
     "title": "Historique",
     "none": "Aucune série enregistrée pour l’instant.",
-    "week": "Semaine du",
+    "week": "Semaine",
     "sets": "{count, plural, =1 {1 série} other {# séries}}",
     "volume": "Volume",
     "exercise": "Exercice",
-    "last": "Dernière"
+    "last": "Dernière",
+    "noCompare": "Une seule semaine pour l’instant — rien à comparer."
   },
   "cycleTab": {
     "none": "Le suivi de cycle n’est pas activé pour cette cliente.",
@@ -544,5 +545,29 @@
     "moveTo": "Déplacer vers",
     "drag": "Glisser",
     "dropHint": "Déposer ici"
+  },
+  "compare": {
+    "vsLastWeek": "vs sem. préc.",
+    "vsLast": "vs précédent",
+    "noCompare": "rien à comparer",
+    "week": "Semaine",
+    "best": "Meilleure série",
+    "volume": "Volume",
+    "progress": "Progression",
+    "noHistory": "Pas encore assez de semaines pour comparer."
+  },
+  "photos": {
+    "title": "Photos",
+    "add": "Ajouter une photo",
+    "uploading": "Envoi…",
+    "none": "Aucune photo.",
+    "remove": "Supprimer",
+    "hint": "Stockées en privé, visibles seulement par elle et toi.",
+    "tooBig": "Fichier trop lourd (8 Mo maximum).",
+    "failed": "L’envoi a échoué."
+  },
+  "checkin2": {
+    "bodyweight": "Poids",
+    "delta": "écart"
   }
 }
