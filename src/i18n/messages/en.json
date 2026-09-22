@@ -851,6 +851,7 @@
     "settledOn": "Settled {date}",
     "back": "Back",
     "goToCompany": "Fill in my company",
-    "open": "View invoice"
+    "open": "View invoice",
+    "failed": "Issuing failed. Try again, or check your company under Admin."
   }
 }

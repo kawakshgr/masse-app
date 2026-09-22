@@ -68,13 +68,19 @@ export function BillingInspector({
   client,
   period,
   periodLabel,
+  companyReady,
+  problem,
 }: {
   client: BillingClient;
   period: string;
   periodLabel: string;
+  /** Her company is on file, so an invoice can carry its mandatory mentions. */
+  companyReady: boolean;
+  problem?: "entreprise" | "echec" | null;
 }) {
   const t = useTranslations("billing");
   const tInvoice = useTranslations("invoice");
+  const tCompany = useTranslations("company");
   const [, startTransition] = useTransition();
 
   const [amount, setAmount] = useState(client.amountCents);
@@ -376,6 +382,13 @@ export function BillingInspector({
             >
               {tInvoice("open")}
             </Link>
+          ) : !companyReady ? (
+            <Link
+              href="/admin"
+              className="glass2 flex h-10 min-w-0 flex-1 basis-32 items-center justify-center rounded-r2 px-3 text-center text-[12px] font-semibold text-[var(--ink2)]"
+            >
+              {tInvoice("goToCompany")}
+            </Link>
           ) : (
             <form action={issueInvoice} className="min-w-0 flex-1 basis-32">
               <input type="hidden" name="client_id" value={client.id} />
@@ -405,6 +418,16 @@ export function BillingInspector({
             </span>
           )}
         </div>
+        {!companyReady && (
+          <p className="text-[12px] leading-[1.45] text-[var(--ink3)]">
+            {tCompany("incomplete")}
+          </p>
+        )}
+        {problem === "echec" && (
+          <p className="text-[12px] leading-[1.45] text-[var(--a3)]">
+            {tInvoice("failed")}
+          </p>
+        )}
       </section>
 
       <section

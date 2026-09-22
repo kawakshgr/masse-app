@@ -851,6 +851,7 @@
     "settledOn": "Réglée le {date}",
     "back": "Retour",
     "goToCompany": "Renseigner mon entreprise",
-    "open": "Voir la facture"
+    "open": "Voir la facture",
+    "failed": "L’émission a échoué. Réessaie, ou vérifie ton entreprise dans Admin."
   }
 }

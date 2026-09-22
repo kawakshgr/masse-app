@@ -36,7 +36,7 @@ function initialsOf(name: string): string {
 export default async function BillingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ filtre?: string; ligne?: string }>;
+  searchParams: Promise<{ filtre?: string; ligne?: string; probleme?: string }>;
 }) {
   const t = await getTranslations("billing");
   const params = await searchParams;
@@ -49,20 +49,37 @@ export default async function BillingPage({
   const months = lastMonths(period, 6);
   const nextMonth = nextMonthOf(period);
 
-  const [clientsRes, arrangementsRes, invoicesRes] = await Promise.all([
-    supabase
-      .from("clients")
-      .select("id, name, email, created_at")
-      .eq("status", "active")
-      .order("name"),
-    supabase
-      .from("billing_arrangements")
-      .select("client_id, amount_cents, type, day_of_month, pack_sessions"),
-    supabase
-      .from("invoices")
-      .select("client_id, period_start, status, paid_at, issued_at, invoice_number")
-      .gte("period_start", months[0]),
-  ]);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [clientsRes, arrangementsRes, invoicesRes, profileRes] =
+    await Promise.all([
+      supabase
+        .from("clients")
+        .select("id, name, email, created_at")
+        .eq("status", "active")
+        .order("name"),
+      supabase
+        .from("billing_arrangements")
+        .select("client_id, amount_cents, type, day_of_month, pack_sessions"),
+      supabase
+        .from("invoices")
+        .select(
+          "client_id, period_start, status, paid_at, issued_at, invoice_number",
+        )
+        .gte("period_start", months[0]),
+      supabase
+        .from("coach_billing_profiles")
+        .select("legal_name, siret")
+        .eq("coach_id", user?.id ?? "")
+        .maybeSingle(),
+    ]);
+
+  // An invoice cannot be written without the mentions it has to carry, so the
+  // panel says so rather than offering a button that quietly fails.
+  const companyReady =
+    profileRes.data?.legal_name != null && profileRes.data?.siret != null;
 
   const clients = clientsRes.data ?? [];
   const arrangements = new Map(
@@ -262,6 +279,12 @@ export default async function BillingPage({
 
         {selected && (
           <BillingInspector
+            companyReady={companyReady}
+            problem={
+              params.probleme === "entreprise" || params.probleme === "echec"
+                ? params.probleme
+                : null
+            }
             client={
               {
                 ...selected,

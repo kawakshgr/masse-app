@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { statusFor, type MonthState } from "@/lib/billing";
 import type { BillingType } from "@/lib/supabase/types";
@@ -144,11 +145,19 @@ export async function issueInvoice(formData: FormData) {
   const period = String(formData.get("period") ?? "");
   if (!clientId || !period) return;
 
-  await supabase.rpc("assign_invoice_number", {
+  const { error } = await supabase.rpc("assign_invoice_number", {
     p_client: clientId,
     p_period: period,
     p_amount: toCents(formData.get("amount")),
   });
+
+  if (error) {
+    // The one failure a coach can act on herself: she has no company yet.
+    const reason = error.message.includes("no billing profile")
+      ? "entreprise"
+      : "echec";
+    redirect(`/facturation?ligne=${clientId}&probleme=${reason}`);
+  }
 
   revalidatePath("/facturation");
 }
