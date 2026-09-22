@@ -577,5 +577,36 @@
     "lede": "Masse needs the network to load your sessions.",
     "held": "Sets you logged offline are kept on this device. They go as soon as the connection returns — you have nothing to do.",
     "retry": "Try again"
+  },
+  "review": {
+    "poses": {
+      "front": "Front",
+      "side": "Side",
+      "back": "Back"
+    },
+    "thisWeek": "this week",
+    "baseline": "baseline",
+    "discipline": "Same light, same time of day — shot before breakfast. Tap a pose to switch both sides.",
+    "privacy": "Only you and {first}.",
+    "addPose": "Add",
+    "noBaseline": "No baseline for this pose yet.",
+    "weight": "Weight · {weeks} weeks",
+    "since": "since week 1",
+    "weightNote": "7-day average, not single weigh-ins.",
+    "measures": "Measurements",
+    "waist": "Waist",
+    "chest": "Chest",
+    "hips": "Hips",
+    "thigh": "Thigh",
+    "noChange": "no change",
+    "answers": "Her answers",
+    "qFeel": "How did the week feel overall?",
+    "qPain": "Any pain or niggles?",
+    "qAdherence": "Sticking to the plan?",
+    "noAnswer": "—",
+    "week": "W{n}",
+    "pickWeek": "Week",
+    "noCheckins": "No check-ins yet.",
+    "photos": "Progress photos"
   }
 }

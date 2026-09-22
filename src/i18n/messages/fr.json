@@ -577,5 +577,36 @@
     "lede": "Masse a besoin du réseau pour charger tes séances.",
     "held": "Tes séries saisies hors-ligne sont gardées sur cet appareil. Elles partiront dès que la connexion revient — tu n’as rien à faire.",
     "retry": "Réessayer"
+  },
+  "review": {
+    "poses": {
+      "front": "Face",
+      "side": "Profil",
+      "back": "Dos"
+    },
+    "thisWeek": "cette semaine",
+    "baseline": "référence",
+    "discipline": "Même lumière, même heure — prise avant le petit-déjeuner. Change la pose pour basculer les deux côtés.",
+    "privacy": "Seulement toi et {first}.",
+    "addPose": "Ajouter",
+    "noBaseline": "Pas encore de référence pour cette pose.",
+    "weight": "Poids · {weeks} semaines",
+    "since": "depuis la semaine 1",
+    "weightNote": "Moyenne 7 jours, pas des pesées isolées.",
+    "measures": "Mensurations",
+    "waist": "Taille",
+    "chest": "Poitrine",
+    "hips": "Hanches",
+    "thigh": "Cuisse",
+    "noChange": "stable",
+    "answers": "Ses réponses",
+    "qFeel": "Comment s’est passée la semaine ?",
+    "qPain": "Des douleurs ou des gênes ?",
+    "qAdherence": "Le plan a-t-il été suivi ?",
+    "noAnswer": "—",
+    "week": "S{n}",
+    "pickWeek": "Semaine",
+    "noCheckins": "Aucun bilan pour l’instant.",
+    "photos": "Photos de progression"
   }
 }

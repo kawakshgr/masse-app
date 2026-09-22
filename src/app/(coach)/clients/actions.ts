@@ -8,6 +8,7 @@ import type {
   CheckinFeel,
   CheckinPain,
   ClientGoal,
+  PhotoPose,
 } from "@/lib/supabase/types";
 
 function num(value: FormDataEntryValue | null): number | null {
@@ -41,6 +42,10 @@ export async function saveCheckIn(formData: FormData) {
       pain: pick<CheckinPain>("pain"),
       adherence: pick<CheckinAdherence>("adherence"),
       bodyweight_kg: num(formData.get("bodyweight_kg")),
+      waist_cm: num(formData.get("waist_cm")),
+      chest_cm: num(formData.get("chest_cm")),
+      hips_cm: num(formData.get("hips_cm")),
+      thigh_cm: num(formData.get("thigh_cm")),
       note: String(formData.get("note") ?? "").trim() || null,
       author: "coach",
       submitted_at: new Date().toISOString(),
@@ -199,19 +204,36 @@ export async function deleteCheckIn(formData: FormData) {
   revalidatePath("/clients");
 }
 
-/** Records a photo that the browser already put in the private bucket. */
+/**
+ * Records a photo the browser already put in the private bucket. One per pose
+ * per check-in, so re-shooting a pose replaces it instead of stacking.
+ */
 export async function attachCheckInPhoto(
   checkInId: string,
   clientId: string,
   storagePath: string,
+  pose: PhotoPose,
 ) {
   const supabase = await createClient();
   if (!checkInId || !clientId || !storagePath) return;
+
+  const { data: existing } = await supabase
+    .from("check_in_photos")
+    .select("id, storage_path")
+    .eq("check_in_id", checkInId)
+    .eq("pose", pose)
+    .maybeSingle();
+
+  if (existing) {
+    await supabase.from("check_in_photos").delete().eq("id", existing.id);
+    await supabase.storage.from("check-in-photos").remove([existing.storage_path]);
+  }
 
   await supabase.from("check_in_photos").insert({
     check_in_id: checkInId,
     client_id: clientId,
     storage_path: storagePath,
+    pose,
   });
 
   revalidatePath(`/clients/${clientId}`);

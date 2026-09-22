@@ -8,7 +8,8 @@ import { RecordPanel } from "@/components/RecordPanel";
 import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
-import type { PhotoView } from "@/components/CheckInPhotos";
+import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
+import type { PhotoPose } from "@/lib/supabase/types";
 
 function initialsOf(name: string) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]!.toUpperCase()).join("");
@@ -449,50 +450,79 @@ async function HistoryTab({
 
 async function CheckInsTab({ clientId }: { clientId: string }) {
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("check_ins")
-    .select("*")
-    .eq("client_id", clientId)
-    .order("week_start_date", { ascending: false })
-    .limit(12);
 
-  const checkIns = (data ?? []) as CheckInRow[];
+  const [{ data: rows }, { data: client }] = await Promise.all([
+    supabase
+      .from("check_ins")
+      .select("*")
+      // Oldest first: week 1 is the baseline everything is measured against.
+      .eq("client_id", clientId)
+      .order("week_start_date", { ascending: true })
+      .limit(52),
+    supabase
+      .from("clients")
+      .select("first_name, name")
+      .eq("id", clientId)
+      .maybeSingle(),
+  ]);
+
+  const checkIns = (rows ?? []) as CheckInRow[];
 
   const { data: photos } = await supabase
     .from("check_in_photos")
-    .select("id, check_in_id, storage_path")
-    .eq("client_id", clientId)
-    .order("uploaded_at");
+    .select("id, check_in_id, storage_path, pose")
+    .eq("client_id", clientId);
 
-  // The bucket is private, so each file is served through a short-lived signed
-  // URL rather than a public path.
+  // The bucket is private, so every file is served through a signed URL.
   const paths = (photos ?? []).map((p) => p.storage_path);
   const signed =
     paths.length === 0
       ? []
-      : ((
-          await supabase.storage
-            .from("check-in-photos")
-            .createSignedUrls(paths, 3600)
-        ).data ?? []);
+      : ((await supabase.storage.from("check-in-photos").createSignedUrls(paths, 3600))
+          .data ?? []);
 
   const urlByPath = new Map(
     signed.map((entry) => [entry.path ?? "", entry.signedUrl ?? null]),
   );
 
-  const photosByCheckIn: Record<string, PhotoView[]> = {};
+  const photosByCheckIn = new Map<
+    string,
+    Partial<Record<PhotoPose, { id: string; url: string | null }>>
+  >();
+
   for (const photo of photos ?? []) {
-    const list = photosByCheckIn[photo.check_in_id] ?? [];
-    list.push({ id: photo.id, url: urlByPath.get(photo.storage_path) ?? null });
-    photosByCheckIn[photo.check_in_id] = list;
+    const slot = photosByCheckIn.get(photo.check_in_id) ?? {};
+    slot[photo.pose] = {
+      id: photo.id,
+      url: urlByPath.get(photo.storage_path) ?? null,
+    };
+    photosByCheckIn.set(photo.check_in_id, slot);
   }
 
+  const weeks: ReviewWeek[] = checkIns.map((row, index) => ({
+    id: row.id,
+    weekStart: row.week_start_date,
+    number: index + 1,
+    bodyweight: row.bodyweight_kg == null ? null : Number(row.bodyweight_kg),
+    feel: row.feel,
+    pain: row.pain,
+    adherence: row.adherence,
+    note: row.note,
+    waist: row.waist_cm == null ? null : Number(row.waist_cm),
+    chest: row.chest_cm == null ? null : Number(row.chest_cm),
+    hips: row.hips_cm == null ? null : Number(row.hips_cm),
+    thigh: row.thigh_cm == null ? null : Number(row.thigh_cm),
+    photos: photosByCheckIn.get(row.id) ?? {},
+  }));
+
+  const firstName =
+    client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";
+
   return (
-    <CheckInPanel
-      clientId={clientId}
-      checkIns={checkIns}
-      photosByCheckIn={photosByCheckIn}
-    />
+    <div className="space-y-4">
+      <CheckInPanel clientId={clientId} current={checkIns.at(-1) ?? null} />
+      <CheckInReview clientId={clientId} firstName={firstName} weeks={weeks} />
+    </div>
   );
 }
 

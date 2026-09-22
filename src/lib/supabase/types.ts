@@ -30,6 +30,7 @@ export type CheckinAdherence = "All of it" | "Most" | "Struggled";
 export type CheckinAuthor = "coach" | "client";
 export type CyclePhase = "menstrual" | "follicular" | "ovulatory" | "luteal";
 export type InvoiceStatus = "draft" | "sent" | "paid" | "void";
+export type PhotoPose = "front" | "side" | "back";
 export type AdminAction =
   | "read_client_record"
   | "read_client_cycle"
@@ -147,6 +148,10 @@ export type CheckInRow = {
   bodyweight_kg: number | null;
   note: string | null;
   author: CheckinAuthor;
+  waist_cm: number | null;
+  chest_cm: number | null;
+  hips_cm: number | null;
+  thigh_cm: number | null;
   submitted_at: string;
   /** Null means the check-in is still waiting on the coach. */
   reviewed_at: string | null;
@@ -227,6 +232,7 @@ export type CheckInPhotoRow = {
   check_in_id: string;
   client_id: string;
   storage_path: string;
+  pose: PhotoPose;
   note: string | null;
   uploaded_at: string;
 };
@@ -384,6 +390,7 @@ export type Database = {
       checkin_author: CheckinAuthor;
       cycle_phase: CyclePhase;
       admin_action: AdminAction;
+      photo_pose: PhotoPose;
       invoice_status: InvoiceStatus;
     };
     CompositeTypes: { [_ in never]: never };
