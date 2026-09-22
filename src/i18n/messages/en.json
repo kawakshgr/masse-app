@@ -608,5 +608,29 @@
     "pickWeek": "Week",
     "noCheckins": "No check-ins yet.",
     "photos": "Progress photos"
+  },
+  "hist": {
+    "longView": "The long view",
+    "r12w": "12 weeks",
+    "r6m": "6 months",
+    "r1y": "A year",
+    "clientSince": "Client since {date} · {weeks} weeks",
+    "withYou": "With you",
+    "withYouSub": "since {date}",
+    "logged": "Logged",
+    "loggedSub": "sessions in range",
+    "adherence": "Adherence",
+    "adherenceSub": "across the range",
+    "weight": "Weight",
+    "weightSub": "{from} → {to} kg",
+    "perWeek": "Sessions per week",
+    "perWeekNote": "One bar per week, red where a session was missed. {logged} of {prescribed} prescribed sessions logged.",
+    "perWeekNone": "No sessions prescribed in range.",
+    "strength": "Strength",
+    "estimated": "estimated 1RM · {from} → today",
+    "noStrength": "No loaded sets yet to estimate progress from.",
+    "records": "Records",
+    "noRecords": "No records in range.",
+    "reps": "×"
   }
 }

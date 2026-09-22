@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
@@ -9,6 +10,9 @@ import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
 import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
+import { BarChart } from "@/components/BarChart";
+import { StrengthPanel } from "@/components/StrengthPanel";
+import { loadHistory, type Range } from "@/lib/history";
 import type { PhotoPose } from "@/lib/supabase/types";
 
 function initialsOf(name: string) {
@@ -24,10 +28,10 @@ export default async function ClientDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ onglet?: string }>;
+  searchParams: Promise<{ onglet?: string; portee?: string }>;
 }) {
   const { id } = await params;
-  const { onglet } = await searchParams;
+  const { onglet, portee } = await searchParams;
   const supabase = await createClient();
   const detail = await loadClientDetail(supabase, id);
   if (!detail) notFound();
@@ -37,7 +41,6 @@ export default async function ClientDetailPage({
   const tDays = await getTranslations("days");
   const tGoal = await getTranslations("goal");
   const tPhase = await getTranslations("phase");
-  const tHistory = await getTranslations("history");
   const tCycle = await getTranslations("cycleTab");
   const tSteps = await getTranslations("stepsTab");
   const tNutrition = await getTranslations("nutritionTab");
@@ -98,7 +101,12 @@ export default async function ClientDetailPage({
         />
       )}
 
-      {tab === "history" && <HistoryTab clientId={id} tHistory={tHistory} />}
+      {tab === "history" && (
+        <HistoryTab
+          clientId={id}
+          range={portee === "6m" || portee === "1y" ? portee : "12w"}
+        />
+      )}
 
       {tab === "checkins" && <CheckInsTab clientId={id} />}
 
@@ -306,145 +314,148 @@ function OverviewTab({
 
 async function HistoryTab({
   clientId,
-  tHistory,
+  range,
 }: {
   clientId: string;
-  tHistory: Translate;
+  range: Range;
 }) {
   const supabase = await createClient();
+  const t = await getTranslations("hist");
+  const view = await loadHistory(supabase, clientId, range);
 
-  const { data: logs } = await supabase
-    .from("set_logs")
-    .select("id, reps, weight_kg, rpe, logged_at, session_exercises(name)")
-    .eq("client_id", clientId)
-    .order("logged_at", { ascending: false })
-    .limit(600);
-
-  const rows = (logs ?? []) as unknown as {
-    id: string;
-    reps: number | null;
-    weight_kg: number | null;
-    logged_at: string;
-    session_exercises: { name: string } | null;
-  }[];
-
-  if (rows.length === 0) {
-    return (
-      <section className={panel}>
-        <p className="text-[12px] text-[var(--ink2)]">{tHistory("none")}</p>
-      </section>
-    );
-  }
-
-  /** Monday of the week a set was logged in, so weeks line up across exercises. */
-  function weekOf(iso: string): string {
-    const d = new Date(iso);
-    const monday = new Date(
-      Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()),
-    );
-    monday.setUTCDate(monday.getUTCDate() - ((monday.getUTCDay() + 6) % 7));
-    return monday.toISOString().slice(0, 10);
-  }
-
-  type WeekStat = { week: string; sets: number; best: number; volume: number };
-
-  const byExercise = new Map<string, Map<string, WeekStat>>();
-
-  for (const row of rows) {
-    const name = row.session_exercises?.name ?? "—";
-    const week = weekOf(row.logged_at);
-    const weeks = byExercise.get(name) ?? new Map<string, WeekStat>();
-    const stat = weeks.get(week) ?? { week, sets: 0, best: 0, volume: 0 };
-
-    const weight = Number(row.weight_kg ?? 0);
-    const reps = Number(row.reps ?? 0);
-
-    stat.sets += 1;
-    stat.best = Math.max(stat.best, weight);
-    stat.volume += weight * reps;
-
-    weeks.set(week, stat);
-    byExercise.set(name, weeks);
-  }
+  const ranges: Range[] = ["12w", "6m", "1y"];
 
   return (
-    <section className={panel}>
-      <h3 className={heading}>{tHistory("title")}</h3>
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+          {t("longView")}
+        </span>
+        <div className="flex gap-1">
+          {ranges.map((r) => (
+            <Link
+              key={r}
+              href={`/clients/${clientId}?onglet=history&portee=${r}`}
+              aria-current={r === range ? "page" : undefined}
+              className={`h-7 rounded-rp px-2.5 text-[11px] font-semibold leading-7 ${
+                r === range
+                  ? "sel text-[var(--ink)]"
+                  : "border border-[var(--edge)] text-[var(--ink2)]"
+              }`}
+            >
+              {t(r === "12w" ? "r12w" : r === "6m" ? "r6m" : "r1y")}
+            </Link>
+          ))}
+        </div>
+        <span className="ml-auto text-[10px] text-[var(--ink3)]">
+          {t("clientSince", { date: view.since, weeks: view.weeksWithCoach })}
+        </span>
+      </div>
 
-      <ul className="mt-3 space-y-3">
-        {[...byExercise.entries()].map(([name, weeks]) => {
-          // Newest first, so the change reads against the week before it.
-          const ordered = [...weeks.values()].sort((a, b) =>
-            b.week.localeCompare(a.week),
-          );
+      <div className="flex flex-wrap gap-3">
+        <MetricCard
+          label={t("withYou")}
+          value={`${view.weeksWithCoach} sem.`}
+          sub={t("withYouSub", { date: view.since })}
+          wash="wash-1"
+        />
+        <MetricCard
+          label={t("logged")}
+          value={`${view.sessionsLogged} / ${view.sessionsPrescribed}`}
+          sub={t("loggedSub")}
+          wash="wash-2"
+        />
+        <MetricCard
+          label={t("adherence")}
+          value={view.adherencePct == null ? "—" : `${view.adherencePct}%`}
+          sub={t("adherenceSub")}
+          wash="wash-1"
+        />
+        <MetricCard
+          label={t("weight")}
+          value={
+            view.weightFrom == null || view.weightTo == null
+              ? "—"
+              : `${Math.round((view.weightTo - view.weightFrom) * 10) / 10} kg`
+          }
+          sub={
+            view.weightFrom == null || view.weightTo == null
+              ? null
+              : t("weightSub", { from: view.weightFrom, to: view.weightTo })
+          }
+          wash="wash-3"
+        />
+      </div>
 
-          return (
-            <li key={name} className="rounded-r2 border border-[var(--hair)] p-3">
-              <p className="text-[12px] font-bold">{name}</p>
+      <section className={panel}>
+        <h3 className={heading}>{t("perWeek")}</h3>
+        {view.weeks.length === 0 ? (
+          <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("perWeekNone")}</p>
+        ) : (
+          <>
+            <div className="mt-3">
+              <BarChart
+                ariaLabel={t("perWeek")}
+                bars={view.weeks.map((w) => ({
+                  value: w.prescribed,
+                  label: `${w.week} · ${w.logged}/${w.prescribed}`,
+                  // Red marks a week where something prescribed went unlogged.
+                  alert: w.logged < w.prescribed,
+                }))}
+              />
+            </div>
+            <p className="mt-2 text-[10px] leading-relaxed text-[var(--ink3)]">
+              {t("perWeekNote", {
+                logged: view.sessionsLogged,
+                prescribed: view.sessionsPrescribed,
+              })}
+            </p>
+          </>
+        )}
+      </section>
 
-              <table className="mt-2 w-full text-left text-[11px]">
-                <thead>
-                  <tr className="text-[10px] uppercase tracking-wide text-[var(--ink3)]">
-                    <th className="pb-1 font-semibold">{tHistory("week")}</th>
-                    <th className="pb-1 text-right font-semibold">
-                      {tHistory("sets", { count: 0 }).replace(/^\d+\s*/, "")}
-                    </th>
-                    <th className="pb-1 text-right font-semibold">
-                      {tHistory("last")}
-                    </th>
-                    <th className="pb-1 text-right font-semibold">
-                      {tHistory("volume")}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ordered.slice(0, 8).map((stat, index) => {
-                    const previous = ordered[index + 1];
-                    const change =
-                      previous && previous.volume > 0
-                        ? Math.round(
-                            ((stat.volume - previous.volume) / previous.volume) * 100,
-                          )
-                        : null;
+      <div className="flex flex-wrap gap-4">
+        <div className="min-w-[280px] flex-1">
+          <StrengthPanel strengthByExercise={view.strengthByExercise} />
+        </div>
 
-                    return (
-                      <tr key={stat.week} className="border-t border-[var(--hair)]">
-                        <td className="tnum py-1">{stat.week}</td>
-                        <td className="tnum py-1 text-right">{stat.sets}</td>
-                        <td className="tnum py-1 text-right">
-                          {stat.best > 0 ? `${stat.best} kg` : "—"}
-                        </td>
-                        <td className="tnum py-1 text-right">
-                          {Math.round(stat.volume).toLocaleString("fr-FR")} kg
-                          {change !== null && change !== 0 && (
-                            <span
-                              className={`ml-1 font-semibold ${
-                                change > 0
-                                  ? "text-[var(--accent-soft)]"
-                                  : "text-[var(--a3)]"
-                              }`}
-                            >
-                              {change > 0 ? "+" : ""}
-                              {change}%
-                            </span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-
-              {ordered.length < 2 && (
-                <p className="mt-1 text-[10px] text-[var(--ink3)]">
-                  {tHistory("noCompare")}
-                </p>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </section>
+        <section className={`${panel} min-w-[260px] flex-1`}>
+          <h3 className={heading}>{t("records")}</h3>
+          {view.records.length === 0 ? (
+            <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("noRecords")}</p>
+          ) : (
+            <ul className="mt-2">
+              {view.records.map((record, index) => (
+                <li
+                  key={`${record.exercise}-${record.on}-${index}`}
+                  className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
+                >
+                  <span aria-hidden className="text-[12px] text-[var(--accent)]">
+                    ★
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[12px] font-semibold">
+                      {record.exercise}
+                    </span>
+                    <span className="tnum block text-[10px] text-[var(--ink3)]">
+                      {record.on}
+                    </span>
+                  </span>
+                  <span className="tnum shrink-0 text-right text-[12px] font-semibold">
+                    {record.weight} kg {t("reps")} {record.reps}
+                    {record.gain !== null && record.gain > 0 && (
+                      <span className="ml-1 text-[10px] font-normal text-[var(--accent-soft)]">
+                        +{record.gain}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
+    </div>
   );
 }
 

@@ -608,5 +608,29 @@
     "pickWeek": "Semaine",
     "noCheckins": "Aucun bilan pour l’instant.",
     "photos": "Photos de progression"
+  },
+  "hist": {
+    "longView": "La vue longue",
+    "r12w": "12 semaines",
+    "r6m": "6 mois",
+    "r1y": "1 an",
+    "clientSince": "Cliente depuis {date} · {weeks} semaines",
+    "withYou": "Avec toi",
+    "withYouSub": "depuis {date}",
+    "logged": "Faites",
+    "loggedSub": "séances sur la période",
+    "adherence": "Adhérence",
+    "adherenceSub": "sur la période",
+    "weight": "Poids",
+    "weightSub": "{from} → {to} kg",
+    "perWeek": "Séances par semaine",
+    "perWeekNote": "Une barre par semaine, en rouge celles où une séance a été manquée. {logged} séances faites sur {prescribed} prescrites.",
+    "perWeekNone": "Aucune séance prescrite sur la période.",
+    "strength": "Force",
+    "estimated": "1RM estimé · {from} → aujourd’hui",
+    "noStrength": "Pas encore de séries chargées pour estimer une progression.",
+    "records": "Records",
+    "noRecords": "Aucun record sur la période.",
+    "reps": "×"
   }
 }
