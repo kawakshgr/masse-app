@@ -564,10 +564,18 @@
     "remove": "Delete",
     "hint": "Stored privately, visible only to her and you.",
     "tooBig": "File too large (8 MB maximum).",
-    "failed": "Upload failed."
+    "failed": "Upload failed.",
+    "open": "Open full size",
+    "close": "Close"
   },
   "checkin2": {
     "bodyweight": "Bodyweight",
     "delta": "change"
+  },
+  "offline": {
+    "title": "No connection",
+    "lede": "Masse needs the network to load your sessions.",
+    "held": "Sets you logged offline are kept on this device. They go as soon as the connection returns — you have nothing to do.",
+    "retry": "Try again"
   }
 }

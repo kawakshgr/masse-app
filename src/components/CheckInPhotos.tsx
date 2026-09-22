@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { attachCheckInPhoto, deleteCheckInPhoto } from "@/app/(coach)/clients/actions";
@@ -23,6 +23,8 @@ export function CheckInPhotos({
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<string | null>(null);
+  // Index of the photo shown full size, or null.
+  const [viewing, setViewing] = useState<number | null>(null);
   const [, startTransition] = useTransition();
 
   async function upload(file: File) {
@@ -59,6 +61,22 @@ export function CheckInPhotos({
     if (input.current) input.current.value = "";
   }
 
+  // Escape closes; arrows walk the set she is already looking at.
+  useEffect(() => {
+    if (viewing === null) return;
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setViewing(null);
+      else if (event.key === "ArrowRight")
+        setViewing((i) => (i === null ? null : Math.min(photos.length - 1, i + 1)));
+      else if (event.key === "ArrowLeft")
+        setViewing((i) => (i === null ? null : Math.max(0, i - 1)));
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [viewing, photos.length]);
+
+  const shown = viewing === null ? null : photos[viewing];
+
   return (
     <div className="mt-2">
       <div className="flex flex-wrap items-center gap-2">
@@ -92,15 +110,22 @@ export function CheckInPhotos({
         <p className="mt-1 text-[10px] text-[var(--ink3)]">{t("hint")}</p>
       ) : (
         <ul className="mt-2 flex flex-wrap gap-2">
-          {photos.map((photo) => (
+          {photos.map((photo, index) => (
             <li key={photo.id} className="relative">
               {photo.url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={photo.url}
-                  alt=""
-                  className="size-20 rounded-r2 border border-[var(--edge)] object-cover"
-                />
+                <button
+                  type="button"
+                  onClick={() => setViewing(index)}
+                  aria-label={t("open")}
+                  className="block cursor-zoom-in"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photo.url}
+                    alt=""
+                    className="size-20 rounded-r2 border border-[var(--edge)] object-cover transition-opacity hover:opacity-80"
+                  />
+                </button>
               ) : (
                 <div className="size-20 rounded-r2 border border-[var(--edge)]" />
               )}
@@ -118,6 +143,43 @@ export function CheckInPhotos({
             </li>
           ))}
         </ul>
+      )}
+
+      {shown?.url && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("open")}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(2, 10, 16, .88)" }}
+          onClick={() => setViewing(null)}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={shown.url}
+            alt=""
+            onClick={(event) => event.stopPropagation()}
+            className="max-h-full max-w-full rounded-r3 object-contain"
+          />
+
+          {photos.length > 1 && (
+            <p className="tnum absolute bottom-5 left-1/2 -translate-x-1/2 text-[12px] text-[var(--ink2)]">
+              {(viewing ?? 0) + 1} / {photos.length}
+            </p>
+          )}
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setViewing(null);
+            }}
+            aria-label={t("close")}
+            className="absolute right-4 top-4 rounded-rp border border-[var(--edge)] px-3 py-1 text-[12px] text-[var(--ink2)]"
+          >
+            {t("close")}
+          </button>
+        </div>
       )}
     </div>
   );

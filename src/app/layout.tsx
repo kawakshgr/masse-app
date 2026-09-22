@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { ServiceWorker } from "@/components/ServiceWorker";
 import { getLocale } from "next-intl/server";
 import "./globals.css";
 
@@ -29,6 +30,20 @@ export const preferredRegion = "fra1";
 export const metadata: Metadata = {
   title: "Masse",
   description: "Le logiciel des coachs de force.",
+  applicationName: "Masse",
+  appleWebApp: { capable: true, title: "Masse", statusBarStyle: "black-translucent" },
+  icons: { icon: "/icon-192.png", apple: "/apple-icon.png" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#05121b" },
+    { media: "(prefers-color-scheme: light)", color: "#e7f2f3" },
+  ],
+  // Her thumb is on the screen mid-set; a stray double-tap must not zoom.
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({
@@ -54,6 +69,7 @@ export default async function RootLayout({
           }}
         />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <ServiceWorker />
       </body>
     </html>
   );

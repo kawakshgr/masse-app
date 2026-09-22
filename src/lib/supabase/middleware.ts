@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Onboarding runs before the client has an account.
-const PUBLIC_PATHS = ["/connexion", "/auth", "/invitation"];
+const PUBLIC_PATHS = ["/connexion", "/auth", "/invitation", "/hors-ligne"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });

@@ -564,10 +564,18 @@
     "remove": "Supprimer",
     "hint": "Stockées en privé, visibles seulement par elle et toi.",
     "tooBig": "Fichier trop lourd (8 Mo maximum).",
-    "failed": "L’envoi a échoué."
+    "failed": "L’envoi a échoué.",
+    "open": "Ouvrir en grand",
+    "close": "Fermer"
   },
   "checkin2": {
     "bodyweight": "Poids",
     "delta": "écart"
+  },
+  "offline": {
+    "title": "Pas de connexion",
+    "lede": "Masse a besoin du réseau pour charger tes séances.",
+    "held": "Tes séries saisies hors-ligne sont gardées sur cet appareil. Elles partiront dès que la connexion revient — tu n’as rien à faire.",
+    "retry": "Réessayer"
   }
 }
