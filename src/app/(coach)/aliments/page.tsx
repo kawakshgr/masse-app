@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { addFood, deleteFood, updateFood } from "./actions";
+import { deleteFood, updateFood } from "./actions";
 import { FoodSearch } from "@/components/FoodSearch";
+import { FoodForm } from "@/components/FoodForm";
 
 const cell =
   "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
@@ -34,32 +35,8 @@ export default async function FoodsPage() {
       </header>
 
       <section className="glass rounded-r3 p-4">
-        <form action={addFood} className="flex flex-wrap items-end gap-2">
-          <label className="block min-w-[160px] flex-1">
-            <span className="block text-[10px] text-[var(--ink3)]">{t("name")}</span>
-            <input name="name" required className={`mt-1 ${cell}`} />
-          </label>
-          <label className="block w-[120px]">
-            <span className="block text-[10px] text-[var(--ink3)]">{t("brand")}</span>
-            <input name="brand" className={`mt-1 ${cell}`} />
-          </label>
-          {(["kcal_100g", "protein_100g", "carbs_100g", "fat_100g"] as const).map(
-            (field, i) => (
-              <label key={field} className="block w-[78px]">
-                <span className="block text-[10px] text-[var(--ink3)]">
-                  {[t("kcal"), t("protein"), t("carbs"), t("fat")][i]}
-                </span>
-                <input name={field} inputMode="decimal" className={`tnum mt-1 ${cell}`} />
-              </label>
-            ),
-          )}
-          <button
-            type="submit"
-            className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
-          >
-            {t("add")}
-          </button>
-        </form>
+        <FoodForm />
+
         <p className="mt-2 text-[10px] text-[var(--ink3)]">{t("per100")}</p>
       </section>
 
@@ -95,9 +72,11 @@ export default async function FoodsPage() {
                     className={cell}
                   />
                 </label>
+                <span className="tnum flex h-8 w-[78px] shrink-0 items-center justify-center rounded-r2 border border-dashed border-[var(--edge)] text-[11px] text-[var(--ink3)]">
+                  {food.kcal_100g ?? "—"}
+                </span>
                 {(
                   [
-                    ["kcal_100g", food.kcal_100g],
                     ["protein_100g", food.protein_100g],
                     ["carbs_100g", food.carbs_100g],
                     ["fat_100g", food.fat_100g],

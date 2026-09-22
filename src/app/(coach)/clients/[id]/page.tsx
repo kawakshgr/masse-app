@@ -13,6 +13,11 @@ import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
 import { BarChart } from "@/components/BarChart";
 import { StrengthPanel } from "@/components/StrengthPanel";
 import { CyclePanel, type PhaseLevers } from "@/components/CyclePanel";
+import {
+  NutritionPlan,
+  type PlanMeal,
+  type Targets,
+} from "@/components/NutritionPlan";
 import type { CyclePhase } from "@/lib/supabase/types";
 import { loadHistory, type Range } from "@/lib/history";
 import type { PhotoPose } from "@/lib/supabase/types";
@@ -44,7 +49,6 @@ export default async function ClientDetailPage({
   const tGoal = await getTranslations("goal");
   const tPhase = await getTranslations("phase");
   const tSteps = await getTranslations("stepsTab");
-  const tNutrition = await getTranslations("nutritionTab");
 
   const { client, sleep } = detail;
 
@@ -111,9 +115,7 @@ export default async function ClientDetailPage({
 
       {tab === "checkins" && <CheckInsTab clientId={id} />}
 
-      {tab === "nutrition" && (
-        <NutritionTab clientId={id} tNutrition={tNutrition} />
-      )}
+      {tab === "nutrition" && <NutritionTab clientId={id} />}
 
       {tab === "cycle" && <CycleTab clientId={id} />}
 
@@ -565,75 +567,137 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
   );
 }
 
-async function NutritionTab({
-  clientId,
-  tNutrition,
-}: {
-  clientId: string;
-  tNutrition: Translate;
-}) {
+async function NutritionTab({ clientId }: { clientId: string }) {
   const supabase = await createClient();
-  const { data: meals } = await supabase
-    .from("meals")
-    .select("id, day, name, quantity_g, kcal, protein_g, carbs_g, fat_g")
-    .eq("client_id", clientId)
-    .order("day", { ascending: false })
-    .limit(80);
+  const tWeek = await getTranslations("nutWeek");
+  const tDays = await getTranslations("days");
 
-  const rows = meals ?? [];
-  if (rows.length === 0) {
-    return (
-      <section className={panel}>
-        <p className="text-[12px] text-[var(--ink2)]">{tNutrition("none")}</p>
-      </section>
-    );
+  const today = new Date();
+  const weekStart = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
+  );
+  weekStart.setUTCDate(weekStart.getUTCDate() - ((weekStart.getUTCDay() + 6) % 7));
+  const weekStartIso = weekStart.toISOString().slice(0, 10);
+  const todayIso = today.toISOString().slice(0, 10);
+
+  const [clientRes, targetsRes, mealsRes, foodsRes, loggedRes] = await Promise.all([
+    supabase
+      .from("clients")
+      .select("first_name, name, nutrition_mode")
+      .eq("id", clientId)
+      .maybeSingle(),
+    supabase.from("nutrition_targets").select("*").eq("client_id", clientId).maybeSingle(),
+    supabase
+      .from("plan_meals")
+      .select("id, at_time, name, position, plan_meal_items(id, name, quantity_g, kcal, position)")
+      .eq("client_id", clientId)
+      .order("at_time"),
+    supabase.from("foods").select("id, name").order("name").limit(300),
+    supabase
+      .from("meals")
+      .select("id, day, name, kcal")
+      .eq("client_id", clientId)
+      .gte("day", weekStartIso)
+      .order("day"),
+  ]);
+
+  const client = clientRes.data;
+  const targets: Targets = {
+    kcal: targetsRes.data?.kcal ?? 2000,
+    proteinG: targetsRes.data?.protein_g ?? 0,
+    carbsG: targetsRes.data?.carbs_g ?? 0,
+    fatG: targetsRes.data?.fat_g ?? 0,
+  };
+
+  const meals: PlanMeal[] = (mealsRes.data ?? []).map((row) => ({
+    id: row.id,
+    atTime: row.at_time,
+    name: row.name,
+    items: [
+      ...((row.plan_meal_items as unknown as {
+        id: string;
+        name: string;
+        quantity_g: number | null;
+        kcal: number | null;
+        position: number;
+      }[]) ?? []),
+    ]
+      .sort((a, b) => a.position - b.position)
+      .map((item) => ({
+        id: item.id,
+        name: item.name,
+        quantityG: item.quantity_g,
+        kcal: item.kcal,
+      })),
+  }));
+
+  const logged = loggedRes.data ?? [];
+
+  // Calories per day this week, summed from the very rows listed below.
+  const byDay = new Map<string, number>();
+  for (const meal of logged) {
+    byDay.set(meal.day, (byDay.get(meal.day) ?? 0) + Number(meal.kcal ?? 0));
   }
 
-  const byDay = new Map<string, typeof rows>();
-  for (const meal of rows) {
-    byDay.set(meal.day, [...(byDay.get(meal.day) ?? []), meal]);
-  }
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(weekStart);
+    d.setUTCDate(d.getUTCDate() + i);
+    const iso = d.toISOString().slice(0, 10);
+    return { iso, dayIndex: i, kcal: byDay.get(iso) ?? 0, isToday: iso === todayIso };
+  });
+
+  // A day still running is not a day that missed: only closed days count.
+  const fullDaysOnTarget = days.filter(
+    (d) => !d.isToday && d.iso < todayIso && d.kcal > 0 &&
+      Math.abs(d.kcal - targets.kcal) <= 300,
+  ).length;
+
+  const todayKcal = byDay.get(todayIso) ?? 0;
 
   return (
-    <section className={panel}>
-      <ul className="space-y-3">
-        {[...byDay.entries()].map(([day, meals]) => {
-          const total = meals.reduce(
-            (acc, m) => ({
-              kcal: acc.kcal + Number(m.kcal ?? 0),
-              p: acc.p + Number(m.protein_g ?? 0),
-              c: acc.c + Number(m.carbs_g ?? 0),
-              f: acc.f + Number(m.fat_g ?? 0),
-            }),
-            { kcal: 0, p: 0, c: 0, f: 0 },
-          );
-          return (
-            <li key={day} className="rounded-r2 border border-[var(--hair)] p-3">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="tnum text-[12px] font-bold">{day}</span>
-                <span className="tnum text-[11px] text-[var(--ink3)]">
-                  {Math.round(total.kcal)} {tNutrition("kcal")} · {Math.round(total.p)} /{" "}
-                  {Math.round(total.c)} / {Math.round(total.f)}
-                </span>
-              </div>
-              <ul className="mt-2">
-                {meals.map((meal) => (
-                  <li
-                    key={meal.id}
-                    className="flex items-center gap-3 border-b border-[var(--hair)] py-1 text-[11px] last:border-0"
-                  >
-                    <span className="min-w-0 flex-1 truncate">{meal.name}</span>
-                    <span className="tnum shrink-0 text-[var(--ink3)]">
-                      {meal.quantity_g ? `${meal.quantity_g} g` : "—"}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
+    <div className="space-y-4">
+      <section className={panel}>
+        <h3 className={heading}>{tWeek("title")}</h3>
+        {logged.length === 0 ? (
+          <p className="mt-2 text-[11px] text-[var(--ink2)]">{tWeek("none")}</p>
+        ) : (
+          <>
+            <div className="mt-3">
+              <BarChart
+                ariaLabel={tWeek("title")}
+                bars={days.map((d) => ({
+                  value: d.kcal === 0 ? null : d.kcal,
+                  label: `${tDays(String(d.dayIndex))} · ${Math.round(d.kcal)} kcal`,
+                  current: d.isToday,
+                }))}
+              />
+            </div>
+            <p className="tnum mt-2 text-[10px] leading-relaxed text-[var(--ink3)]">
+              {tWeek("note", {
+                today: Math.round(todayKcal).toLocaleString("fr-FR"),
+                target: targets.kcal.toLocaleString("fr-FR"),
+                full: fullDaysOnTarget,
+              })}
+            </p>
+          </>
+        )}
+      </section>
+
+      <NutritionPlan
+        clientId={clientId}
+        firstName={client?.first_name ?? client?.name?.split(/\s+/)[0] ?? ""}
+        mode={client?.nutrition_mode ?? "macros"}
+        targets={targets}
+        meals={meals}
+        foods={foodsRes.data ?? []}
+        offPlan={logged.map((m) => ({
+          id: m.id,
+          name: m.name,
+          day: m.day,
+          kcal: m.kcal == null ? null : Number(m.kcal),
+        }))}
+      />
+    </div>
   );
 }
 

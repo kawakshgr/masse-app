@@ -651,5 +651,49 @@
     "noPhase": "No cycle data — nothing to adjust yet.",
     "promise": "You see the phase and the levers you set. Period dates are never shown to you: the database refuses them, this is not the interface hiding them.",
     "defaultNote": "Unset — the handoff defaults apply."
+  },
+  "nut": {
+    "fed": "How {first} gets fed",
+    "modeMacros": "Macro targets",
+    "modePlan": "Fixed meal plan",
+    "noteMacros": "{first} sees targets and logs against them. Best for clients who can judge portions.",
+    "notePlan": "{first} sees the exact meals you wrote. Best for clients who want no decisions.",
+    "daily": "Daily calories",
+    "fromMacros": "{kcal} kcal from macros",
+    "drift": "The macros do not land on the target — {gap} kcal out.",
+    "protein": "Protein",
+    "carbs": "Carbs",
+    "fat": "Fat",
+    "share": "{pct}% of intake",
+    "apply": "Apply",
+    "mealTimes": "Meal times",
+    "fixedPlan": "The fixed plan",
+    "mealName": "Meal",
+    "mealTime": "Time",
+    "addMeal": "Add a meal",
+    "mealsCount": "{count, plural, =0 {no meals} =1 {1 meal a day} other {# meals a day}}",
+    "noMeals": "No meals set. Add them to give her day a shape.",
+    "addItem": "Add a food",
+    "pickFood": "From your library",
+    "freeItem": "or freely",
+    "grams": "g",
+    "remove": "Remove",
+    "planTotal": "Plan total",
+    "targetGap": "{gap} kcal under target",
+    "targetOver": "{gap} kcal over target",
+    "offPlan": "Off plan this week",
+    "offPlanNote": "Logged by her, not by you. If it keeps appearing, write it into the plan.",
+    "noOffPlan": "Nothing off plan this week."
+  },
+  "nutWeek": {
+    "title": "This week",
+    "note": "Today {today} of {target} so far. {full, plural, =0 {No full day} =1 {1 full day} other {# full days}} landed within 300 kcal of target.",
+    "none": "Nothing logged this week."
+  },
+  "foods2": {
+    "derived": "Derived from the macros — you never type calories twice.",
+    "kcalDerived": "{kcal} kcal",
+    "label": "label value",
+    "hint": "Type the macros; calories are derived."
   }
 }

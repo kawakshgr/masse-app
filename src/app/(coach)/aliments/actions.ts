@@ -11,6 +11,16 @@ function num(value: FormDataEntryValue | null): number | null {
   return Number.isNaN(n) || n < 0 ? null : n;
 }
 
+/** Protein and carbs at 4 kcal a gram, fat at 9. */
+function kcalFromMacros(
+  protein: number | null,
+  carbs: number | null,
+  fat: number | null,
+): number | null {
+  if (protein === null && carbs === null && fat === null) return null;
+  return Math.round((protein ?? 0) * 4 + (carbs ?? 0) * 4 + (fat ?? 0) * 9);
+}
+
 export async function addFood(formData: FormData) {
   const supabase = await createClient();
   const {
@@ -21,14 +31,20 @@ export async function addFood(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   if (name === "") return;
 
+  const protein = num(formData.get("protein_100g"));
+  const carbs = num(formData.get("carbs_100g"));
+  const fat = num(formData.get("fat_100g"));
+
   await supabase.from("foods").insert({
     coach_id: user.id,
     name,
     brand: String(formData.get("brand") ?? "").trim() || null,
-    kcal_100g: num(formData.get("kcal_100g")),
-    protein_100g: num(formData.get("protein_100g")),
-    carbs_100g: num(formData.get("carbs_100g")),
-    fat_100g: num(formData.get("fat_100g")),
+    // Derived, never typed: she would otherwise have two numbers to keep in
+    // step. An imported food keeps its label value until she edits it.
+    kcal_100g: kcalFromMacros(protein, carbs, fat),
+    protein_100g: protein,
+    carbs_100g: carbs,
+    fat_100g: fat,
   });
 
   revalidatePath("/aliments");
@@ -40,15 +56,19 @@ export async function updateFood(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   if (!id || name === "") return;
 
+  const protein = num(formData.get("protein_100g"));
+  const carbs = num(formData.get("carbs_100g"));
+  const fat = num(formData.get("fat_100g"));
+
   await supabase
     .from("foods")
     .update({
       name,
       brand: String(formData.get("brand") ?? "").trim() || null,
-      kcal_100g: num(formData.get("kcal_100g")),
-      protein_100g: num(formData.get("protein_100g")),
-      carbs_100g: num(formData.get("carbs_100g")),
-      fat_100g: num(formData.get("fat_100g")),
+      kcal_100g: kcalFromMacros(protein, carbs, fat),
+      protein_100g: protein,
+      carbs_100g: carbs,
+      fat_100g: fat,
     })
     .eq("id", id);
 

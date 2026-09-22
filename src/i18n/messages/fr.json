@@ -651,5 +651,49 @@
     "noPhase": "Aucune donnée de cycle — rien à ajuster pour l’instant.",
     "promise": "Tu vois la phase et les leviers que tu as réglés. Les dates de règles ne te sont jamais montrées : la base les refuse, ce n’est pas l’interface qui les cache.",
     "defaultNote": "Non réglé — les valeurs du handoff s’appliquent."
+  },
+  "nut": {
+    "fed": "Comment {first} est nourrie",
+    "modeMacros": "Cibles de macros",
+    "modePlan": "Plan de repas fixe",
+    "noteMacros": "{first} voit des cibles et enregistre dessus. Pour les clientes capables de juger une portion.",
+    "notePlan": "{first} voit les repas exacts que tu as écrits. Pour les clientes qui ne veulent aucune décision.",
+    "daily": "Calories quotidiennes",
+    "fromMacros": "{kcal} kcal issues des macros",
+    "drift": "Les macros ne tombent pas sur la cible — {gap} kcal d’écart.",
+    "protein": "Protéines",
+    "carbs": "Glucides",
+    "fat": "Lipides",
+    "share": "{pct} % de l’apport",
+    "apply": "Appliquer",
+    "mealTimes": "Horaires de repas",
+    "fixedPlan": "Le plan fixe",
+    "mealName": "Repas",
+    "mealTime": "Heure",
+    "addMeal": "Ajouter un repas",
+    "mealsCount": "{count, plural, =0 {aucun repas} =1 {1 repas par jour} other {# repas par jour}}",
+    "noMeals": "Aucun repas défini. Ajoute-les pour donner une structure à sa journée.",
+    "addItem": "Ajouter un aliment",
+    "pickFood": "Depuis ta bibliothèque",
+    "freeItem": "ou librement",
+    "grams": "g",
+    "remove": "Retirer",
+    "planTotal": "Total du plan",
+    "targetGap": "soit {gap} kcal sous la cible",
+    "targetOver": "soit {gap} kcal au-dessus",
+    "offPlan": "Hors plan cette semaine",
+    "offPlanNote": "Enregistré par elle, pas par toi. Si ça revient, écris-le dans le plan.",
+    "noOffPlan": "Rien hors plan cette semaine."
+  },
+  "nutWeek": {
+    "title": "Cette semaine",
+    "note": "Aujourd’hui {today} sur {target} pour l’instant. {full, plural, =0 {Aucune journée complète} =1 {1 journée complète} other {# journées complètes}} dans la marge de 300 kcal.",
+    "none": "Rien enregistré cette semaine."
+  },
+  "foods2": {
+    "derived": "Déduit des macros — tu ne saisis jamais les calories deux fois.",
+    "kcalDerived": "{kcal} kcal",
+    "label": "valeur étiquette",
+    "hint": "Saisis les macros ; les calories se déduisent."
   }
 }

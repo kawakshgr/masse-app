@@ -32,6 +32,7 @@ export type CyclePhase = "menstrual" | "follicular" | "ovulatory" | "luteal";
 export type InvoiceStatus = "draft" | "sent" | "paid" | "void";
 export type PhotoPose = "front" | "side" | "back";
 export type CycleMode = "log" | "manual";
+export type NutritionMode = "macros" | "plan";
 export type AdminAction =
   | "read_client_record"
   | "read_client_cycle"
@@ -68,6 +69,7 @@ export type ClientRow = {
   sleep_target_h: number | null;
   cycle_tracking: boolean;
   cycle_mode: CycleMode;
+  nutrition_mode: NutritionMode;
   /** Used only when cycle_mode is 'manual'. */
   cycle_phase_manual: CyclePhase | null;
   status: ClientStatus;
@@ -252,6 +254,38 @@ export type CycleAdjustmentRow = {
   carbs_g_delta: number;
 };
 
+/** What the coach sets. Percentages and the kcal cross-check are derived. */
+export type NutritionTargetRow = {
+  client_id: string;
+  kcal: number;
+  protein_g: number;
+  carbs_g: number;
+  fat_g: number;
+  updated_at: string;
+};
+
+export type PlanMealRow = {
+  id: string;
+  client_id: string;
+  at_time: string;
+  name: string;
+  position: number;
+};
+
+/** Items snapshot their macros so editing a food cannot rewrite a sent plan. */
+export type PlanMealItemRow = {
+  id: string;
+  meal_id: string;
+  food_id: string | null;
+  name: string;
+  quantity_g: number | null;
+  kcal: number | null;
+  protein_g: number | null;
+  carbs_g: number | null;
+  fat_g: number | null;
+  position: number;
+};
+
 export type PlatformAdminRow = {
   user_id: string;
   granted_at: string;
@@ -316,6 +350,9 @@ export type Database = {
       allowed_coach_emails: Table<AllowedCoachEmailRow, "email">;
       check_in_photos: Table<CheckInPhotoRow, "check_in_id" | "client_id" | "storage_path">;
       cycle_adjustments: Table<CycleAdjustmentRow, "client_id" | "phase">;
+      nutrition_targets: Table<NutritionTargetRow, "client_id">;
+      plan_meals: Table<PlanMealRow, "client_id" | "at_time" | "name">;
+      plan_meal_items: Table<PlanMealItemRow, "meal_id" | "name">;
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
     };
@@ -415,6 +452,7 @@ export type Database = {
       admin_action: AdminAction;
       photo_pose: PhotoPose;
       cycle_mode: CycleMode;
+      nutrition_mode: NutritionMode;
       invoice_status: InvoiceStatus;
     };
     CompositeTypes: { [_ in never]: never };
