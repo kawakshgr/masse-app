@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   addPlanMeal,
@@ -43,26 +44,45 @@ function kcalFromMacros(t: Targets): number {
   return t.proteinG * 4 + t.carbsG * 4 + t.fatG * 9;
 }
 
+function Step({
+  label,
+  onClick,
+}: {
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className="flex size-7 shrink-0 items-center justify-center rounded-rp border border-[var(--edge)] text-[13px] leading-none text-[var(--ink2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+    >
+      {label}
+    </button>
+  );
+}
+
 function Macro({
   label,
-  name,
   grams,
   perGram,
   kcal,
   shareLabel,
+  onChange,
 }: {
   label: string;
-  name: string;
   grams: number;
   perGram: number;
   kcal: number;
   shareLabel: (pct: number) => string;
+  onChange: (next: number) => void;
 }) {
-  // Derived from the same grams the input holds, so the two cannot disagree.
+  // Derived from the grams held in state, so it moves as she types or steps.
   const pct = kcal > 0 ? Math.round((grams * perGram * 100) / kcal) : 0;
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-r2 border border-[var(--hair)] px-3 py-2">
+    <div className="flex items-center justify-between gap-2 rounded-r2 border border-[var(--hair)] px-3 py-2">
       <span className="min-w-0">
         <span className="block text-[12px] font-semibold">{label}</span>
         <span className="tnum block text-[10px] text-[var(--ink3)]">
@@ -70,10 +90,118 @@ function Macro({
         </span>
       </span>
       <span className="flex shrink-0 items-center gap-1">
-        <input name={name} inputMode="numeric" defaultValue={grams} className={`tnum w-[74px] text-right ${cell}`} />
+        <Step label="−" onClick={() => onChange(Math.max(0, grams - 5))} />
+        <input
+          inputMode="numeric"
+          value={grams}
+          onChange={(event) => {
+            const n = Number(event.target.value.replace(/[^0-9]/g, ""));
+            onChange(Number.isFinite(n) ? n : 0);
+          }}
+          className={`tnum w-[62px] text-center ${cell}`}
+        />
         <span className="text-[10px] text-[var(--ink3)]">g</span>
+        <Step label="+" onClick={() => onChange(grams + 5)} />
       </span>
     </div>
+  );
+}
+
+/**
+ * Held in state so every derived figure moves while she works. Remounted by
+ * key when a save returns new values, which resyncs without an effect.
+ */
+function TargetsEditor({
+  clientId,
+  targets,
+}: {
+  clientId: string;
+  targets: Targets;
+}) {
+  const t = useTranslations("nut");
+  const [draft, setDraft] = useState(targets);
+
+  const fromMacros = kcalFromMacros(draft);
+  const gap = fromMacros - draft.kcal;
+  // The prototype's own threshold: past 120 kcal the mismatch is worth saying.
+  const drifting = Math.abs(gap) > 120;
+
+  return (
+    <form action={saveNutritionTargets} className="mt-4">
+      <input type="hidden" name="client_id" value={clientId} />
+      <input type="hidden" name="kcal" value={draft.kcal} />
+      <input type="hidden" name="protein_g" value={draft.proteinG} />
+      <input type="hidden" name="carbs_g" value={draft.carbsG} />
+      <input type="hidden" name="fat_g" value={draft.fatG} />
+
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        {t("daily")}
+      </p>
+
+      <div className="mt-1 flex items-center gap-2">
+        <Step
+          label="−"
+          onClick={() =>
+            setDraft((d) => ({ ...d, kcal: Math.max(1200, d.kcal - 50) }))
+          }
+        />
+        <input
+          inputMode="numeric"
+          value={draft.kcal}
+          aria-label={t("daily")}
+          onChange={(event) => {
+            const n = Number(event.target.value.replace(/[^0-9]/g, ""));
+            setDraft((d) => ({ ...d, kcal: Number.isFinite(n) ? n : 0 }));
+          }}
+          className="tnum h-12 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-3 text-center font-display text-[24px] font-extrabold tracking-[-.04em] text-[var(--ink)]"
+        />
+        <Step label="+" onClick={() => setDraft((d) => ({ ...d, kcal: d.kcal + 50 }))} />
+      </div>
+
+      {/* The cross-check. It turns coral when the macros stop adding up. */}
+      <p
+        className={`tnum mt-1 text-[10px] ${
+          drifting ? "text-[var(--a3)]" : "text-[var(--ink3)]"
+        }`}
+      >
+        {t("fromMacros", { kcal: fromMacros.toLocaleString("fr-FR") })}
+        {drifting && ` · ${t("drift", { gap: Math.abs(gap) })}`}
+      </p>
+
+      <div className="mt-3 space-y-2">
+        <Macro
+          label={t("protein")}
+          grams={draft.proteinG}
+          perGram={4}
+          kcal={draft.kcal}
+          shareLabel={(pct) => t("share", { pct })}
+          onChange={(proteinG) => setDraft((d) => ({ ...d, proteinG }))}
+        />
+        <Macro
+          label={t("carbs")}
+          grams={draft.carbsG}
+          perGram={4}
+          kcal={draft.kcal}
+          shareLabel={(pct) => t("share", { pct })}
+          onChange={(carbsG) => setDraft((d) => ({ ...d, carbsG }))}
+        />
+        <Macro
+          label={t("fat")}
+          grams={draft.fatG}
+          perGram={9}
+          kcal={draft.kcal}
+          shareLabel={(pct) => t("share", { pct })}
+          onChange={(fatG) => setDraft((d) => ({ ...d, fatG }))}
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="mt-3 h-9 w-full rounded-rp bg-[var(--accent)] text-[12px] font-semibold text-[var(--on-accent)]"
+      >
+        {t("apply")}
+      </button>
+    </form>
   );
 }
 
@@ -95,11 +223,6 @@ export function NutritionPlan({
   offPlan: { id: string; name: string; day: string; kcal: number | null }[];
 }) {
   const t = useTranslations("nut");
-
-  const fromMacros = kcalFromMacros(targets);
-  const gap = fromMacros - targets.kcal;
-  // The prototype's own threshold: past 120 kcal the mismatch is worth saying.
-  const drifting = Math.abs(gap) > 120;
 
   const planTotal = meals.reduce(
     (sum, meal) =>
@@ -143,43 +266,11 @@ export function NutritionPlan({
           {t(mode === "macros" ? "noteMacros" : "notePlan", { first: firstName })}
         </p>
 
-        <form action={saveNutritionTargets} className="mt-4">
-          <input type="hidden" name="client_id" value={clientId} />
-
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
-            {t("daily")}
-          </p>
-          <input
-            name="kcal"
-            inputMode="numeric"
-            defaultValue={targets.kcal}
-            aria-label={t("daily")}
-            className="tnum mt-1 h-12 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-3 text-center font-display text-[24px] font-extrabold tracking-[-.04em] text-[var(--ink)]"
-          />
-
-          {/* The cross-check. It turns coral when the macros stop adding up. */}
-          <p
-            className={`tnum mt-1 text-[10px] ${
-              drifting ? "text-[var(--a3)]" : "text-[var(--ink3)]"
-            }`}
-          >
-            {t("fromMacros", { kcal: fromMacros.toLocaleString("fr-FR") })}
-            {drifting && ` · ${t("drift", { gap: Math.abs(gap) })}`}
-          </p>
-
-          <div className="mt-3 space-y-2">
-            <Macro label={t("protein")} name="protein_g" grams={targets.proteinG} perGram={4} kcal={targets.kcal} shareLabel={(pct) => t("share", { pct })} />
-            <Macro label={t("carbs")} name="carbs_g" grams={targets.carbsG} perGram={4} kcal={targets.kcal} shareLabel={(pct) => t("share", { pct })} />
-            <Macro label={t("fat")} name="fat_g" grams={targets.fatG} perGram={9} kcal={targets.kcal} shareLabel={(pct) => t("share", { pct })} />
-          </div>
-
-          <button
-            type="submit"
-            className="mt-3 h-9 w-full rounded-rp bg-[var(--accent)] text-[12px] font-semibold text-[var(--on-accent)]"
-          >
-            {t("apply")}
-          </button>
-        </form>
+        <TargetsEditor
+          key={`${targets.kcal}-${targets.proteinG}-${targets.carbsG}-${targets.fatG}`}
+          clientId={clientId}
+          targets={targets}
+        />
       </section>
 
       <div className="min-w-[300px] flex-1 space-y-4">
