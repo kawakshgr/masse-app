@@ -2,22 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-
-export const CLIENT_TABS = [
-  "overview",
-  "history",
-  "checkins",
-  "nutrition",
-  "cycle",
-  "steps",
-  "file",
-] as const;
-
-export type ClientTab = (typeof CLIENT_TABS)[number];
-
-export function isClientTab(value: string | undefined): value is ClientTab {
-  return value !== undefined && (CLIENT_TABS as readonly string[]).includes(value);
-}
+import { CLIENT_TABS, type ClientTab } from "@/lib/clientTabs";
 
 /**
  * URL-driven, so a tab is linkable and survives a reload. Cycle is absent, not

@@ -5,11 +5,8 @@ import { loadClientDetail, formatHours } from "@/lib/clientDetail";
 import { MetricCard } from "@/components/MetricCard";
 import { CheckInPanel } from "@/components/CheckInPanel";
 import { RecordPanel } from "@/components/RecordPanel";
-import {
-  ClientTabs,
-  isClientTab,
-  type ClientTab,
-} from "@/components/ClientTabs";
+import { ClientTabs } from "@/components/ClientTabs";
+import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
 
 function initialsOf(name: string) {
