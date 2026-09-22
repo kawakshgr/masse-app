@@ -25,6 +25,13 @@ export default async function CoachLayout({
   const t = await getTranslations("shell");
   const { clientsNeedingYou, checkinsToReview } = await loadRoster(supabase);
 
+  // The Admin tab is only rendered for someone who can actually use it.
+  const { data: admin } = await supabase
+    .from("platform_admins")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
   return (
     <>
       <div className="atmosphere" aria-hidden />
@@ -44,7 +51,7 @@ export default async function CoachLayout({
           </div>
         </header>
 
-        <TabBar />
+        <TabBar isPlatformAdmin={admin != null} />
 
         <div className="flex min-h-0 flex-1">{children}</div>
       </div>

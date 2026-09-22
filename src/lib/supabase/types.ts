@@ -29,6 +29,12 @@ export type CheckinPain = "None" | "Minor" | "Need to talk";
 export type CheckinAdherence = "All of it" | "Most" | "Struggled";
 export type CheckinAuthor = "coach" | "client";
 export type CyclePhase = "menstrual" | "follicular" | "ovulatory" | "luteal";
+export type AdminAction =
+  | "read_client_record"
+  | "read_client_cycle"
+  | "read_client_checkins"
+  | "suspend_coach"
+  | "restore_coach";
 
 /* ---------- rows ---------- */
 
@@ -154,6 +160,24 @@ export type CycleLogRow = {
   logged_at: string;
 };
 
+export type PlatformAdminRow = {
+  user_id: string;
+  granted_at: string;
+  granted_by: string | null;
+  note: string | null;
+};
+
+/** Append-only. No policy grants update or delete, to anyone. */
+export type AdminAccessLogRow = {
+  id: string;
+  admin_id: string;
+  action: AdminAction;
+  client_id: string | null;
+  coach_id: string | null;
+  reason: string;
+  accessed_at: string;
+};
+
 export type DailyMetricRow = {
   id: string;
   client_id: string;
@@ -193,6 +217,8 @@ export type Database = {
       check_ins: Table<CheckInRow, "client_id" | "week_start_date">;
       cycle_logs: Table<CycleLogRow, "client_id" | "period_start_date">;
       daily_metrics: Table<DailyMetricRow, "client_id" | "day">;
+      platform_admins: Table<PlatformAdminRow, "user_id">;
+      admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
     };
     Views: { [_ in never]: never };
     Functions: {
@@ -275,6 +301,7 @@ export type Database = {
       checkin_adherence: CheckinAdherence;
       checkin_author: CheckinAuthor;
       cycle_phase: CyclePhase;
+      admin_action: AdminAction;
     };
     CompositeTypes: { [_ in never]: never };
   };

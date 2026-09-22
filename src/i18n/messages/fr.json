@@ -251,5 +251,42 @@
     "follicular": "folliculaire",
     "ovulatory": "ovulatoire",
     "luteal": "lutéale"
+  },
+  "nav": {
+    "clients": "Roster",
+    "programmes": "Programmes",
+    "foods": "Aliments",
+    "inbox": "Inbox",
+    "billing": "Facturation",
+    "admin": "Admin"
+  },
+  "soonCopy": {
+    "foods": "La nutrition n’est pas dans v1 : le coach écrit ses cibles en texte dans le programme.",
+    "inbox": "La messagerie est en développement. D’ici là, WhatsApp reste où il est.",
+    "billing": "La facturation viendra en v1.1. À cette échelle, un tableur suffit — et rien ne sera jamais débité automatiquement."
+  },
+  "admin": {
+    "title": "Administration",
+    "lede": "Vue plateforme. Chaque lecture de données clientes est tracée et exige un motif.",
+    "coaches": "Coachs",
+    "clients": "Clientes",
+    "programmes": "Programmes",
+    "created": "Inscrit le",
+    "suspend": "Suspendre",
+    "restore": "Réactiver",
+    "suspended": "Suspendu",
+    "active": "Actif",
+    "reason": "Motif (10 caractères minimum)",
+    "reasonPlaceholder": "ticket 412 : demande du coach",
+    "log": "Journal des accès",
+    "logEmpty": "Aucun accès enregistré. C’est le bon état.",
+    "noAccess": "Cette page est réservée aux administrateurs de la plateforme.",
+    "action": {
+      "read_client_record": "fiche cliente lue",
+      "read_client_cycle": "cycle lu",
+      "read_client_checkins": "bilans lus",
+      "suspend_coach": "coach suspendu",
+      "restore_coach": "coach réactivé"
+    }
   }
 }

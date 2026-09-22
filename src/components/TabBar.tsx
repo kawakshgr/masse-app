@@ -6,43 +6,54 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 /**
- * Deferred features keep their nav entry, rendered inert. One list drives it —
- * not a condition scattered across three components.
+ * Deferred features keep their nav entry, rendered inert: greyed label, soon
+ * badge, one line of copy on tap. Driven by this one list — never by a
+ * condition scattered across the tab bar, a sidebar and a rail.
  */
-const SOON = ["inbox"] as const;
+const SOON = ["foods", "inbox", "billing"] as const;
 
-export function TabBar() {
-  const t = useTranslations("shell");
+type SoonKey = (typeof SOON)[number];
+
+export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
+  const t = useTranslations("nav");
+  const tSoon = useTranslations("soonCopy");
+  const tShell = useTranslations("shell");
   const tToolbar = useTranslations("toolbar");
   const pathname = usePathname();
-  const [revealed, setRevealed] = useState(false);
+  const [revealed, setRevealed] = useState<SoonKey | null>(null);
 
   const items = [
-    { key: "clients", href: "/clients", label: t("clients"), chord: "⌘1" },
-    { key: "programmes", href: "/programmes", label: t("programmes"), chord: "⌘2" },
-    { key: "inbox", href: "/inbox", label: t("messaging"), chord: "⌘3" },
+    { key: "clients", href: "/clients", chord: "⌘1" },
+    { key: "programmes", href: "/programmes", chord: "⌘2" },
+    { key: "foods", href: "/aliments", chord: "⌘3" },
+    { key: "inbox", href: "/inbox", chord: "⌘4" },
+    { key: "billing", href: "/facturation", chord: "⌘5" },
+    // Real, and only for those who can actually use it.
+    ...(isPlatformAdmin ? [{ key: "admin", href: "/admin", chord: "⌘6" }] : []),
   ];
 
   return (
     <div className="border-b border-[var(--hair)]">
       <div className="flex items-center gap-2 px-4 py-2">
-        <nav className="flex items-center gap-1">
+        <nav className="flex flex-wrap items-center gap-1">
           {items.map((item) => {
             const isSoon = (SOON as readonly string[]).includes(item.key);
             const active = !isSoon && pathname.startsWith(item.href);
 
             if (isSoon) {
+              const key = item.key as SoonKey;
               return (
                 <button
                   key={item.key}
                   type="button"
                   aria-disabled="true"
-                  onClick={() => setRevealed((v) => !v)}
+                  aria-expanded={revealed === key}
+                  onClick={() => setRevealed((c) => (c === key ? null : key))}
                   className="flex h-8 items-center gap-2 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink3)]"
                 >
-                  {item.label}
+                  {t(item.key)}
                   <span className="rounded-r1 border border-[var(--edge)] px-1.5 py-px text-[9px] uppercase tracking-wide">
-                    {t("soon")}
+                    {tShell("soon")}
                   </span>
                 </button>
               );
@@ -59,7 +70,7 @@ export function TabBar() {
                     : "text-[var(--ink2)] hover:bg-[var(--glass)]"
                 }`}
               >
-                {item.label}
+                {t(item.key)}
                 <span className="tnum text-[10px] text-[var(--ink3)]">
                   {item.chord}
                 </span>
@@ -68,14 +79,14 @@ export function TabBar() {
           })}
         </nav>
 
-        <p className="ml-auto hidden truncate pl-4 text-[11px] text-[var(--ink3)] lg:block">
+        <p className="ml-auto hidden truncate pl-4 text-[11px] text-[var(--ink3)] xl:block">
           {tToolbar("addClientHint")}
         </p>
       </div>
 
       {revealed && (
-        <p className="px-4 pb-2 text-[11px] text-[var(--ink3)]">
-          {t("messagingSoon")}
+        <p className="px-4 pb-2 text-[11px] leading-relaxed text-[var(--ink3)]">
+          {tSoon(revealed)}
         </p>
       )}
     </div>

@@ -251,5 +251,42 @@
     "follicular": "follicular",
     "ovulatory": "ovulatory",
     "luteal": "luteal"
+  },
+  "nav": {
+    "clients": "Roster",
+    "programmes": "Programmes",
+    "foods": "Foods",
+    "inbox": "Inbox",
+    "billing": "Billing",
+    "admin": "Admin"
+  },
+  "soonCopy": {
+    "foods": "Nutrition is not in v1: the coach writes targets as text in the programme.",
+    "inbox": "Messaging is in development. Until it ships, WhatsApp stays where it is.",
+    "billing": "Billing arrives in v1.1. At this scale a spreadsheet suffices — and nothing will ever be charged automatically."
+  },
+  "admin": {
+    "title": "Administration",
+    "lede": "Platform view. Every read of client data is logged and needs a reason.",
+    "coaches": "Coaches",
+    "clients": "Clients",
+    "programmes": "Programmes",
+    "created": "Joined",
+    "suspend": "Suspend",
+    "restore": "Restore",
+    "suspended": "Suspended",
+    "active": "Active",
+    "reason": "Reason (10 characters minimum)",
+    "reasonPlaceholder": "ticket 412: coach request",
+    "log": "Access log",
+    "logEmpty": "No access recorded. That is the right state.",
+    "noAccess": "This page is for platform administrators only.",
+    "action": {
+      "read_client_record": "client record read",
+      "read_client_cycle": "cycle read",
+      "read_client_checkins": "check-ins read",
+      "suspend_coach": "coach suspended",
+      "restore_coach": "coach restored"
+    }
   }
 }
