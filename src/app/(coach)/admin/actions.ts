@@ -24,3 +24,34 @@ export async function setCoachSuspended(formData: FormData) {
 
   revalidatePath("/admin");
 }
+
+export async function allowCoachEmail(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  if (email === "") return;
+
+  await supabase.from("allowed_coach_emails").insert({
+    email,
+    note: String(formData.get("note") ?? "").trim() || null,
+    added_by: user?.id ?? null,
+  });
+
+  revalidatePath("/admin");
+}
+
+/**
+ * Removing an address stops anyone new signing up with it. A coach who already
+ * has an account keeps it — suspend her instead, which is audited.
+ */
+export async function disallowCoachEmail(formData: FormData) {
+  const supabase = await createClient();
+  const email = String(formData.get("email") ?? "");
+  if (email === "") return;
+
+  await supabase.from("allowed_coach_emails").delete().eq("email", email);
+  revalidatePath("/admin");
+}

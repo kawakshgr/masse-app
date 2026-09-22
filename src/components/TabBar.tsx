@@ -51,10 +51,10 @@ export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
                   aria-disabled="true"
                   aria-expanded={revealed === key}
                   onClick={() => setRevealed((c) => (c === key ? null : key))}
-                  className="flex h-8 items-center gap-2 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink3)]"
+                  className="flex h-8 items-center gap-2 rounded-rp px-3 text-[12px] font-semibold text-[var(--ink3)]"
                 >
                   {t(item.key)}
-                  <span className="rounded-r1 border border-[var(--edge)] px-1.5 py-px text-[9px] uppercase tracking-wide">
+                  <span className="rounded-rp border border-[var(--edge)] px-2 py-px text-[9px] uppercase tracking-wide">
                     {tShell("soon")}
                   </span>
                 </button>
@@ -66,9 +66,9 @@ export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
                 key={item.key}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-8 items-center gap-2 rounded-r2 px-3 text-[12px] font-semibold transition-colors ${
+                className={`flex h-8 items-center gap-2 rounded-rp px-3 text-[12px] font-semibold transition-colors ${
                   active
-                    ? "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink)]"
+                    ? "sel border border-[var(--edge)] text-[var(--ink)]"
                     : "text-[var(--ink2)] hover:bg-[var(--glass)]"
                 }`}
               >

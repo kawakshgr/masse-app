@@ -205,6 +205,13 @@ export type InvoiceRow = {
   created_at: string;
 };
 
+export type AllowedCoachEmailRow = {
+  email: string;
+  note: string | null;
+  added_at: string;
+  added_by: string | null;
+};
+
 export type PlatformAdminRow = {
   user_id: string;
   granted_at: string;
@@ -265,6 +272,7 @@ export type Database = {
       foods: Table<FoodRow, "coach_id" | "name">;
       meals: Table<MealRow, "client_id" | "day" | "name">;
       invoices: Table<InvoiceRow, "coach_id" | "client_id" | "period_start">;
+      allowed_coach_emails: Table<AllowedCoachEmailRow, "email">;
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
     };
@@ -321,6 +329,11 @@ export type Database = {
           p_cycle_tracking: boolean;
         };
         Returns: string;
+      };
+      /** Whether the signed-in address is allowed to hold a coach account. */
+      may_become_coach: {
+        Args: Record<string, never>;
+        Returns: boolean;
       };
       admin_coach_overview: {
         Args: Record<string, never>;

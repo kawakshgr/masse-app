@@ -104,7 +104,7 @@ export default async function ClientDetailPage({
           type="button"
           disabled
           title={t("noWeek")}
-          className="shrink-0 rounded-r2 bg-[var(--a1)] px-3 py-2 text-[12px] font-semibold text-[var(--onA)] disabled:opacity-40"
+          className="shrink-0 rounded-rp bg-[var(--a1)] px-4 py-2 text-[12px] font-semibold text-[var(--onA)] disabled:opacity-40"
         >
           {t("pushWeek")}
         </button>

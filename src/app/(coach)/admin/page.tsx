@@ -1,6 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { setCoachSuspended } from "./actions";
+import {
+  allowCoachEmail,
+  disallowCoachEmail,
+  setCoachSuspended,
+} from "./actions";
 
 export default async function AdminPage() {
   const t = await getTranslations("admin");
@@ -25,17 +29,23 @@ export default async function AdminPage() {
     );
   }
 
-  const [overviewRes, logRes] = await Promise.all([
+  const [overviewRes, logRes, allowlistRes] = await Promise.all([
     supabase.rpc("admin_coach_overview"),
     supabase
       .from("admin_access_log")
       .select("id, action, reason, accessed_at, client_id, coach_id")
       .order("accessed_at", { ascending: false })
       .limit(40),
+    supabase
+      .from("allowed_coach_emails")
+      .select("email, note, added_at")
+      .order("added_at"),
   ]);
 
   const coaches = overviewRes.data ?? [];
   const log = logRes.data ?? [];
+  const allowlist = allowlistRes.data ?? [];
+  const tAllow = await getTranslations("allowlist");
 
   return (
     <div className="space-y-4 p-5">
@@ -114,6 +124,69 @@ export default async function AdminPage() {
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section className="glass rounded-r3 p-4">
+        <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+          {tAllow("title")}
+        </h3>
+        <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
+          {tAllow("lede")}
+        </p>
+
+        <form action={allowCoachEmail} className="mt-3 flex flex-wrap items-end gap-2">
+          <label className="block min-w-[200px] flex-1">
+            <span className="block text-[10px] text-[var(--ink3)]">{tAllow("email")}</span>
+            <input
+              name="email"
+              type="email"
+              required
+              className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+            />
+          </label>
+          <label className="block min-w-[140px] flex-1">
+            <span className="block text-[10px] text-[var(--ink3)]">{tAllow("note")}</span>
+            <input
+              name="note"
+              className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)]"
+            />
+          </label>
+          <button
+            type="submit"
+            className="h-8 shrink-0 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+          >
+            {tAllow("add")}
+          </button>
+        </form>
+
+        {allowlist.length === 0 ? (
+          <p className="mt-3 text-[11px] text-[var(--a3)]">{tAllow("empty")}</p>
+        ) : (
+          <ul className="mt-3">
+            {allowlist.map((entry) => (
+              <li
+                key={entry.email}
+                className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
+              >
+                <span className="min-w-0 flex-1 truncate text-[12px] font-semibold">
+                  {entry.email}
+                </span>
+                <span className="min-w-0 truncate text-[11px] text-[var(--ink3)]">
+                  {entry.note}
+                </span>
+                <form action={disallowCoachEmail} className="shrink-0">
+                  <input type="hidden" name="email" value={entry.email} />
+                  <button
+                    type="submit"
+                    className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                  >
+                    {tAllow("remove")}
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section className="glass rounded-r3 p-4">

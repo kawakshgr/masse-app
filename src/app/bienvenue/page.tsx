@@ -51,6 +51,40 @@ export default async function WelcomePage({
     .maybeSingle();
   if (coach) redirect("/clients");
 
+  // A client who lands here has an account but belongs on her own screen.
+  const { data: asClient } = await supabase
+    .from("clients")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+  if (asClient) redirect("/aujourdhui");
+
+  // Masse is invite-only. Showing the form to someone the database will refuse
+  // would be a lie told twice.
+  const { data: allowed } = await supabase.rpc("may_become_coach");
+
+  if (!allowed) {
+    return (
+      <main className="flex min-h-dvh items-center justify-center p-6">
+        <div className="atmosphere" aria-hidden />
+        <div className="glass lift w-full max-w-[460px] rounded-r4 p-8">
+          <h1 className="font-display text-[22px] font-extrabold tracking-[-.04em]">
+            {t("notAllowed")}
+          </h1>
+          <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink2)]">
+            {t("notAllowedBody")}
+          </p>
+          <a
+            href="/invitation"
+            className="mt-5 flex h-11 w-full items-center justify-center rounded-r2 bg-[var(--a1)] text-[14px] font-semibold text-[var(--onA)]"
+          >
+            {t("goInvite")}
+          </a>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="glass lift w-full max-w-[460px] rounded-r4 p-8">

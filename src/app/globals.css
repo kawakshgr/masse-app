@@ -81,6 +81,7 @@
   --r2: 10px;
   --r3: 14px;
   --r4: 18px;
+  --rp: 999px;
   /* Uniform row height in lists. A ragged list reads as noise. */
   --row-h: 54px;
 }
@@ -103,6 +104,7 @@
   --radius-r2: var(--r2);
   --radius-r3: var(--r3);
   --radius-r4: var(--r4);
+  --radius-rp: var(--rp);
   --font-display: var(--font-bricolage), system-ui, sans-serif;
   --font-sans: var(--font-instrument), system-ui, sans-serif;
 }
@@ -134,7 +136,13 @@ body {
 }
 
 .lift {
-  box-shadow: var(--lift);
+  box-shadow: var(--lift), var(--spec);
+}
+
+/* Selection is a tinted gradient, not a flat fill. */
+.sel {
+  background: var(--sel);
+  border-color: var(--edge);
 }
 
 /* Focus must stay visible: the coach lives on the keyboard. */

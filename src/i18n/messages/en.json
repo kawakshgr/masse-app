@@ -78,7 +78,11 @@
     "she": "she",
     "he": "he",
     "submit": "Get started",
-    "error": "Could not save. Try again."
+    "error": "Could not save. Try again.",
+    "notAllowed": "This address is not allowed to open a coach account.",
+    "notAllowedBody": "Masse is invite-only. If you are a client, your coach sends you an invite code — that is the way in.",
+    "goInvite": "I have an invite code",
+    "signOut": "Sign out"
   },
   "attention": {
     "checkin": "check-in to review",
@@ -451,5 +455,15 @@
     "removeWeek": "Delete week",
     "retract": "Retract",
     "retractHint": "Makes the week invisible to this client again"
+  },
+  "allowlist": {
+    "title": "Allowed coaches",
+    "lede": "Only these addresses can open a coach account. Clients come in by invite code, not through here.",
+    "email": "Address",
+    "note": "Note",
+    "add": "Allow",
+    "remove": "Remove",
+    "empty": "No allowed addresses — nobody can become a coach.",
+    "added": "Added"
   }
 }

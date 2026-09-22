@@ -78,7 +78,11 @@
     "she": "féminin",
     "he": "masculin",
     "submit": "Commencer",
-    "error": "Impossible d’enregistrer. Réessaie."
+    "error": "Impossible d’enregistrer. Réessaie.",
+    "notAllowed": "Cette adresse n’est pas autorisée à ouvrir un compte coach.",
+    "notAllowedBody": "Masse est sur invitation. Si tu es cliente, ton coach doit t’envoyer un code d’invitation — c’est par là que tu entres.",
+    "goInvite": "J’ai un code d’invitation",
+    "signOut": "Se déconnecter"
   },
   "attention": {
     "checkin": "bilan à relire",
@@ -451,5 +455,15 @@
     "removeWeek": "Supprimer la semaine",
     "retract": "Retirer",
     "retractHint": "Rend la semaine invisible pour cette cliente"
+  },
+  "allowlist": {
+    "title": "Coachs autorisés",
+    "lede": "Seules ces adresses peuvent ouvrir un compte coach. Les clientes entrent par code d’invitation, pas par ici.",
+    "email": "Adresse",
+    "note": "Note",
+    "add": "Autoriser",
+    "remove": "Retirer",
+    "empty": "Aucune adresse autorisée — plus personne ne peut devenir coach.",
+    "added": "Ajoutée le"
   }
 }

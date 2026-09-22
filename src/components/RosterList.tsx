@@ -67,7 +67,7 @@ export function RosterList({
                     href={`/clients/${entry.id}`}
                     aria-current={active ? "page" : undefined}
                     className={`flex items-center gap-3 border-b border-[var(--hair)] px-3 transition-colors ${
-                      active ? "bg-[var(--glass2)]" : "hover:bg-[var(--glass)]"
+                      active ? "sel" : "hover:bg-[var(--glass)]"
                     }`}
                     style={{ height: "var(--row-h)" }}
                   >
@@ -99,7 +99,7 @@ export function RosterList({
                     </span>
 
                     {entry.attention && (
-                      <span className="shrink-0 rounded-r1 border border-[var(--a3)] px-2 py-0.5 text-[10px] font-semibold text-[var(--a3)]">
+                      <span className="shrink-0 rounded-rp border border-[var(--a3)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--a3)]">
                         {tChip(entry.attention)}
                       </span>
                     )}
