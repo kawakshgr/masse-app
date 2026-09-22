@@ -54,7 +54,7 @@ export default async function FoodsPage() {
           )}
           <button
             type="submit"
-            className="h-8 shrink-0 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+            className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
           >
             {t("add")}
           </button>

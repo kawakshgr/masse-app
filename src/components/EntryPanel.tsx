@@ -99,7 +99,7 @@ export function EntryPanel({
         </label>
         <button
           type="submit"
-          className="h-9 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+          className="h-9 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
         >
           {t("save")}
         </button>
@@ -113,7 +113,7 @@ export function EntryPanel({
               {t("cycleTitle")}
             </h3>
             {phaseLabel && (
-              <span className="text-[11px] text-[var(--a1)]">
+              <span className="text-[11px] text-[var(--accent)]">
                 {t("phaseNow")} · {phaseLabel}
               </span>
             )}
@@ -149,7 +149,7 @@ export function EntryPanel({
             </label>
             <button
               type="submit"
-              className="h-9 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+              className="h-9 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
             >
               {t("save")}
             </button>

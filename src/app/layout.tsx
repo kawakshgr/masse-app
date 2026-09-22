@@ -42,9 +42,17 @@ export default async function RootLayout({
     <html
       lang={locale}
       data-theme="dark"
+      suppressHydrationWarning
       className={`${bricolage.variable} ${instrument.variable} h-full`}
     >
       <body className="min-h-full">
+        {/* Resolves the stored choice before anything paints, so switching to
+            light does not flash the dark palette first. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var c=localStorage.getItem("masse:theme");var r=(c==="light"||c==="dark")?c:(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=r;}catch(e){}})();`,
+          }}
+        />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

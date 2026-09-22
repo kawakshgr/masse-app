@@ -42,7 +42,7 @@ function Radios({
         {values.map((value) => (
           <label
             key={value}
-            className="flex h-8 min-w-0 flex-1 cursor-pointer items-center justify-center rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-1 text-[11px] text-[var(--ink2)] has-checked:border-[var(--a1)] has-checked:text-[var(--a1)]"
+            className="flex h-8 min-w-0 flex-1 cursor-pointer items-center justify-center rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-1 text-[11px] text-[var(--ink2)] has-checked:border-[var(--accent)] has-checked:text-[var(--accent)]"
           >
             <input
               type="radio"
@@ -130,7 +130,7 @@ export function CheckInPanel({
 
         <button
           type="submit"
-          className="h-9 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+          className="h-9 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
         >
           {t("save")}
         </button>

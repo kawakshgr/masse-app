@@ -123,7 +123,7 @@ export function SessionLogger({
       )}
 
       {rest !== null && (
-        <p className="tnum mt-2 text-[12px] font-semibold text-[var(--a1)]">
+        <p className="tnum mt-2 text-[12px] font-semibold text-[var(--accent-soft)]">
           {t("rest")} · {Math.floor(rest / 60)}:{String(rest % 60).padStart(2, "0")}
         </p>
       )}
@@ -189,7 +189,7 @@ export function SessionLogger({
                 </label>
                 <button
                   type="submit"
-                  className="h-9 shrink-0 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+                  className="h-9 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
                 >
                   {t("addSet")}
                 </button>

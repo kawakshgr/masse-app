@@ -110,7 +110,7 @@ export default async function AdminPage() {
                           type="submit"
                           className={`h-8 shrink-0 rounded-r2 border px-3 text-[11px] font-semibold ${
                             suspended
-                              ? "border-[var(--a1)] text-[var(--a1)]"
+                              ? "border-[var(--accent-soft)] text-[var(--accent-soft)]"
                               : "border-[var(--a3)] text-[var(--a3)]"
                           }`}
                         >
@@ -153,7 +153,7 @@ export default async function AdminPage() {
           </label>
           <button
             type="submit"
-            className="h-8 shrink-0 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+            className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
           >
             {tAllow("add")}
           </button>

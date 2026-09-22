@@ -49,7 +49,7 @@ export default function FinalisePage() {
             <p className="text-[13px] text-[var(--a3)]">{t("failed")}</p>
             <a
               href="/invitation"
-              className="mt-4 inline-block text-[12px] text-[var(--a1)] underline"
+              className="mt-4 inline-block text-[12px] text-[var(--accent)] underline"
             >
               {t("back")}
             </a>

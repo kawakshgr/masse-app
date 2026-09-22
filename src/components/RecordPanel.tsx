@@ -208,7 +208,7 @@ export function RecordPanel({
         <div className="flex gap-2">
           <button
             type="submit"
-            className="h-8 rounded-r2 bg-[var(--a1)] px-3 text-[11px] font-semibold text-[var(--onA)]"
+            className="h-8 rounded-r2 bg-[var(--accent)] px-3 text-[11px] font-semibold text-[var(--on-accent)]"
           >
             {t("save")}
           </button>

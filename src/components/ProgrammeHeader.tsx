@@ -29,7 +29,7 @@ export function ProgrammeHeader({
           />
           <button
             type="submit"
-            className="h-8 shrink-0 rounded-r2 bg-[var(--a1)] px-3 text-[11px] font-semibold text-[var(--onA)]"
+            className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-3 text-[11px] font-semibold text-[var(--on-accent)]"
           >
             {t("rename")}
           </button>

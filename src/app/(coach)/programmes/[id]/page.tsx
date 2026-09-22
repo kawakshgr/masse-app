@@ -143,7 +143,7 @@ export default async function ProgrammeEditorPage({
         >
           <button
             type="submit"
-            className="h-8 rounded-r2 px-3 text-[12px] text-[var(--a1)]"
+            className="h-8 rounded-r2 px-3 text-[12px] text-[var(--accent)]"
           >
             {t("addWeek")}
           </button>

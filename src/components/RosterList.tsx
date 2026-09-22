@@ -73,7 +73,7 @@ export function RosterList({
                   >
                     <span
                       aria-hidden
-                      className="flex size-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-[var(--onA)]"
+                      className="flex size-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-[var(--on-accent)]"
                       style={{
                         background: "linear-gradient(140deg, var(--a1), var(--a2))",
                       }}

@@ -47,7 +47,7 @@ export default async function BillingPage() {
   const statusTone: Record<string, string> = {
     draft: "text-[var(--ink3)]",
     sent: "text-[var(--a2)]",
-    paid: "text-[var(--a1)]",
+    paid: "text-[var(--accent-soft)]",
     void: "text-[var(--ink3)] line-through",
   };
 
@@ -64,7 +64,7 @@ export default async function BillingPage() {
           <span className="text-[var(--ink3)]">{t("outstanding")} </span>
           <span className="font-bold text-[var(--a2)]">{euros(outstanding)}</span>
           <span className="text-[var(--ink3)]"> · {t("collected")} </span>
-          <span className="font-bold text-[var(--a1)]">{euros(collected)}</span>
+          <span className="font-bold text-[var(--accent)]">{euros(collected)}</span>
         </p>
       </header>
 
@@ -103,7 +103,7 @@ export default async function BillingPage() {
             </label>
             <button
               type="submit"
-              className="h-8 shrink-0 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)]"
+              className="h-8 shrink-0 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)]"
             >
               {t("create")}
             </button>

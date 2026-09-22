@@ -68,7 +68,7 @@ export function InviteDialog({
           setCreated(null);
           setOpen(true);
         }}
-        className="h-9 w-full rounded-rp text-[12px] font-semibold text-[var(--onA)]"
+        className="h-9 w-full rounded-rp text-[12px] font-semibold text-[var(--on-accent)]"
         style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
       >
         {label}
@@ -120,7 +120,7 @@ export function InviteDialog({
                   type="button"
                   onClick={onCreate}
                   disabled={pendingTransition}
-                  className="mt-5 h-10 w-full rounded-r2 bg-[var(--a1)] text-[13px] font-semibold text-[var(--onA)] disabled:opacity-60"
+                  className="mt-5 h-10 w-full rounded-r2 bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)] disabled:opacity-60"
                 >
                   {pendingTransition ? t("creating") : t("create")}
                 </button>
@@ -130,7 +130,7 @@ export function InviteDialog({
                 <p className="mt-5 text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
                   {t("yourCode")}
                 </p>
-                <p className="tnum mt-1 select-all break-all font-display text-[26px] font-extrabold tracking-[-.02em] text-[var(--a1)]">
+                <p className="tnum mt-1 select-all break-all font-display text-[26px] font-extrabold tracking-[-.02em] text-[var(--accent)]">
                   {created.code}
                 </p>
                 <p className="tnum mt-1 text-[11px] text-[var(--ink3)]">
@@ -143,7 +143,7 @@ export function InviteDialog({
                 <button
                   type="button"
                   onClick={() => copy(created.code)}
-                  className="mt-4 h-10 w-full rounded-r2 bg-[var(--a1)] text-[13px] font-semibold text-[var(--onA)]"
+                  className="mt-4 h-10 w-full rounded-r2 bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)]"
                 >
                   {copied === created.code ? t("copied") : t("copy")}
                 </button>

@@ -465,5 +465,11 @@
     "remove": "Remove",
     "empty": "No allowed addresses — nobody can become a coach.",
     "added": "Added"
+  },
+  "theme": {
+    "label": "Theme",
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark"
   }
 }

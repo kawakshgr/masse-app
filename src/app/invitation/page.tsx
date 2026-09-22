@@ -46,7 +46,7 @@ function Choice({
       aria-pressed={selected}
       className={`h-11 rounded-r2 border px-3 text-[13px] transition-colors ${
         selected
-          ? "border-[var(--a1)] bg-[var(--glass2)] text-[var(--a1)]"
+          ? "border-[var(--accent)] bg-[var(--glass2)] text-[var(--accent)]"
           : "border-[var(--edge)] bg-[var(--glass)] text-[var(--ink2)]"
       }`}
     >
@@ -114,7 +114,7 @@ export default function OnboardingPage() {
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="atmosphere" aria-hidden />
       <div className="glass lift w-full max-w-[520px] rounded-r4 p-8">
-        <p className="tnum text-[11px] font-semibold text-[var(--a1)]">
+        <p className="tnum text-[11px] font-semibold text-[var(--accent)]">
           {t("step", { n: shownIndex })}
         </p>
 
@@ -140,7 +140,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={checkCode}
               disabled={checking || a.code.trim().length < 4}
-              className="mt-5 h-11 w-full rounded-r2 bg-[var(--a1)] text-[14px] font-semibold text-[var(--onA)] disabled:opacity-50"
+              className="mt-5 h-11 w-full rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)] disabled:opacity-50"
             >
               {t("next")}
             </button>
@@ -152,7 +152,7 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.04em]">
               {t("goalTitle")}
             </h1>
-            <p className="mt-1 text-[12px] text-[var(--a1)]">
+            <p className="mt-1 text-[12px] text-[var(--accent)]">
               {t("codeOk", { coach: a.coachName ?? "" })}
             </p>
             <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("goalLede")}</p>
@@ -327,12 +327,12 @@ export default function OnboardingPage() {
               type="button"
               onClick={finish}
               disabled={sent || !email || !a.name.trim()}
-              className="mt-4 h-11 w-full rounded-r2 bg-[var(--a1)] text-[14px] font-semibold text-[var(--onA)] disabled:opacity-50"
+              className="mt-4 h-11 w-full rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)] disabled:opacity-50"
             >
               {t("finish")}
             </button>
             {sent && (
-              <p role="status" className="mt-3 text-[13px] text-[var(--a1)]">
+              <p role="status" className="mt-3 text-[13px] text-[var(--accent)]">
                 {t("sent")}
               </p>
             )}
@@ -351,7 +351,7 @@ export default function OnboardingPage() {
             <button
               type="button"
               onClick={() => go(1)}
-              className="h-11 flex-1 rounded-r2 bg-[var(--a1)] text-[13px] font-semibold text-[var(--onA)]"
+              className="h-11 flex-1 rounded-r2 bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)]"
             >
               {t("next")}
             </button>

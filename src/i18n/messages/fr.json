@@ -465,5 +465,11 @@
     "remove": "Retirer",
     "empty": "Aucune adresse autorisée — plus personne ne peut devenir coach.",
     "added": "Ajoutée le"
+  },
+  "theme": {
+    "label": "Thème",
+    "auto": "Auto",
+    "light": "Clair",
+    "dark": "Sombre"
   }
 }

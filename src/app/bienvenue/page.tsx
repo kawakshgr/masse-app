@@ -76,7 +76,7 @@ export default async function WelcomePage({
           </p>
           <a
             href="/invitation"
-            className="mt-5 flex h-11 w-full items-center justify-center rounded-r2 bg-[var(--a1)] text-[14px] font-semibold text-[var(--onA)]"
+            className="mt-5 flex h-11 w-full items-center justify-center rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)]"
           >
             {t("goInvite")}
           </a>
@@ -141,7 +141,7 @@ export default async function WelcomePage({
               {(["she", "he"] as const).map((value) => (
                 <label
                   key={value}
-                  className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-r2 border border-[var(--edge)] bg-[var(--glass)] text-[13px] has-checked:border-[var(--a1)] has-checked:text-[var(--a1)]"
+                  className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-r2 border border-[var(--edge)] bg-[var(--glass)] text-[13px] has-checked:border-[var(--accent)] has-checked:text-[var(--accent)]"
                 >
                   <input
                     type="radio"
@@ -158,7 +158,7 @@ export default async function WelcomePage({
 
           <button
             type="submit"
-            className="h-11 w-full rounded-r2 bg-[var(--a1)] text-[14px] font-semibold text-[var(--onA)]"
+            className="h-11 w-full rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)]"
           >
             {t("submit")}
           </button>

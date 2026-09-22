@@ -20,6 +20,11 @@
   --a2: #9c86ff;
   --a3: #ff8069;
   --onA: #022b2a;
+  /* Semantic layer. The handoff tokens keep their meaning — the iOS client
+     reads the same names — while this decides which one carries emphasis. */
+  --accent: var(--a2);
+  --on-accent: #16093c;
+  --accent-soft: var(--a1);
   --b1: #0f6f80;
   --b2: #4b2fa8;
   --b3: #8f3a4f;
@@ -52,6 +57,9 @@
   --a2: #5636cf;
   --a3: #c9452f;
   --onA: #ffffff;
+  --accent: var(--a2);
+  --on-accent: #ffffff;
+  --accent-soft: var(--a1);
   --b1: #9fe6dd;
   --b2: #c9bcff;
   --b3: #ffc9be;
@@ -96,6 +104,9 @@
   --color-a2: var(--a2);
   --color-a3: var(--a3);
   --color-ona: var(--onA);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
   --color-glass: var(--glass);
   --color-glass2: var(--glass2);
   --color-edge: var(--edge);
@@ -147,7 +158,7 @@ body {
 
 /* Focus must stay visible: the coach lives on the keyboard. */
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {
-  outline: 2px solid var(--a1);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--r1);
 }
@@ -179,14 +190,14 @@ body {
 .atmosphere::before {
   top: -18vw;
   left: -10vw;
-  background: radial-gradient(circle, var(--a1), transparent 68%);
+  background: radial-gradient(circle, var(--a2), transparent 68%);
   animation: atmos-a 44s ease-in-out infinite;
 }
 
 .atmosphere::after {
   right: -16vw;
   bottom: -22vw;
-  background: radial-gradient(circle, var(--a2), transparent 68%);
+  background: radial-gradient(circle, var(--a1), transparent 68%);
   animation: atmos-b 58s ease-in-out infinite;
 }
 

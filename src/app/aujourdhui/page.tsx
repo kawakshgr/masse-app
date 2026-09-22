@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SessionLogger, type LoggerExercise } from "@/components/SessionLogger";
 import { EntryPanel } from "@/components/EntryPanel";
 import { MealsPanel } from "@/components/MealsPanel";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { deleteCycleLog, deleteSetLog } from "./actions";
 import type { FoodRow, MealRow } from "@/lib/supabase/types";
 
@@ -101,7 +102,8 @@ export default async function TodayPage() {
     <main className="mx-auto min-h-dvh max-w-[720px] space-y-4 p-5">
       <div className="atmosphere" aria-hidden />
 
-      <header>
+      <header className="flex items-start gap-3">
+        <div className="min-w-0 flex-1">
         <h1 className="font-display text-[26px] font-extrabold tracking-[-.04em]">
           {t("title")}
         </h1>
@@ -109,6 +111,8 @@ export default async function TodayPage() {
           {client.first_name ?? client.name}
           {week?.programmes?.name ? ` · ${week.programmes.name}` : ""}
         </p>
+        </div>
+        <ThemeToggle />
       </header>
 
       {todaySession && todaySession.session_exercises.length > 0 ? (

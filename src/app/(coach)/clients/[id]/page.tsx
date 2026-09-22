@@ -74,7 +74,7 @@ export default async function ClientDetailPage({
   }
 
   const statusTone: Record<string, string> = {
-    logged: "text-[var(--a1)]",
+    logged: "text-[var(--accent-soft)]",
     "in-progress": "text-[var(--a2)]",
     scheduled: "text-[var(--ink3)]",
     rest: "text-[var(--ink3)]",
@@ -85,7 +85,7 @@ export default async function ClientDetailPage({
       <header className="flex items-start gap-3">
         <span
           aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-[var(--onA)]"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-[var(--on-accent)]"
           style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
         >
           {initialsOf(client.name)}
@@ -104,7 +104,7 @@ export default async function ClientDetailPage({
           type="button"
           disabled
           title={t("noWeek")}
-          className="shrink-0 rounded-rp bg-[var(--a1)] px-4 py-2 text-[12px] font-semibold text-[var(--onA)] disabled:opacity-40"
+          className="shrink-0 rounded-rp bg-[var(--accent)] px-4 py-2 text-[12px] font-semibold text-[var(--on-accent)] disabled:opacity-40"
         >
           {t("pushWeek")}
         </button>

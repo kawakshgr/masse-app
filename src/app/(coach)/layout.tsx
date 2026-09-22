@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { loadRoster } from "@/lib/roster";
 import { TabBar } from "@/components/TabBar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default async function CoachLayout({
   children,
@@ -49,6 +50,10 @@ export default async function CoachLayout({
                 checkins: checkinsToReview,
               })}
             </p>
+          </div>
+
+          <div className="ml-auto">
+            <ThemeToggle />
           </div>
         </header>
 

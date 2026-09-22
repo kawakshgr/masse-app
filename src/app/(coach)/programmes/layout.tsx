@@ -98,7 +98,7 @@ export default async function ProgrammesLayout({
           />
           <button
             type="submit"
-            className="h-9 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--onA)]"
+            className="h-9 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--on-accent)]"
             style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
           >
             +

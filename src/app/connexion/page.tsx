@@ -44,7 +44,7 @@ function SignInForm() {
   return (
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="glass lift w-full max-w-[420px] rounded-r4 p-8">
-        <p className="font-display text-[13px] font-semibold tracking-[-.02em] text-[var(--a1)]">
+        <p className="font-display text-[13px] font-semibold tracking-[-.02em] text-[var(--accent)]">
           {tApp("name")}
         </p>
         <h1 className="mt-2 font-display text-[28px] font-extrabold tracking-[-.04em]">
@@ -85,14 +85,14 @@ function SignInForm() {
           <button
             type="submit"
             disabled={state === "sending" || state === "sent"}
-            className="mt-4 h-11 w-full rounded-r2 bg-[var(--a1)] text-[14px] font-semibold text-[var(--onA)] disabled:opacity-60"
+            className="mt-4 h-11 w-full rounded-r2 bg-[var(--accent)] text-[14px] font-semibold text-[var(--on-accent)] disabled:opacity-60"
           >
             {state === "sending" ? t("sending") : t("send")}
           </button>
         </form>
 
         {state === "sent" && (
-          <p role="status" className="mt-4 text-[13px] text-[var(--a1)]">
+          <p role="status" className="mt-4 text-[13px] text-[var(--accent-soft)]">
             {t("sent")}
           </p>
         )}

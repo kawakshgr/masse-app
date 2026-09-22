@@ -86,10 +86,10 @@ export function WeekEditor({
                       void addSession(weekId, day, programmeId);
                     })
                   }
-                  className="flex h-24 flex-col items-center justify-center rounded-r3 border border-dashed border-[var(--edge)] text-[11px] text-[var(--ink3)] hover:text-[var(--a1)]"
+                  className="flex h-24 flex-col items-center justify-center rounded-r3 border border-dashed border-[var(--edge)] text-[11px] text-[var(--ink3)] hover:text-[var(--accent)]"
                 >
                   <span>{t("emptyDay")}</span>
-                  <span className="mt-1 text-[var(--a1)]">{t("addSession")}</span>
+                  <span className="mt-1 text-[var(--accent)]">{t("addSession")}</span>
                 </button>
               ) : (
                 <div
@@ -100,7 +100,7 @@ export function WeekEditor({
                   onDragLeave={() => setOverSession(null)}
                   onDrop={() => drop(session.id, session.exercises.length)}
                   className={`glass flex-1 rounded-r3 p-2 ${
-                    overSession === session.id ? "border-[var(--a1)]" : ""
+                    overSession === session.id ? "border-[var(--accent)]" : ""
                   }`}
                 >
                   <div className="flex items-center gap-1">
@@ -221,7 +221,7 @@ export function WeekEditor({
                         void addExercise(session.id, programmeId);
                       })
                     }
-                    className="mt-2 w-full rounded-r1 py-1 text-[11px] text-[var(--a1)]"
+                    className="mt-2 w-full rounded-r1 py-1 text-[11px] text-[var(--accent)]"
                   >
                     {t("addExercise")}
                   </button>
@@ -259,7 +259,7 @@ export function WeekEditor({
                         }
                         className={`h-8 rounded-r2 border px-3 text-[12px] ${
                           on
-                            ? "border-[var(--a1)] bg-[var(--glass2)] text-[var(--a1)]"
+                            ? "border-[var(--accent)] bg-[var(--glass2)] text-[var(--accent)]"
                             : "border-[var(--edge)] text-[var(--ink2)]"
                         }`}
                       >
@@ -311,7 +311,7 @@ export function WeekEditor({
                     void pushWeek(weekId, selected, startDate, programmeId);
                   })
                 }
-                className="h-9 rounded-r2 bg-[var(--a1)] px-4 text-[12px] font-semibold text-[var(--onA)] disabled:opacity-40"
+                className="h-9 rounded-r2 bg-[var(--accent)] px-4 text-[12px] font-semibold text-[var(--on-accent)] disabled:opacity-40"
               >
                 {t("push")}
               </button>
