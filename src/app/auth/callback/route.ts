@@ -1,10 +1,17 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+/** Only same-site paths, so `suite` can never become an open redirect. */
+function safeSuite(raw: string | null): string | null {
+  if (!raw) return null;
+  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
+  return raw;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get("code");
-  const suite = searchParams.get("suite") ?? "/clients";
+  const suite = safeSuite(searchParams.get("suite"));
 
   if (!code) {
     return NextResponse.redirect(`${origin}/connexion?erreur=callback`);
@@ -17,22 +24,41 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/connexion?erreur=callback`);
   }
 
-  // A signed-in user without a coaches row has not introduced herself yet.
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user) {
-    const { data: coach } = await supabase
-      .from("coaches")
-      .select("id")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    if (!coach) {
-      return NextResponse.redirect(`${origin}/bienvenue`);
-    }
+  if (!user) {
+    return NextResponse.redirect(`${origin}/connexion?erreur=callback`);
   }
 
-  return NextResponse.redirect(`${origin}${suite}`);
+  // Someone finishing onboarding has neither row yet, by design. Sending her to
+  // /bienvenue would tell her she cannot be a coach — which is true, and
+  // entirely beside the point. Let the invite flow finish first.
+  if (suite?.startsWith("/invitation")) {
+    return NextResponse.redirect(`${origin}${suite}`);
+  }
+
+  const { data: coach } = await supabase
+    .from("coaches")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (coach) {
+    return NextResponse.redirect(`${origin}${suite ?? "/clients"}`);
+  }
+
+  const { data: client } = await supabase
+    .from("clients")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (client) {
+    return NextResponse.redirect(`${origin}/aujourdhui`);
+  }
+
+  // Neither, and not mid-onboarding: she still has to introduce herself.
+  return NextResponse.redirect(`${origin}/bienvenue`);
 }

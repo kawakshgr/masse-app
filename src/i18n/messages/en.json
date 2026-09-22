@@ -207,7 +207,11 @@
     "back": "Back",
     "skip": "Skip",
     "finalising": "Finishing your sign-up…",
-    "failed": "Sign-up failed. Your code may already have been used."
+    "failed": "Sign-up failed. Your code may already have been used.",
+    "noAnswers": "Your answers are not in this browser.",
+    "noAnswersBody": "The sign-in link has to be opened on the same device and browser where you filled in the steps. Start them again here — it is quick.",
+    "restart": "Start the steps again",
+    "failedBody": "Your code may already have been used, or it expired. Ask your coach for a new one."
   },
   "equipment": {
     "gym": "Gym",

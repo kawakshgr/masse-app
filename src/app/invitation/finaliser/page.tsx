@@ -13,7 +13,9 @@ import { clear, load, toClaimArgs } from "@/lib/onboarding";
 export default function FinalisePage() {
   const t = useTranslations("onboarding");
   const router = useRouter();
-  const [failed, setFailed] = useState(false);
+  const [failure, setFailure] = useState<"none" | "no-answers" | "refused">(
+    "none",
+  );
   const ran = useRef(false);
 
   useEffect(() => {
@@ -23,7 +25,10 @@ export default function FinalisePage() {
     (async () => {
       const answers = load();
       if (!answers) {
-        setFailed(true);
+        // Opened in another browser: the answers stayed where she typed them.
+        // That is a different problem from a code being refused, and it has a
+        // different fix, so it gets a different message.
+        setFailure("no-answers");
         return;
       }
 
@@ -31,7 +36,7 @@ export default function FinalisePage() {
       const { error } = await supabase.rpc("claim_invite", toClaimArgs(answers));
 
       if (error) {
-        setFailed(true);
+        setFailure("refused");
         return;
       }
 
@@ -44,18 +49,23 @@ export default function FinalisePage() {
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="atmosphere" aria-hidden />
       <div className="glass lift w-full max-w-[420px] rounded-r4 p-8 text-center">
-        {failed ? (
+        {failure === "none" ? (
+          <p className="text-[13px] text-[var(--ink2)]">{t("finalising")}</p>
+        ) : (
           <>
-            <p className="text-[13px] text-[var(--a3)]">{t("failed")}</p>
+            <p className="text-[13px] font-semibold text-[var(--a3)]">
+              {failure === "no-answers" ? t("noAnswers") : t("failed")}
+            </p>
+            <p className="mt-2 text-[12px] leading-relaxed text-[var(--ink2)]">
+              {failure === "no-answers" ? t("noAnswersBody") : t("failedBody")}
+            </p>
             <a
               href="/invitation"
-              className="mt-4 inline-block text-[12px] text-[var(--accent)] underline"
+              className="mt-4 flex h-11 w-full items-center justify-center rounded-rp bg-[var(--accent)] text-[13px] font-semibold text-[var(--on-accent)]"
             >
-              {t("back")}
+              {t("restart")}
             </a>
           </>
-        ) : (
-          <p className="text-[13px] text-[var(--ink2)]">{t("finalising")}</p>
         )}
       </div>
     </main>
