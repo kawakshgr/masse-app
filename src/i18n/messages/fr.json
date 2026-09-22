@@ -130,8 +130,22 @@
   "invite": {
     "title": "Inviter une cliente",
     "created": "Code créé : {code}",
-    "pending": "{count, plural, =1 {1 invitation en attente} other {# invitations en attente}}",
-    "expires": "expire le {date}"
+    "pending": "{count, plural, =0 {Aucune invitation en attente} =1 {1 invitation en attente} other {# invitations en attente}}",
+    "expires": "Expire le {date}",
+    "lede": "On génère un code. Tu le lui envoies par WhatsApp ; elle s’inscrit seule et sa fiche apparaît ici.",
+    "askCycle": "Lui proposer le suivi de cycle",
+    "askCycleHint": "Elle décidera elle-même à l’étape 7. Sans ça, l’étape n’est même pas affichée.",
+    "create": "Créer le code",
+    "creating": "Création…",
+    "yourCode": "Son code",
+    "copy": "Copier",
+    "copied": "Copié",
+    "shareHint": "Un seul usage. Il meurt après 14 jours, ou dès qu’elle s’inscrit.",
+    "revoke": "Révoquer",
+    "opened": "Ouvert",
+    "sent": "Envoyé",
+    "close": "Fermer",
+    "link": "Lien direct"
   },
   "prose": {
     "sleep": "{under, plural, =0 {Aucune nuit} =1 {1 nuit} other {# nuits}} sous {target}, moyenne {avg}.",
@@ -147,7 +161,11 @@
     "equipment": "Matériel",
     "days": "Jours",
     "sleepTarget": "Sommeil visé",
-    "none": "—"
+    "none": "—",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "saved": "Enregistré"
   },
   "onboarding": {
     "step": "Étape {n} sur 9",
@@ -288,5 +306,83 @@
       "suspend_coach": "coach suspendu",
       "restore_coach": "coach réactivé"
     }
+  },
+  "checkin": {
+    "title": "Bilan de la semaine",
+    "lede": "Tu demandes par WhatsApp, tu saisis ici. Le formulaire côté cliente viendra plus tard.",
+    "week": "Semaine du",
+    "feel": "Sensation",
+    "pain": "Douleur",
+    "adherence": "Assiduité",
+    "bodyweight": "Poids (kg)",
+    "note": "Note",
+    "save": "Enregistrer le bilan",
+    "saved": "Bilan enregistré",
+    "markReviewed": "Marquer comme relu",
+    "reviewed": "Relu",
+    "waiting": "En attente de relecture",
+    "none": "Aucun bilan pour l’instant.",
+    "history": "Bilans"
+  },
+  "remove": {
+    "action": "Retirer",
+    "confirmTitle": "Retirer {name} ?",
+    "confirmBody": "Sa fiche, ses séances, ses bilans et ses données de cycle seront supprimés définitivement. C’est irréversible.",
+    "confirmType": "Tape son prénom pour confirmer",
+    "confirm": "Retirer définitivement",
+    "cancel": "Annuler"
+  },
+  "log": {
+    "title": "Séance",
+    "target": "Objectif",
+    "done": "Fait",
+    "reps": "Reps",
+    "weight": "kg",
+    "rpe": "RPE",
+    "addSet": "+ Série",
+    "held": "En attente de synchro",
+    "heldCount": "{count, plural, =1 {1 série en attente} other {# séries en attente}}",
+    "synced": "Synchronisé",
+    "rest": "Repos",
+    "restDone": "Repos terminé",
+    "offline": "Hors ligne — tes séries sont gardées ici",
+    "noSession": "Pas de séance prévue aujourd’hui.",
+    "startRest": "Lancer le repos"
+  },
+  "entry": {
+    "title": "Saisie",
+    "sleep": "Sommeil (h)",
+    "quality": "Qualité",
+    "steps": "Pas",
+    "q1": "Difficile",
+    "q2": "Correct",
+    "q3": "Bon",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "cycleTitle": "Cycle",
+    "periodStart": "Début des règles",
+    "cycleLength": "Durée du cycle (jours)",
+    "cyclePromise": "Seules ces deux valeurs sont envoyées. Tes notes de symptômes restent sur cet appareil.",
+    "symptomNote": "Note personnelle (reste sur cet appareil)",
+    "symptomHint": "Jamais envoyée. Aucune table ne peut la recevoir.",
+    "phaseNow": "Phase actuelle"
+  },
+  "exportW": {
+    "title": "Exporter",
+    "copy": "Copier en texte",
+    "copied": "Copié",
+    "print": "Imprimer / PDF",
+    "week": "Semaine {n}",
+    "rest": "Repos"
+  },
+  "palette": {
+    "title": "Commandes",
+    "placeholder": "Rechercher ou lancer une commande",
+    "goClients": "Aller au Roster",
+    "goProgrammes": "Aller aux Programmes",
+    "goAdmin": "Aller à l’Admin",
+    "newProgramme": "Nouveau programme",
+    "newInvite": "Nouveau code d’invitation",
+    "empty": "Aucun résultat"
   }
 }

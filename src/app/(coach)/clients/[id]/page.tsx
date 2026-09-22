@@ -3,6 +3,9 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { loadClientDetail, formatHours } from "@/lib/clientDetail";
 import { MetricCard } from "@/components/MetricCard";
+import { CheckInPanel } from "@/components/CheckInPanel";
+import { RecordPanel } from "@/components/RecordPanel";
+import type { CheckInRow } from "@/lib/supabase/types";
 
 function initialsOf(name: string) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]!.toUpperCase()).join("");
@@ -18,10 +21,16 @@ export default async function ClientDetailPage({
   const detail = await loadClientDetail(supabase, id);
   if (!detail) notFound();
 
+  const { data: checkIns } = await supabase
+    .from("check_ins")
+    .select("*")
+    .eq("client_id", id)
+    .order("week_start_date", { ascending: false })
+    .limit(8);
+
   const t = await getTranslations("detail");
   const tProse = await getTranslations("prose");
   const tDays = await getTranslations("days");
-  const tRecord = await getTranslations("record");
   const tGoal = await getTranslations("goal");
   const tPhase = await getTranslations("phase");
 
@@ -195,27 +204,10 @@ export default async function ClientDetailPage({
         )}
       </section>
 
-      <section className="glass rounded-r3 p-4">
-        <h3 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
-          {tRecord("title")}
-        </h3>
-        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-[11px]">
-          {[
-            [tRecord("goal"), client.goal && tGoal(client.goal)],
-            [tRecord("injuries"), client.injuries.join(", ")],
-            [tRecord("equipment"), client.equipment.join(", ")],
-            [tRecord("days"), client.session_days.map((d) => tDays(String(d)).slice(0, 3)).join(", ")],
-            [tRecord("sleepTarget"), targetLabel],
-          ].map(([label, value]) => (
-            <div key={label as string} className="min-w-0">
-              <dt className="text-[var(--ink3)]">{label}</dt>
-              <dd className="truncate text-[var(--ink)]">
-                {value ? String(value) : tRecord("none")}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <CheckInPanel clientId={id} checkIns={(checkIns ?? []) as CheckInRow[]} />
+
+      <RecordPanel client={client} sleepTargetLabel={targetLabel} />
+
     </div>
   );
 }

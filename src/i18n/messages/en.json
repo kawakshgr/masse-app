@@ -130,8 +130,22 @@
   "invite": {
     "title": "Invite a client",
     "created": "Code created: {code}",
-    "pending": "{count, plural, =1 {1 invitation pending} other {# invitations pending}}",
-    "expires": "expires {date}"
+    "pending": "{count, plural, =0 {No invitations pending} =1 {1 invitation pending} other {# invitations pending}}",
+    "expires": "Expires {date}",
+    "lede": "We generate a code. Send it to her on WhatsApp; she signs herself up and her record appears here.",
+    "askCycle": "Offer her cycle tracking",
+    "askCycleHint": "She decides for herself at step 7. Without this, the step is not even shown.",
+    "create": "Create the code",
+    "creating": "Creating…",
+    "yourCode": "Her code",
+    "copy": "Copy",
+    "copied": "Copied",
+    "shareHint": "One use only. It dies after 14 days, or the moment she signs up.",
+    "revoke": "Revoke",
+    "opened": "Opened",
+    "sent": "Sent",
+    "close": "Close",
+    "link": "Direct link"
   },
   "prose": {
     "sleep": "{under, plural, =0 {No nights} =1 {1 night} other {# nights}} under {target}, averaging {avg}.",
@@ -147,7 +161,11 @@
     "equipment": "Equipment",
     "days": "Days",
     "sleepTarget": "Sleep target",
-    "none": "—"
+    "none": "—",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Saved"
   },
   "onboarding": {
     "step": "Step {n} of 9",
@@ -288,5 +306,83 @@
       "suspend_coach": "coach suspended",
       "restore_coach": "coach restored"
     }
+  },
+  "checkin": {
+    "title": "Weekly check-in",
+    "lede": "You ask on WhatsApp, you type it here. The client-submitted form comes later.",
+    "week": "Week of",
+    "feel": "Feel",
+    "pain": "Pain",
+    "adherence": "Adherence",
+    "bodyweight": "Bodyweight (kg)",
+    "note": "Note",
+    "save": "Save check-in",
+    "saved": "Check-in saved",
+    "markReviewed": "Mark reviewed",
+    "reviewed": "Reviewed",
+    "waiting": "Waiting on you",
+    "none": "No check-ins yet.",
+    "history": "Check-ins"
+  },
+  "remove": {
+    "action": "Remove",
+    "confirmTitle": "Remove {name}?",
+    "confirmBody": "Her record, sessions, check-ins and cycle data are deleted permanently. This cannot be undone.",
+    "confirmType": "Type her first name to confirm",
+    "confirm": "Remove permanently",
+    "cancel": "Cancel"
+  },
+  "log": {
+    "title": "Session",
+    "target": "Target",
+    "done": "Done",
+    "reps": "Reps",
+    "weight": "kg",
+    "rpe": "RPE",
+    "addSet": "+ Set",
+    "held": "Held until reconnect",
+    "heldCount": "{count, plural, =1 {1 set held} other {# sets held}}",
+    "synced": "Synced",
+    "rest": "Rest",
+    "restDone": "Rest done",
+    "offline": "Offline — your sets are kept here",
+    "noSession": "No session scheduled today.",
+    "startRest": "Start rest"
+  },
+  "entry": {
+    "title": "Entry",
+    "sleep": "Sleep (h)",
+    "quality": "Quality",
+    "steps": "Steps",
+    "q1": "Rough",
+    "q2": "Okay",
+    "q3": "Good",
+    "save": "Save",
+    "saved": "Saved",
+    "cycleTitle": "Cycle",
+    "periodStart": "Period start",
+    "cycleLength": "Cycle length (days)",
+    "cyclePromise": "Only these two values are sent. Your symptom notes stay on this device.",
+    "symptomNote": "Personal note (stays on this device)",
+    "symptomHint": "Never sent. There is no table that could receive it.",
+    "phaseNow": "Current phase"
+  },
+  "exportW": {
+    "title": "Export",
+    "copy": "Copy as text",
+    "copied": "Copied",
+    "print": "Print / PDF",
+    "week": "Week {n}",
+    "rest": "Rest"
+  },
+  "palette": {
+    "title": "Commands",
+    "placeholder": "Search or run a command",
+    "goClients": "Go to Roster",
+    "goProgrammes": "Go to Programmes",
+    "goAdmin": "Go to Admin",
+    "newProgramme": "New programme",
+    "newInvite": "New invite code",
+    "empty": "No results"
   }
 }

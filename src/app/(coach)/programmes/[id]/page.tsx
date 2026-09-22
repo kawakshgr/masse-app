@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
+import { WeekExport, WeekPrintout } from "@/components/WeekExport";
 import { addWeek, duplicateWeek, toggleTemplate } from "../actions";
 
 export default async function ProgrammeEditorPage({
@@ -71,7 +72,7 @@ export default async function ProgrammeEditorPage({
 
   return (
     <div className="p-5">
-      <header className="mb-4 flex flex-wrap items-center gap-2">
+      <header className="mb-4 flex flex-wrap items-center gap-2 print:hidden">
         <h2 className="min-w-0 flex-1 truncate font-display text-[20px] font-extrabold tracking-[-.04em]">
           {programme.name}
         </h2>
@@ -91,6 +92,14 @@ export default async function ProgrammeEditorPage({
         </form>
 
         {current && (
+          <WeekExport
+            programmeName={programme.name}
+            weekNumber={current.week_number}
+            sessions={sessions}
+          />
+        )}
+
+        {current && (
           <form
             action={async () => {
               "use server";
@@ -107,7 +116,7 @@ export default async function ProgrammeEditorPage({
         )}
       </header>
 
-      <nav className="mb-4 flex flex-wrap items-center gap-1">
+      <nav className="mb-4 flex flex-wrap items-center gap-1 print:hidden">
         {weeks.map((week) => {
           const active = current?.id === week.id;
           return (
@@ -140,6 +149,14 @@ export default async function ProgrammeEditorPage({
           </button>
         </form>
       </nav>
+
+      {current && (
+        <WeekPrintout
+          programmeName={programme.name}
+          weekNumber={current.week_number}
+          sessions={sessions}
+        />
+      )}
 
       {current ? (
         <WeekEditor

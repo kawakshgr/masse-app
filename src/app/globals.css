@@ -201,3 +201,10 @@ body {
 .wash-1 { background: color-mix(in oklab, var(--a1) 13%, var(--glass)); }
 .wash-2 { background: color-mix(in oklab, var(--a2) 13%, var(--glass)); }
 .wash-3 { background: color-mix(in oklab, var(--a3) 13%, var(--glass)); }
+
+/* Print: the week on paper, nothing else. */
+@media print {
+  .atmosphere { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .glass { background: none !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; }
+}

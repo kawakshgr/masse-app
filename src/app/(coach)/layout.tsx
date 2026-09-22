@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { loadRoster } from "@/lib/roster";
 import { TabBar } from "@/components/TabBar";
+import { CommandPalette } from "@/components/CommandPalette";
 
 export default async function CoachLayout({
   children,
@@ -23,7 +24,7 @@ export default async function CoachLayout({
   if (!coach) redirect("/bienvenue");
 
   const t = await getTranslations("shell");
-  const { clientsNeedingYou, checkinsToReview } = await loadRoster(supabase);
+  const { entries, clientsNeedingYou, checkinsToReview } = await loadRoster(supabase);
 
   // The Admin tab is only rendered for someone who can actually use it.
   const { data: admin } = await supabase
@@ -52,6 +53,11 @@ export default async function CoachLayout({
         </header>
 
         <TabBar isPlatformAdmin={admin != null} />
+
+        <CommandPalette
+          clients={entries.map((e) => ({ id: e.id, name: e.name }))}
+          isPlatformAdmin={admin != null}
+        />
 
         <div className="flex min-h-0 flex-1">{children}</div>
       </div>

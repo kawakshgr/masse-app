@@ -6,15 +6,14 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Toolbar } from "@/components/Toolbar";
 import type { RosterEntry } from "@/lib/roster";
+import { InviteDialog, type PendingInvite } from "@/components/InviteDialog";
 
 export function RosterList({
   entries,
   pendingInvites,
-  createInvite,
 }: {
   entries: RosterEntry[];
-  pendingInvites: number;
-  createInvite: () => Promise<void>;
+  pendingInvites: PendingInvite[];
 }) {
   const t = useTranslations("roster");
   const tAttention = useTranslations("attention");
@@ -113,20 +112,12 @@ export function RosterList({
       </div>
 
       <div className="shrink-0 border-t border-[var(--hair)] p-3">
-        {pendingInvites > 0 && (
+        {pendingInvites.length > 0 && (
           <p className="tnum mb-2 text-[11px] text-[var(--ink3)]">
-            {tInvite("pending", { count: pendingInvites })}
+            {tInvite("pending", { count: pendingInvites.length })}
           </p>
         )}
-        <form action={createInvite}>
-          <button
-            type="submit"
-            className="h-9 w-full rounded-r2 text-[12px] font-semibold text-[var(--onA)]"
-            style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
-          >
-            {tToolbar("addClient")}
-          </button>
-        </form>
+        <InviteDialog pending={pendingInvites} label={tToolbar("addClient")} />
       </div>
     </div>
   );
