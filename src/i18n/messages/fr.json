@@ -471,5 +471,57 @@
     "auto": "Auto",
     "light": "Clair",
     "dark": "Sombre"
+  },
+  "tabs": {
+    "overview": "Vue d’ensemble",
+    "history": "Historique",
+    "checkins": "Bilans",
+    "nutrition": "Nutrition",
+    "cycle": "Cycle",
+    "steps": "Pas",
+    "file": "Fiche"
+  },
+  "history": {
+    "title": "Historique",
+    "none": "Aucune série enregistrée pour l’instant.",
+    "week": "Semaine du",
+    "sets": "{count, plural, =1 {1 série} other {# séries}}",
+    "volume": "Volume",
+    "exercise": "Exercice",
+    "last": "Dernière"
+  },
+  "cycleTab": {
+    "none": "Le suivi de cycle n’est pas activé pour cette cliente.",
+    "phase": "Phase",
+    "intensity": "Charge",
+    "volume": "Volume",
+    "promise": "Tu vois la phase et la charge adaptée. Les dates de règles et les notes de symptômes ne te sont jamais montrées — la base les refuse, ce n’est pas l’interface qui les cache.",
+    "noData": "Aucune donnée de cycle saisie."
+  },
+  "stepsTab": {
+    "none": "Rien saisi cette semaine.",
+    "day": "Jour",
+    "sleep": "Sommeil",
+    "quality": "Qualité",
+    "steps": "Pas",
+    "avgSleep": "Sommeil moyen",
+    "avgSteps": "Pas moyens"
+  },
+  "nutritionTab": {
+    "none": "Aucun repas enregistré.",
+    "day": "Jour",
+    "kcal": "kcal",
+    "macros": "P / G / L",
+    "today": "Aujourd’hui"
+  },
+  "foodSearch": {
+    "title": "Chercher dans Open Food Facts",
+    "lede": "Base ouverte et française, sans clé. MyFitnessPal a fermé son API publique en 2019 — rien à brancher de ce côté.",
+    "placeholder": "poulet, flocons d’avoine, skyr…",
+    "search": "Chercher",
+    "searching": "Recherche…",
+    "import": "Ajouter à ma bibliothèque",
+    "none": "Aucun résultat. Tu peux toujours le saisir à la main.",
+    "per100": "pour 100 g"
   }
 }

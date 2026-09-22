@@ -471,5 +471,57 @@
     "auto": "Auto",
     "light": "Light",
     "dark": "Dark"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "history": "History",
+    "checkins": "Check-ins",
+    "nutrition": "Nutrition",
+    "cycle": "Cycle",
+    "steps": "Steps",
+    "file": "File"
+  },
+  "history": {
+    "title": "History",
+    "none": "No sets logged yet.",
+    "week": "Week of",
+    "sets": "{count, plural, =1 {1 set} other {# sets}}",
+    "volume": "Volume",
+    "exercise": "Exercise",
+    "last": "Last"
+  },
+  "cycleTab": {
+    "none": "Cycle tracking is not enabled for this client.",
+    "phase": "Phase",
+    "intensity": "Load",
+    "volume": "Volume",
+    "promise": "You see the phase and the adapted load. Period dates and symptom notes are never shown to you — the database refuses them, this is not the interface hiding them.",
+    "noData": "No cycle data entered."
+  },
+  "stepsTab": {
+    "none": "Nothing entered this week.",
+    "day": "Day",
+    "sleep": "Sleep",
+    "quality": "Quality",
+    "steps": "Steps",
+    "avgSleep": "Average sleep",
+    "avgSteps": "Average steps"
+  },
+  "nutritionTab": {
+    "none": "No meals logged.",
+    "day": "Day",
+    "kcal": "kcal",
+    "macros": "P / C / F",
+    "today": "Today"
+  },
+  "foodSearch": {
+    "title": "Search Open Food Facts",
+    "lede": "Open, French, no key needed. MyFitnessPal closed its public API in 2019 — there is nothing to connect there.",
+    "placeholder": "chicken, oats, skyr…",
+    "search": "Search",
+    "searching": "Searching…",
+    "import": "Add to my library",
+    "none": "No results. You can still type it in by hand.",
+    "per100": "per 100 g"
   }
 }

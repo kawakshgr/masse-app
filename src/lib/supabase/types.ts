@@ -161,6 +161,16 @@ export type CycleLogRow = {
   logged_at: string;
 };
 
+export type ExerciseRow = {
+  id: string;
+  /** Null means a built-in entry, readable by every coach. */
+  coach_id: string | null;
+  name: string;
+  muscle_group: string | null;
+  equipment: string | null;
+  created_at: string;
+};
+
 export type FoodRow = {
   id: string;
   coach_id: string;
@@ -269,6 +279,7 @@ export type Database = {
       check_ins: Table<CheckInRow, "client_id" | "week_start_date">;
       cycle_logs: Table<CycleLogRow, "client_id" | "period_start_date">;
       daily_metrics: Table<DailyMetricRow, "client_id" | "day">;
+      exercises: Table<ExerciseRow, "name">;
       foods: Table<FoodRow, "coach_id" | "name">;
       meals: Table<MealRow, "client_id" | "day" | "name">;
       invoices: Table<InvoiceRow, "coach_id" | "client_id" | "period_start">;

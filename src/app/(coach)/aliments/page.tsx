@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { addFood, deleteFood, updateFood } from "./actions";
+import { FoodSearch } from "@/components/FoodSearch";
 
 const cell =
   "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
@@ -61,6 +62,10 @@ export default async function FoodsPage() {
         </form>
         <p className="mt-2 text-[10px] text-[var(--ink3)]">{t("per100")}</p>
       </section>
+
+      <div className="mt-4">
+        <FoodSearch />
+      </div>
 
       {rows.length === 0 ? (
         <div className="mt-4 p-2">

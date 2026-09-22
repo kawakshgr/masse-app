@@ -35,12 +35,14 @@ export function WeekEditor({
   sessions,
   clients,
   assignedClientIds,
+  catalogue,
 }: {
   programmeId: string;
   weekId: string;
   sessions: EditorSession[];
   clients: { id: string; name: string }[];
   assignedClientIds: string[];
+  catalogue: string[];
 }) {
   const t = useTranslations("editor");
   const tProgramme = useTranslations("programme");
@@ -67,6 +69,14 @@ export function WeekEditor({
 
   return (
     <div className={pending ? "opacity-70 transition-opacity" : ""}>
+      {/* Suggestions, never a restriction: any name she types is accepted, and
+          a new one joins her library on save. */}
+      <datalist id="masse-exercise-catalogue">
+        {catalogue.map((name) => (
+          <option key={name} value={name} />
+        ))}
+      </datalist>
+
       {/* Seven day columns. Empty days are visibly empty and clickable. */}
       <div className="grid grid-cols-7 gap-2 overflow-x-auto pb-2 [grid-auto-columns:minmax(0,1fr)]">
         {[0, 1, 2, 3, 4, 5, 6].map((day) => {
@@ -154,6 +164,7 @@ export function WeekEditor({
                           <div className="min-w-0 flex-1">
                             <input
                               defaultValue={exercise.name}
+                              list="masse-exercise-catalogue"
                               aria-label={t("exName")}
                               onBlur={(e) =>
                                 startTransition(() => {

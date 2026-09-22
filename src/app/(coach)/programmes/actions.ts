@@ -180,7 +180,34 @@ export async function updateExercise(
 ) {
   const supabase = await createClient();
   await supabase.from("session_exercises").update(patch).eq("id", exerciseId);
+
+  // A name she typed that the catalogue does not know becomes hers, so the
+  // next week autocompletes it. No button needed to "create" one.
+  if (patch.name && patch.name.trim() !== "") {
+    await rememberExercise(patch.name.trim());
+  }
+
   revalidatePath(`/programmes/${programmeId}`);
+}
+
+async function rememberExercise(name: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { data: known } = await supabase
+    .from("exercises")
+    .select("id")
+    .ilike("name", name)
+    .limit(1)
+    .maybeSingle();
+
+  if (known) return;
+
+  // A collision with a built-in is caught by the unique index and ignored.
+  await supabase.from("exercises").insert({ coach_id: user.id, name });
 }
 
 export async function deleteExercise(exerciseId: string, programmeId: string) {

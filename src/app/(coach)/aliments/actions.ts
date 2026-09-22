@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { searchOpenFoodFacts, type FoodCandidate } from "@/lib/openFoodFacts";
 
 function num(value: FormDataEntryValue | null): number | null {
   const raw = String(value ?? "").replace(",", ".").trim();
@@ -64,5 +65,34 @@ export async function deleteFood(formData: FormData) {
   if (!id) return;
 
   await supabase.from("foods").delete().eq("id", id);
+  revalidatePath("/aliments");
+}
+
+/** Searches Open Food Facts. Returns candidates; imports nothing by itself. */
+export async function searchFoods(term: string): Promise<FoodCandidate[]> {
+  return searchOpenFoodFacts(term);
+}
+
+/** Copies a candidate into the coach's own library, where she can edit it. */
+export async function importFood(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const name = String(formData.get("name") ?? "").trim();
+  if (name === "") return;
+
+  await supabase.from("foods").insert({
+    coach_id: user.id,
+    name,
+    brand: String(formData.get("brand") ?? "").trim() || null,
+    kcal_100g: num(formData.get("kcal_100g")),
+    protein_100g: num(formData.get("protein_100g")),
+    carbs_100g: num(formData.get("carbs_100g")),
+    fat_100g: num(formData.get("fat_100g")),
+  });
+
   revalidatePath("/aliments");
 }

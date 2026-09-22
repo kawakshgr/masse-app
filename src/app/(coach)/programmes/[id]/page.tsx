@@ -66,11 +66,15 @@ export default async function ProgrammeEditorPage({
     assignedClientIds = (assignmentsRes.data ?? []).map((a) => a.client_id);
   }
 
-  const { data: clients } = await supabase
-    .from("clients")
-    .select("id, name")
-    .eq("status", "active")
-    .order("name");
+  const [{ data: clients }, { data: catalogue }] = await Promise.all([
+    supabase
+      .from("clients")
+      .select("id, name")
+      .eq("status", "active")
+      .order("name"),
+    // Built-ins plus her own, in one list.
+    supabase.from("exercises").select("id, name").order("name").limit(500),
+  ]);
 
   return (
     <div className="p-5">
@@ -181,6 +185,7 @@ export default async function ProgrammeEditorPage({
           sessions={sessions}
           clients={clients ?? []}
           assignedClientIds={assignedClientIds}
+          catalogue={(catalogue ?? []).map((e) => e.name)}
         />
       ) : (
         <p className="text-[12px] text-[var(--ink3)]">{tProg("emptyAction")}</p>
