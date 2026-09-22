@@ -36,10 +36,10 @@ export function RosterList({
       </div>
 
       <div className="mt-3 flex h-10 shrink-0 items-center justify-between border-y border-[var(--hair)] px-3">
-        <span className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("title")}
         </span>
-        <span className="tnum text-[10px] text-[var(--ink3)]">
+        <span className="tnum text-[11px] text-[var(--ink3)]">
           {t("count", { count: entries.length })}
         </span>
       </div>
@@ -48,8 +48,8 @@ export function RosterList({
         {entries.length === 0 ? (
           // Empty states are designed, not blank.
           <div className="p-5">
-            <p className="text-[13px] font-bold">{t("empty")}</p>
-            <p className="mt-1 text-[12px] leading-relaxed text-[var(--ink2)]">
+            <p className="text-[14px] font-semibold">{t("empty")}</p>
+            <p className="mt-1 text-[13px] leading-[1.5] text-[var(--ink2)]">
               {t("emptyAction")}
             </p>
           </div>
@@ -73,7 +73,7 @@ export function RosterList({
                   >
                     <span
                       aria-hidden
-                      className="flex size-8 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-[var(--on-accent)]"
+                      className="flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold text-[var(--on-accent)]"
                       style={{
                         background: "linear-gradient(140deg, var(--a1), var(--a2))",
                       }}
@@ -83,13 +83,13 @@ export function RosterList({
 
                     <span className="min-w-0 flex-1">
                       <span
-                        className="block truncate text-[13px] font-bold leading-tight"
+                        className="block truncate text-[14px] font-semibold leading-tight"
                         title={entry.name}
                       >
                         {entry.name}
                       </span>
                       <span
-                        className={`block truncate text-[11px] leading-tight ${
+                        className={`block truncate text-[12px] leading-tight ${
                           entry.attention ? "text-[var(--a3)]" : "text-[var(--ink2)]"
                         }`}
                         title={secondLine}
@@ -99,7 +99,7 @@ export function RosterList({
                     </span>
 
                     {entry.attention && (
-                      <span className="shrink-0 rounded-rp border border-[var(--a3)] px-2.5 py-0.5 text-[10px] font-bold text-[var(--a3)]">
+                      <span className="shrink-0 rounded-rp border border-[var(--a3)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--a3)]">
                         {tChip(entry.attention)}
                       </span>
                     )}
@@ -113,7 +113,7 @@ export function RosterList({
 
       <div className="shrink-0 border-t border-[var(--hair)] p-3">
         {pendingInvites.length > 0 && (
-          <p className="tnum mb-2 text-[11px] text-[var(--ink3)]">
+          <p className="tnum mb-2 text-[12px] text-[var(--ink3)]">
             {tInvite("pending", { count: pendingInvites.length })}
           </p>
         )}

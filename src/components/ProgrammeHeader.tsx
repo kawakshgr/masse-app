@@ -25,18 +25,18 @@ export function ProgrammeHeader({
             name="name"
             defaultValue={name}
             autoFocus
-            className="h-8 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] font-bold text-[var(--ink)]"
+            className="h-8 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[15px] font-semibold text-[var(--ink)]"
           />
           <button
             type="submit"
-            className="h-8 shrink-0 rounded-r2 cta px-3 text-[11px] font-bold text-[var(--on-accent)]"
+            className="h-8 shrink-0 rounded-r2 cta px-3 text-[12px] font-semibold text-[var(--on-accent)]"
           >
             {t("rename")}
           </button>
           <button
             type="button"
             onClick={() => setRenaming(false)}
-            className="h-8 shrink-0 rounded-r2 px-2 text-[11px] text-[var(--ink3)]"
+            className="h-8 shrink-0 rounded-r2 px-2 text-[12px] text-[var(--ink3)]"
           >
             {t("cancel")}
           </button>
@@ -49,14 +49,14 @@ export function ProgrammeHeader({
           <button
             type="button"
             onClick={() => setRenaming(true)}
-            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink2)]"
+            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink2)]"
           >
             {t("rename")}
           </button>
           <button
             type="button"
             onClick={() => setConfirming((v) => !v)}
-            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
+            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
           >
             {t("remove")}
           </button>
@@ -69,36 +69,36 @@ export function ProgrammeHeader({
           aria-label={t("confirmTitle", { name })}
           className="mt-3 rounded-r2 border border-[var(--a3)] p-3"
         >
-          <p className="text-[12px] font-bold text-[var(--a3)]">
+          <p className="text-[13px] font-semibold text-[var(--a3)]">
             {t("confirmTitle", { name })}
           </p>
-          <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
+          <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">
             {t("confirmBody")}
           </p>
           <form action={deleteProgramme} className="mt-3 flex flex-wrap items-end gap-2">
             <input type="hidden" name="programme_id" value={programmeId} />
             <input type="hidden" name="expected" value={name} />
             <label className="block min-w-0 flex-1">
-              <span className="block text-[10px] text-[var(--ink2)]">
+              <span className="block text-[11px] text-[var(--ink2)]">
                 {t("confirmType")}
               </span>
               <input
                 name="confirm"
                 required
                 autoComplete="off"
-                className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+                className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
               />
             </label>
             <button
               type="submit"
-              className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[11px] font-bold text-[var(--a3)]"
+              className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[12px] font-semibold text-[var(--a3)]"
             >
               {t("confirm")}
             </button>
             <button
               type="button"
               onClick={() => setConfirming(false)}
-              className="h-8 shrink-0 rounded-r2 px-3 text-[11px] text-[var(--ink3)]"
+              className="h-8 shrink-0 rounded-r2 px-3 text-[12px] text-[var(--ink3)]"
             >
               {t("cancel")}
             </button>

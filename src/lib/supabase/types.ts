@@ -226,6 +226,22 @@ export type InvoiceRow = {
   created_at: string;
 };
 
+export type BillingType = "monthly" | "pack";
+
+/** What was agreed with this client. The invoices are its monthly consequence. */
+export type BillingArrangementRow = {
+  client_id: string;
+  coach_id: string;
+  amount_cents: number;
+  currency: string;
+  type: BillingType;
+  /** 1–28: every month has a 28th, so an agreed day never silently moves. */
+  day_of_month: number;
+  pack_sessions: number;
+  created_at: string;
+  updated_at: string;
+};
+
 export type AllowedCoachEmailRow = {
   email: string;
   note: string | null;
@@ -347,6 +363,7 @@ export type Database = {
       foods: Table<FoodRow, "coach_id" | "name">;
       meals: Table<MealRow, "client_id" | "day" | "name">;
       invoices: Table<InvoiceRow, "coach_id" | "client_id" | "period_start">;
+      billing_arrangements: Table<BillingArrangementRow, "client_id" | "coach_id">;
       allowed_coach_emails: Table<AllowedCoachEmailRow, "email">;
       check_in_photos: Table<CheckInPhotoRow, "check_in_id" | "client_id" | "storage_path">;
       cycle_adjustments: Table<CycleAdjustmentRow, "client_id" | "phase">;
@@ -454,6 +471,7 @@ export type Database = {
       cycle_mode: CycleMode;
       nutrition_mode: NutritionMode;
       invoice_status: InvoiceStatus;
+      billing_type: BillingType;
     };
     CompositeTypes: { [_ in never]: never };
   };

@@ -110,20 +110,20 @@ export function SessionLogger({
           {sessionName ?? t("title")}
         </h2>
         {held > 0 && (
-          <span className="tnum rounded-r1 border border-[var(--a2)] px-2 py-0.5 text-[10px] font-bold text-[var(--a2)]">
+          <span className="tnum rounded-r1 border border-[var(--a2)] px-2 py-0.5 text-[11px] font-bold text-[var(--a2)]">
             {t("heldCount", { count: held })}
           </span>
         )}
       </div>
 
       {!online && (
-        <p className="mt-2 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 py-2 text-[11px] text-[var(--ink2)]">
+        <p className="mt-2 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 py-2 text-[12px] text-[var(--ink2)]">
           {t("offline")}
         </p>
       )}
 
       {rest !== null && (
-        <p className="tnum mt-2 text-[12px] font-bold text-[var(--accent-soft)]">
+        <p className="tnum mt-2 text-[13px] font-bold text-[var(--accent-soft)]">
           {t("rest")} · {Math.floor(rest / 60)}:{String(rest % 60).padStart(2, "0")}
         </p>
       )}
@@ -135,21 +135,21 @@ export function SessionLogger({
             <li key={exercise.id} className="rounded-r2 border border-[var(--hair)] p-3">
               <div className="flex items-baseline justify-between gap-2">
                 <span className="min-w-0">
-                  <span className="block truncate text-[13px] font-bold">
+                  <span className="block truncate text-[14px] font-semibold">
                     {exercise.name}
                   </span>
                   {exercise.cue && (
-                    <span className="block truncate text-[11px] text-[var(--ink3)]">
+                    <span className="block truncate text-[12px] text-[var(--ink3)]">
                       {exercise.cue}
                     </span>
                   )}
                 </span>
-                <span className="tnum shrink-0 text-[11px] text-[var(--ink2)]">
+                <span className="tnum shrink-0 text-[12px] text-[var(--ink2)]">
                   {exercise.scheme ?? "—"}
                 </span>
               </div>
 
-              <p className="tnum mt-1 text-[11px] text-[var(--ink3)]">
+              <p className="tnum mt-1 text-[12px] text-[var(--ink3)]">
                 {t("done")} {done}
                 {exercise.target_sets ? ` / ${exercise.target_sets}` : ""}
               </p>
@@ -162,34 +162,34 @@ export function SessionLogger({
                 className="mt-2 flex flex-wrap items-end gap-2"
               >
                 <label className="block w-[72px]">
-                  <span className="block text-[10px] text-[var(--ink2)]">{t("reps")}</span>
+                  <span className="block text-[11px] text-[var(--ink2)]">{t("reps")}</span>
                   <input
                     name="reps"
                     inputMode="numeric"
                     defaultValue={exercise.target_reps ?? ""}
-                    className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+                    className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
                   />
                 </label>
                 <label className="block w-[86px]">
-                  <span className="block text-[10px] text-[var(--ink2)]">{t("weight")}</span>
+                  <span className="block text-[11px] text-[var(--ink2)]">{t("weight")}</span>
                   <input
                     name="weight_kg"
                     inputMode="decimal"
                     defaultValue={exercise.target_weight_kg ?? ""}
-                    className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+                    className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
                   />
                 </label>
                 <label className="block w-[68px]">
-                  <span className="block text-[10px] text-[var(--ink2)]">{t("rpe")}</span>
+                  <span className="block text-[11px] text-[var(--ink2)]">{t("rpe")}</span>
                   <input
                     name="rpe"
                     inputMode="numeric"
-                    className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+                    className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
                   />
                 </label>
                 <button
                   type="submit"
-                  className="h-9 shrink-0 rounded-rp cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
+                  className="h-9 shrink-0 rounded-rp cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
                 >
                   {t("addSet")}
                 </button>

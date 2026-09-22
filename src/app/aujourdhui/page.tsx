@@ -107,7 +107,7 @@ export default async function TodayPage() {
         <h1 className="font-display text-[26px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h1>
-        <p className="text-[12px] text-[var(--ink3)]">
+        <p className="text-[13px] text-[var(--ink3)]">
           {client.first_name ?? client.name}
           {week?.programmes?.name ? ` · ${week.programmes.name}` : ""}
         </p>
@@ -125,11 +125,11 @@ export default async function TodayPage() {
         />
       ) : (
         <section className="glass rounded-r3 p-4">
-          <p className="text-[13px] font-bold">
+          <p className="text-[14px] font-semibold">
             {week ? tLog("noSession") : t("none")}
           </p>
           {!week && (
-            <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("noneHint")}</p>
+            <p className="mt-1 text-[13px] text-[var(--ink2)]">{t("noneHint")}</p>
           )}
         </section>
       )}
@@ -137,7 +137,7 @@ export default async function TodayPage() {
       {/* Sets that reached the server today, each removable. */}
       {(setsRes.data ?? []).length > 0 && (
         <section className="glass rounded-r3 p-4">
-          <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+          <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {tLog("done")}
           </h2>
           <ul className="mt-2">
@@ -146,7 +146,7 @@ export default async function TodayPage() {
                 key={row.id}
                 className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
               >
-                <span className="tnum min-w-0 flex-1 truncate text-[12px]">
+                <span className="tnum min-w-0 flex-1 truncate text-[13px]">
                   {[
                     row.reps ? `${row.reps} ${tLog("reps")}` : null,
                     row.weight_kg ? `${row.weight_kg} ${tLog("weight")}` : null,
@@ -159,7 +159,7 @@ export default async function TodayPage() {
                   <input type="hidden" name="set_log_id" value={row.id} />
                   <button
                     type="submit"
-                    className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                    className="rounded-r1 px-2 py-0.5 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
                   >
                     ×
                   </button>
@@ -184,7 +184,7 @@ export default async function TodayPage() {
       {/* Her cycle entries, each removable: the erasure right on her own rows. */}
       {client.cycle_tracking && (cycleLogsRes.data ?? []).length > 0 && (
         <section className="glass rounded-r3 p-4">
-          <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+          <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {tEntry("cycleTitle")}
           </h2>
           <ul className="mt-2">
@@ -193,14 +193,14 @@ export default async function TodayPage() {
                 key={row.id}
                 className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
               >
-                <span className="tnum min-w-0 flex-1 truncate text-[12px]">
+                <span className="tnum min-w-0 flex-1 truncate text-[13px]">
                   {row.period_start_date} · {row.cycle_length_days} j
                 </span>
                 <form action={deleteCycleLog} className="shrink-0">
                   <input type="hidden" name="cycle_log_id" value={row.id} />
                   <button
                     type="submit"
-                    className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                    className="rounded-r1 px-2 py-0.5 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
                   >
                     ×
                   </button>
@@ -213,7 +213,7 @@ export default async function TodayPage() {
 
       {week && (
         <section className="glass rounded-r3 p-4">
-          <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+          <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("week")}
           </h2>
           <ul className="mt-2">
@@ -226,13 +226,13 @@ export default async function TodayPage() {
                   className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
                 >
                   <span
-                    className={`w-12 shrink-0 text-[11px] ${
-                      isToday ? "font-bold text-[var(--ink)]" : "text-[var(--ink3)]"
+                    className={`w-12 shrink-0 text-[12px] ${
+                      isToday ? "font-semibold text-[var(--ink)]" : "text-[var(--ink3)]"
                     }`}
                   >
                     {tDays(String(dayIndex)).slice(0, 3)}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-[12px]">
+                  <span className="min-w-0 flex-1 truncate text-[13px]">
                     {session?.name ?? t("rest")}
                   </span>
                 </li>

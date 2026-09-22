@@ -1,205 +1,280 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import {
-  createInvoice,
-  deleteInvoice,
-  setInvoiceStatus,
-  updateInvoice,
-} from "./actions";
+  BillingInspector,
+  type BillingClient,
+} from "@/components/BillingInspector";
+import { BillingTable } from "@/components/BillingTable";
+import {
+  euros,
+  lastMonths,
+  monthLabel,
+  monthStart,
+  monthState,
+  nextMonthOf,
+  shortMonth,
+  type MonthState,
+} from "@/lib/billing";
+import type { BillingType, InvoiceStatus } from "@/lib/supabase/types";
 
-const cell =
-  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
+type Filter = "all" | "open" | "monthly" | "pack";
 
-function euros(cents: number): string {
-  return (cents / 100).toLocaleString("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-  });
+const FILTERS: Filter[] = ["all", "open", "monthly", "pack"];
+
+const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
+
+function initialsOf(name: string): string {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
 }
 
-export default async function BillingPage() {
+export default async function BillingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ filtre?: string; ligne?: string }>;
+}) {
   const t = await getTranslations("billing");
-  const supabase = await createClient();
+  const params = await searchParams;
+  const filter: Filter = FILTERS.includes(params.filtre as Filter)
+    ? (params.filtre as Filter)
+    : "all";
 
-  const [invoicesRes, clientsRes] = await Promise.all([
+  const supabase = await createClient();
+  const period = monthStart();
+  const months = lastMonths(period, 6);
+  const nextMonth = nextMonthOf(period);
+
+  const [clientsRes, arrangementsRes, invoicesRes] = await Promise.all([
+    supabase
+      .from("clients")
+      .select("id, name, email, created_at")
+      .eq("status", "active")
+      .order("name"),
+    supabase
+      .from("billing_arrangements")
+      .select("client_id, amount_cents, type, day_of_month, pack_sessions"),
     supabase
       .from("invoices")
-      .select("*")
-      .order("period_start", { ascending: false }),
-    supabase.from("clients").select("id, name").eq("status", "active").order("name"),
+      .select("client_id, period_start, status, paid_at, issued_at")
+      .gte("period_start", months[0]),
   ]);
 
-  const invoices = invoicesRes.data ?? [];
   const clients = clientsRes.data ?? [];
-  const nameOf = new Map(clients.map((c) => [c.id, c.name]));
+  const arrangements = new Map(
+    (arrangementsRes.data ?? []).map((a) => [a.client_id, a]),
+  );
+  const invoices = invoicesRes.data ?? [];
+  const invoiceAt = new Map(
+    invoices.map((i) => [`${i.client_id}:${i.period_start}`, i]),
+  );
 
-  // Both totals derived from the rows beside them, never stored.
-  const outstanding = invoices
-    .filter((i) => i.status === "draft" || i.status === "sent")
-    .reduce((sum, i) => sum + i.amount_cents, 0);
-  const collected = invoices
-    .filter((i) => i.status === "paid")
-    .reduce((sum, i) => sum + i.amount_cents, 0);
+  const rows = clients.map((client) => {
+    const a = arrangements.get(client.id);
+    const type: BillingType = a?.type ?? "monthly";
+    const amountCents = a?.amount_cents ?? 0;
+    const dayOfMonth = a?.day_of_month ?? 1;
+    const packSessions = a?.pack_sessions ?? 10;
+    const current = invoiceAt.get(`${client.id}:${period}`) ?? null;
+    const state = monthState(
+      (current?.status ?? null) as InvoiceStatus | null,
+      period,
+      dayOfMonth,
+    );
 
-  const today = new Date().toISOString().slice(0, 10);
-  const monthStart = `${today.slice(0, 7)}-01`;
+    return {
+      id: client.id,
+      name: client.name,
+      email: client.email,
+      since: t("clientSince", {
+        date: new Date(client.created_at).toLocaleDateString("fr-FR", {
+          month: "long",
+          year: "numeric",
+        }),
+      }),
+      amountCents,
+      type,
+      dayOfMonth,
+      packSessions,
+      state,
+      paidWhen: current?.paid_at
+        ? t("receivedOn", {
+            date: new Date(current.paid_at).toLocaleDateString("fr-FR", {
+              day: "numeric",
+              month: "short",
+            }),
+          })
+        : null,
+      issued: current?.issued_at != null,
+      history: months.map((m) => {
+        const row = invoiceAt.get(`${client.id}:${m}`);
+        return {
+          label: shortMonth(m),
+          state: (row == null
+            ? "none"
+            : monthState(row.status as InvoiceStatus, m, dayOfMonth)) as
+            MonthState | "none",
+        };
+      }),
+    };
+  });
 
-  const statusTone: Record<string, string> = {
-    draft: "text-[var(--ink3)]",
-    sent: "text-[var(--a2)]",
-    paid: "text-[var(--accent-soft)]",
-    void: "text-[var(--ink3)] line-through",
-  };
+  // Every figure below is derived from the rows beside it, never stored.
+  const open = rows.filter((r) => r.state !== "paid");
+  const monthly = rows.filter((r) => r.type === "monthly");
+  const packs = rows.filter((r) => r.type === "pack");
+  const recurring = monthly.reduce((sum, r) => sum + r.amountCents, 0);
+  const collected = rows
+    .filter((r) => r.state === "paid")
+    .reduce((sum, r) => sum + r.amountCents, 0);
+  const owed = open.reduce((sum, r) => sum + r.amountCents, 0);
 
-  return (
-    <div className="min-w-0 flex-1 overflow-y-auto p-5">
-      <header className="mb-4">
-        <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
+  const shown =
+    filter === "open"
+      ? open
+      : filter === "monthly"
+        ? monthly
+        : filter === "pack"
+          ? packs
+          : rows;
+
+  const selected =
+    shown.find((r) => r.id === params.ligne) ?? shown[0] ?? rows[0] ?? null;
+  const periodLabel = monthLabel(period);
+
+  const totals = [
+    {
+      label: t("recurring"),
+      value: euros(recurring),
+      sub: t("monthlyClients", { count: monthly.length }),
+      tone: "",
+    },
+    {
+      label: t("collected"),
+      value: euros(collected),
+      sub: t("settled", {
+        settled: rows.length - open.length,
+        total: rows.length,
+      }),
+      tone: "",
+    },
+    {
+      label: t("stillOpen"),
+      value: euros(owed),
+      sub:
+        open.length === 0
+          ? t("nothingOutstanding")
+          : open.map((r) => r.name.split(" ")[0]).join(", "),
+      tone: owed > 0 ? "text-[var(--a3)]" : "",
+    },
+    {
+      label: t("packsLive"),
+      value: String(packs.length),
+      sub: t("packsLiveSub"),
+      tone: "",
+    },
+  ];
+
+  if (clients.length === 0) {
+    return (
+      <div className="min-w-0 flex-1 overflow-y-auto p-5">
+        <h2 className="font-display text-[22px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h2>
-        <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
+        <p className="mt-1 text-[13px] leading-[1.5] text-[var(--ink2)]">
           {t("lede")}
         </p>
-        <p className="tnum mt-2 text-[12px]">
-          <span className="text-[var(--ink3)]">{t("outstanding")} </span>
-          <span className="font-bold text-[var(--a2)]">{euros(outstanding)}</span>
-          <span className="text-[var(--ink3)]"> · {t("collected")} </span>
-          <span className="font-bold text-[var(--accent)]">{euros(collected)}</span>
-        </p>
+        <p className="mt-4 text-[13px] text-[var(--ink3)]">{t("noClients")}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="@container flex min-w-0 flex-1 flex-col gap-3.5 overflow-y-auto p-5">
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <h2 className="font-display text-[23px] font-extrabold tracking-[-.03em]">
+            {t("titleMonth", { month: periodLabel })}
+          </h2>
+          <p className="mt-1 text-[13px] text-[var(--ink2)]">
+            {open.length === 0
+              ? t("subSettled", { recurring: euros(recurring) })
+              : t("subOpen", {
+                  recurring: euros(recurring),
+                  count: open.length,
+                  owed: euros(owed),
+                })}
+          </p>
+        </div>
+        <nav className="flex flex-wrap items-center gap-2">
+          {FILTERS.map((value) => (
+            <Link
+              key={value}
+              href={`/facturation?filtre=${value}`}
+              aria-current={filter === value ? "page" : undefined}
+              className={`rounded-r2 border border-[var(--edge)] px-3 py-2 text-[13px] font-semibold ${
+                filter === value
+                  ? "sel text-[var(--ink)]"
+                  : "bg-[var(--glass2)] text-[var(--ink2)]"
+              }`}
+            >
+              {value === "open" && open.length > 0
+                ? `${t("filterOpen")} · ${open.length}`
+                : t(`filter_${value}`)}
+            </Link>
+          ))}
+        </nav>
       </header>
 
-      {clients.length === 0 ? (
-        <p className="text-[12px] text-[var(--ink3)]">{t("noClients")}</p>
-      ) : (
-        <section className="glass rounded-r3 p-4">
-          <form action={createInvoice} className="flex flex-wrap items-end gap-2">
-            <label className="block min-w-[150px] flex-1">
-              <span className="block text-[10px] text-[var(--ink2)]">{t("client")}</span>
-              <select name="client_id" required className={`mt-1 ${cell}`}>
-                {clients.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="block w-[140px]">
-              <span className="block text-[10px] text-[var(--ink2)]">{t("period")}</span>
-              <input
-                type="date"
-                name="period_start"
-                required
-                defaultValue={monthStart}
-                className={`tnum mt-1 ${cell}`}
-              />
-            </label>
-            <label className="block w-[110px]">
-              <span className="block text-[10px] text-[var(--ink2)]">{t("amount")}</span>
-              <input name="amount" inputMode="decimal" className={`tnum mt-1 ${cell}`} />
-            </label>
-            <label className="block min-w-[140px] flex-1">
-              <span className="block text-[10px] text-[var(--ink2)]">{t("note")}</span>
-              <input name="note" className={`mt-1 ${cell}`} />
-            </label>
-            <button
-              type="submit"
-              className="h-8 shrink-0 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(166px,1fr))] gap-2.5">
+        {totals.map((total) => (
+          <div
+            key={total.label}
+            className="glass flex flex-col gap-1 rounded-r3 px-4 py-3.5"
+          >
+            <span className={`truncate ${micro}`}>{total.label}</span>
+            <span
+              className={`tnum font-display text-[21px] font-extrabold tracking-[-.03em] ${total.tone}`}
             >
-              {t("create")}
-            </button>
-          </form>
-        </section>
-      )}
+              {total.value}
+            </span>
+            <span
+              className="truncate text-[12px] text-[var(--ink2)]"
+              title={total.sub}
+            >
+              {total.sub}
+            </span>
+          </div>
+        ))}
+      </div>
 
-      {invoices.length === 0 ? (
-        <div className="mt-4 p-2">
-          <p className="text-[13px] font-bold">{t("empty")}</p>
-          <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("emptyHint")}</p>
-        </div>
-      ) : (
-        <ul className="mt-4 space-y-2">
-          {invoices.map((invoice) => (
-            <li key={invoice.id} className="glass rounded-r2 p-3">
-              <div className="flex flex-wrap items-baseline gap-2">
-                <span className="text-[13px] font-bold">
-                  {nameOf.get(invoice.client_id) ?? "—"}
-                </span>
-                <span className="tnum text-[11px] text-[var(--ink3)]">
-                  {invoice.period_start}
-                  {invoice.period_end ? ` → ${invoice.period_end}` : ""}
-                </span>
-                <span
-                  className={`ml-auto text-[11px] font-bold ${statusTone[invoice.status]}`}
-                >
-                  {t(invoice.status)}
-                </span>
-              </div>
+      <div className="grid gap-3.5 @5xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] @5xl:items-start">
+        <BillingTable
+          rows={shown.map((r) => ({ ...r, initials: initialsOf(r.name) }))}
+          total={rows.length}
+          open={open.map((r) => ({ id: r.id, amountCents: r.amountCents }))}
+          selectedId={selected?.id ?? null}
+          filter={filter}
+          period={period}
+          nextMonth={nextMonth}
+        />
 
-              <form action={updateInvoice} className="mt-2 flex flex-wrap items-end gap-2">
-                <input type="hidden" name="invoice_id" value={invoice.id} />
-                <label className="block w-[110px]">
-                  <span className="sr-only">{t("amount")}</span>
-                  <input
-                    name="amount"
-                    inputMode="decimal"
-                    defaultValue={(invoice.amount_cents / 100).toFixed(2)}
-                    className={`tnum ${cell}`}
-                  />
-                </label>
-                <label className="block min-w-[150px] flex-1">
-                  <span className="sr-only">{t("note")}</span>
-                  <input
-                    name="note"
-                    defaultValue={invoice.note ?? ""}
-                    placeholder={t("note")}
-                    className={cell}
-                  />
-                </label>
-                <button
-                  type="submit"
-                  className="h-8 shrink-0 rounded-r2 border border-[var(--edge)] px-3 text-[11px] text-[var(--ink2)]"
-                >
-                  {t("status")}
-                </button>
-              </form>
-
-              <div className="mt-2 flex flex-wrap gap-1">
-                {(
-                  [
-                    ["sent", t("markSent")],
-                    ["paid", t("markPaid")],
-                    ["void", t("markVoid")],
-                    ["draft", t("reopen")],
-                  ] as const
-                )
-                  .filter(([status]) => status !== invoice.status)
-                  .map(([status, label]) => (
-                    <form key={status} action={setInvoiceStatus}>
-                      <input type="hidden" name="invoice_id" value={invoice.id} />
-                      <input type="hidden" name="status" value={status} />
-                      <button
-                        type="submit"
-                        className="rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink2)]"
-                      >
-                        {label}
-                      </button>
-                    </form>
-                  ))}
-
-                <form action={deleteInvoice} className="ml-auto">
-                  <input type="hidden" name="invoice_id" value={invoice.id} />
-                  <button
-                    type="submit"
-                    className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
-                  >
-                    {t("remove")}
-                  </button>
-                </form>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        {selected && (
+          <BillingInspector
+            client={
+              {
+                ...selected,
+                initials: initialsOf(selected.name),
+              } satisfies BillingClient
+            }
+            period={period}
+            periodLabel={periodLabel}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { addFood } from "@/app/(coach)/aliments/actions";
 
 const cell =
-  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
+  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
 
 /**
  * Macros in, calories out. The prototype is explicit that calories are never
@@ -29,12 +29,12 @@ export function FoodForm() {
   return (
     <form action={addFood} className="flex flex-wrap items-end gap-2">
       <label className="block min-w-[160px] flex-1">
-        <span className="block text-[10px] text-[var(--ink2)]">{t("name")}</span>
+        <span className="block text-[11px] text-[var(--ink2)]">{t("name")}</span>
         <input name="name" required className={`mt-1 ${cell}`} />
       </label>
 
       <label className="block w-[120px]">
-        <span className="block text-[10px] text-[var(--ink2)]">{t("brand")}</span>
+        <span className="block text-[11px] text-[var(--ink2)]">{t("brand")}</span>
         <input name="brand" className={`mt-1 ${cell}`} />
       </label>
 
@@ -46,7 +46,7 @@ export function FoodForm() {
         ] as const
       ).map(([field, label, key]) => (
         <label key={field} className="block w-[78px]">
-          <span className="block text-[10px] text-[var(--ink2)]">{label}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{label}</span>
           <input
             name={field}
             inputMode="decimal"
@@ -60,20 +60,20 @@ export function FoodForm() {
       ))}
 
       <div className="w-[96px]">
-        <span className="block text-[10px] text-[var(--ink2)]">{t("kcal")}</span>
-        <p className="tnum mt-1 flex h-8 items-center justify-center rounded-r2 border border-dashed border-[var(--edge)] text-[12px] font-bold text-[var(--ink2)]">
+        <span className="block text-[11px] text-[var(--ink2)]">{t("kcal")}</span>
+        <p className="tnum mt-1 flex h-8 items-center justify-center rounded-r2 border border-dashed border-[var(--edge)] text-[13px] font-semibold text-[var(--ink2)]">
           {kcal}
         </p>
       </div>
 
       <button
         type="submit"
-        className="h-8 shrink-0 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
+        className="h-8 shrink-0 rounded-r2 cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
       >
         {t("add")}
       </button>
 
-      <p className="w-full text-[10px] text-[var(--ink3)]">{t2("derived")}</p>
+      <p className="w-full text-[11px] text-[var(--ink3)]">{t2("derived")}</p>
     </form>
   );
 }

@@ -5,7 +5,7 @@ import { FoodSearch } from "@/components/FoodSearch";
 import { FoodForm } from "@/components/FoodForm";
 
 const cell =
-  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
+  "h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
 
 export default async function FoodsPage() {
   const t = await getTranslations("foods");
@@ -25,11 +25,11 @@ export default async function FoodsPage() {
           <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
             {t("title")}
           </h2>
-          <span className="tnum text-[11px] text-[var(--ink3)]">
+          <span className="tnum text-[12px] text-[var(--ink3)]">
             {t("count", { count: rows.length })}
           </span>
         </div>
-        <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
+        <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">
           {t("lede")}
         </p>
       </header>
@@ -37,7 +37,7 @@ export default async function FoodsPage() {
       <section className="glass rounded-r3 p-4">
         <FoodForm />
 
-        <p className="mt-2 text-[10px] text-[var(--ink3)]">{t("per100")}</p>
+        <p className="mt-2 text-[11px] text-[var(--ink3)]">{t("per100")}</p>
       </section>
 
       <div className="mt-4">
@@ -46,8 +46,8 @@ export default async function FoodsPage() {
 
       {rows.length === 0 ? (
         <div className="mt-4 p-2">
-          <p className="text-[13px] font-bold">{t("empty")}</p>
-          <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("emptyHint")}</p>
+          <p className="text-[14px] font-semibold">{t("empty")}</p>
+          <p className="mt-1 text-[13px] text-[var(--ink2)]">{t("emptyHint")}</p>
         </div>
       ) : (
         <ul className="mt-4 space-y-2">
@@ -72,7 +72,7 @@ export default async function FoodsPage() {
                     className={cell}
                   />
                 </label>
-                <span className="tnum flex h-8 w-[78px] shrink-0 items-center justify-center rounded-r2 border border-dashed border-[var(--edge)] text-[11px] text-[var(--ink3)]">
+                <span className="tnum flex h-8 w-[78px] shrink-0 items-center justify-center rounded-r2 border border-dashed border-[var(--edge)] text-[12px] text-[var(--ink3)]">
                   {food.kcal_100g ?? "—"}
                 </span>
                 {(
@@ -94,7 +94,7 @@ export default async function FoodsPage() {
                 ))}
                 <button
                   type="submit"
-                  className="h-8 shrink-0 rounded-r2 border border-[var(--edge)] px-3 text-[11px] text-[var(--ink2)]"
+                  className="h-8 shrink-0 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
                 >
                   {t("save")}
                 </button>
@@ -104,7 +104,7 @@ export default async function FoodsPage() {
                 <input type="hidden" name="food_id" value={food.id} />
                 <button
                   type="submit"
-                  className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                  className="rounded-r1 px-2 py-0.5 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
                 >
                   {t("remove")}
                 </button>

@@ -93,7 +93,7 @@ export default async function ProgrammeEditorPage({
         >
           <button
             type="submit"
-            className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[11px] text-[var(--ink2)]"
+            className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
           >
             {programme.is_template ? t("untemplate") : t("template")}
           </button>
@@ -116,7 +116,7 @@ export default async function ProgrammeEditorPage({
           >
             <button
               type="submit"
-              className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[11px] text-[var(--ink2)]"
+              className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
             >
               {t("duplicate")}
             </button>
@@ -132,7 +132,7 @@ export default async function ProgrammeEditorPage({
               key={week.id}
               href={`/programmes/${programme.id}?semaine=${week.week_number}`}
               aria-current={active ? "page" : undefined}
-              className={`h-8 rounded-r2 px-3 text-[12px] font-bold leading-8 ${
+              className={`h-8 rounded-r2 px-3 text-[13px] font-semibold leading-8 ${
                 active
                   ? "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink)]"
                   : "text-[var(--ink2)] hover:bg-[var(--glass)]"
@@ -151,7 +151,7 @@ export default async function ProgrammeEditorPage({
         >
           <button
             type="submit"
-            className="h-8 rounded-r2 px-3 text-[12px] text-[var(--accent)]"
+            className="h-8 rounded-r2 px-3 text-[13px] text-[var(--accent)]"
           >
             {t("addWeek")}
           </button>
@@ -166,7 +166,7 @@ export default async function ProgrammeEditorPage({
           >
             <button
               type="submit"
-              className="h-8 rounded-r2 px-3 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
+              className="h-8 rounded-r2 px-3 text-[13px] text-[var(--ink3)] hover:text-[var(--a3)]"
             >
               {tProgramme("removeWeek")}
             </button>
@@ -197,7 +197,7 @@ export default async function ProgrammeEditorPage({
           }))}
         />
       ) : (
-        <p className="text-[12px] text-[var(--ink3)]">{tProg("emptyAction")}</p>
+        <p className="text-[13px] text-[var(--ink3)]">{tProg("emptyAction")}</p>
       )}
     </div>
   );

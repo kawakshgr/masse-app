@@ -19,12 +19,12 @@ function Field({
 }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="block">
-      <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+      <span className="block text-[12px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {label}
       </span>
       <input
         {...props}
-        className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+        className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[15px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
       />
     </label>
   );
@@ -44,7 +44,7 @@ function Choice({
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`h-11 rounded-r2 border px-3 text-[13px] transition-colors ${
+      className={`h-11 rounded-r2 border px-3 text-[14px] transition-colors ${
         selected
           ? "border-[var(--accent)] bg-[var(--glass2)] text-[var(--accent)]"
           : "border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
@@ -114,7 +114,7 @@ export default function OnboardingPage() {
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="atmosphere" aria-hidden />
       <div className="glass lift w-full max-w-[520px] rounded-r4 p-8">
-        <p className="tnum text-[11px] font-bold text-[var(--accent)]">
+        <p className="tnum text-[12px] font-bold text-[var(--accent)]">
           {t("step", { n: shownIndex })}
         </p>
 
@@ -123,16 +123,16 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("codeTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("codeLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("codeLede")}</p>
             <input
               value={a.code}
               onChange={(e) => set({ code: e.target.value.toUpperCase() })}
               placeholder={t("codePlaceholder")}
               aria-label={t("codeTitle")}
-              className="tnum mt-5 h-12 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-center text-[18px] font-bold tracking-widest text-[var(--ink)] placeholder:text-[var(--ink3)]"
+              className="tnum mt-5 h-12 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-center text-[18px] font-semibold tracking-widest text-[var(--ink)] placeholder:text-[var(--ink3)]"
             />
             {codeBad && (
-              <p role="alert" className="mt-3 text-[12px] text-[var(--a3)]">
+              <p role="alert" className="mt-3 text-[13px] text-[var(--a3)]">
                 {t("codeBad")}
               </p>
             )}
@@ -140,7 +140,7 @@ export default function OnboardingPage() {
               type="button"
               onClick={checkCode}
               disabled={checking || a.code.trim().length < 4}
-              className="mt-5 h-11 w-full rounded-rp cta text-[14px] font-bold text-[var(--on-accent)] disabled:opacity-50"
+              className="mt-5 h-11 w-full rounded-rp cta text-[15px] font-semibold text-[var(--on-accent)] disabled:opacity-50"
             >
               {t("next")}
             </button>
@@ -152,10 +152,10 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("goalTitle")}
             </h1>
-            <p className="mt-1 text-[12px] text-[var(--accent)]">
+            <p className="mt-1 text-[13px] text-[var(--accent)]">
               {t("codeOk", { coach: a.coachName ?? "" })}
             </p>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("goalLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("goalLede")}</p>
             <div className="mt-5 grid grid-cols-2 gap-2">
               {GOALS.map((goal) => (
                 <Choice key={goal} selected={a.goal === goal} onClick={() => set({ goal })}>
@@ -171,7 +171,7 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("bodyTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("bodyLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("bodyLede")}</p>
             <div className="mt-5 space-y-3">
               <Field label="Nom" value={a.name} onChange={(e) => set({ name: e.target.value })} />
               <div className="grid grid-cols-3 gap-2">
@@ -188,13 +188,13 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("injuriesTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("injuriesLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("injuriesLede")}</p>
             <textarea
               value={a.injuries}
               onChange={(e) => set({ injuries: e.target.value })}
               rows={4}
               aria-label={t("injuriesTitle")}
-              className="mt-5 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[14px] text-[var(--ink)]"
+              className="mt-5 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[15px] text-[var(--ink)]"
             />
           </>
         )}
@@ -204,7 +204,7 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("equipmentTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("equipmentLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("equipmentLede")}</p>
             <div className="mt-5 grid grid-cols-2 gap-2">
               {EQUIPMENT.map((item) => (
                 <Choice
@@ -230,7 +230,7 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("daysTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("daysLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("daysLede")}</p>
             <div className="mt-5 grid grid-cols-4 gap-2">
               {[0, 1, 2, 3, 4, 5, 6].map((d) => (
                 <Choice
@@ -256,9 +256,9 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("cycleTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("cycleLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("cycleLede")}</p>
             {/* The promise is stated plainly, because the architecture keeps it. */}
-            <p className="mt-4 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[12px] leading-relaxed text-[var(--ink2)]">
+            <p className="mt-4 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[13px] leading-[1.5] text-[var(--ink2)]">
               {t("cyclePromise")}
             </p>
             <div className="mt-5 grid grid-cols-2 gap-2">
@@ -277,7 +277,7 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("sleepTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("sleepLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("sleepLede")}</p>
             <div className="mt-5">
               <Field
                 label="h"
@@ -294,9 +294,9 @@ export default function OnboardingPage() {
             <h1 className="mt-2 font-display text-[26px] font-extrabold tracking-[-.03em]">
               {t("summaryTitle")}
             </h1>
-            <p className="mt-2 text-[13px] text-[var(--ink2)]">{t("summaryLede")}</p>
+            <p className="mt-2 text-[14px] text-[var(--ink2)]">{t("summaryLede")}</p>
 
-            <dl className="mt-5 space-y-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[12px]">
+            <dl className="mt-5 space-y-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[13px]">
               {[
                 ["Coach", a.coachName],
                 [t("goalTitle"), a.goal && tGoal(a.goal)],
@@ -327,12 +327,12 @@ export default function OnboardingPage() {
               type="button"
               onClick={finish}
               disabled={sent || !email || !a.name.trim()}
-              className="mt-4 h-11 w-full rounded-rp cta text-[14px] font-bold text-[var(--on-accent)] disabled:opacity-50"
+              className="mt-4 h-11 w-full rounded-rp cta text-[15px] font-semibold text-[var(--on-accent)] disabled:opacity-50"
             >
               {t("finish")}
             </button>
             {sent && (
-              <p role="status" className="mt-3 text-[13px] text-[var(--accent)]">
+              <p role="status" className="mt-3 text-[14px] text-[var(--accent)]">
                 {t("sent")}
               </p>
             )}
@@ -344,14 +344,14 @@ export default function OnboardingPage() {
             <button
               type="button"
               onClick={() => go(-1)}
-              className="h-11 flex-1 rounded-r2 border border-[var(--edge)] text-[13px] text-[var(--ink2)]"
+              className="h-11 flex-1 rounded-r2 border border-[var(--edge)] text-[14px] text-[var(--ink2)]"
             >
               {t("back")}
             </button>
             <button
               type="button"
               onClick={() => go(1)}
-              className="h-11 flex-1 rounded-rp cta text-[13px] font-bold text-[var(--on-accent)]"
+              className="h-11 flex-1 rounded-rp cta text-[14px] font-semibold text-[var(--on-accent)]"
             >
               {t("next")}
             </button>

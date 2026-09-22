@@ -12,11 +12,11 @@ export default async function OfflinePage() {
         <h1 className="font-display text-[24px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h1>
-        <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink2)]">
+        <p className="mt-2 text-[14px] leading-[1.5] text-[var(--ink2)]">
           {t("lede")}
         </p>
         {/* Offline is a state, not an error: say what is safe, not what failed. */}
-        <p className="mt-4 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[12px] leading-relaxed text-[var(--ink2)]">
+        <p className="mt-4 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-3 text-[13px] leading-[1.5] text-[var(--ink2)]">
           {t("held")}
         </p>
         <RetryButton label={t("retry")} />

@@ -20,7 +20,7 @@ export type PhaseLevers = {
 };
 
 const field =
-  "tnum h-7 w-full rounded-r1 border border-[var(--edge)] bg-[var(--glass2)] px-1.5 text-center text-[11px] text-[var(--ink)]";
+  "tnum h-7 w-full rounded-r1 border border-[var(--edge)] bg-[var(--glass2)] px-1.5 text-center text-[12px] text-[var(--ink)]";
 
 function Lever({
   label,
@@ -35,11 +35,11 @@ function Lever({
 }) {
   return (
     <label className="flex items-center justify-between gap-2">
-      <span className="shrink-0 text-[10px] text-[var(--ink3)]">{label}</span>
+      <span className="shrink-0 text-[11px] text-[var(--ink3)]">{label}</span>
       <span className="flex w-[84px] shrink-0 items-center gap-1">
         <input name={name} inputMode="numeric" defaultValue={value} className={field} />
         {suffix && (
-          <span className="shrink-0 text-[10px] text-[var(--ink3)]">{suffix}</span>
+          <span className="shrink-0 text-[11px] text-[var(--ink3)]">{suffix}</span>
         )}
       </span>
     </label>
@@ -69,7 +69,7 @@ export function CyclePanel({
   if (!tracking) {
     return (
       <section className="glass rounded-r3 p-4">
-        <p className="text-[12px] text-[var(--ink2)]">{t("off")}</p>
+        <p className="text-[13px] text-[var(--ink2)]">{t("off")}</p>
       </section>
     );
   }
@@ -79,8 +79,8 @@ export function CyclePanel({
       <section className="glass rounded-r3 p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[13px] font-bold">{t("on")}</p>
-            <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
+            <p className="text-[14px] font-semibold">{t("on")}</p>
+            <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">
               {t("lede", { first: firstName })}
             </p>
           </div>
@@ -93,7 +93,7 @@ export function CyclePanel({
               <select
                 name="phase_manual"
                 defaultValue={manualPhase ?? "follicular"}
-                className="h-7 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[11px] text-[var(--ink)]"
+                className="h-7 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
               >
                 {PHASES.map((p) => (
                   <option key={p} value={p}>
@@ -104,7 +104,7 @@ export function CyclePanel({
             )}
             <button
               type="submit"
-              className={`h-7 rounded-rp px-2.5 text-[11px] font-bold ${
+              className={`h-7 rounded-rp px-2.5 text-[12px] font-semibold ${
                 mode === "log"
                   ? "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
                   : "sel text-[var(--ink)]"
@@ -116,7 +116,7 @@ export function CyclePanel({
         </div>
 
         {currentPhase == null && (
-          <p className="mt-3 text-[11px] text-[var(--ink3)]">{t("noPhase")}</p>
+          <p className="mt-3 text-[12px] text-[var(--ink3)]">{t("noPhase")}</p>
         )}
       </section>
 
@@ -137,9 +137,9 @@ export function CyclePanel({
               <input type="hidden" name="phase" value={phase} />
 
               <div className="flex items-baseline justify-between gap-2">
-                <span className="text-[12px] font-bold">{tPhase(phase)}</span>
+                <span className="text-[13px] font-semibold">{tPhase(phase)}</span>
                 {isNow && (
-                  <span className="rounded-rp bg-[var(--accent)] px-2 py-0.5 text-[9px] font-bold text-[var(--on-accent)]">
+                  <span className="rounded-rp bg-[var(--accent)] px-2 py-0.5 text-[10px] font-bold text-[var(--on-accent)]">
                     {t("now")}
                   </span>
                 )}
@@ -154,14 +154,14 @@ export function CyclePanel({
               </div>
 
               {!lever.configured && (
-                <p className="mt-2 text-[9px] leading-snug text-[var(--ink3)]">
+                <p className="mt-2 text-[10px] leading-snug text-[var(--ink3)]">
                   {t("defaultNote")}
                 </p>
               )}
 
               <button
                 type="submit"
-                className="mt-2 h-7 w-full rounded-r2 cta text-[11px] font-bold text-[var(--on-accent)]"
+                className="mt-2 h-7 w-full rounded-r2 cta text-[12px] font-semibold text-[var(--on-accent)]"
               >
                 {t("save")}
               </button>
@@ -170,7 +170,7 @@ export function CyclePanel({
         })}
       </div>
 
-      <p className="text-[11px] leading-relaxed text-[var(--ink2)]">{t("promise")}</p>
+      <p className="text-[12px] leading-[1.5] text-[var(--ink2)]">{t("promise")}</p>
     </div>
   );
 }

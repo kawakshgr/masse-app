@@ -30,7 +30,7 @@ export function ClientTabs({
             key={tab}
             href={`/clients/${clientId}?onglet=${tab}`}
             aria-current={active ? "page" : undefined}
-            className={`h-7 rounded-rp px-3 text-[12.5px] font-bold leading-7 transition-colors ${
+            className={`h-7 rounded-rp px-3 text-[13.5px] font-semibold leading-7 transition-colors ${
               active
                 ? "sel text-[var(--ink)]"
                 : "text-[var(--ink2)] hover:text-[var(--ink)]"

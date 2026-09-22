@@ -23,12 +23,16 @@ import { loadHistory, type Range } from "@/lib/history";
 import type { PhotoPose } from "@/lib/supabase/types";
 
 function initialsOf(name: string) {
-  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]!.toUpperCase()).join("");
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]!.toUpperCase())
+    .join("");
 }
 
 const panel = "glass rounded-r3 p-4";
-const heading =
-  "text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]";
+const heading = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 
 export default async function ClientDetailPage({
   params,
@@ -72,8 +76,10 @@ export default async function ClientDetailPage({
       <header className="flex items-start gap-3">
         <span
           aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-[var(--onA)]"
-          style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
+          className="flex size-10 shrink-0 items-center justify-center rounded-full text-[14px] font-semibold text-[var(--onA)]"
+          style={{
+            background: "linear-gradient(140deg, var(--a1), var(--a2))",
+          }}
         >
           {initialsOf(client.name)}
         </span>
@@ -82,7 +88,7 @@ export default async function ClientDetailPage({
             {client.name}
           </h2>
           {meta.length > 0 && (
-            <p className="truncate text-[11px] text-[var(--ink2)]">
+            <p className="truncate text-[12px] text-[var(--ink2)]">
               {meta.join(" · ")}
             </p>
           )}
@@ -130,7 +136,10 @@ export default async function ClientDetailPage({
 
 /* ---------- tabs ---------- */
 
-type Translate = (key: string, values?: Record<string, string | number>) => string;
+type Translate = (
+  key: string,
+  values?: Record<string, string | number>,
+) => string;
 
 function OverviewTab({
   detail,
@@ -168,11 +177,17 @@ function OverviewTab({
       prose += tProse("lutealTrim", {
         pct: Math.round((1 - detail.volumeCoefficient) * 100),
       });
-    } else if (detail.intensityCoefficient != null && detail.intensityCoefficient > 1) {
+    } else if (
+      detail.intensityCoefficient != null &&
+      detail.intensityCoefficient > 1
+    ) {
       prose += tProse("intensityLift", {
         pct: Math.round((detail.intensityCoefficient - 1) * 100),
       });
-    } else if (detail.intensityCoefficient != null && detail.intensityCoefficient < 1) {
+    } else if (
+      detail.intensityCoefficient != null &&
+      detail.intensityCoefficient < 1
+    ) {
       prose += tProse("intensityDrop", {
         pct: Math.round((1 - detail.intensityCoefficient) * 100),
       });
@@ -191,25 +206,31 @@ function OverviewTab({
       <div className="flex flex-wrap gap-3">
         <MetricCard
           label={t("adherence")}
+          kind="adherence"
           value={adherence.pct == null ? "—" : `${adherence.pct}%`}
           sub={adherence.expected === 0 ? null : t("adherenceSub")}
           wash="wash-1"
         />
         <MetricCard
           label={t("sessions")}
+          kind="sessions"
           value={`${sessionsThisWeek.done} / ${sessionsThisWeek.total}`}
           sub={t("sessionsSub")}
           wash="wash-2"
         />
         <MetricCard
           label={t("sleep")}
+          kind="sleep"
           value={avgLabel ?? "—"}
           sub={targetLabel && t("sleepSub", { target: targetLabel })}
           wash="wash-3"
         />
         <MetricCard
           label={t("steps")}
-          value={steps.latest == null ? "—" : steps.latest.toLocaleString("fr-FR")}
+          kind="steps"
+          value={
+            steps.latest == null ? "—" : steps.latest.toLocaleString("fr-FR")
+          }
           sub={
             steps.avg == null
               ? null
@@ -227,16 +248,16 @@ function OverviewTab({
               key={night.dayIndex}
               className="flex min-w-0 flex-1 flex-col items-center rounded-r2 border border-[var(--hair)] px-1 py-2"
             >
-              <span className="truncate text-[10px] text-[var(--ink3)]">
+              <span className="truncate text-[11px] text-[var(--ink3)]">
                 {tDays(String(night.dayIndex)).slice(0, 3)}
               </span>
-              <span className="tnum mt-1 text-[12px] font-bold">
+              <span className="tnum mt-1 text-[13px] font-semibold">
                 {formatHours(night.hours) ?? "—"}
               </span>
             </div>
           ))}
         </div>
-        <p className="tnum mt-3 text-[11px] leading-relaxed text-[var(--ink2)]">
+        <p className="tnum mt-3 text-[12px] leading-[1.5] text-[var(--ink2)]">
           {prose ?? t("noSleep")}
         </p>
       </section>
@@ -245,14 +266,14 @@ function OverviewTab({
         <div className="flex items-center justify-between">
           <h3 className={heading}>{t("thisWeek")}</h3>
           {detail.blockLabel && (
-            <span className="truncate text-[11px] text-[var(--ink3)]">
+            <span className="truncate text-[12px] text-[var(--ink3)]">
               {detail.blockLabel}
             </span>
           )}
         </div>
 
         {detail.blockLabel == null ? (
-          <p className="mt-3 text-[11px] text-[var(--ink2)]">{t("noWeek")}</p>
+          <p className="mt-3 text-[12px] text-[var(--ink2)]">{t("noWeek")}</p>
         ) : (
           <ul className="mt-3">
             {week.map((day) => (
@@ -261,15 +282,19 @@ function OverviewTab({
                 className="flex items-center gap-3 border-b border-[var(--hair)] px-1 last:border-0"
                 style={{ height: "36px" }}
               >
-                <span className="w-10 shrink-0 text-[11px] text-[var(--ink3)]">
+                <span className="w-10 shrink-0 text-[12px] text-[var(--ink3)]">
                   {tDays(String(day.dayIndex)).slice(0, 3)}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-[12px] font-bold">
+                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">
                   {day.sessionName ?? t("rest")}
                 </span>
                 {day.status !== "rest" && (
-                  <span className={`shrink-0 text-[10px] ${statusTone[day.status]}`}>
-                    {t(day.status === "in-progress" ? "inProgress" : day.status)}
+                  <span
+                    className={`shrink-0 text-[11px] ${statusTone[day.status]}`}
+                  >
+                    {t(
+                      day.status === "in-progress" ? "inProgress" : day.status,
+                    )}
                   </span>
                 )}
               </li>
@@ -297,7 +322,7 @@ async function HistoryTab({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("longView")}
         </span>
         <div className="flex gap-1">
@@ -306,7 +331,7 @@ async function HistoryTab({
               key={r}
               href={`/clients/${clientId}?onglet=history&portee=${r}`}
               aria-current={r === range ? "page" : undefined}
-              className={`h-7 rounded-rp px-2.5 text-[11px] font-bold leading-7 ${
+              className={`h-7 rounded-rp px-2.5 text-[12px] font-semibold leading-7 ${
                 r === range
                   ? "sel text-[var(--ink)]"
                   : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
@@ -316,7 +341,7 @@ async function HistoryTab({
             </Link>
           ))}
         </div>
-        <span className="ml-auto text-[10px] text-[var(--ink3)]">
+        <span className="ml-auto text-[11px] text-[var(--ink3)]">
           {t("clientSince", { date: view.since, weeks: view.weeksWithCoach })}
         </span>
       </div>
@@ -330,12 +355,14 @@ async function HistoryTab({
         />
         <MetricCard
           label={t("logged")}
+          kind="sessions"
           value={`${view.sessionsLogged} / ${view.sessionsPrescribed}`}
           sub={t("loggedSub")}
           wash="wash-2"
         />
         <MetricCard
           label={t("adherence")}
+          kind="adherence"
           value={view.adherencePct == null ? "—" : `${view.adherencePct}%`}
           sub={t("adherenceSub")}
           wash="wash-1"
@@ -359,7 +386,9 @@ async function HistoryTab({
       <section className={panel}>
         <h3 className={heading}>{t("perWeek")}</h3>
         {view.weeks.length === 0 ? (
-          <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("perWeekNone")}</p>
+          <p className="mt-2 text-[12px] text-[var(--ink2)]">
+            {t("perWeekNone")}
+          </p>
         ) : (
           <>
             <div className="mt-3">
@@ -373,7 +402,7 @@ async function HistoryTab({
                 }))}
               />
             </div>
-            <p className="mt-2 text-[10px] leading-relaxed text-[var(--ink3)]">
+            <p className="mt-2 text-[11px] leading-[1.5] text-[var(--ink3)]">
               {t("perWeekNote", {
                 logged: view.sessionsLogged,
                 prescribed: view.sessionsPrescribed,
@@ -391,7 +420,9 @@ async function HistoryTab({
         <section className={`${panel} min-w-[260px] flex-1`}>
           <h3 className={heading}>{t("records")}</h3>
           {view.records.length === 0 ? (
-            <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("noRecords")}</p>
+            <p className="mt-2 text-[12px] text-[var(--ink2)]">
+              {t("noRecords")}
+            </p>
           ) : (
             <ul className="mt-2">
               {view.records.map((record, index) => (
@@ -399,21 +430,24 @@ async function HistoryTab({
                   key={`${record.exercise}-${record.on}-${index}`}
                   className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
                 >
-                  <span aria-hidden className="text-[12px] text-[var(--accent)]">
+                  <span
+                    aria-hidden
+                    className="text-[13px] text-[var(--accent)]"
+                  >
                     ★
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[12px] font-bold">
+                    <span className="block truncate text-[13px] font-semibold">
                       {record.exercise}
                     </span>
-                    <span className="tnum block text-[10px] text-[var(--ink2)]">
+                    <span className="tnum block text-[11px] text-[var(--ink2)]">
                       {record.on}
                     </span>
                   </span>
-                  <span className="tnum shrink-0 text-right text-[12px] font-bold">
+                  <span className="tnum shrink-0 text-right text-[13px] font-semibold">
                     {record.weight} kg {t("reps")} {record.reps}
                     {record.gain !== null && record.gain > 0 && (
-                      <span className="ml-1 text-[10px] font-normal text-[var(--accent-soft)]">
+                      <span className="ml-1 text-[11px] font-normal text-[var(--accent-soft)]">
                         +{record.gain}
                       </span>
                     )}
@@ -434,14 +468,13 @@ async function CycleTab({ clientId }: { clientId: string }) {
   const [clientRes, stateRes, adjRes] = await Promise.all([
     supabase
       .from("clients")
-      .select("first_name, name, cycle_tracking, cycle_mode, cycle_phase_manual")
+      .select(
+        "first_name, name, cycle_tracking, cycle_mode, cycle_phase_manual",
+      )
       .eq("id", clientId)
       .maybeSingle(),
     supabase.rpc("client_cycle_state", { p_client: clientId }),
-    supabase
-      .from("cycle_adjustments")
-      .select("*")
-      .eq("client_id", clientId),
+    supabase.from("cycle_adjustments").select("*").eq("client_id", clientId),
   ]);
 
   const client = clientRes.data;
@@ -450,7 +483,12 @@ async function CycleTab({ clientId }: { clientId: string }) {
 
   // Defaults come from the same functions the database falls back to, so an
   // unconfigured column shows what is actually being applied — not a zero.
-  const PHASES: CyclePhase[] = ["menstrual", "follicular", "ovulatory", "luteal"];
+  const PHASES: CyclePhase[] = [
+    "menstrual",
+    "follicular",
+    "ovulatory",
+    "luteal",
+  ];
   const fallbackLoad: Record<CyclePhase, number> = {
     menstrual: -10,
     follicular: 0,
@@ -519,8 +557,11 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
   const signed =
     paths.length === 0
       ? []
-      : ((await supabase.storage.from("check-in-photos").createSignedUrls(paths, 3600))
-          .data ?? []);
+      : ((
+          await supabase.storage
+            .from("check-in-photos")
+            .createSignedUrls(paths, 3600)
+        ).data ?? []);
 
   const urlByPath = new Map(
     signed.map((entry) => [entry.path ?? "", entry.signedUrl ?? null]),
@@ -556,8 +597,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
     photos: photosByCheckIn.get(row.id) ?? {},
   }));
 
-  const firstName =
-    client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";
+  const firstName = client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";
 
   return (
     <div className="space-y-4">
@@ -577,30 +617,39 @@ async function NutritionTab({ clientId }: { clientId: string }) {
   const weekStart = new Date(
     Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
   );
-  weekStart.setUTCDate(weekStart.getUTCDate() - ((weekStart.getUTCDay() + 6) % 7));
+  weekStart.setUTCDate(
+    weekStart.getUTCDate() - ((weekStart.getUTCDay() + 6) % 7),
+  );
   const weekStartIso = weekStart.toISOString().slice(0, 10);
   const todayIso = today.toISOString().slice(0, 10);
 
-  const [clientRes, targetsRes, mealsRes, foodsRes, loggedRes] = await Promise.all([
-    supabase
-      .from("clients")
-      .select("first_name, name, nutrition_mode")
-      .eq("id", clientId)
-      .maybeSingle(),
-    supabase.from("nutrition_targets").select("*").eq("client_id", clientId).maybeSingle(),
-    supabase
-      .from("plan_meals")
-      .select("id, at_time, name, position, plan_meal_items(id, name, quantity_g, kcal, protein_g, carbs_g, fat_g, position)")
-      .eq("client_id", clientId)
-      .order("at_time"),
-    supabase.from("foods").select("id, name").order("name").limit(300),
-    supabase
-      .from("meals")
-      .select("id, day, name, kcal")
-      .eq("client_id", clientId)
-      .gte("day", weekStartIso)
-      .order("day"),
-  ]);
+  const [clientRes, targetsRes, mealsRes, foodsRes, loggedRes] =
+    await Promise.all([
+      supabase
+        .from("clients")
+        .select("first_name, name, nutrition_mode")
+        .eq("id", clientId)
+        .maybeSingle(),
+      supabase
+        .from("nutrition_targets")
+        .select("*")
+        .eq("client_id", clientId)
+        .maybeSingle(),
+      supabase
+        .from("plan_meals")
+        .select(
+          "id, at_time, name, position, plan_meal_items(id, name, quantity_g, kcal, protein_g, carbs_g, fat_g, position)",
+        )
+        .eq("client_id", clientId)
+        .order("at_time"),
+      supabase.from("foods").select("id, name").order("name").limit(300),
+      supabase
+        .from("meals")
+        .select("id, day, name, kcal")
+        .eq("client_id", clientId)
+        .gte("day", weekStartIso)
+        .order("day"),
+    ]);
 
   const client = clientRes.data;
   const targets: Targets = {
@@ -704,7 +753,7 @@ async function NutritionTab({ clientId }: { clientId: string }) {
       <section className={panel}>
         <h3 className={heading}>{tWeek("title")}</h3>
         {logged.length === 0 ? (
-          <p className="mt-2 text-[11px] text-[var(--ink2)]">{tWeek("none")}</p>
+          <p className="mt-2 text-[12px] text-[var(--ink2)]">{tWeek("none")}</p>
         ) : (
           <>
             <div className="mt-3">
@@ -723,7 +772,7 @@ async function NutritionTab({ clientId }: { clientId: string }) {
                 }))}
               />
             </div>
-            <p className="tnum mt-2 text-[10px] leading-relaxed text-[var(--ink3)]">
+            <p className="tnum mt-2 text-[11px] leading-[1.5] text-[var(--ink3)]">
               {`${now} ${verdict}`}
             </p>
           </>
@@ -770,29 +819,36 @@ async function StepsTab({
   if (rows.length === 0) {
     return (
       <section className={panel}>
-        <p className="text-[12px] text-[var(--ink2)]">{tSteps("none")}</p>
+        <p className="text-[13px] text-[var(--ink2)]">{tSteps("none")}</p>
       </section>
     );
   }
 
-  const slept = rows.filter((r) => r.sleep_h != null).map((r) => Number(r.sleep_h));
-  const stepped = rows.filter((r) => r.steps != null).map((r) => Number(r.steps));
+  const slept = rows
+    .filter((r) => r.sleep_h != null)
+    .map((r) => Number(r.sleep_h));
+  const stepped = rows
+    .filter((r) => r.steps != null)
+    .map((r) => Number(r.steps));
 
   return (
     <section className={panel}>
       <div className="flex flex-wrap gap-3">
         <MetricCard
           label={tSteps("avgSleep")}
+          kind="sleep"
           value={
             slept.length === 0
               ? "—"
-              : (formatHours(slept.reduce((a, b) => a + b, 0) / slept.length) ?? "—")
+              : (formatHours(slept.reduce((a, b) => a + b, 0) / slept.length) ??
+                "—")
           }
           sub={null}
           wash="wash-3"
         />
         <MetricCard
           label={tSteps("avgSteps")}
+          kind="steps"
           value={
             stepped.length === 0
               ? "—"
@@ -809,10 +865,12 @@ async function StepsTab({
         {rows.map((row) => (
           <li
             key={row.day}
-            className="tnum flex items-center gap-3 border-b border-[var(--hair)] py-2 text-[11px] last:border-0"
+            className="tnum flex items-center gap-3 border-b border-[var(--hair)] py-2 text-[12px] last:border-0"
           >
             <span className="w-24 shrink-0 text-[var(--ink3)]">{row.day}</span>
-            <span className="w-20 shrink-0">{formatHours(Number(row.sleep_h)) ?? "—"}</span>
+            <span className="w-20 shrink-0">
+              {formatHours(Number(row.sleep_h)) ?? "—"}
+            </span>
             <span className="w-16 shrink-0 text-[var(--ink3)]">
               {row.sleep_quality ?? "—"}
             </span>

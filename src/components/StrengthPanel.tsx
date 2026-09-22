@@ -18,10 +18,10 @@ export function StrengthPanel({
   if (names.length === 0 || !selected) {
     return (
       <section className="glass rounded-r3 p-4">
-        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("strength")}
         </h3>
-        <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("noStrength")}</p>
+        <p className="mt-2 text-[12px] text-[var(--ink2)]">{t("noStrength")}</p>
       </section>
     );
   }
@@ -34,7 +34,7 @@ export function StrengthPanel({
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+      <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("strength")}
       </h3>
 
@@ -45,7 +45,7 @@ export function StrengthPanel({
             type="button"
             aria-pressed={name === selected}
             onClick={() => setSelected(name)}
-            className={`h-7 rounded-rp px-2.5 text-[11px] font-bold ${
+            className={`h-7 rounded-rp px-2.5 text-[12px] font-semibold ${
               name === selected
                 ? "sel text-[var(--ink)]"
                 : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
@@ -62,7 +62,7 @@ export function StrengthPanel({
         </span>
         {gain !== null && gain !== 0 && (
           <span
-            className={`tnum text-[13px] font-bold ${
+            className={`tnum text-[14px] font-bold ${
               gain > 0 ? "text-[var(--accent-soft)]" : "text-[var(--a3)]"
             }`}
           >
@@ -70,7 +70,7 @@ export function StrengthPanel({
             {gain} kg
           </span>
         )}
-        <span className="ml-auto text-[10px] text-[var(--ink3)]">
+        <span className="ml-auto text-[11px] text-[var(--ink3)]">
           {t("estimated", { from: points[0]?.week ?? "—" })}
         </span>
       </div>

@@ -27,28 +27,28 @@ export function RecordPanel({
     return (
       <section className="glass rounded-r3 p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+          <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("title")}
           </h3>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink2)]"
+              className="rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink2)]"
             >
               {t("edit")}
             </button>
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
+              className="rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
             >
               {tRemove("action")}
             </button>
           </div>
         </div>
 
-        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-[11px]">
+        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-[12px]">
           {[
             [t("goal"), client.goal && tGoal(client.goal)],
             [t("injuries"), client.injuries.join(", ")],
@@ -71,36 +71,36 @@ export function RecordPanel({
             aria-label={tRemove("confirmTitle", { name: firstName })}
             className="mt-4 rounded-r2 border border-[var(--a3)] p-3"
           >
-            <p className="text-[12px] font-bold text-[var(--a3)]">
+            <p className="text-[13px] font-semibold text-[var(--a3)]">
               {tRemove("confirmTitle", { name: firstName })}
             </p>
-            <p className="mt-1 text-[11px] leading-relaxed text-[var(--ink2)]">
+            <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">
               {tRemove("confirmBody")}
             </p>
             <form action={removeClient} className="mt-3 flex flex-wrap items-end gap-2">
               <input type="hidden" name="client_id" value={client.id} />
               <input type="hidden" name="expected" value={firstName} />
               <label className="block min-w-0 flex-1">
-                <span className="block text-[10px] text-[var(--ink2)]">
+                <span className="block text-[11px] text-[var(--ink2)]">
                   {tRemove("confirmType")}
                 </span>
                 <input
                   name="confirm"
                   required
                   autoComplete="off"
-                  className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+                  className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
                 />
               </label>
               <button
                 type="submit"
-                className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[11px] font-bold text-[var(--a3)]"
+                className="h-8 shrink-0 rounded-r2 border border-[var(--a3)] px-3 text-[12px] font-semibold text-[var(--a3)]"
               >
                 {tRemove("confirm")}
               </button>
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="h-8 shrink-0 rounded-r2 px-3 text-[11px] text-[var(--ink3)]"
+                className="h-8 shrink-0 rounded-r2 px-3 text-[12px] text-[var(--ink3)]"
               >
                 {tRemove("cancel")}
               </button>
@@ -113,28 +113,28 @@ export function RecordPanel({
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+      <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("title")}
       </h3>
 
-      <form action={updateClientRecord} className="mt-3 space-y-3 text-[11px]">
+      <form action={updateClientRecord} className="mt-3 space-y-3 text-[12px]">
         <input type="hidden" name="client_id" value={client.id} />
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink2)]">Nom</span>
+          <span className="block text-[11px] text-[var(--ink2)]">Nom</span>
           <input
             name="name"
             defaultValue={client.name}
-            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
           />
         </label>
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink2)]">{t("goal")}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{t("goal")}</span>
           <select
             name="goal"
             defaultValue={client.goal ?? ""}
-            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
           >
             <option value="">—</option>
             {GOALS.map((goal) => (
@@ -147,51 +147,51 @@ export function RecordPanel({
 
         <div className="flex gap-3">
           <label className="block flex-1">
-            <span className="block text-[10px] text-[var(--ink2)]">cm</span>
+            <span className="block text-[11px] text-[var(--ink2)]">cm</span>
             <input
               name="height_cm"
               inputMode="decimal"
               defaultValue={client.height_cm ?? ""}
-              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
             />
           </label>
           <label className="block flex-1">
-            <span className="block text-[10px] text-[var(--ink2)]">{t("sleepTarget")}</span>
+            <span className="block text-[11px] text-[var(--ink2)]">{t("sleepTarget")}</span>
             <input
               name="sleep_target_h"
               inputMode="decimal"
               defaultValue={client.sleep_target_h ?? ""}
-              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
             />
           </label>
           <label className="block flex-1">
-            <span className="block text-[10px] text-[var(--ink2)]">{t("days")}</span>
+            <span className="block text-[11px] text-[var(--ink2)]">{t("days")}</span>
             <input
               name="session_days"
               defaultValue={client.session_days.join(",")}
               placeholder="0,2,4"
-              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+              className="tnum mt-1 h-8 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
             />
           </label>
         </div>
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink2)]">{t("injuries")}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{t("injuries")}</span>
           <textarea
             name="injuries"
             rows={2}
             defaultValue={client.injuries.join("\n")}
-            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[13px] text-[var(--ink)]"
           />
         </label>
 
         <label className="block">
-          <span className="block text-[10px] text-[var(--ink2)]">{t("equipment")}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{t("equipment")}</span>
           <textarea
             name="equipment"
             rows={2}
             defaultValue={client.equipment.join("\n")}
-            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[12px] text-[var(--ink)]"
+            className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[13px] text-[var(--ink)]"
           />
         </label>
 
@@ -202,20 +202,20 @@ export function RecordPanel({
             defaultChecked={client.cycle_tracking}
             className="size-4 accent-[var(--a1)]"
           />
-          <span className="text-[11px] text-[var(--ink2)]">Cycle</span>
+          <span className="text-[12px] text-[var(--ink2)]">Cycle</span>
         </label>
 
         <div className="flex gap-2">
           <button
             type="submit"
-            className="h-8 rounded-r2 cta px-3 text-[11px] font-bold text-[var(--on-accent)]"
+            className="h-8 rounded-r2 cta px-3 text-[12px] font-semibold text-[var(--on-accent)]"
           >
             {t("save")}
           </button>
           <button
             type="button"
             onClick={() => setEditing(false)}
-            className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[11px] text-[var(--ink2)]"
+            className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
           >
             {t("cancel")}
           </button>

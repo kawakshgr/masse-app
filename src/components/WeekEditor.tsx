@@ -155,7 +155,7 @@ export function WeekEditor({
 
           return (
             <div key={day} className="flex min-w-0 flex-col">
-              <p className="mb-2 px-1 text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+              <p className="mb-2 px-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
                 {tDays(String(day))}
               </p>
 
@@ -170,7 +170,7 @@ export function WeekEditor({
                       void addSession(weekId, day, programmeId);
                     })
                   }
-                  className={`flex h-24 flex-col items-center justify-center rounded-r3 border border-dashed text-[11px] text-[var(--ink3)] hover:text-[var(--accent)] ${
+                  className={`flex h-24 flex-col items-center justify-center rounded-r3 border border-dashed text-[12px] text-[var(--ink3)] hover:text-[var(--accent)] ${
                     overDay === day
                       ? "border-[var(--accent)] text-[var(--accent)]"
                       : "border-[var(--edge)]"
@@ -199,7 +199,7 @@ export function WeekEditor({
                           void renameSession(session.id, e.target.value, programmeId);
                         })
                       }
-                      className="min-w-0 flex-1 rounded-r1 bg-transparent px-1 py-1 text-[12px] font-bold text-[var(--ink)] placeholder:text-[var(--ink3)]"
+                      className="min-w-0 flex-1 rounded-r1 bg-transparent px-1 py-1 text-[13px] font-semibold text-[var(--ink)] placeholder:text-[var(--ink3)]"
                     />
                     <button
                       type="button"
@@ -209,7 +209,7 @@ export function WeekEditor({
                           void deleteSession(session.id, programmeId);
                         })
                       }
-                      className="shrink-0 px-1 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                      className="shrink-0 px-1 text-[13px] text-[var(--ink3)] hover:text-[var(--a3)]"
                     >
                       ×
                     </button>
@@ -248,7 +248,7 @@ export function WeekEditor({
                               setDragging(null);
                               setOverDay(null);
                             }}
-                            className="-m-1 cursor-grab select-none p-1 text-[12px] leading-none text-[var(--ink3)] active:cursor-grabbing"
+                            className="-m-1 cursor-grab select-none p-1 text-[13px] leading-none text-[var(--ink3)] active:cursor-grabbing"
                           >
                             ⠿
                           </span>
@@ -266,7 +266,7 @@ export function WeekEditor({
                                   );
                                 })
                               }
-                              className="w-full rounded-r1 bg-transparent text-[12px] font-bold text-[var(--ink)]"
+                              className="w-full rounded-r1 bg-transparent text-[13px] font-semibold text-[var(--ink)]"
                             />
                             <input
                               defaultValue={exercise.scheme ?? ""}
@@ -281,7 +281,7 @@ export function WeekEditor({
                                   );
                                 })
                               }
-                              className="tnum w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink2)] placeholder:text-[var(--ink3)]"
+                              className="tnum w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink2)] placeholder:text-[var(--ink3)]"
                             />
                             <input
                               defaultValue={exercise.cue ?? ""}
@@ -296,7 +296,7 @@ export function WeekEditor({
                                   );
                                 })
                               }
-                              className="w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink3)] placeholder:text-[var(--ink3)]"
+                              className="w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink3)] placeholder:text-[var(--ink3)]"
                             />
                           </div>
                           <button
@@ -307,7 +307,7 @@ export function WeekEditor({
                                 void deleteExercise(exercise.id, programmeId);
                               })
                             }
-                            className="shrink-0 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                            className="shrink-0 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
                           >
                             ×
                           </button>
@@ -322,7 +322,7 @@ export function WeekEditor({
                               moveToDay(exercise.id, target);
                             }
                           }}
-                          className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[10px] text-[var(--ink3)]"
+                          className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink3)]"
                         >
                           <option value="">{tEditor2("moveTo")}…</option>
                           {[0, 1, 2, 3, 4, 5, 6]
@@ -344,7 +344,7 @@ export function WeekEditor({
                         void addExercise(session.id, programmeId);
                       })
                     }
-                    className="mt-2 w-full rounded-r1 py-1 text-[11px] text-[var(--accent)]"
+                    className="mt-2 w-full rounded-r1 py-1 text-[12px] text-[var(--accent)]"
                   >
                     {t("addExercise")}
                   </button>
@@ -357,13 +357,13 @@ export function WeekEditor({
 
       {/* The delivery boundary, made an explicit act. */}
       <section className="glass mt-4 rounded-r3 p-4">
-        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("assign")}
         </h3>
-        <p className="mt-1 text-[11px] text-[var(--ink2)]">{t("assignLede")}</p>
+        <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("assignLede")}</p>
 
         {clients.length === 0 ? (
-          <p className="mt-3 text-[12px] text-[var(--ink3)]">{t("noClients")}</p>
+          <p className="mt-3 text-[13px] text-[var(--ink3)]">{t("noClients")}</p>
         ) : (
           <>
             <ul className="mt-3 flex flex-wrap gap-2">
@@ -380,7 +380,7 @@ export function WeekEditor({
                             on ? prev.filter((id) => id !== client.id) : [...prev, client.id],
                           )
                         }
-                        className={`h-8 rounded-r2 border px-3 text-[12px] ${
+                        className={`h-8 rounded-r2 border px-3 text-[13px] ${
                           on
                             ? "border-[var(--accent)] bg-[var(--glass2)] text-[var(--accent)]"
                             : "border-[var(--edge)] text-[var(--ink2)]"
@@ -388,7 +388,7 @@ export function WeekEditor({
                       >
                         {client.name}
                         {assignedClientIds.includes(client.id) && (
-                          <span className="ml-2 text-[10px] text-[var(--ink3)]">
+                          <span className="ml-2 text-[11px] text-[var(--ink3)]">
                             {t("pushed")}
                           </span>
                         )}
@@ -403,7 +403,7 @@ export function WeekEditor({
                               void retractWeek(weekId, client.id, programmeId);
                             })
                           }
-                          className="h-8 shrink-0 rounded-r2 border border-[var(--edge)] px-2 text-[10px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
+                          className="h-8 shrink-0 rounded-r2 border border-[var(--edge)] px-2 text-[11px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
                         >
                           {tProgramme("retract")}
                         </button>
@@ -416,14 +416,14 @@ export function WeekEditor({
 
             <div className="mt-3 flex items-end gap-2">
               <label className="block">
-                <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+                <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("startDate")}
                 </span>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="tnum mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+                  className="tnum mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
                 />
               </label>
               <button
@@ -434,7 +434,7 @@ export function WeekEditor({
                     void pushWeek(weekId, selected, startDate, programmeId);
                   })
                 }
-                className="h-9 rounded-r2 cta px-4 text-[12px] font-bold text-[var(--on-accent)] disabled:opacity-40"
+                className="h-9 rounded-r2 cta px-4 text-[13px] font-semibold text-[var(--on-accent)] disabled:opacity-40"
               >
                 {t("push")}
               </button>

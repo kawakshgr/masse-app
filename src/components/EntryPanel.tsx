@@ -62,26 +62,26 @@ export function EntryPanel({
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h2 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+      <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("title")}
       </h2>
 
       <form action={saveDailyMetrics} className="mt-3 flex flex-wrap items-end gap-2">
         <input type="hidden" name="day" value={today} />
         <label className="block w-[92px]">
-          <span className="block text-[10px] text-[var(--ink2)]">{t("sleep")}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{t("sleep")}</span>
           <input
             name="sleep_h"
             inputMode="decimal"
-            className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+            className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
           />
         </label>
         <label className="block w-[110px]">
-          <span className="block text-[10px] text-[var(--ink2)]">{t("quality")}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{t("quality")}</span>
           <select
             name="sleep_quality"
             defaultValue=""
-            className="mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+            className="mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
           >
             <option value="">—</option>
             <option value="1">{t("q1")}</option>
@@ -90,16 +90,16 @@ export function EntryPanel({
           </select>
         </label>
         <label className="block w-[110px]">
-          <span className="block text-[10px] text-[var(--ink2)]">{t("steps")}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{t("steps")}</span>
           <input
             name="steps"
             inputMode="numeric"
-            className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+            className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
           />
         </label>
         <button
           type="submit"
-          className="h-9 rounded-rp cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
+          className="h-9 rounded-rp cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
         >
           {t("save")}
         </button>
@@ -109,23 +109,23 @@ export function EntryPanel({
       {cycleTracking && (
         <div className="mt-5 border-t border-[var(--hair)] pt-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("cycleTitle")}
             </h3>
             {phaseLabel && (
-              <span className="text-[11px] text-[var(--accent)]">
+              <span className="text-[12px] text-[var(--accent)]">
                 {t("phaseNow")} · {phaseLabel}
               </span>
             )}
           </div>
 
-          <p className="mt-2 text-[11px] leading-relaxed text-[var(--ink2)]">
+          <p className="mt-2 text-[12px] leading-[1.5] text-[var(--ink2)]">
             {t("cyclePromise")}
           </p>
 
           <form action={saveCycleLog} className="mt-3 flex flex-wrap items-end gap-2">
             <label className="block">
-              <span className="block text-[10px] text-[var(--ink2)]">
+              <span className="block text-[11px] text-[var(--ink2)]">
                 {t("periodStart")}
               </span>
               <input
@@ -133,23 +133,23 @@ export function EntryPanel({
                 name="period_start_date"
                 required
                 defaultValue={today}
-                className="tnum mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+                className="tnum mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
               />
             </label>
             <label className="block w-[120px]">
-              <span className="block text-[10px] text-[var(--ink2)]">
+              <span className="block text-[11px] text-[var(--ink2)]">
                 {t("cycleLength")}
               </span>
               <input
                 name="cycle_length_days"
                 inputMode="numeric"
                 defaultValue="28"
-                className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+                className="tnum mt-1 h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[14px] text-[var(--ink)]"
               />
             </label>
             <button
               type="submit"
-              className="h-9 rounded-rp cta px-4 text-[12px] font-bold text-[var(--on-accent)]"
+              className="h-9 rounded-rp cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
             >
               {t("save")}
             </button>
@@ -157,16 +157,16 @@ export function EntryPanel({
 
           {/* Deliberately outside every form on this page. */}
           <label className="mt-4 block">
-            <span className="block text-[10px] text-[var(--ink2)]">
+            <span className="block text-[11px] text-[var(--ink2)]">
               {t("symptomNote")}
             </span>
             <textarea
               rows={3}
               value={symptoms}
               onChange={(event) => rememberSymptoms(event.target.value)}
-              className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[13px] text-[var(--ink)]"
+              className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2 text-[14px] text-[var(--ink)]"
             />
-            <span className="mt-1 block text-[10px] text-[var(--ink2)]">
+            <span className="mt-1 block text-[11px] text-[var(--ink2)]">
               {t("symptomHint")}
             </span>
           </label>

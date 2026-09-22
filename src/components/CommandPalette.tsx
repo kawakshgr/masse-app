@@ -105,11 +105,11 @@ export function CommandPalette({
           }}
           placeholder={t("placeholder")}
           aria-label={t("placeholder")}
-          className="h-12 w-full border-b border-[var(--hair)] bg-transparent px-4 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)] focus:outline-none"
+          className="h-12 w-full border-b border-[var(--hair)] bg-transparent px-4 text-[15px] text-[var(--ink)] placeholder:text-[var(--ink3)] focus:outline-none"
         />
 
         {shown.length === 0 ? (
-          <p className="px-4 py-4 text-[12px] text-[var(--ink3)]">{t("empty")}</p>
+          <p className="px-4 py-4 text-[13px] text-[var(--ink3)]">{t("empty")}</p>
         ) : (
           <ul className="max-h-[320px] overflow-y-auto py-1">
             {shown.map((command, index) => (
@@ -118,7 +118,7 @@ export function CommandPalette({
                   type="button"
                   onMouseEnter={() => setCursor(index)}
                   onClick={command.run}
-                  className={`flex h-10 w-full items-center px-4 text-left text-[13px] ${
+                  className={`flex h-10 w-full items-center px-4 text-left text-[14px] ${
                     index === cursor
                       ? "bg-[var(--glass2)] text-[var(--ink)]"
                       : "text-[var(--ink2)]"

@@ -39,11 +39,11 @@ export default async function CoachLayout({
     <div className="desk flex h-dvh flex-col">
       <header className="topbar flex h-14 shrink-0 items-center gap-3 px-4">
         <div className="min-w-0">
-          <h1 className="truncate font-display text-[14px] font-extrabold tracking-[-.03em]">
+          <h1 className="truncate font-display text-[15px] font-extrabold tracking-[-.02em]">
             Masse — {coach.first_name ?? coach.name}
           </h1>
           {/* Derived from rows, with correct singular and plural. */}
-          <p className="tnum truncate text-[11px] text-[var(--ink2)]">
+          <p className="tnum truncate text-[12px] text-[var(--ink2)]">
             {t("subtitle", {
               clients: clientsNeedingYou,
               checkins: checkinsToReview,

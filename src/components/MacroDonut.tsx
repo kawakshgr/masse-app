@@ -74,11 +74,11 @@ export function MacroDonut({
         </svg>
 
         <span className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <span className="tnum font-display text-[15px] font-extrabold leading-none tracking-[-.03em]">
+          <span className="tnum font-display text-[16px] font-extrabold leading-none tracking-[-.02em]">
             {centre}
           </span>
           {caption && (
-            <span className="mt-0.5 text-[9px] text-[var(--ink3)]">{caption}</span>
+            <span className="mt-0.5 text-[10px] text-[var(--ink3)]">{caption}</span>
           )}
         </span>
       </div>
@@ -91,16 +91,16 @@ export function MacroDonut({
               className="size-2.5 shrink-0 rounded-full"
               style={{ background: slice.colour }}
             />
-            <span className="min-w-0 flex-1 truncate text-[11px] text-[var(--ink2)]">
+            <span className="min-w-0 flex-1 truncate text-[12px] text-[var(--ink2)]">
               {slice.label}
             </span>
-            <span className="tnum shrink-0 text-[11px] font-bold">
+            <span className="tnum shrink-0 text-[12px] font-bold">
               {Math.round((slice.value / total) * 100)}%
             </span>
           </li>
         ))}
         {slices.length === 0 && (
-          <li className="text-[11px] text-[var(--ink3)]">—</li>
+          <li className="text-[12px] text-[var(--ink3)]">—</li>
         )}
       </ul>
     </div>

@@ -63,14 +63,14 @@ export function WeekExport({
       <button
         type="button"
         onClick={copy}
-        className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[11px] text-[var(--ink2)]"
+        className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
       >
         {copied ? t("copied") : t("copy")}
       </button>
       <button
         type="button"
         onClick={() => window.print()}
-        className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[11px] text-[var(--ink2)]"
+        className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
       >
         {t("print")}
       </button>

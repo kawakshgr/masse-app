@@ -71,12 +71,12 @@ export default async function WelcomePage({
           <h1 className="font-display text-[22px] font-extrabold tracking-[-.03em]">
             {t("notAllowed")}
           </h1>
-          <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink2)]">
+          <p className="mt-2 text-[14px] leading-[1.5] text-[var(--ink2)]">
             {t("notAllowedBody")}
           </p>
           <a
             href="/invitation"
-            className="mt-5 flex h-11 w-full items-center justify-center rounded-r2 cta text-[14px] font-bold text-[var(--on-accent)]"
+            className="mt-5 flex h-11 w-full items-center justify-center rounded-r2 cta text-[15px] font-semibold text-[var(--on-accent)]"
           >
             {t("goInvite")}
           </a>
@@ -91,12 +91,12 @@ export default async function WelcomePage({
         <h1 className="font-display text-[28px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h1>
-        <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink2)]">
+        <p className="mt-2 text-[14px] leading-[1.5] text-[var(--ink2)]">
           {t("lede")}
         </p>
 
         {erreur && (
-          <p role="alert" className="mt-4 text-[13px] text-[var(--a3)]">
+          <p role="alert" className="mt-4 text-[14px] text-[var(--a3)]">
             {t("error")}
           </p>
         )}
@@ -105,7 +105,7 @@ export default async function WelcomePage({
           <div>
             <label
               htmlFor="name"
-              className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]"
+              className="block text-[12px] uppercase tracking-[.14em] text-[var(--ink2)]"
             >
               {t("name")}
             </label>
@@ -114,14 +114,14 @@ export default async function WelcomePage({
               name="name"
               required
               placeholder={t("namePlaceholder")}
-              className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[14px] placeholder:text-[var(--ink3)]"
+              className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[15px] placeholder:text-[var(--ink3)]"
             />
           </div>
 
           <div>
             <label
               htmlFor="first_name"
-              className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]"
+              className="block text-[12px] uppercase tracking-[.14em] text-[var(--ink2)]"
             >
               {t("firstName")}
             </label>
@@ -129,19 +129,19 @@ export default async function WelcomePage({
               id="first_name"
               name="first_name"
               placeholder={t("firstNamePlaceholder")}
-              className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[14px] placeholder:text-[var(--ink3)]"
+              className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[15px] placeholder:text-[var(--ink3)]"
             />
           </div>
 
           <fieldset>
-            <legend className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <legend className="text-[12px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("pronoun")}
             </legend>
             <div className="mt-2 flex gap-2">
               {(["she", "he"] as const).map((value) => (
                 <label
                   key={value}
-                  className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] text-[13px] has-checked:border-[var(--accent)] has-checked:text-[var(--accent)]"
+                  className="flex h-10 flex-1 cursor-pointer items-center justify-center rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] text-[14px] has-checked:border-[var(--accent)] has-checked:text-[var(--accent)]"
                 >
                   <input
                     type="radio"
@@ -158,7 +158,7 @@ export default async function WelcomePage({
 
           <button
             type="submit"
-            className="h-11 w-full rounded-r2 cta text-[14px] font-bold text-[var(--on-accent)]"
+            className="h-11 w-full rounded-r2 cta text-[15px] font-semibold text-[var(--on-accent)]"
           >
             {t("submit")}
           </button>

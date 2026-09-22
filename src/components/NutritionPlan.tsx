@@ -41,7 +41,7 @@ export type Targets = {
 // No width here on purpose: each use sets its own, and a w-full baked in
 // would collide with every fixed width placed beside it.
 const cell =
-  "h-8 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]";
+  "h-8 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]";
 
 /** Protein and carbs at 4 kcal a gram, fat at 9 — the usual arithmetic. */
 function kcalFromMacros(t: Targets): number {
@@ -60,7 +60,7 @@ function Step({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex size-7 shrink-0 items-center justify-center rounded-rp border border-[var(--edge)] bg-[var(--glass2)] text-[13px] leading-none text-[var(--ink2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+      className="flex size-7 shrink-0 items-center justify-center rounded-rp border border-[var(--edge)] bg-[var(--glass2)] text-[14px] leading-none text-[var(--ink2)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
     >
       {label}
     </button>
@@ -88,8 +88,8 @@ function Macro({
   return (
     <div className="flex items-center justify-between gap-2 rounded-r2 border border-[var(--hair)] px-3 py-2">
       <span className="min-w-0">
-        <span className="block text-[12px] font-bold">{label}</span>
-        <span className="tnum block text-[10px] text-[var(--ink2)]">
+        <span className="block text-[13px] font-semibold">{label}</span>
+        <span className="tnum block text-[11px] text-[var(--ink2)]">
           {shareLabel(pct)}
         </span>
       </span>
@@ -104,7 +104,7 @@ function Macro({
           }}
           className={`tnum w-[62px] text-center ${cell}`}
         />
-        <span className="text-[10px] text-[var(--ink3)]">g</span>
+        <span className="text-[11px] text-[var(--ink3)]">g</span>
         <Step label="+" onClick={() => onChange(grams + 5)} />
       </span>
     </div>
@@ -138,7 +138,7 @@ function TargetsEditor({
       <input type="hidden" name="carbs_g" value={draft.carbsG} />
       <input type="hidden" name="fat_g" value={draft.fatG} />
 
-      <p className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+      <p className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("daily")}
       </p>
 
@@ -164,7 +164,7 @@ function TargetsEditor({
 
       {/* The cross-check. It turns coral when the macros stop adding up. */}
       <p
-        className={`tnum mt-1 text-[10px] ${
+        className={`tnum mt-1 text-[11px] ${
           drifting ? "text-[var(--a3)]" : "text-[var(--ink3)]"
         }`}
       >
@@ -212,7 +212,7 @@ function TargetsEditor({
 
       <button
         type="submit"
-        className="mt-3 h-9 w-full rounded-r2 cta text-[12px] font-bold text-[var(--on-accent)]"
+        className="mt-3 h-9 w-full rounded-r2 cta text-[13px] font-semibold text-[var(--on-accent)]"
       >
         {t("apply")}
       </button>
@@ -253,19 +253,19 @@ function PlanTotals({
 
   return (
     <div className="mt-4">
-      <p className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+      <p className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("daily")}
       </p>
 
       {empty ? (
-        <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("planEmpty")}</p>
+        <p className="mt-2 text-[12px] text-[var(--ink2)]">{t("planEmpty")}</p>
       ) : (
         <>
           <p className="tnum mt-1 font-display text-[28px] font-extrabold leading-none tracking-[-.03em]">
             {Math.round(total.kcal).toLocaleString("fr-FR")}
-            <span className="ml-1 text-[12px] font-normal text-[var(--ink3)]">kcal</span>
+            <span className="ml-1 text-[13px] font-normal text-[var(--ink3)]">kcal</span>
           </p>
-          <p className="mt-1 text-[10px] text-[var(--ink3)]">{t("planDerived")}</p>
+          <p className="mt-1 text-[11px] text-[var(--ink3)]">{t("planDerived")}</p>
 
           <div className="mt-3">
             <MacroDonut
@@ -287,7 +287,7 @@ function PlanTotals({
         <input type="hidden" name="carbs_g" value={targets.carbsG} />
         <input type="hidden" name="fat_g" value={targets.fatG} />
         <label className="block min-w-0 flex-1">
-          <span className="block text-[10px] text-[var(--ink2)]">{t("aimFor")}</span>
+          <span className="block text-[11px] text-[var(--ink2)]">{t("aimFor")}</span>
           <input
             name="kcal"
             inputMode="numeric"
@@ -297,7 +297,7 @@ function PlanTotals({
         </label>
         <button
           type="submit"
-          className="h-8 shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[11px] font-bold text-[var(--ink2)]"
+          className="h-8 shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[12px] font-semibold text-[var(--ink2)]"
         >
           {t("apply")}
         </button>
@@ -305,7 +305,7 @@ function PlanTotals({
 
       {!empty && (
         <p
-          className={`tnum mt-2 text-[10px] ${
+          className={`tnum mt-2 text-[11px] ${
             Math.abs(gap) > 300 ? "text-[var(--a3)]" : "text-[var(--ink3)]"
           }`}
         >
@@ -346,7 +346,7 @@ export function NutritionPlan({
   return (
     <div className="flex flex-wrap gap-4">
       <section className="glass min-w-[300px] flex-1 rounded-r3 p-4">
-        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("fed", { first: firstName })}
         </h3>
 
@@ -358,7 +358,7 @@ export function NutritionPlan({
               <button
                 type="submit"
                 aria-pressed={mode === value}
-                className={`h-9 w-full rounded-r2 text-[12px] font-bold ${
+                className={`h-9 w-full rounded-r2 text-[13px] font-semibold ${
                   mode === value
                     ? "text-[var(--onA)]"
                     : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
@@ -375,7 +375,7 @@ export function NutritionPlan({
           ))}
         </div>
 
-        <p className="mt-2 text-[11px] leading-relaxed text-[var(--ink2)]">
+        <p className="mt-2 text-[12px] leading-[1.5] text-[var(--ink2)]">
           {t(mode === "macros" ? "noteMacros" : "notePlan", { first: firstName })}
         </p>
 
@@ -393,16 +393,16 @@ export function NutritionPlan({
       <div className="min-w-[300px] flex-1 space-y-4">
         <section className="glass rounded-r3 p-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t(mode === "plan" ? "fixedPlan" : "mealTimes")}
             </h3>
-            <span className="tnum text-[10px] text-[var(--ink3)]">
+            <span className="tnum text-[11px] text-[var(--ink3)]">
               {t("mealsCount", { count: meals.length })}
             </span>
           </div>
 
           {meals.length === 0 ? (
-            <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("noMeals")}</p>
+            <p className="mt-2 text-[12px] text-[var(--ink2)]">{t("noMeals")}</p>
           ) : (
             <ul className="mt-2 space-y-2">
               {meals.map((meal) => {
@@ -430,13 +430,13 @@ export function NutritionPlan({
                         className={`w-full min-w-0 flex-1 ${cell}`}
                       />
                       {mode === "plan" && mealKcal > 0 && (
-                        <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
+                        <span className="tnum shrink-0 text-[12px] text-[var(--ink3)]">
                           {Math.round(mealKcal)} kcal
                         </span>
                       )}
                       <button
                         type="submit"
-                        className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-1 text-[10px] text-[var(--ink2)]"
+                        className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-1 text-[11px] text-[var(--ink2)]"
                       >
                         {t("apply")}
                       </button>
@@ -452,10 +452,10 @@ export function NutritionPlan({
                                 key={item.id}
                                 className="flex items-center gap-2 border-b border-[var(--hair)] py-1 last:border-0"
                               >
-                                <span className="min-w-0 flex-1 truncate text-[11px]">
+                                <span className="min-w-0 flex-1 truncate text-[12px]">
                                   {item.name}
                                 </span>
-                                <span className="tnum shrink-0 text-[10px] text-[var(--ink3)]">
+                                <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
                                   {item.quantityG ? `${item.quantityG} g` : "—"}
                                   {item.kcal ? ` · ${Math.round(item.kcal)} kcal` : ""}
                                 </span>
@@ -465,7 +465,7 @@ export function NutritionPlan({
                                   <button
                                     type="submit"
                                     aria-label={t("remove")}
-                                    className="px-1 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                                    className="px-1 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
                                   >
                                     ×
                                   </button>
@@ -490,7 +490,7 @@ export function NutritionPlan({
                           <input name="quantity_g" inputMode="decimal" placeholder={t("grams")} aria-label={t("grams")} className={`tnum w-[60px] shrink-0 ${cell}`} />
                           <button
                             type="submit"
-                            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-1 text-[10px] text-[var(--accent)]"
+                            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-1 text-[11px] text-[var(--accent)]"
                           >
                             +
                           </button>
@@ -503,7 +503,7 @@ export function NutritionPlan({
                       <input type="hidden" name="client_id" value={clientId} />
                       <button
                         type="submit"
-                        className="px-1 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                        className="px-1 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
                       >
                         {t("remove")}
                       </button>
@@ -520,14 +520,14 @@ export function NutritionPlan({
             <input name="name" placeholder={t("mealName")} aria-label={t("mealName")} className={`w-full min-w-0 flex-1 ${cell}`} />
             <button
               type="submit"
-              className="shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 py-1.5 text-[11px] font-bold text-[var(--ink2)]"
+              className="shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 py-1.5 text-[12px] font-semibold text-[var(--ink2)]"
             >
               {t("addMeal")}
             </button>
           </form>
 
           {mode === "plan" && planTotal > 0 && (
-            <p className="tnum mt-2 text-[10px] text-[var(--ink3)]">
+            <p className="tnum mt-2 text-[11px] text-[var(--ink3)]">
               {t("planTotal")} {Math.round(planTotal).toLocaleString("fr-FR")} kcal ·{" "}
               {planTotal <= targets.kcal
                 ? t("targetGap", { gap: Math.round(targets.kcal - planTotal) })
@@ -537,11 +537,11 @@ export function NutritionPlan({
         </section>
 
         <section className="glass rounded-r3 p-4">
-          <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+          <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("offPlan")}
           </h3>
           {offPlan.length === 0 ? (
-            <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("noOffPlan")}</p>
+            <p className="mt-2 text-[12px] text-[var(--ink2)]">{t("noOffPlan")}</p>
           ) : (
             <>
               <ul className="mt-2">
@@ -550,17 +550,17 @@ export function NutritionPlan({
                     key={meal.id}
                     className="flex items-center gap-3 border-b border-[var(--hair)] py-1.5 last:border-0"
                   >
-                    <span className="tnum shrink-0 text-[10px] text-[var(--ink3)]">
+                    <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
                       {meal.day}
                     </span>
-                    <span className="min-w-0 flex-1 truncate text-[11px]">{meal.name}</span>
-                    <span className="tnum shrink-0 text-[10px] text-[var(--ink3)]">
+                    <span className="min-w-0 flex-1 truncate text-[12px]">{meal.name}</span>
+                    <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
                       {meal.kcal ? `${Math.round(meal.kcal)} kcal` : "—"}
                     </span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-2 text-[10px] leading-relaxed text-[var(--ink3)]">
+              <p className="mt-2 text-[11px] leading-[1.5] text-[var(--ink3)]">
                 {t("offPlanNote")}
               </p>
             </>

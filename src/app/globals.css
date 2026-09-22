@@ -118,6 +118,8 @@
   --radius-rp: var(--rp);
   --font-display: var(--font-bricolage), system-ui, sans-serif;
   --font-sans: var(--font-instrument), system-ui, sans-serif;
+  /* The brief's name for the same stack. Both exist so either spelling works. */
+  --font-body: var(--font-instrument), system-ui, sans-serif;
 }
 
 html,
@@ -130,7 +132,16 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-instrument), system-ui, sans-serif;
+  line-height: 1.45;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Never the platform's own UI font: form controls take the page's. */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
 }
 
 /* Every figure that changes gets tabular numerals. */

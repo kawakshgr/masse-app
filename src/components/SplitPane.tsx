@@ -95,10 +95,14 @@ export function SplitPane({
   }, [width]);
 
   useEffect(() => {
-    function onMove(event: MouseEvent) {
+    function onMove(event: PointerEvent) {
       if (!dragging.current || !paneRef.current) return;
-      // Move the DOM directly while dragging — no re-render per mouse event.
-      const next = Math.min(max, Math.max(min, event.clientX - 168));
+      // The new width is the pointer's distance from the pane's own left edge,
+      // measured rather than assumed: this component does not know where on the
+      // page it has been placed.
+      const left = paneRef.current.getBoundingClientRect().left;
+      const next = Math.min(max, Math.max(min, event.clientX - left));
+      // Move the DOM directly while dragging — no re-render per pointer event.
       live.current = next;
       paneRef.current.style.width = `${next}px`;
     }
@@ -110,11 +114,13 @@ export function SplitPane({
       store.set(live.current);
     }
 
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
     return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
     };
   }, [min, max, store]);
 
@@ -135,7 +141,9 @@ export function SplitPane({
         aria-valuemin={min}
         aria-valuemax={max}
         tabIndex={0}
-        onMouseDown={() => {
+        onPointerDown={(event) => {
+          // Without this the drag selects the text in both panes.
+          event.preventDefault();
           dragging.current = true;
           document.body.style.cursor = "col-resize";
         }}
@@ -149,7 +157,7 @@ export function SplitPane({
             nudge(step);
           }
         }}
-        className="w-2 shrink-0 cursor-col-resize bg-[var(--hair)] transition-colors hover:bg-[var(--glass2)]"
+        className="w-2 shrink-0 cursor-col-resize touch-none bg-[var(--hair)] transition-colors hover:bg-[var(--glass2)]"
       />
 
       <div className="min-w-0 flex-1 overflow-y-auto">{detail}</div>

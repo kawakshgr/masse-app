@@ -5,7 +5,7 @@ export default async function ProgrammesIndexPage() {
 
   return (
     <div className="grid h-full place-items-center p-6">
-      <p className="text-[12px] text-[var(--ink3)]">{t("pickWeek")}</p>
+      <p className="text-[13px] text-[var(--ink3)]">{t("pickWeek")}</p>
     </div>
   );
 }

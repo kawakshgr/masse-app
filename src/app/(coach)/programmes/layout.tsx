@@ -42,7 +42,7 @@ export default async function ProgrammesLayout({
   const list = (
     <div className="flex h-full flex-col">
       <div className="flex h-10 shrink-0 items-center border-b border-[var(--hair)] px-3">
-        <span className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("title")}
         </span>
       </div>
@@ -50,8 +50,8 @@ export default async function ProgrammesLayout({
       <div className="min-h-0 flex-1 overflow-y-auto">
         {rows.length === 0 ? (
           <div className="p-5">
-            <p className="text-[13px] font-bold">{t("empty")}</p>
-            <p className="mt-1 text-[12px] leading-relaxed text-[var(--ink2)]">
+            <p className="text-[14px] font-semibold">{t("empty")}</p>
+            <p className="mt-1 text-[13px] leading-[1.5] text-[var(--ink2)]">
               {t("emptyAction")}
             </p>
           </div>
@@ -66,18 +66,18 @@ export default async function ProgrammesLayout({
                 >
                   <span className="min-w-0 flex-1">
                     <span
-                      className="block truncate text-[13px] font-bold leading-tight"
+                      className="block truncate text-[14px] font-semibold leading-tight"
                       title={row.name}
                     >
                       {row.name}
                     </span>
-                    <span className="tnum block truncate text-[11px] leading-tight text-[var(--ink2)]">
+                    <span className="tnum block truncate text-[12px] leading-tight text-[var(--ink2)]">
                       {t("weeks", { count: row.weekCount })} ·{" "}
                       {t("assigned", { count: row.clientCount })}
                     </span>
                   </span>
                   {row.isTemplate && (
-                    <span className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink3)]">
+                    <span className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink3)]">
                       {t("template")}
                     </span>
                   )}
@@ -94,11 +94,11 @@ export default async function ProgrammesLayout({
             name="name"
             placeholder={t("new")}
             aria-label={t("new")}
-            className="h-9 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+            className="h-9 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
           />
           <button
             type="submit"
-            className="h-9 shrink-0 rounded-r2 px-3 text-[12px] font-bold text-[var(--on-accent)]"
+            className="h-9 shrink-0 rounded-r2 px-3 text-[13px] font-semibold text-[var(--on-accent)]"
             style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
           >
             +

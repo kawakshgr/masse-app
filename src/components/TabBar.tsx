@@ -51,10 +51,10 @@ export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
                   aria-disabled="true"
                   aria-expanded={revealed === key}
                   onClick={() => setRevealed((c) => (c === key ? null : key))}
-                  className="flex h-8 items-center gap-2 rounded-r2 px-3.5 text-[13px] font-bold text-[var(--ink3)]"
+                  className="flex h-8 items-center gap-2 rounded-r2 px-3.5 text-[14px] font-semibold text-[var(--ink3)]"
                 >
                   {t(item.key)}
-                  <span className="rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2 py-px text-[9px] uppercase tracking-[.14em]">
+                  <span className="rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2 py-px text-[10px] uppercase tracking-[.14em]">
                     {tShell("soon")}
                   </span>
                 </button>
@@ -66,14 +66,14 @@ export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
                 key={item.key}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-8 items-center gap-2 rounded-r2 px-3.5 text-[13px] font-bold transition-colors ${
+                className={`flex h-8 items-center gap-2 rounded-r2 px-3.5 text-[14px] font-semibold transition-colors ${
                   active
                     ? "sel border border-[var(--edge)] text-[var(--ink)]"
                     : "text-[var(--ink2)] hover:bg-[var(--glass)]"
                 }`}
               >
                 {t(item.key)}
-                <span className="tnum text-[10px] text-[var(--ink3)]">
+                <span className="tnum text-[11px] text-[var(--ink3)]">
                   {item.chord}
                 </span>
               </Link>
@@ -81,13 +81,13 @@ export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
           })}
         </nav>
 
-        <p className="ml-auto hidden truncate pl-4 text-[11px] text-[var(--ink3)] xl:block">
+        <p className="ml-auto hidden truncate pl-4 text-[12px] text-[var(--ink3)] xl:block">
           {tToolbar("addClientHint")}
         </p>
       </div>
 
       {revealed && (
-        <p className="px-4 pb-2 text-[11px] leading-relaxed text-[var(--ink3)]">
+        <p className="px-4 pb-2 text-[12px] leading-[1.5] text-[var(--ink3)]">
           {tSoon(revealed)}
         </p>
       )}

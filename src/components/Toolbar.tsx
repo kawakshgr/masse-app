@@ -25,7 +25,7 @@ export function Toolbar({
           onChange={(event) => onQueryChange(event.target.value)}
           placeholder={t("search")}
           aria-label={t("search")}
-          className="glass h-8 w-full rounded-r2 px-3 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+          className="glass h-8 w-full rounded-r2 px-3 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
         />
       </div>
       {action}

@@ -49,12 +49,12 @@ function Measure({
 
   return (
     <div className="flex items-baseline justify-between gap-2 rounded-r2 border border-[var(--hair)] px-3 py-2">
-      <span className="text-[11px] text-[var(--ink3)]">{label}</span>
-      <span className="tnum text-[13px] font-bold">
+      <span className="text-[12px] text-[var(--ink3)]">{label}</span>
+      <span className="tnum text-[14px] font-semibold">
         {value == null ? "—" : `${value} cm`}
         {change !== null && (
           <span
-            className={`ml-1.5 text-[11px] font-bold ${
+            className={`ml-1.5 text-[12px] font-bold ${
               change === 0
                 ? "text-[var(--ink3)]"
                 : change < 0
@@ -150,14 +150,14 @@ function PhotoSlot({
                 style={{ background: "rgba(0, 0, 0, .42)" }}
               >
                 <div className="chrome lift flex w-full flex-col gap-2.5 rounded-r2 p-3 text-center">
-                  <span className="text-[11px] leading-snug text-balance text-[var(--ink)]">
+                  <span className="text-[12px] leading-snug text-balance text-[var(--ink)]">
                     {askLabel}
                   </span>
                   <div className="flex items-center justify-center gap-2">
                     <button
                       type="button"
                       onClick={() => setArming(false)}
-                      className="glass2 h-7 rounded-r2 px-3 text-[11px] font-bold text-[var(--ink)]"
+                      className="glass2 h-7 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
                     >
                       {cancelLabel}
                     </button>
@@ -166,7 +166,7 @@ function PhotoSlot({
                       <input type="hidden" name="client_id" value={clientId} />
                       <button
                         type="submit"
-                        className="h-7 rounded-r2 border border-[var(--a3)] px-3 text-[11px] font-bold text-[var(--a3)]"
+                        className="h-7 rounded-r2 border border-[var(--a3)] px-3 text-[12px] font-semibold text-[var(--a3)]"
                       >
                         {confirmLabel}
                       </button>
@@ -180,7 +180,7 @@ function PhotoSlot({
                 onClick={() => setArming(true)}
                 aria-label={removeLabel}
                 title={removeLabel}
-                className="chrome absolute top-2 right-2 flex size-6 items-center justify-center rounded-rp text-[11px] leading-none text-[var(--ink2)] hover:text-[var(--a3)]"
+                className="chrome absolute top-2 right-2 flex size-6 items-center justify-center rounded-rp text-[12px] leading-none text-[var(--ink2)] hover:text-[var(--a3)]"
               >
                 ✕
               </button>
@@ -191,7 +191,7 @@ function PhotoSlot({
           type="button"
           onClick={() => input.current?.click()}
           disabled={!checkInId || busy}
-          className="flex aspect-[3/4] w-full flex-col items-center justify-center rounded-r3 border border-dashed border-[var(--edge)] text-[11px] text-[var(--ink3)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-50"
+          className="flex aspect-[3/4] w-full flex-col items-center justify-center rounded-r3 border border-dashed border-[var(--edge)] text-[12px] text-[var(--ink3)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-50"
         >
           <span className="text-[18px] leading-none">＋</span>
           <span className="mt-1">{addLabel}</span>
@@ -210,8 +210,8 @@ function PhotoSlot({
       />
 
       <div className="mt-1.5 flex items-baseline justify-between gap-2">
-        <span className="truncate text-[11px] font-bold">{caption}</span>
-        <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">{weight}</span>
+        <span className="truncate text-[12px] font-semibold">{caption}</span>
+        <span className="tnum shrink-0 text-[12px] text-[var(--ink3)]">{weight}</span>
       </div>
     </div>
   );
@@ -258,7 +258,7 @@ export function CheckInReview({
   if (!selected || !baseline) {
     return (
       <section className="glass rounded-r3 p-4">
-        <p className="text-[12px] text-[var(--ink2)]">{t("noCheckins")}</p>
+        <p className="text-[13px] text-[var(--ink2)]">{t("noCheckins")}</p>
       </section>
     );
   }
@@ -274,7 +274,7 @@ export function CheckInReview({
     <>
       {/* Which week is on screen — the whole panel follows this. */}
       <div className="flex flex-wrap items-center gap-1">
-        <span className="mr-1 text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <span className="mr-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("pickWeek")}
         </span>
         {weeks.slice(-6).map((week) => (
@@ -283,7 +283,7 @@ export function CheckInReview({
             type="button"
             aria-pressed={week.id === selected.id}
             onClick={() => setSelectedId(week.id)}
-            className={`tnum h-7 rounded-rp px-2.5 text-[11px] font-bold ${
+            className={`tnum h-7 rounded-rp px-2.5 text-[12px] font-semibold ${
               week.id === selected.id
                 ? "sel text-[var(--ink)]"
                 : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
@@ -297,7 +297,7 @@ export function CheckInReview({
       <div className="flex flex-wrap gap-4">
         <section className="glass min-w-[280px] flex-1 rounded-r3 p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("photos")}
             </h3>
             <div className="flex gap-1">
@@ -307,7 +307,7 @@ export function CheckInReview({
                   type="button"
                   aria-pressed={p === pose}
                   onClick={() => setPose(p)}
-                  className={`h-7 rounded-rp px-2.5 text-[11px] font-bold ${
+                  className={`h-7 rounded-rp px-2.5 text-[12px] font-semibold ${
                     p === pose
                       ? "sel text-[var(--ink)]"
                       : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
@@ -353,24 +353,24 @@ export function CheckInReview({
             />
           </div>
 
-          <p className="mt-3 text-[11px] leading-relaxed text-[var(--ink3)]">
+          <p className="mt-3 text-[12px] leading-[1.5] text-[var(--ink3)]">
             {t("discipline")}
           </p>
-          <p className="mt-1 text-[11px] text-[var(--ink3)]">
+          <p className="mt-1 text-[12px] text-[var(--ink3)]">
             {t("privacy", { first: firstName })}
           </p>
         </section>
 
         <div className="min-w-[280px] flex-1 space-y-4">
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("weight", { weeks: Math.min(8, weeks.length) })}
             </h3>
             <p className="tnum mt-2 font-display text-[24px] font-extrabold leading-none tracking-[-.03em]">
               {kg(selected.bodyweight)}
               {sinceBaseline !== null && sinceBaseline !== 0 && (
                 <span
-                  className={`ml-2 text-[13px] font-bold ${
+                  className={`ml-2 text-[14px] font-bold ${
                     sinceBaseline < 0
                       ? "text-[var(--accent-soft)]"
                       : "text-[var(--a2)]"
@@ -384,11 +384,11 @@ export function CheckInReview({
             <div className="mt-3">
               <BarChart bars={weightBars} ariaLabel={t("weight", { weeks: 8 })} />
             </div>
-            <p className="mt-2 text-[10px] text-[var(--ink3)]">{t("weightNote")}</p>
+            <p className="mt-2 text-[11px] text-[var(--ink3)]">{t("weightNote")}</p>
           </section>
 
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("measures")}
             </h3>
             <div className="mt-3 grid grid-cols-2 gap-2">
@@ -400,7 +400,7 @@ export function CheckInReview({
           </section>
 
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
               {t("answers")}
             </h3>
             <ul className="mt-2">
@@ -415,17 +415,17 @@ export function CheckInReview({
                   key={question}
                   className="flex items-center justify-between gap-3 border-b border-[var(--hair)] py-2 last:border-0"
                 >
-                  <span className="min-w-0 flex-1 text-[11px] text-[var(--ink2)]">
+                  <span className="min-w-0 flex-1 text-[12px] text-[var(--ink2)]">
                     {question}
                   </span>
-                  <span className="shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2.5 py-0.5 text-[10px] font-bold">
+                  <span className="shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2.5 py-0.5 text-[11px] font-bold">
                     {answer || t("noAnswer")}
                   </span>
                 </li>
               ))}
             </ul>
             {selected.note && (
-              <p className="mt-2 text-[11px] leading-relaxed text-[var(--ink2)]">
+              <p className="mt-2 text-[12px] leading-[1.5] text-[var(--ink2)]">
                 {selected.note}
               </p>
             )}

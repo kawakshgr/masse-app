@@ -44,20 +44,20 @@ function SignInForm() {
   return (
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="glass lift w-full max-w-[420px] rounded-r4 p-8">
-        <p className="font-display text-[13px] font-bold tracking-[-.02em] text-[var(--accent)]">
+        <p className="font-display text-[14px] font-extrabold tracking-[-.02em] text-[var(--accent)]">
           {tApp("name")}
         </p>
         <h1 className="mt-2 font-display text-[28px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h1>
-        <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink2)]">
+        <p className="mt-2 text-[14px] leading-[1.5] text-[var(--ink2)]">
           {t("lede")}
         </p>
 
         {callbackFailed && (
           <p
             role="alert"
-            className="mt-4 rounded-r2 border border-[var(--a3)] px-3 py-2 text-[12px] text-[var(--a3)]"
+            className="mt-4 rounded-r2 border border-[var(--a3)] px-3 py-2 text-[13px] text-[var(--a3)]"
           >
             {t("callbackError")}
           </p>
@@ -66,7 +66,7 @@ function SignInForm() {
         <form onSubmit={onSubmit} className="mt-6">
           <label
             htmlFor="email"
-            className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]"
+            className="block text-[12px] uppercase tracking-[.14em] text-[var(--ink2)]"
           >
             {t("email")}
           </label>
@@ -79,30 +79,30 @@ function SignInForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("emailPlaceholder")}
             disabled={state === "sending" || state === "sent"}
-            className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)] disabled:opacity-60"
+            className="mt-2 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[15px] text-[var(--ink)] placeholder:text-[var(--ink3)] disabled:opacity-60"
           />
 
           <button
             type="submit"
             disabled={state === "sending" || state === "sent"}
-            className="mt-4 h-11 w-full rounded-r2 cta text-[14px] font-bold text-[var(--on-accent)] disabled:opacity-60"
+            className="mt-4 h-11 w-full rounded-r2 cta text-[15px] font-semibold text-[var(--on-accent)] disabled:opacity-60"
           >
             {state === "sending" ? t("sending") : t("send")}
           </button>
         </form>
 
         {state === "sent" && (
-          <p role="status" className="mt-4 text-[13px] text-[var(--accent-soft)]">
+          <p role="status" className="mt-4 text-[14px] text-[var(--accent-soft)]">
             {t("sent")}
           </p>
         )}
         {state === "rate-limited" && (
-          <p role="alert" className="mt-4 text-[13px] leading-relaxed text-[var(--a3)]">
+          <p role="alert" className="mt-4 text-[14px] leading-[1.5] text-[var(--a3)]">
             {t("rateLimited")}
           </p>
         )}
         {state === "error" && (
-          <p role="alert" className="mt-4 text-[13px] text-[var(--a3)]">
+          <p role="alert" className="mt-4 text-[14px] text-[var(--a3)]">
             {t("error")}
           </p>
         )}

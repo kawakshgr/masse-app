@@ -50,7 +50,7 @@ export function ExerciseLibrary({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="h-8 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[11px] text-[var(--ink2)]"
+        className="h-8 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[12px] text-[var(--ink2)]"
       >
         {t("show")}
       </button>
@@ -60,22 +60,22 @@ export function ExerciseLibrary({
   return (
     <section className="glass rounded-r3 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("title")}
         </h3>
-        <span className="tnum text-[10px] text-[var(--ink3)]">
+        <span className="tnum text-[11px] text-[var(--ink3)]">
           {t("count", { count: catalogue.length })}
         </span>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)]"
+          className="rounded-r1 px-2 py-0.5 text-[11px] text-[var(--ink3)]"
         >
           {t("hide")}
         </button>
       </div>
 
-      <p className="mt-1 text-[11px] text-[var(--ink2)]">{t("lede")}</p>
+      <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("lede")}</p>
 
       <div className="mt-3 flex flex-wrap gap-2">
         <input
@@ -83,14 +83,14 @@ export function ExerciseLibrary({
           onChange={(event) => setQuery(event.target.value)}
           placeholder={t("search")}
           aria-label={t("search")}
-          className="h-8 min-w-[160px] flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+          className="h-8 min-w-[160px] flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
         />
         <label className="flex items-center gap-1">
-          <span className="text-[10px] text-[var(--ink3)]">{t("target")}</span>
+          <span className="text-[11px] text-[var(--ink3)]">{t("target")}</span>
           <select
             value={day}
             onChange={(event) => setDay(Number(event.target.value))}
-            className="h-8 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[12px] text-[var(--ink)]"
+            className="h-8 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
           >
             {[0, 1, 2, 3, 4, 5, 6].map((d) => (
               <option key={d} value={d}>
@@ -102,7 +102,7 @@ export function ExerciseLibrary({
       </div>
 
       {shown.length === 0 ? (
-        <p className="mt-3 text-[11px] text-[var(--ink2)]">{t("none")}</p>
+        <p className="mt-3 text-[12px] text-[var(--ink2)]">{t("none")}</p>
       ) : (
         <ul className="mt-3 flex max-h-[220px] flex-wrap content-start gap-1.5 overflow-y-auto">
           {shown.map((entry) => (
@@ -124,12 +124,12 @@ export function ExerciseLibrary({
                   })
                 }
                 title={entry.muscleGroup ?? undefined}
-                className="flex cursor-grab items-center gap-1.5 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2.5 py-1 text-[11px] text-[var(--ink2)] hover:border-[var(--accent)] hover:text-[var(--ink)] active:cursor-grabbing"
+                className="flex cursor-grab items-center gap-1.5 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2.5 py-1 text-[12px] text-[var(--ink2)] hover:border-[var(--accent)] hover:text-[var(--ink)] active:cursor-grabbing"
               >
-                <span aria-hidden className="text-[9px] text-[var(--ink3)]">⠿</span>
+                <span aria-hidden className="text-[10px] text-[var(--ink3)]">⠿</span>
                 {entry.name}
                 {entry.mine && (
-                  <span className="text-[9px] text-[var(--accent)]">
+                  <span className="text-[10px] text-[var(--accent)]">
                     {t("mine")}
                   </span>
                 )}

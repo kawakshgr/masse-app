@@ -68,7 +68,7 @@ export function InviteDialog({
           setCreated(null);
           setOpen(true);
         }}
-        className="h-9 w-full rounded-rp text-[12px] font-bold text-[var(--on-accent)]"
+        className="h-9 w-full rounded-rp text-[13px] font-semibold text-[var(--on-accent)]"
         style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
       >
         {label}
@@ -93,7 +93,7 @@ export function InviteDialog({
             <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
               {t("title")}
             </h2>
-            <p className="mt-2 text-[12px] leading-relaxed text-[var(--ink2)]">
+            <p className="mt-2 text-[13px] leading-[1.5] text-[var(--ink2)]">
               {t("lede")}
             </p>
 
@@ -107,10 +107,10 @@ export function InviteDialog({
                     className="mt-0.5 size-4 shrink-0 accent-[var(--a1)]"
                   />
                   <span className="min-w-0">
-                    <span className="block text-[12px] font-bold">
+                    <span className="block text-[13px] font-semibold">
                       {t("askCycle")}
                     </span>
-                    <span className="block text-[11px] leading-snug text-[var(--ink3)]">
+                    <span className="block text-[12px] leading-snug text-[var(--ink3)]">
                       {t("askCycleHint")}
                     </span>
                   </span>
@@ -120,30 +120,30 @@ export function InviteDialog({
                   type="button"
                   onClick={onCreate}
                   disabled={pendingTransition}
-                  className="mt-5 h-10 w-full rounded-r2 cta text-[13px] font-bold text-[var(--on-accent)] disabled:opacity-60"
+                  className="mt-5 h-10 w-full rounded-r2 cta text-[14px] font-semibold text-[var(--on-accent)] disabled:opacity-60"
                 >
                   {pendingTransition ? t("creating") : t("create")}
                 </button>
               </>
             ) : (
               <>
-                <p className="mt-5 text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+                <p className="mt-5 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("yourCode")}
                 </p>
-                <p className="tnum mt-1 select-all break-all font-display text-[26px] font-extrabold tracking-[-.02em] text-[var(--accent)]">
+                <p className="tnum mt-1 select-all break-all font-display text-[26px] font-extrabold tracking-[-.03em] text-[var(--accent)]">
                   {created.code}
                 </p>
-                <p className="tnum mt-1 text-[11px] text-[var(--ink3)]">
+                <p className="tnum mt-1 text-[12px] text-[var(--ink3)]">
                   {t("expires", { date: created.expiresAt.slice(0, 10) })}
                 </p>
-                <p className="mt-2 text-[11px] leading-relaxed text-[var(--ink2)]">
+                <p className="mt-2 text-[12px] leading-[1.5] text-[var(--ink2)]">
                   {t("shareHint")}
                 </p>
 
                 <button
                   type="button"
                   onClick={() => copy(created.code)}
-                  className="mt-4 h-10 w-full rounded-r2 cta text-[13px] font-bold text-[var(--on-accent)]"
+                  className="mt-4 h-10 w-full rounded-r2 cta text-[14px] font-semibold text-[var(--on-accent)]"
                 >
                   {copied === created.code ? t("copied") : t("copy")}
                 </button>
@@ -152,7 +152,7 @@ export function InviteDialog({
 
             {pending.length > 0 && (
               <div className="mt-5 border-t border-[var(--hair)] pt-3">
-                <p className="text-[10px] uppercase tracking-[.14em] text-[var(--ink2)]">
+                <p className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("pending", { count: pending.length })}
                 </p>
                 <ul className="mt-2">
@@ -161,16 +161,16 @@ export function InviteDialog({
                       key={invite.id}
                       className="flex items-center gap-2 border-b border-[var(--hair)] py-2 last:border-0"
                     >
-                      <span className="tnum min-w-0 flex-1 truncate text-[12px] font-bold">
+                      <span className="tnum min-w-0 flex-1 truncate text-[13px] font-semibold">
                         {invite.code}
                       </span>
-                      <span className="tnum shrink-0 text-[10px] text-[var(--ink3)]">
+                      <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
                         {invite.expires_at.slice(0, 10)}
                       </span>
                       <button
                         type="button"
                         onClick={() => copy(invite.code)}
-                        className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink2)]"
+                        className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink2)]"
                       >
                         {copied === invite.code ? t("copied") : t("copy")}
                       </button>
@@ -178,7 +178,7 @@ export function InviteDialog({
                         <input type="hidden" name="invite_id" value={invite.id} />
                         <button
                           type="submit"
-                          className="rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
+                          className="rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
                         >
                           {t("revoke")}
                         </button>
@@ -192,7 +192,7 @@ export function InviteDialog({
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="mt-4 h-9 w-full rounded-r2 border border-[var(--edge)] text-[12px] text-[var(--ink2)]"
+              className="mt-4 h-9 w-full rounded-r2 border border-[var(--edge)] text-[13px] text-[var(--ink2)]"
             >
               {t("close")}
             </button>
