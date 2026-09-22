@@ -285,9 +285,22 @@ button {
 .wash-2 { background: var(--wash2); }
 .wash-3 { background: var(--wash3); }
 
-/* Print: the week on paper, nothing else. */
+/* Print: the week, or the invoice, on paper — and nothing that frames it. */
 @media print {
-  .atmosphere { display: none !important; }
-  body { background: #fff !important; color: #000 !important; }
-  .glass { background: none !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; }
+  .atmosphere,
+  .topbar,
+  .no-print { display: none !important; }
+  body,
+  .desk { background: #fff !important; color: #000 !important; }
+  .glass,
+  .glass2,
+  .chrome {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  /* An invoice is a page, not a pane: let it use the sheet it is printed on. */
+  .desk { display: block !important; height: auto !important; }
+  [data-print-sheet] { overflow: visible !important; }
 }

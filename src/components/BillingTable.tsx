@@ -73,8 +73,8 @@ export async function BillingTable({
               />
               <input
                 type="hidden"
-                name="paid"
-                value={row.state === "paid" ? "0" : "1"}
+                name="state"
+                value={row.state === "paid" ? "awaiting" : "paid"}
               />
               <button
                 type="submit"

@@ -54,19 +54,29 @@ export function shortMonth(period: string, locale = "fr-FR"): string {
 export type MonthState = "paid" | "awaiting" | "late";
 
 /**
- * Lateness is not stored. It is a fact about the calendar: an unpaid month
- * whose agreed day has gone by. Storing it would go stale the moment the month
- * turns, and the coach would be the one keeping it true.
+ * The state the coach set, nothing more. An earlier version derived lateness
+ * from the calendar, which meant she could pick "awaiting" and the row would
+ * answer "late" — the control looked broken. Whether the day has gone by is
+ * still worth saying, so `isOverdue` says it beside the state instead of
+ * replacing it.
  */
-export function monthState(
-  status: InvoiceStatus | null,
-  period: string,
-  dayOfMonth: number,
-  today = new Date(),
-): MonthState {
+export function monthState(status: InvoiceStatus | null): MonthState {
   if (status === "paid") return "paid";
-  const due = new Date(`${period.slice(0, 8)}${String(dayOfMonth).padStart(2, "0")}T00:00:00Z`);
-  return today > due ? "late" : "awaiting";
+  if (status === "late") return "late";
+  return "awaiting";
+}
+
+/** The agreed day has gone by. A remark, never a state. */
+export function isOverdue(period: string, dayOfMonth: number, today = new Date()): boolean {
+  const due = new Date(
+    `${period.slice(0, 8)}${String(dayOfMonth).padStart(2, "0")}T00:00:00Z`,
+  );
+  return today > due;
+}
+
+/** The status a month is stored with once the coach picks a state for it. */
+export function statusFor(state: MonthState): InvoiceStatus {
+  return state === "paid" ? "paid" : state === "late" ? "late" : "sent";
 }
 
 /** What the client owes next, said the way the coach would say it. */

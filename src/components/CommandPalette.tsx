@@ -10,10 +10,8 @@ type Command = { id: string; label: string; run: () => void };
 
 export function CommandPalette({
   clients,
-  isPlatformAdmin,
 }: {
   clients: PaletteClient[];
-  isPlatformAdmin: boolean;
 }) {
   const t = useTranslations("palette");
   const router = useRouter();
@@ -50,16 +48,14 @@ export function CommandPalette({
     return [
       { id: "clients", label: t("goClients"), run: go("/clients") },
       { id: "programmes", label: t("goProgrammes"), run: go("/programmes") },
-      ...(isPlatformAdmin
-        ? [{ id: "admin", label: t("goAdmin"), run: go("/admin") }]
-        : []),
+      { id: "admin", label: t("goAdmin"), run: go("/admin") },
       ...clients.map((client) => ({
         id: `client-${client.id}`,
         label: client.name,
         run: go(`/clients/${client.id}`),
       })),
     ];
-  }, [clients, isPlatformAdmin, router, t]);
+  }, [clients, router, t]);
 
   const shown = useMemo(() => {
     const needle = query.trim().toLowerCase();

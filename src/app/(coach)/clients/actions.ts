@@ -92,6 +92,16 @@ export async function updateClientRecord(formData: FormData) {
 
   const goal = String(formData.get("goal") ?? "");
 
+  // The file's free-text fields: absent means absent, not an empty string.
+  const text = (key: string) => {
+    const value = String(formData.get(key) ?? "").trim();
+    return value === "" ? null : value;
+  };
+  const date = (key: string) => {
+    const value = String(formData.get(key) ?? "").trim();
+    return /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+  };
+
   await supabase
     .from("clients")
     .update({
@@ -103,6 +113,22 @@ export async function updateClientRecord(formData: FormData) {
       equipment: lines("equipment"),
       session_days: days,
       cycle_tracking: formData.get("cycle_tracking") === "on",
+      email: text("email"),
+      phone: text("phone"),
+      whatsapp: text("whatsapp"),
+      preferred_channel: text("preferred_channel"),
+      timezone: text("timezone"),
+      languages: text("languages"),
+      instagram: text("instagram"),
+      tiktok: text("tiktok"),
+      strava: text("strava"),
+      hevy: text("hevy"),
+      birth_date: date("birth_date"),
+      occupation: text("occupation"),
+      training_age: text("training_age"),
+      diet: text("diet"),
+      emergency_contact: text("emergency_contact"),
+      file_note: text("file_note"),
     })
     .eq("id", clientId);
 

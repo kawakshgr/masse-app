@@ -20,6 +20,7 @@ import {
 } from "@/components/NutritionPlan";
 import type { CyclePhase } from "@/lib/supabase/types";
 import { loadHistory, type Range } from "@/lib/history";
+import { dayLabel, euros } from "@/lib/billing";
 import type { PhotoPose } from "@/lib/supabase/types";
 
 function initialsOf(name: string) {
@@ -70,6 +71,24 @@ export default async function ClientDetailPage({
 
   const avgLabel = formatHours(sleep.avg);
   const targetLabel = formatHours(sleep.target);
+
+  // What was agreed, read from the billing tab's own record rather than typed
+  // a second time here.
+  const tBilling = await getTranslations("billing");
+  const { data: arrangement } = await supabase
+    .from("billing_arrangements")
+    .select("amount_cents, type, day_of_month, pack_sessions")
+    .eq("client_id", id)
+    .maybeSingle();
+  const billingLine = arrangement
+    ? arrangement.type === "monthly"
+      ? `${euros(arrangement.amount_cents)} · ${tBilling("billedOn", {
+          day: dayLabel(arrangement.day_of_month),
+        })}`
+      : `${euros(arrangement.amount_cents)} · ${tBilling("pack")} · ${
+          arrangement.pack_sessions
+        }`
+    : null;
 
   return (
     <div className="space-y-4 p-5">
@@ -128,7 +147,11 @@ export default async function ClientDetailPage({
       {tab === "steps" && <StepsTab clientId={id} tSteps={tSteps} />}
 
       {tab === "file" && (
-        <RecordPanel client={client} sleepTargetLabel={targetLabel} />
+        <RecordPanel
+          client={client}
+          sleepTargetLabel={targetLabel}
+          billingLine={billingLine}
+        />
       )}
     </div>
   );

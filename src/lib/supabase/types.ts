@@ -29,7 +29,7 @@ export type CheckinPain = "None" | "Minor" | "Need to talk";
 export type CheckinAdherence = "All of it" | "Most" | "Struggled";
 export type CheckinAuthor = "coach" | "client";
 export type CyclePhase = "menstrual" | "follicular" | "ovulatory" | "luteal";
-export type InvoiceStatus = "draft" | "sent" | "paid" | "void";
+export type InvoiceStatus = "draft" | "sent" | "paid" | "void" | "late";
 export type PhotoPose = "front" | "side" | "back";
 export type CycleMode = "log" | "manual";
 export type NutritionMode = "macros" | "plan";
@@ -74,6 +74,23 @@ export type ClientRow = {
   cycle_phase_manual: CyclePhase | null;
   status: ClientStatus;
   created_at: string;
+  /* The file: what a coach keeps in her notes app today. None of it derived,
+     none of it required, all of it hers and the client's alone. */
+  phone: string | null;
+  whatsapp: string | null;
+  preferred_channel: string | null;
+  timezone: string | null;
+  languages: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  strava: string | null;
+  hevy: string | null;
+  birth_date: string | null;
+  occupation: string | null;
+  training_age: string | null;
+  diet: string | null;
+  emergency_contact: string | null;
+  file_note: string | null;
 };
 
 export type InviteCodeRow = {
@@ -223,10 +240,45 @@ export type InvoiceRow = {
   issued_at: string | null;
   paid_at: string | null;
   note: string | null;
+  /** Assigned once, by the database, and never reused. */
+  invoice_number: string | null;
   created_at: string;
 };
 
 export type BillingType = "monthly" | "pack";
+
+export type VatRegime = "franchise" | "assujetti";
+
+/**
+ * The mandatory mentions a French invoice carries, held once per coach. None of
+ * it is checked against a registry — it is what she tells us.
+ */
+export type CoachBillingProfileRow = {
+  coach_id: string;
+  legal_name: string | null;
+  legal_form: string | null;
+  address_line1: string | null;
+  address_line2: string | null;
+  postcode: string | null;
+  city: string | null;
+  country: string;
+  siret: string | null;
+  rcs_city: string | null;
+  ape_code: string | null;
+  vat_number: string | null;
+  vat_regime: VatRegime;
+  vat_rate: number;
+  iban: string | null;
+  bic: string | null;
+  payment_terms: string | null;
+  late_penalty: string | null;
+  recovery_fee_cents: number;
+  invoice_prefix: string;
+  next_invoice_no: number;
+  insurance: string | null;
+  footer_note: string | null;
+  updated_at: string;
+};
 
 /** What was agreed with this client. The invoices are its monthly consequence. */
 export type BillingArrangementRow = {
@@ -364,6 +416,7 @@ export type Database = {
       meals: Table<MealRow, "client_id" | "day" | "name">;
       invoices: Table<InvoiceRow, "coach_id" | "client_id" | "period_start">;
       billing_arrangements: Table<BillingArrangementRow, "client_id" | "coach_id">;
+      coach_billing_profiles: Table<CoachBillingProfileRow, "coach_id">;
       allowed_coach_emails: Table<AllowedCoachEmailRow, "email">;
       check_in_photos: Table<CheckInPhotoRow, "check_in_id" | "client_id" | "storage_path">;
       cycle_adjustments: Table<CycleAdjustmentRow, "client_id" | "phase">;
@@ -390,6 +443,11 @@ export type Database = {
           /** False when the handoff defaults are in play. */
           configured: boolean;
         }[];
+      };
+      /** Spends one number from the coach's sequence, under a row lock. */
+      assign_invoice_number: {
+        Args: { p_client: string; p_period: string; p_amount: number };
+        Returns: string;
       };
       cycle_day: {
         Args: { p_period_start: string; p_cycle_length: number; p_on: string };

@@ -16,7 +16,7 @@ const SOON = ["inbox"] as const;
 
 type SoonKey = (typeof SOON)[number];
 
-export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
+export function TabBar() {
   const t = useTranslations("nav");
   const tSoon = useTranslations("soonCopy");
   const tShell = useTranslations("shell");
@@ -30,8 +30,8 @@ export function TabBar({ isPlatformAdmin }: { isPlatformAdmin: boolean }) {
     { key: "foods", href: "/aliments", chord: "⌘3" },
     { key: "inbox", href: "/inbox", chord: "⌘4" },
     { key: "billing", href: "/facturation", chord: "⌘5" },
-    // Real, and only for those who can actually use it.
-    ...(isPlatformAdmin ? [{ key: "admin", href: "/admin", chord: "⌘6" }] : []),
+    // Every coach has one: it holds her own company and her own exports.
+    { key: "admin", href: "/admin", chord: "⌘6" },
   ];
 
   return (

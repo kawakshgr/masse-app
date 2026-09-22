@@ -12,6 +12,7 @@ import {
   monthLabel,
   monthStart,
   monthState,
+  isOverdue,
   nextMonthOf,
   shortMonth,
   type MonthState,
@@ -59,7 +60,7 @@ export default async function BillingPage({
       .select("client_id, amount_cents, type, day_of_month, pack_sessions"),
     supabase
       .from("invoices")
-      .select("client_id, period_start, status, paid_at, issued_at")
+      .select("client_id, period_start, status, paid_at, issued_at, invoice_number")
       .gte("period_start", months[0]),
   ]);
 
@@ -79,11 +80,7 @@ export default async function BillingPage({
     const dayOfMonth = a?.day_of_month ?? 1;
     const packSessions = a?.pack_sessions ?? 10;
     const current = invoiceAt.get(`${client.id}:${period}`) ?? null;
-    const state = monthState(
-      (current?.status ?? null) as InvoiceStatus | null,
-      period,
-      dayOfMonth,
-    );
+    const state = monthState((current?.status ?? null) as InvoiceStatus | null);
 
     return {
       id: client.id,
@@ -109,14 +106,15 @@ export default async function BillingPage({
           })
         : null,
       issued: current?.issued_at != null,
+      invoiceNumber: current?.invoice_number ?? null,
+      overdue: isOverdue(period, dayOfMonth),
       history: months.map((m) => {
         const row = invoiceAt.get(`${client.id}:${m}`);
         return {
           label: shortMonth(m),
           state: (row == null
             ? "none"
-            : monthState(row.status as InvoiceStatus, m, dayOfMonth)) as
-            MonthState | "none",
+            : monthState(row.status as InvoiceStatus)) as MonthState | "none",
         };
       }),
     };

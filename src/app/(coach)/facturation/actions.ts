@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { statusFor, type MonthState } from "@/lib/billing";
 import type { BillingType } from "@/lib/supabase/types";
 
 /** Euros in, integer cents stored. Money never goes through a float. */
@@ -79,7 +80,9 @@ export async function setMonthStatus(formData: FormData) {
 
   const clientId = String(formData.get("client_id") ?? "");
   const period = String(formData.get("period") ?? "");
-  const paid = String(formData.get("paid") ?? "") === "1";
+  const raw = String(formData.get("state") ?? "awaiting");
+  const state: MonthState =
+    raw === "paid" || raw === "late" ? raw : "awaiting";
   if (!clientId || !period) return;
 
   await supabase.from("invoices").upsert(
@@ -88,8 +91,8 @@ export async function setMonthStatus(formData: FormData) {
       client_id: clientId,
       period_start: period,
       amount_cents: toCents(formData.get("amount")),
-      status: paid ? "paid" : "sent",
-      paid_at: paid ? new Date().toISOString() : null,
+      status: statusFor(state),
+      paid_at: state === "paid" ? new Date().toISOString() : null,
     },
     { onConflict: "client_id,period_start" },
   );
@@ -129,8 +132,9 @@ export async function markAllPaid(formData: FormData) {
 }
 
 /**
- * Writing the invoice means the month is now on the record as issued. There is
- * no PDF in v1 — the printable view is the browser's, and nothing is emailed.
+ * Writing the invoice spends one number from the coach's sequence. The database
+ * does it under a row lock: a French number has to be continuous and unique,
+ * and two browser tabs must not be able to agree on the same one.
  */
 export async function issueInvoice(formData: FormData) {
   const { supabase, userId } = await coachId();
@@ -140,17 +144,11 @@ export async function issueInvoice(formData: FormData) {
   const period = String(formData.get("period") ?? "");
   if (!clientId || !period) return;
 
-  await supabase.from("invoices").upsert(
-    {
-      coach_id: userId,
-      client_id: clientId,
-      period_start: period,
-      amount_cents: toCents(formData.get("amount")),
-      status: "sent",
-      issued_at: new Date().toISOString(),
-    },
-    { onConflict: "client_id,period_start" },
-  );
+  await supabase.rpc("assign_invoice_number", {
+    p_client: clientId,
+    p_period: period,
+    p_amount: toCents(formData.get("amount")),
+  });
 
   revalidatePath("/facturation");
 }

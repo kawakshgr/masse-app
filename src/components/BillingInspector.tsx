@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { saveArrangement, setMonthStatus, issueInvoice } from "@/app/(coach)/facturation/actions";
@@ -25,6 +26,10 @@ export type BillingClient = {
   state: MonthState;
   paidWhen: string | null;
   issued: boolean;
+  /** Present once the database has spent a number on this month. */
+  invoiceNumber: string | null;
+  /** The agreed day has gone by. Said beside the state, never instead of it. */
+  overdue: boolean;
   /** Oldest first: one mark per month, six of them. */
   history: { label: string; state: MonthState | "none" }[];
 };
@@ -69,6 +74,7 @@ export function BillingInspector({
   periodLabel: string;
 }) {
   const t = useTranslations("billing");
+  const tInvoice = useTranslations("invoice");
   const [, startTransition] = useTransition();
 
   const [amount, setAmount] = useState(client.amountCents);
@@ -110,12 +116,12 @@ export function BillingInspector({
     save({ amountCents: next });
   }
 
-  function togglePaid(paid: boolean) {
+  function setState(state: MonthState) {
     const body = new FormData();
     body.set("client_id", client.id);
     body.set("period", period);
     body.set("amount", (amount / 100).toFixed(2));
-    body.set("paid", paid ? "1" : "0");
+    body.set("state", state);
     startTransition(() => {
       void setMonthStatus(body);
     });
@@ -289,34 +295,26 @@ export function BillingInspector({
 
         <div className="flex flex-col gap-2">
           <span className={micro}>{t("thisMonth")}</span>
+          {/* Three states, all of them hers to pick. Whether the day has gone
+              by is said underneath, so choosing one never contradicts it. */}
           <div className="grid grid-cols-3 gap-2">
-            <Chip on={paid} onClick={() => togglePaid(true)}>
+            <Chip on={paid} onClick={() => setState("paid")}>
               {t("paid")}
             </Chip>
-            <Chip on={client.state === "awaiting"} onClick={() => togglePaid(false)}>
+            <Chip
+              on={client.state === "awaiting"}
+              onClick={() => setState("awaiting")}
+            >
               {t("awaiting")}
             </Chip>
-            {/* Not a button: lateness is the calendar's verdict, not a choice. */}
-            <span
-              aria-current={client.state === "late" ? "true" : undefined}
-              className={`min-w-0 truncate rounded-r2 border border-[var(--edge)] px-2.5 py-2.5 text-center text-[13px] font-semibold ${
-                client.state === "late"
-                  ? "text-[var(--a3)]"
-                  : "bg-[var(--glass2)] text-[var(--ink3)]"
-              }`}
-              style={
-                client.state === "late"
-                  ? { background: "color-mix(in oklab, var(--a3) 22%, var(--glass2))" }
-                  : undefined
-              }
-            >
+            <Chip on={client.state === "late"} onClick={() => setState("late")}>
               {t("late")}
-            </span>
+            </Chip>
           </div>
 
           <button
             type="button"
-            onClick={() => togglePaid(!paid)}
+            onClick={() => setState(paid ? "awaiting" : "paid")}
             className="glass2 flex items-center gap-2.5 rounded-r2 p-2.5 text-left"
           >
             <span
@@ -338,8 +336,8 @@ export function BillingInspector({
             <span className="shrink-0 text-[12px] text-[var(--ink3)]">
               {paid
                 ? (client.paidWhen ?? t("received"))
-                : client.state === "late"
-                  ? t("overdueSince", { day: dayLabel(day) })
+                : client.overdue
+                  ? t("dueDayPassed", { day: dayLabel(day) })
                   : t("notReceived")}
             </span>
           </button>
@@ -371,17 +369,26 @@ export function BillingInspector({
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <form action={issueInvoice} className="min-w-0 flex-1 basis-32">
-            <input type="hidden" name="client_id" value={client.id} />
-            <input type="hidden" name="period" value={period} />
-            <input type="hidden" name="amount" value={(amount / 100).toFixed(2)} />
-            <button
-              type="submit"
-              className="glass2 h-10 w-full rounded-r2 px-3 text-[13px] font-semibold text-[var(--ink)]"
+          {client.invoiceNumber ? (
+            <Link
+              href={`/facturation/${client.id}/${period}`}
+              className="glass2 flex h-10 min-w-0 flex-1 basis-32 items-center justify-center rounded-r2 px-3 text-[13px] font-semibold text-[var(--ink)]"
             >
-              {client.issued ? t("invoiceReady") : t("writeInvoice")}
-            </button>
-          </form>
+              {tInvoice("open")}
+            </Link>
+          ) : (
+            <form action={issueInvoice} className="min-w-0 flex-1 basis-32">
+              <input type="hidden" name="client_id" value={client.id} />
+              <input type="hidden" name="period" value={period} />
+              <input type="hidden" name="amount" value={(amount / 100).toFixed(2)} />
+              <button
+                type="submit"
+                className="glass2 h-10 w-full rounded-r2 px-3 text-[13px] font-semibold text-[var(--ink)]"
+              >
+                {t("writeInvoice")}
+              </button>
+            </form>
+          )}
           {/* Opens her own mail client, pre-filled. Masse sends nothing itself. */}
           {reminder ? (
             <a
