@@ -683,7 +683,10 @@
     "targetOver": "{gap} kcal over target",
     "offPlan": "Off plan this week",
     "offPlanNote": "Logged by her, not by you. If it keeps appearing, write it into the plan.",
-    "noOffPlan": "Nothing off plan this week."
+    "noOffPlan": "Nothing off plan this week.",
+    "planEmpty": "Add foods to the meals: calories and macros are computed from them.",
+    "planDerived": "Computed from the foods in the plan.",
+    "aimFor": "Aiming for"
   },
   "nutWeek": {
     "title": "This week",
@@ -695,5 +698,13 @@
     "kcalDerived": "{kcal} kcal",
     "label": "label value",
     "hint": "Type the macros; calories are derived."
+  },
+  "nutRead": {
+    "today": "Today {today} of {target} so far.",
+    "noFull": "No full day logged yet this week.",
+    "shortMany": "{count} full days under by 300 kcal or more ({days}) — {first} is under-fuelling, not over-eating.",
+    "shortOne": "{day} came in {gap} kcal under; the other full days held.",
+    "over": "{count, plural, =1 {1 full day} other {# full days}} over by 300 kcal or more ({days}) — worth asking before adjusting the plan.",
+    "allNear": "Every full day landed within 300 kcal of target."
   }
 }

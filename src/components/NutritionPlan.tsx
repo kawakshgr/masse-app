@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MacroDonut } from "@/components/MacroDonut";
 import { useTranslations } from "next-intl";
 import {
   addPlanMeal,
@@ -18,6 +19,9 @@ export type PlanItem = {
   name: string;
   quantityG: number | null;
   kcal: number | null;
+  proteinG: number | null;
+  carbsG: number | null;
+  fatG: number | null;
 };
 
 export type PlanMeal = {
@@ -168,6 +172,17 @@ function TargetsEditor({
         {drifting && ` · ${t("drift", { gap: Math.abs(gap) })}`}
       </p>
 
+      <div className="mt-3">
+        <MacroDonut
+          proteinG={draft.proteinG}
+          carbsG={draft.carbsG}
+          fatG={draft.fatG}
+          centre={`${draft.kcal.toLocaleString("fr-FR")}`}
+          caption="kcal"
+          labels={{ protein: t("protein"), carbs: t("carbs"), fat: t("fat") }}
+        />
+      </div>
+
       <div className="mt-3 space-y-2">
         <Macro
           label={t("protein")}
@@ -202,6 +217,104 @@ function TargetsEditor({
         {t("apply")}
       </button>
     </form>
+  );
+}
+
+/**
+ * In plan mode the coach builds the day out of foods, so the calories and the
+ * split are read off the plan rather than typed. The only thing still hers to
+ * set is what she is aiming at, which is what makes "under target" mean
+ * anything.
+ */
+function PlanTotals({
+  clientId,
+  targets,
+  meals,
+}: {
+  clientId: string;
+  targets: Targets;
+  meals: PlanMeal[];
+}) {
+  const t = useTranslations("nut");
+
+  const items = meals.flatMap((meal) => meal.items);
+  const total = items.reduce(
+    (acc, item) => ({
+      kcal: acc.kcal + Number(item.kcal ?? 0),
+      proteinG: acc.proteinG + Number(item.proteinG ?? 0),
+      carbsG: acc.carbsG + Number(item.carbsG ?? 0),
+      fatG: acc.fatG + Number(item.fatG ?? 0),
+    }),
+    { kcal: 0, proteinG: 0, carbsG: 0, fatG: 0 },
+  );
+
+  const gap = Math.round(total.kcal - targets.kcal);
+  const empty = items.length === 0;
+
+  return (
+    <div className="mt-4">
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+        {t("daily")}
+      </p>
+
+      {empty ? (
+        <p className="mt-2 text-[11px] text-[var(--ink2)]">{t("planEmpty")}</p>
+      ) : (
+        <>
+          <p className="tnum mt-1 font-display text-[28px] font-extrabold leading-none tracking-[-.04em]">
+            {Math.round(total.kcal).toLocaleString("fr-FR")}
+            <span className="ml-1 text-[12px] font-normal text-[var(--ink3)]">kcal</span>
+          </p>
+          <p className="mt-1 text-[10px] text-[var(--ink3)]">{t("planDerived")}</p>
+
+          <div className="mt-3">
+            <MacroDonut
+              proteinG={Math.round(total.proteinG)}
+              carbsG={Math.round(total.carbsG)}
+              fatG={Math.round(total.fatG)}
+              centre={`${Math.round(total.proteinG)} / ${Math.round(total.carbsG)} / ${Math.round(total.fatG)}`}
+              caption="g"
+              labels={{ protein: t("protein"), carbs: t("carbs"), fat: t("fat") }}
+            />
+          </div>
+        </>
+      )}
+
+      {/* Still hers to set: it is what "under target" is measured against. */}
+      <form action={saveNutritionTargets} className="mt-4 flex items-end gap-2">
+        <input type="hidden" name="client_id" value={clientId} />
+        <input type="hidden" name="protein_g" value={targets.proteinG} />
+        <input type="hidden" name="carbs_g" value={targets.carbsG} />
+        <input type="hidden" name="fat_g" value={targets.fatG} />
+        <label className="block min-w-0 flex-1">
+          <span className="block text-[10px] text-[var(--ink3)]">{t("aimFor")}</span>
+          <input
+            name="kcal"
+            inputMode="numeric"
+            defaultValue={targets.kcal}
+            className={`tnum mt-1 w-full ${cell}`}
+          />
+        </label>
+        <button
+          type="submit"
+          className="h-8 shrink-0 rounded-rp border border-[var(--edge)] px-3 text-[11px] font-semibold text-[var(--ink2)]"
+        >
+          {t("apply")}
+        </button>
+      </form>
+
+      {!empty && (
+        <p
+          className={`tnum mt-2 text-[10px] ${
+            Math.abs(gap) > 300 ? "text-[var(--a3)]" : "text-[var(--ink3)]"
+          }`}
+        >
+          {gap <= 0
+            ? t("targetGap", { gap: Math.abs(gap) })
+            : t("targetOver", { gap })}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -266,11 +379,15 @@ export function NutritionPlan({
           {t(mode === "macros" ? "noteMacros" : "notePlan", { first: firstName })}
         </p>
 
-        <TargetsEditor
-          key={`${targets.kcal}-${targets.proteinG}-${targets.carbsG}-${targets.fatG}`}
-          clientId={clientId}
-          targets={targets}
-        />
+        {mode === "macros" ? (
+          <TargetsEditor
+            key={`${targets.kcal}-${targets.proteinG}-${targets.carbsG}-${targets.fatG}`}
+            clientId={clientId}
+            targets={targets}
+          />
+        ) : (
+          <PlanTotals clientId={clientId} targets={targets} meals={meals} />
+        )}
       </section>
 
       <div className="min-w-[300px] flex-1 space-y-4">

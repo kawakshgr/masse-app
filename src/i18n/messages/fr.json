@@ -683,7 +683,10 @@
     "targetOver": "soit {gap} kcal au-dessus",
     "offPlan": "Hors plan cette semaine",
     "offPlanNote": "Enregistré par elle, pas par toi. Si ça revient, écris-le dans le plan.",
-    "noOffPlan": "Rien hors plan cette semaine."
+    "noOffPlan": "Rien hors plan cette semaine.",
+    "planEmpty": "Ajoute des aliments aux repas : les calories et les macros se calculent à partir d’eux.",
+    "planDerived": "Calculé à partir des aliments du plan.",
+    "aimFor": "Cible visée"
   },
   "nutWeek": {
     "title": "Cette semaine",
@@ -695,5 +698,13 @@
     "kcalDerived": "{kcal} kcal",
     "label": "valeur étiquette",
     "hint": "Saisis les macros ; les calories se déduisent."
+  },
+  "nutRead": {
+    "today": "Aujourd’hui {today} sur {target} pour l’instant.",
+    "noFull": "Aucune journée complète enregistrée cette semaine.",
+    "shortMany": "{count} journées complètes sous la cible de 300 kcal ou plus ({days}) — {first} se sous-alimente, elle ne mange pas trop.",
+    "shortOne": "{day} est tombée {gap} kcal sous la cible ; les autres journées complètes ont tenu.",
+    "over": "{count, plural, =1 {1 journée complète} other {# journées complètes}} au-dessus de 300 kcal ou plus ({days}) — à creuser avant d’ajuster le plan.",
+    "allNear": "Chaque journée complète est tombée dans la marge de 300 kcal."
   }
 }

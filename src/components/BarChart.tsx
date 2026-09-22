@@ -6,6 +6,11 @@ export type Bar = {
   current?: boolean;
   /** Something went wrong that week — a missed session, say. */
   alert?: boolean;
+  /**
+   * Semantic fill. `today` is in progress and never judged; `near` landed
+   * within tolerance; `off` did not; `future` has not happened.
+   */
+  tone?: "future" | "today" | "near" | "off";
 };
 
 /**
@@ -42,11 +47,21 @@ export function BarChart({
         const pct =
           bar.value == null ? 0 : Math.max(6, ((bar.value - floor) / span) * 100);
 
-        const background = bar.alert
-          ? "var(--a3)"
-          : bar.current
-            ? "var(--accent)"
-            : "color-mix(in oklab, var(--accent) 34%, var(--glass2))";
+        // A day still being lived is reported, never marked pass or fail.
+        const background =
+          bar.tone === "future"
+            ? "var(--hair)"
+            : bar.tone === "today"
+              ? "var(--a2)"
+              : bar.tone === "near"
+                ? "linear-gradient(180deg, var(--a1), var(--a2))"
+                : bar.tone === "off"
+                  ? "var(--a3)"
+                  : bar.alert
+                    ? "var(--a3)"
+                    : bar.current
+                      ? "var(--accent)"
+                      : "color-mix(in oklab, var(--accent) 34%, var(--glass2))";
 
         return (
           <div

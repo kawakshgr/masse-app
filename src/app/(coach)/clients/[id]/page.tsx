@@ -570,6 +570,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
 async function NutritionTab({ clientId }: { clientId: string }) {
   const supabase = await createClient();
   const tWeek = await getTranslations("nutWeek");
+  const tRead = await getTranslations("nutRead");
   const tDays = await getTranslations("days");
 
   const today = new Date();
@@ -589,7 +590,7 @@ async function NutritionTab({ clientId }: { clientId: string }) {
     supabase.from("nutrition_targets").select("*").eq("client_id", clientId).maybeSingle(),
     supabase
       .from("plan_meals")
-      .select("id, at_time, name, position, plan_meal_items(id, name, quantity_g, kcal, position)")
+      .select("id, at_time, name, position, plan_meal_items(id, name, quantity_g, kcal, protein_g, carbs_g, fat_g, position)")
       .eq("client_id", clientId)
       .order("at_time"),
     supabase.from("foods").select("id, name").order("name").limit(300),
@@ -619,6 +620,9 @@ async function NutritionTab({ clientId }: { clientId: string }) {
         name: string;
         quantity_g: number | null;
         kcal: number | null;
+        protein_g: number | null;
+        carbs_g: number | null;
+        fat_g: number | null;
         position: number;
       }[]) ?? []),
     ]
@@ -628,6 +632,9 @@ async function NutritionTab({ clientId }: { clientId: string }) {
         name: item.name,
         quantityG: item.quantity_g,
         kcal: item.kcal,
+        proteinG: item.protein_g,
+        carbsG: item.carbs_g,
+        fatG: item.fat_g,
       })),
   }));
 
@@ -639,20 +646,58 @@ async function NutritionTab({ clientId }: { clientId: string }) {
     byDay.set(meal.day, (byDay.get(meal.day) ?? 0) + Number(meal.kcal ?? 0));
   }
 
+  // 300 kcal is the tolerance the prototype reads "on target" against.
+  const TOLERANCE = 300;
+
   const days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
     d.setUTCDate(d.getUTCDate() + i);
     const iso = d.toISOString().slice(0, 10);
-    return { iso, dayIndex: i, kcal: byDay.get(iso) ?? 0, isToday: iso === todayIso };
+    const kcal = byDay.get(iso) ?? 0;
+    return {
+      iso,
+      dayIndex: i,
+      kcal,
+      isToday: iso === todayIso,
+      isFuture: iso > todayIso,
+      near: Math.abs(kcal - targets.kcal) <= TOLERANCE,
+    };
   });
 
-  // A day still running is not a day that missed: only closed days count.
-  const fullDaysOnTarget = days.filter(
-    (d) => !d.isToday && d.iso < todayIso && d.kcal > 0 &&
-      Math.abs(d.kcal - targets.kcal) <= 300,
-  ).length;
-
   const todayKcal = byDay.get(todayIso) ?? 0;
+  const firstName = client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";
+
+  // The read computes from the same days the bars draw, so the sentence can
+  // never contradict the chart. Today is reported, never judged.
+  const closed = days.filter((d) => !d.isFuture && !d.isToday && d.kcal > 0);
+  const short = closed.filter((d) => !d.near && d.kcal < targets.kcal);
+  const over = closed.filter((d) => !d.near && d.kcal > targets.kcal);
+  const dayName = (i: number) => tDays(String(i)).slice(0, 3);
+
+  const now = tRead("today", {
+    today: Math.round(todayKcal).toLocaleString("fr-FR"),
+    target: targets.kcal.toLocaleString("fr-FR"),
+  });
+
+  let verdict: string;
+  if (closed.length === 0) verdict = tRead("noFull");
+  else if (short.length >= 2)
+    verdict = tRead("shortMany", {
+      count: short.length,
+      days: short.map((d) => dayName(d.dayIndex)).join(", "),
+      first: firstName,
+    });
+  else if (short.length === 1)
+    verdict = tRead("shortOne", {
+      day: dayName(short[0]!.dayIndex),
+      gap: Math.round(targets.kcal - short[0]!.kcal).toLocaleString("fr-FR"),
+    });
+  else if (over.length > 0)
+    verdict = tRead("over", {
+      count: over.length,
+      days: over.map((d) => dayName(d.dayIndex)).join(", "),
+    });
+  else verdict = tRead("allNear");
 
   return (
     <div className="space-y-4">
@@ -668,16 +713,18 @@ async function NutritionTab({ clientId }: { clientId: string }) {
                 bars={days.map((d) => ({
                   value: d.kcal === 0 ? null : d.kcal,
                   label: `${tDays(String(d.dayIndex))} · ${Math.round(d.kcal)} kcal`,
-                  current: d.isToday,
+                  tone: d.isFuture
+                    ? "future"
+                    : d.isToday
+                      ? "today"
+                      : d.near
+                        ? "near"
+                        : "off",
                 }))}
               />
             </div>
             <p className="tnum mt-2 text-[10px] leading-relaxed text-[var(--ink3)]">
-              {tWeek("note", {
-                today: Math.round(todayKcal).toLocaleString("fr-FR"),
-                target: targets.kcal.toLocaleString("fr-FR"),
-                full: fullDaysOnTarget,
-              })}
+              {`${now} ${verdict}`}
             </p>
           </>
         )}
@@ -685,7 +732,7 @@ async function NutritionTab({ clientId }: { clientId: string }) {
 
       <NutritionPlan
         clientId={clientId}
-        firstName={client?.first_name ?? client?.name?.split(/\s+/)[0] ?? ""}
+        firstName={firstName}
         mode={client?.nutrition_mode ?? "macros"}
         targets={targets}
         meals={meals}
