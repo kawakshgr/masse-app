@@ -2,7 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import type { CheckInRow } from "@/lib/supabase/types";
-import { markCheckInReviewed, saveCheckIn } from "@/app/(coach)/clients/actions";
+import {
+  deleteCheckIn,
+  markCheckInReviewed,
+  saveCheckIn,
+} from "@/app/(coach)/clients/actions";
 
 const FEEL = ["Strong", "Steady", "Heavy"] as const;
 const PAIN = ["None", "Minor", "Need to talk"] as const;
@@ -172,6 +176,18 @@ export function CheckInPanel({
                     </button>
                   </form>
                 )}
+
+                <form action={deleteCheckIn} className="shrink-0">
+                  <input type="hidden" name="check_in_id" value={entry.id} />
+                  <input type="hidden" name="client_id" value={clientId} />
+                  <button
+                    type="submit"
+                    aria-label="×"
+                    className="rounded-r1 px-1 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                  >
+                    ×
+                  </button>
+                </form>
               </li>
             ))}
           </ul>

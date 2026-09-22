@@ -10,6 +10,7 @@ import {
   moveExercise,
   pushWeek,
   renameSession,
+  retractWeek,
   updateExercise,
 } from "@/app/(coach)/programmes/actions";
 
@@ -42,6 +43,7 @@ export function WeekEditor({
   assignedClientIds: string[];
 }) {
   const t = useTranslations("editor");
+  const tProgramme = useTranslations("programme");
   const tDays = useTranslations("days");
   const [pending, startTransition] = useTransition();
   const [dragging, setDragging] = useState<string | null>(null);
@@ -246,27 +248,44 @@ export function WeekEditor({
                 const on = selected.includes(client.id);
                 return (
                   <li key={client.id}>
-                    <button
-                      type="button"
-                      aria-pressed={on}
-                      onClick={() =>
-                        setSelected((prev) =>
-                          on ? prev.filter((id) => id !== client.id) : [...prev, client.id],
-                        )
-                      }
-                      className={`h-8 rounded-r2 border px-3 text-[12px] ${
-                        on
-                          ? "border-[var(--a1)] bg-[var(--glass2)] text-[var(--a1)]"
-                          : "border-[var(--edge)] text-[var(--ink2)]"
-                      }`}
-                    >
-                      {client.name}
+                    <span className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() =>
+                          setSelected((prev) =>
+                            on ? prev.filter((id) => id !== client.id) : [...prev, client.id],
+                          )
+                        }
+                        className={`h-8 rounded-r2 border px-3 text-[12px] ${
+                          on
+                            ? "border-[var(--a1)] bg-[var(--glass2)] text-[var(--a1)]"
+                            : "border-[var(--edge)] text-[var(--ink2)]"
+                        }`}
+                      >
+                        {client.name}
+                        {assignedClientIds.includes(client.id) && (
+                          <span className="ml-2 text-[10px] text-[var(--ink3)]">
+                            {t("pushed")}
+                          </span>
+                        )}
+                      </button>
+
                       {assignedClientIds.includes(client.id) && (
-                        <span className="ml-2 text-[10px] text-[var(--ink3)]">
-                          {t("pushed")}
-                        </span>
+                        <button
+                          type="button"
+                          title={tProgramme("retractHint")}
+                          onClick={() =>
+                            startTransition(() => {
+                              void retractWeek(weekId, client.id, programmeId);
+                            })
+                          }
+                          className="h-8 shrink-0 rounded-r2 border border-[var(--edge)] px-2 text-[10px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
+                        >
+                          {tProgramme("retract")}
+                        </button>
                       )}
-                    </button>
+                    </span>
                   </li>
                 );
               })}

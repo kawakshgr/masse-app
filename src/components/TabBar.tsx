@@ -10,7 +10,9 @@ import { useTranslations } from "next-intl";
  * badge, one line of copy on tap. Driven by this one list — never by a
  * condition scattered across the tab bar, a sidebar and a rail.
  */
-const SOON = ["foods", "inbox", "billing"] as const;
+// Messaging alone: a credible thread needs real time, read states, push and
+// media upload — a month of work to end up worse than WhatsApp.
+const SOON = ["inbox"] as const;
 
 type SoonKey = (typeof SOON)[number];
 

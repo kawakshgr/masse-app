@@ -29,6 +29,7 @@ export type CheckinPain = "None" | "Minor" | "Need to talk";
 export type CheckinAdherence = "All of it" | "Most" | "Struggled";
 export type CheckinAuthor = "coach" | "client";
 export type CyclePhase = "menstrual" | "follicular" | "ovulatory" | "luteal";
+export type InvoiceStatus = "draft" | "sent" | "paid" | "void";
 export type AdminAction =
   | "read_client_record"
   | "read_client_cycle"
@@ -160,6 +161,50 @@ export type CycleLogRow = {
   logged_at: string;
 };
 
+export type FoodRow = {
+  id: string;
+  coach_id: string;
+  name: string;
+  brand: string | null;
+  kcal_100g: number | null;
+  protein_100g: number | null;
+  carbs_100g: number | null;
+  fat_100g: number | null;
+  created_at: string;
+};
+
+/** Name and macros are snapshotted: a deleted food cannot rewrite history. */
+export type MealRow = {
+  id: string;
+  client_id: string;
+  day: string;
+  slot: string | null;
+  food_id: string | null;
+  name: string;
+  quantity_g: number | null;
+  kcal: number | null;
+  protein_g: number | null;
+  carbs_g: number | null;
+  fat_g: number | null;
+  logged_at: string;
+};
+
+/** A ledger the coach ticks. Nothing here is ever charged automatically. */
+export type InvoiceRow = {
+  id: string;
+  coach_id: string;
+  client_id: string;
+  period_start: string;
+  period_end: string | null;
+  amount_cents: number;
+  currency: string;
+  status: InvoiceStatus;
+  issued_at: string | null;
+  paid_at: string | null;
+  note: string | null;
+  created_at: string;
+};
+
 export type PlatformAdminRow = {
   user_id: string;
   granted_at: string;
@@ -217,6 +262,9 @@ export type Database = {
       check_ins: Table<CheckInRow, "client_id" | "week_start_date">;
       cycle_logs: Table<CycleLogRow, "client_id" | "period_start_date">;
       daily_metrics: Table<DailyMetricRow, "client_id" | "day">;
+      foods: Table<FoodRow, "coach_id" | "name">;
+      meals: Table<MealRow, "client_id" | "day" | "name">;
+      invoices: Table<InvoiceRow, "coach_id" | "client_id" | "period_start">;
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
     };
@@ -302,6 +350,7 @@ export type Database = {
       checkin_author: CheckinAuthor;
       cycle_phase: CyclePhase;
       admin_action: AdminAction;
+      invoice_status: InvoiceStatus;
     };
     CompositeTypes: { [_ in never]: never };
   };

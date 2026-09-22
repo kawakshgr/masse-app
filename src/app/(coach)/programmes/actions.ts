@@ -248,3 +248,63 @@ export async function pushWeek(
   revalidatePath(`/programmes/${programmeId}`);
   revalidatePath("/clients");
 }
+
+export async function renameProgramme(formData: FormData) {
+  const supabase = await createClient();
+  const id = String(formData.get("programme_id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  if (!id || name === "") return;
+
+  await supabase.from("programmes").update({ name }).eq("id", id);
+  revalidatePath(`/programmes/${id}`);
+  revalidatePath("/programmes");
+}
+
+/**
+ * Destructive: weeks, sessions and exercises cascade, and any assignment
+ * pointing at those weeks goes with them. Guarded by a typed confirmation.
+ */
+export async function deleteProgramme(formData: FormData) {
+  const supabase = await createClient();
+  const id = String(formData.get("programme_id") ?? "");
+  const typed = String(formData.get("confirm") ?? "").trim().toLowerCase();
+  const expected = String(formData.get("expected") ?? "").trim().toLowerCase();
+
+  if (!id || typed === "" || typed !== expected) {
+    redirect(`/programmes/${id}?suppression=confirmation`);
+  }
+
+  await supabase.from("programmes").delete().eq("id", id);
+
+  revalidatePath("/programmes");
+  redirect("/programmes");
+}
+
+export async function deleteWeek(weekId: string, programmeId: string) {
+  const supabase = await createClient();
+  await supabase.from("programme_weeks").delete().eq("id", weekId);
+  revalidatePath(`/programmes/${programmeId}`);
+  revalidatePath("/clients");
+}
+
+/**
+ * Takes a pushed week back. pushed_at null means invisible again — the same
+ * boundary, read in the other direction. Without this a coach who pushes the
+ * wrong week has no way back.
+ */
+export async function retractWeek(
+  weekId: string,
+  clientId: string,
+  programmeId: string,
+) {
+  const supabase = await createClient();
+
+  await supabase
+    .from("assignments")
+    .update({ pushed_at: null })
+    .eq("week_id", weekId)
+    .eq("client_id", clientId);
+
+  revalidatePath(`/programmes/${programmeId}`);
+  revalidatePath("/clients");
+}

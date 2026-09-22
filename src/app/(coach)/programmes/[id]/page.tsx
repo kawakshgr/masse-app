@@ -4,7 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
 import { WeekExport, WeekPrintout } from "@/components/WeekExport";
-import { addWeek, duplicateWeek, toggleTemplate } from "../actions";
+import { addWeek, deleteWeek, duplicateWeek, toggleTemplate } from "../actions";
+import { ProgrammeHeader } from "@/components/ProgrammeHeader";
 
 export default async function ProgrammeEditorPage({
   params,
@@ -27,6 +28,7 @@ export default async function ProgrammeEditorPage({
 
   const t = await getTranslations("editor");
   const tProg = await getTranslations("programmes");
+  const tProgramme = await getTranslations("programme");
 
   const weeks = [
     ...((programme.programme_weeks as unknown as { id: string; week_number: number }[]) ?? []),
@@ -73,9 +75,7 @@ export default async function ProgrammeEditorPage({
   return (
     <div className="p-5">
       <header className="mb-4 flex flex-wrap items-center gap-2 print:hidden">
-        <h2 className="min-w-0 flex-1 truncate font-display text-[20px] font-extrabold tracking-[-.04em]">
-          {programme.name}
-        </h2>
+        <ProgrammeHeader programmeId={programme.id} name={programme.name} />
 
         <form
           action={async () => {
@@ -148,6 +148,22 @@ export default async function ProgrammeEditorPage({
             {t("addWeek")}
           </button>
         </form>
+
+        {current && weeks.length > 1 && (
+          <form
+            action={async () => {
+              "use server";
+              await deleteWeek(current.id, programme.id);
+            }}
+          >
+            <button
+              type="submit"
+              className="h-8 rounded-r2 px-3 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
+            >
+              {tProgramme("removeWeek")}
+            </button>
+          </form>
+        )}
       </nav>
 
       {current && (

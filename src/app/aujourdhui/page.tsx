@@ -3,6 +3,9 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { SessionLogger, type LoggerExercise } from "@/components/SessionLogger";
 import { EntryPanel } from "@/components/EntryPanel";
+import { MealsPanel } from "@/components/MealsPanel";
+import { deleteCycleLog, deleteSetLog } from "./actions";
+import type { FoodRow, MealRow } from "@/lib/supabase/types";
 
 type WeekShape = {
   week_number: number;
@@ -38,12 +41,16 @@ export default async function TodayPage() {
   const tLog = await getTranslations("log");
   const tDays = await getTranslations("days");
   const tPhase = await getTranslations("phase");
+  const tEntry = await getTranslations("entry");
 
   const today = new Date();
   const weekAgo = new Date(today);
   weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
 
-  const [assignmentsRes, cycleRes] = await Promise.all([
+  const todayIso = today.toISOString().slice(0, 10);
+
+  const [assignmentsRes, cycleRes, foodsRes, mealsRes, setsRes, cycleLogsRes] =
+    await Promise.all([
     supabase
       .from("assignments")
       .select(
@@ -53,6 +60,19 @@ export default async function TodayPage() {
       .order("start_date", { ascending: false })
       .limit(1),
     supabase.rpc("client_cycle_state", { p_client: user.id }),
+    // Her coach's library, readable to her so she can log against it.
+    supabase.from("foods").select("id, name, brand").order("name"),
+    supabase.from("meals").select("*").eq("day", todayIso).order("logged_at"),
+    supabase
+      .from("set_logs")
+      .select("id, set_index, reps, weight_kg, rpe, session_exercise_id, logged_at")
+      .gte("logged_at", `${todayIso}T00:00:00Z`)
+      .order("logged_at"),
+    supabase
+      .from("cycle_logs")
+      .select("id, period_start_date, cycle_length_days")
+      .order("period_start_date", { ascending: false })
+      .limit(6),
   ]);
 
   const assignment = (assignmentsRes.data ?? [])[0];
@@ -110,10 +130,82 @@ export default async function TodayPage() {
         </section>
       )}
 
+      {/* Sets that reached the server today, each removable. */}
+      {(setsRes.data ?? []).length > 0 && (
+        <section className="glass rounded-r3 p-4">
+          <h2 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            {tLog("done")}
+          </h2>
+          <ul className="mt-2">
+            {(setsRes.data ?? []).map((row) => (
+              <li
+                key={row.id}
+                className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
+              >
+                <span className="tnum min-w-0 flex-1 truncate text-[12px]">
+                  {[
+                    row.reps ? `${row.reps} ${tLog("reps")}` : null,
+                    row.weight_kg ? `${row.weight_kg} ${tLog("weight")}` : null,
+                    row.rpe ? `${tLog("rpe")} ${row.rpe}` : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ") || "—"}
+                </span>
+                <form action={deleteSetLog} className="shrink-0">
+                  <input type="hidden" name="set_log_id" value={row.id} />
+                  <button
+                    type="submit"
+                    className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                  >
+                    ×
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <MealsPanel
+        day={todayIso}
+        foods={(foodsRes.data ?? []) as Pick<FoodRow, "id" | "name" | "brand">[]}
+        meals={(mealsRes.data ?? []) as MealRow[]}
+      />
+
       <EntryPanel
         cycleTracking={client.cycle_tracking}
         phaseLabel={phase ? tPhase(phase) : null}
       />
+
+      {/* Her cycle entries, each removable: the erasure right on her own rows. */}
+      {client.cycle_tracking && (cycleLogsRes.data ?? []).length > 0 && (
+        <section className="glass rounded-r3 p-4">
+          <h2 className="text-[10px] font-semibold uppercase tracking-wide text-[var(--ink3)]">
+            {tEntry("cycleTitle")}
+          </h2>
+          <ul className="mt-2">
+            {(cycleLogsRes.data ?? []).map((row) => (
+              <li
+                key={row.id}
+                className="flex items-center gap-3 border-b border-[var(--hair)] py-2 last:border-0"
+              >
+                <span className="tnum min-w-0 flex-1 truncate text-[12px]">
+                  {row.period_start_date} · {row.cycle_length_days} j
+                </span>
+                <form action={deleteCycleLog} className="shrink-0">
+                  <input type="hidden" name="cycle_log_id" value={row.id} />
+                  <button
+                    type="submit"
+                    className="rounded-r1 px-2 py-0.5 text-[10px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                  >
+                    ×
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {week && (
         <section className="glass rounded-r3 p-4">

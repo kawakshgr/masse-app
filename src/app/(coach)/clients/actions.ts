@@ -187,3 +187,14 @@ export async function revokeInvite(formData: FormData) {
   await supabase.from("invite_codes").update({ state: "revoked" }).eq("id", id);
   revalidatePath("/clients");
 }
+
+export async function deleteCheckIn(formData: FormData) {
+  const supabase = await createClient();
+  const id = String(formData.get("check_in_id") ?? "");
+  const clientId = String(formData.get("client_id") ?? "");
+  if (!id) return;
+
+  await supabase.from("check_ins").delete().eq("id", id);
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/clients");
+}
