@@ -98,7 +98,7 @@
     "search": "Rechercher ou lancer une commande",
     "newProgramme": "+ Nouveau programme",
     "addClient": "+ Ajouter une cliente",
-    "addClientHint": "« Ajouter une cliente » envoie un code d’invitation et attend son onboarding"
+    "addClientHint": "« Ajouter une cliente » envoie un code d’invitation et attend son onboarding"
   },
   "detail": {
     "pickClient": "Choisis une cliente dans la liste.",
@@ -133,10 +133,10 @@
   },
   "invite": {
     "title": "Inviter une cliente",
-    "created": "Code créé : {code}",
+    "created": "Code créé : {code}",
     "pending": "{count, plural, =0 {Aucune invitation en attente} =1 {1 invitation en attente} other {# invitations en attente}}",
     "expires": "Expire le {date}",
-    "lede": "On génère un code. Tu le lui envoies par WhatsApp ; elle s’inscrit seule et sa fiche apparaît ici.",
+    "lede": "On génère un code. Tu le lui envoies par WhatsApp ; elle s’inscrit seule et sa fiche apparaît ici.",
     "askCycle": "Lui proposer le suivi de cycle",
     "askCycleHint": "Elle décidera elle-même à l’étape 7. Sans ça, l’étape n’est même pas affichée.",
     "create": "Créer le code",
@@ -155,8 +155,8 @@
     "sleep": "{under, plural, =0 {Aucune nuit} =1 {1 nuit} other {# nuits}} sous {target}, moyenne {avg}.",
     "sleepNoTarget": "Moyenne {avg} sur {nights, plural, =1 {1 nuit saisie} other {# nuits saisies}}.",
     "lutealTrim": " Charge lutéale déjà réduite de {pct} % — retire une série avant d’en ajouter une.",
-    "intensityLift": " Phase ovulatoire : charge relevée de {pct} %.",
-    "intensityDrop": " Phase menstruelle : charge abaissée de {pct} %."
+    "intensityLift": " Phase ovulatoire : charge relevée de {pct} %.",
+    "intensityDrop": " Phase menstruelle : charge abaissée de {pct} %."
   },
   "record": {
     "title": "Fiche",
@@ -185,7 +185,7 @@
     "height": "Taille (cm)",
     "weight": "Poids (kg)",
     "birthYear": "Année de naissance",
-    "injuriesTitle": "Des blessures ?",
+    "injuriesTitle": "Des blessures ?",
     "injuriesLede": "Ce qu’il faut contourner. Une par ligne, laisse vide s’il n’y a rien.",
     "equipmentTitle": "Ton matériel",
     "equipmentLede": "Ce à quoi tu as accès.",
@@ -193,11 +193,11 @@
     "daysLede": "Les jours où tu peux t’entraîner.",
     "cycleTitle": "Suivi du cycle",
     "cycleLede": "Optionnel, et révocable à tout moment.",
-    "cyclePromise": "Si tu l’actives, seules ta date de règles et la durée de ton cycle sont enregistrées — en Europe. Tes notes de symptômes ne quittent jamais ton téléphone : il n’existe aucune table pour les stocker. Ton coach voit une phase et une charge adaptée, jamais un symptôme.",
+    "cyclePromise": "Si tu l’actives, seules ta date de règles et la durée de ton cycle sont enregistrées — en Europe. Tes notes de symptômes ne quittent jamais ton téléphone : il n’existe aucune table pour les stocker. Ton coach voit une phase et une charge adaptée, jamais un symptôme.",
     "cycleOn": "Activer le suivi",
     "cycleOff": "Sans suivi",
     "sleepTitle": "Une nuit normale",
-    "sleepLede": "Combien d’heures, d’habitude ?",
+    "sleepLede": "Combien d’heures, d’habitude ?",
     "summaryTitle": "Tout est là",
     "summaryLede": "Vérifie, puis crée ton compte. Ta première semaine t’attend.",
     "emailLabel": "Ton adresse e-mail",
@@ -222,7 +222,7 @@
   "today": {
     "title": "Aujourd’hui",
     "none": "Aucune semaine poussée pour l’instant.",
-    "noneHint": "Ton coach te l’enverra ; elle apparaîtra ici.",
+    "noneHint": "Ton coach te l’enverra ; elle apparaîtra ici.",
     "rest": "Repos",
     "week": "Ta semaine",
     "sets": "{count, plural, =1 {1 série} other {# séries}}",
@@ -287,7 +287,7 @@
     "admin": "Admin"
   },
   "soonCopy": {
-    "foods": "La nutrition n’est pas dans v1 : le coach écrit ses cibles en texte dans le programme.",
+    "foods": "La nutrition n’est pas dans v1 : le coach écrit ses cibles en texte dans le programme.",
     "inbox": "La messagerie est en développement. D’ici là, WhatsApp reste où il est.",
     "billing": "La facturation viendra en v1.1. À cette échelle, un tableur suffit — et rien ne sera jamais débité automatiquement."
   },
@@ -303,7 +303,7 @@
     "suspended": "Suspendu",
     "active": "Actif",
     "reason": "Motif (10 caractères minimum)",
-    "reasonPlaceholder": "ticket 412 : demande du coach",
+    "reasonPlaceholder": "ticket 412 : demande du coach",
     "log": "Journal des accès",
     "logEmpty": "Aucun accès enregistré. C’est le bon état.",
     "noAccess": "Cette page est réservée aux administrateurs de la plateforme.",
@@ -334,7 +334,7 @@
   },
   "remove": {
     "action": "Retirer",
-    "confirmTitle": "Retirer {name} ?",
+    "confirmTitle": "Retirer {name} ?",
     "confirmBody": "Sa fiche, ses séances, ses bilans et ses données de cycle seront supprimés définitivement. C’est irréversible.",
     "confirmType": "Tape son prénom pour confirmer",
     "confirm": "Retirer définitivement",
@@ -395,7 +395,7 @@
   },
   "foods": {
     "title": "Aliments",
-    "lede": "Ta bibliothèque. Les macros sont pour 100 g ; la quantité les met à l’échelle au moment où la cliente enregistre.",
+    "lede": "Ta bibliothèque. Les macros sont pour 100 g ; la quantité les met à l’échelle au moment où la cliente enregistre.",
     "name": "Nom",
     "brand": "Marque",
     "kcal": "kcal",
@@ -451,7 +451,7 @@
   "programme": {
     "rename": "Renommer",
     "remove": "Supprimer le programme",
-    "confirmTitle": "Supprimer « {name} » ?",
+    "confirmTitle": "Supprimer « {name} » ?",
     "confirmBody": "Toutes ses semaines, séances et exercices seront supprimés, ainsi que les assignations qui les visent. Irréversible.",
     "confirmType": "Tape le nom du programme pour confirmer",
     "confirm": "Supprimer définitivement",
@@ -474,7 +474,9 @@
     "label": "Thème",
     "auto": "Auto",
     "light": "Clair",
-    "dark": "Sombre"
+    "dark": "Sombre",
+    "toLight": "Passer en clair",
+    "toDark": "Passer en sombre"
   },
   "tabs": {
     "overview": "Vue d’ensemble",
@@ -600,14 +602,18 @@
     "thigh": "Cuisse",
     "noChange": "stable",
     "answers": "Ses réponses",
-    "qFeel": "Comment s’est passée la semaine ?",
-    "qPain": "Des douleurs ou des gênes ?",
-    "qAdherence": "Le plan a-t-il été suivi ?",
+    "qFeel": "Comment s’est passée la semaine ?",
+    "qPain": "Des douleurs ou des gênes ?",
+    "qAdherence": "Le plan a-t-il été suivi ?",
     "noAnswer": "—",
     "week": "S{n}",
     "pickWeek": "Semaine",
     "noCheckins": "Aucun bilan pour l’instant.",
-    "photos": "Photos de progression"
+    "photos": "Photos de progression",
+    "removePhoto": "Supprimer la photo",
+    "confirmRemovePhoto": "Supprimer",
+    "cancel": "Annuler",
+    "askRemovePhoto": "Supprimer cette photo ? Elle ne revient pas."
   },
   "hist": {
     "longView": "La vue longue",
@@ -635,7 +641,7 @@
   },
   "cyc": {
     "on": "Le suivi de cycle est actif",
-    "lede": "{first} enregistre ses règles ; le plan s’ajuste selon la phase. Les notes de symptômes restent privées.",
+    "lede": "{first} enregistre ses règles ; le plan s’ajuste selon la phase. Les notes de symptômes restent privées.",
     "off": "Le suivi de cycle n’est pas activé pour cette cliente.",
     "mode": "Mode",
     "followLog": "Suivre le journal",
@@ -649,7 +655,7 @@
     "carbs": "Glucides",
     "save": "Appliquer",
     "noPhase": "Aucune donnée de cycle — rien à ajuster pour l’instant.",
-    "promise": "Tu vois la phase et les leviers que tu as réglés. Les dates de règles ne te sont jamais montrées : la base les refuse, ce n’est pas l’interface qui les cache.",
+    "promise": "Tu vois la phase et les leviers que tu as réglés. Les dates de règles ne te sont jamais montrées : la base les refuse, ce n’est pas l’interface qui les cache.",
     "defaultNote": "Non réglé — les valeurs du handoff s’appliquent."
   },
   "nut": {
@@ -684,7 +690,7 @@
     "offPlan": "Hors plan cette semaine",
     "offPlanNote": "Enregistré par elle, pas par toi. Si ça revient, écris-le dans le plan.",
     "noOffPlan": "Rien hors plan cette semaine.",
-    "planEmpty": "Ajoute des aliments aux repas : les calories et les macros se calculent à partir d’eux.",
+    "planEmpty": "Ajoute des aliments aux repas : les calories et les macros se calculent à partir d’eux.",
     "planDerived": "Calculé à partir des aliments du plan.",
     "aimFor": "Cible visée"
   },
@@ -697,13 +703,13 @@
     "derived": "Déduit des macros — tu ne saisis jamais les calories deux fois.",
     "kcalDerived": "{kcal} kcal",
     "label": "valeur étiquette",
-    "hint": "Saisis les macros ; les calories se déduisent."
+    "hint": "Saisis les macros ; les calories se déduisent."
   },
   "nutRead": {
     "today": "Aujourd’hui {today} sur {target} pour l’instant.",
     "noFull": "Aucune journée complète enregistrée cette semaine.",
     "shortMany": "{count} journées complètes sous la cible de 300 kcal ou plus ({days}) — {first} se sous-alimente, elle ne mange pas trop.",
-    "shortOne": "{day} est tombée {gap} kcal sous la cible ; les autres journées complètes ont tenu.",
+    "shortOne": "{day} est tombée {gap} kcal sous la cible ; les autres journées complètes ont tenu.",
     "over": "{count, plural, =1 {1 journée complète} other {# journées complètes}} au-dessus de 300 kcal ou plus ({days}) — à creuser avant d’ajuster le plan.",
     "allNear": "Chaque journée complète est tombée dans la marge de 300 kcal."
   }

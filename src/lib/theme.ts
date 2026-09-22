@@ -32,6 +32,25 @@ export function getServerTheme(): ThemeChoice {
   return "auto";
 }
 
+/**
+ * What is actually on screen. The switch is two-state, so it reflects this
+ * rather than the stored choice: "auto" is not a position on the track, it is
+ * simply what we follow until she touches it.
+ */
+export function getResolvedTheme(): "light" | "dark" {
+  return resolve(getTheme());
+}
+
+/** Dark is the app's own default; the pre-paint script corrects it instantly. */
+export function getServerResolvedTheme(): "light" | "dark" {
+  return "dark";
+}
+
+/** Flips to the opposite of what she is looking at, whatever got her there. */
+export function toggleTheme() {
+  setTheme(getResolvedTheme() === "dark" ? "light" : "dark");
+}
+
 function resolve(choice: ThemeChoice): "light" | "dark" {
   if (choice !== "auto") return choice;
   try {
@@ -66,6 +85,7 @@ export function watchSystemTheme(): () => void {
   const onChange = () => {
     if (getTheme() === "auto") {
       document.documentElement.dataset.theme = resolve("auto");
+      listeners.forEach((listener) => listener());
     }
   };
   media.addEventListener("change", onChange);

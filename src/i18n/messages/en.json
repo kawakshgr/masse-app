@@ -474,7 +474,9 @@
     "label": "Theme",
     "auto": "Auto",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "toLight": "Switch to light",
+    "toDark": "Switch to dark"
   },
   "tabs": {
     "overview": "Overview",
@@ -607,7 +609,11 @@
     "week": "W{n}",
     "pickWeek": "Week",
     "noCheckins": "No check-ins yet.",
-    "photos": "Progress photos"
+    "photos": "Progress photos",
+    "removePhoto": "Delete the photo",
+    "confirmRemovePhoto": "Delete",
+    "cancel": "Cancel",
+    "askRemovePhoto": "Delete this photo? It does not come back."
   },
   "hist": {
     "longView": "The long view",
