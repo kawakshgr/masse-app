@@ -346,24 +346,52 @@ export async function addExerciseNamed(
   sessionId: string,
   name: string,
   programmeId: string,
+  /** Where it landed. Omitted means the end — a click on "add", not a drop. */
+  atPosition?: number,
 ) {
   const supabase = await createClient();
   const clean = name.trim();
   if (clean === "") return;
 
-  const { data: last } = await supabase
+  const { data: siblings } = await supabase
     .from("session_exercises")
-    .select("position")
+    .select("id, position")
     .eq("session_id", sessionId)
-    .order("position", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .order("position");
 
-  await supabase.from("session_exercises").insert({
-    session_id: sessionId,
-    position: (last?.position ?? -1) + 1,
-    name: clean,
-  });
+  const rows = siblings ?? [];
+
+  if (atPosition === undefined) {
+    await supabase.from("session_exercises").insert({
+      session_id: sessionId,
+      position: rows.length,
+      name: clean,
+    });
+    revalidatePath(`/programmes/${programmeId}`);
+    return;
+  }
+
+  // Dropped between two movements, so it belongs between them. Insert at the
+  // end first, then renumber the session — the same path moveExercise takes,
+  // and it leaves positions contiguous whatever they were before.
+  const { data: created } = await supabase
+    .from("session_exercises")
+    .insert({ session_id: sessionId, position: rows.length, name: clean })
+    .select("id")
+    .single();
+
+  if (!created) return;
+
+  const at = Math.max(0, Math.min(atPosition, rows.length));
+  const ordered = [
+    ...rows.slice(0, at).map((row) => row.id),
+    created.id,
+    ...rows.slice(at).map((row) => row.id),
+  ];
+
+  for (const [index, id] of ordered.entries()) {
+    await supabase.from("session_exercises").update({ position: index }).eq("id", id);
+  }
 
   revalidatePath(`/programmes/${programmeId}`);
 }
@@ -377,6 +405,7 @@ export async function addExerciseToDay(
   dayIndex: number,
   name: string,
   programmeId: string,
+  atPosition?: number,
 ) {
   const supabase = await createClient();
 
@@ -400,7 +429,7 @@ export async function addExerciseToDay(
 
   if (!sessionId) return;
 
-  await addExerciseNamed(sessionId, name, programmeId);
+  await addExerciseNamed(sessionId, name, programmeId, atPosition);
 }
 
 /** A rest day is a decision. An empty day is only an undecided one. */

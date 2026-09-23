@@ -5,6 +5,7 @@ import {
   ExerciseLibrary,
   type CatalogueEntry,
 } from "@/components/ExerciseLibrary";
+import { dragEffect, readDrag, writeDrag } from "@/lib/exerciseDrag";
 import { useTranslations } from "next-intl";
 import {
   addExercise,
@@ -20,33 +21,6 @@ import {
   setTrainingDay,
   updateExercise,
 } from "@/app/(coach)/programmes/actions";
-
-/** What a drag is carrying: an existing row, or a catalogue name. */
-type DragPayload =
-  { kind: "move"; exerciseId: string } | { kind: "new"; name: string };
-
-const DRAG_TYPE = "application/x-masse-exercise";
-
-function writeDrag(event: React.DragEvent, payload: DragPayload) {
-  // Without setData the browser cancels the drag outright — always on Firefox,
-  // intermittently elsewhere. This was why nothing could be dragged at all.
-  event.dataTransfer.setData(DRAG_TYPE, JSON.stringify(payload));
-  event.dataTransfer.setData(
-    "text/plain",
-    payload.kind === "new" ? payload.name : payload.exerciseId,
-  );
-  event.dataTransfer.effectAllowed = "copyMove";
-}
-
-function readDrag(event: React.DragEvent): DragPayload | null {
-  const raw = event.dataTransfer.getData(DRAG_TYPE);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as DragPayload;
-  } catch {
-    return null;
-  }
-}
 
 export type EditorExercise = {
   id: string;
@@ -103,23 +77,30 @@ export function WeekEditor({
   ) {
     event.preventDefault();
     event.stopPropagation();
-    const payload = readDrag(event);
+    const payload = readDrag(event.dataTransfer);
     setDragging(null);
     setOverDay(null);
     if (!payload) return;
 
     startTransition(() => {
       if (payload.kind === "new") {
-        void addExerciseToDay(weekId, day, payload.name, programmeId);
+        void addExerciseToDay(weekId, day, payload.name, programmeId, position);
       } else if (sessionId) {
         void moveExercise(payload.exerciseId, sessionId, position, programmeId);
       }
     });
   }
 
+  /**
+   * Only claim the drags we understand, and claim them with the effect the
+   * dragstart allowed: "move" over a library row's "copy" reads as forbidden
+   * and the drop event never fires.
+   */
   function allowDrop(event: React.DragEvent, day: number) {
+    const effect = dragEffect(event.dataTransfer);
+    if (!effect) return;
     event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
+    event.dataTransfer.dropEffect = effect;
     setOverDay(day);
   }
 
@@ -216,7 +197,14 @@ export function WeekEditor({
                     </div>
                   ) : session.kind === "rest" ? (
                     /* A decision, not an absence — and it says which one it is. */
-                    <div className="glass flex flex-1 flex-col items-center justify-center gap-2 rounded-r3 p-2 text-center">
+                    <div
+                      onDragOver={(event) => {
+                        if (!dragEffect(event.dataTransfer)) return;
+                        event.preventDefault();
+                        event.dataTransfer.dropEffect = "none";
+                      }}
+                      className="glass flex flex-1 flex-col items-center justify-center gap-2 rounded-r3 p-2 text-center"
+                    >
                       <span className="text-[13px] font-semibold">
                         {t("restDay")}
                       </span>
@@ -276,10 +264,7 @@ export function WeekEditor({
                         {session.exercises.map((exercise, index) => (
                           <li
                             key={exercise.id}
-                            onDragOver={(event) => {
-                              event.preventDefault();
-                              event.stopPropagation();
-                            }}
+                            onDragOver={(event) => allowDrop(event, day)}
                             onDrop={(event) =>
                               onDrop(event, day, session.id, index)
                             }
@@ -297,7 +282,7 @@ export function WeekEditor({
                                 aria-label={tEditor2("drag")}
                                 title={tEditor2("drag")}
                                 onDragStart={(event) => {
-                                  writeDrag(event, {
+                                  writeDrag(event.dataTransfer, {
                                     kind: "move",
                                     exerciseId: exercise.id,
                                   });

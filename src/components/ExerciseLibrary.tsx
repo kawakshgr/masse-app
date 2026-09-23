@@ -7,6 +7,7 @@ import {
   addExerciseToDay,
   removeFromLibrary,
 } from "@/app/(coach)/programmes/actions";
+import { writeDrag } from "@/lib/exerciseDrag";
 
 export type CatalogueEntry = {
   id: string;
@@ -15,8 +16,6 @@ export type CatalogueEntry = {
   equipment: string | null;
   mine: boolean;
 };
-
-const DRAG_TYPE = "application/x-masse-exercise";
 
 /**
  * The library, as a pane beside the week rather than a card above it. It was
@@ -147,12 +146,12 @@ export function ExerciseLibrary({
                   <li key={entry.id}>
                     <div
                       draggable
-                      onDragStart={(event) => {
-                        // Without setData the drag never starts in any browser.
-                        event.dataTransfer.setData(DRAG_TYPE, entry.name);
-                        event.dataTransfer.setData("text/plain", entry.name);
-                        event.dataTransfer.effectAllowed = "copy";
-                      }}
+                      onDragStart={(event) =>
+                        writeDrag(event.dataTransfer, {
+                          kind: "new",
+                          name: entry.name,
+                        })
+                      }
                       className="glass2 flex cursor-grab items-center gap-2 rounded-r2 px-2.5 py-2 active:cursor-grabbing"
                     >
                       <span className="min-w-0 flex-1">
