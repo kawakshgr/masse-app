@@ -106,8 +106,8 @@ struct OnboardingView: View {
 
     private var injuriesStep: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(L.t("onboarding.injuriesTitle")).kicker()
             TextEditor(text: $model.answers.injuries)
+                .accessibilityLabel(L.t("onboarding.injuriesTitle"))
                 .font(Ty.copy)
                 .foregroundStyle(Tk.ink)
                 .scrollContentBackground(.hidden)
