@@ -73,7 +73,8 @@
     "loading": "Chargement…",
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "close": "Fermer"
   },
   "welcome": {
     "title": "Bienvenue",
@@ -399,7 +400,8 @@
     "restDone": "Repos terminé",
     "offline": "Hors ligne — tes séries sont gardées ici",
     "noSession": "Pas de séance prévue aujourd’hui.",
-    "startRest": "Lancer le repos"
+    "startRest": "Lancer le repos",
+    "undo": "Annuler la dernière série"
   },
   "entry": {
     "title": "Saisie",

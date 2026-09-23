@@ -73,7 +73,8 @@
     "loading": "Loading…",
     "cancel": "Cancel",
     "save": "Save",
-    "retry": "Retry"
+    "retry": "Retry",
+    "close": "Close"
   },
   "welcome": {
     "title": "Welcome",
@@ -399,7 +400,8 @@
     "restDone": "Rest done",
     "offline": "Offline — your sets are kept here",
     "noSession": "No session scheduled today.",
-    "startRest": "Start rest"
+    "startRest": "Start rest",
+    "undo": "Undo the last set"
   },
   "entry": {
     "title": "Entry",

@@ -11,6 +11,7 @@ struct TodayView: View {
     @State private var week: PushedWeek?
     @State private var loaded = false
     @State private var failed = false
+    @State private var training: PushedWeek.DaySession?
 
     /// Monday is 0, the way the database counts.
     private var todayIndex: Int {
@@ -46,6 +47,7 @@ struct TodayView: View {
             }
         }
         .task { await load() }
+        .fullScreenCover(item: $training) { TrainView(day: $0) }
     }
 
     private var header: some View {
@@ -77,36 +79,41 @@ struct TodayView: View {
     }
 
     private func sessionCard(_ day: PushedWeek.DaySession) -> some View {
-        GlassCard {
-            VStack(alignment: .leading, spacing: 14) {
-                if let name = day.name {
-                    Text(name)
-                        .font(Ty.cardTitle)
-                        .tracking(Ty.displayTracking(19))
-                        .foregroundStyle(Tk.ink)
-                }
-
-                ForEach(day.exercises.sorted { $0.position < $1.position }) { exercise in
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(exercise.name)
-                            .font(Ty.rowTitle)
+        VStack(spacing: 14) {
+            GlassCard {
+                VStack(alignment: .leading, spacing: 14) {
+                    if let name = day.name {
+                        Text(name)
+                            .font(Ty.cardTitle)
+                            .tracking(Ty.displayTracking(19))
                             .foregroundStyle(Tk.ink)
-                        if let detail = target(exercise) {
-                            Text(detail)
-                                .font(Ty.copySmall)
-                                .foregroundStyle(Tk.ink2)
-                                .tabular()
-                        }
-                        if let cue = exercise.cue {
-                            Text(cue)
-                                .font(Ty.copySmall)
-                                .foregroundStyle(Tk.ink3)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    ForEach(day.exercises.sorted { $0.position < $1.position }) { exercise in
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(exercise.name)
+                                .font(Ty.rowTitle)
+                                .foregroundStyle(Tk.ink)
+                            if let detail = target(exercise) {
+                                Text(detail)
+                                    .font(Ty.copySmall)
+                                    .foregroundStyle(Tk.ink2)
+                                    .tabular()
+                            }
+                            if let cue = exercise.cue {
+                                Text(cue)
+                                    .font(Ty.copySmall)
+                                    .foregroundStyle(Tk.ink3)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
             }
+
+            // The whole point of the screen. Nothing above it moves to make room.
+            CTA(title: L.t("log.title")) { training = day }
         }
     }
 

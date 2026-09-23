@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 const NAMESPACES = [
   "onboarding", "today", "goal", "equipment", "days", "cycle",
-  "phase", "offline", "auth", "sets", "feel", "pain", "adherence",
+  "phase", "offline", "auth", "log", "common", "feel", "pain", "adherence",
 ];
 
 const read = (locale) =>
@@ -23,6 +23,27 @@ const read = (locale) =>
 
 const fr = read("fr");
 const en = read("en");
+
+/**
+ * An ICU plural, split into the cases it actually carries.
+ *
+ * The catalog cannot hold ICU machinery, but the copy still belongs in one
+ * place — so each case becomes an ordinary key and Swift picks between them.
+ * Hard-coding the French in Swift would have been fewer lines and would have
+ * left English behind.
+ */
+function splitPlural(value) {
+  const inner = value.slice(value.indexOf("plural,") + 7, value.lastIndexOf("}"));
+  const cases = {};
+  const pattern = /(=\d+|zero|one|two|few|many|other)\s*\{([^{}]*)\}/g;
+
+  for (const [, label, text] of inner.matchAll(pattern)) {
+    const name = label === "=0" ? "zero" : label === "=1" ? "one" : label;
+    // `#` is the count itself.
+    cases[name] = text.replace(/#/g, "%1$@");
+  }
+  return cases;
+}
 
 /** ICU `{n}` is what next-intl uses; Foundation wants `%1$@`. */
 function toFoundation(value) {
@@ -38,13 +59,35 @@ function toFoundation(value) {
 const strings = {};
 let carried = 0;
 let skipped = 0;
+let plurals = 0;
 
 for (const ns of NAMESPACES) {
   for (const [key, value] of Object.entries(fr[ns] ?? {})) {
     if (typeof value !== "string") continue;
-    // A plural or a select is ICU machinery the catalog would mangle. Those
-    // few live in Swift, where they can use the real plural rules.
-    if (/\{[^}]*,\s*(plural|select)/.test(value)) { skipped += 1; continue; }
+    // A select is ICU machinery with no catalog equivalent; skip it.
+    if (/\{[^}]*,\s*select/.test(value)) { skipped += 1; continue; }
+
+    // A plural becomes one key per case, which Swift chooses between.
+    if (/\{[^}]*,\s*plural/.test(value)) {
+      const frCases = splitPlural(value);
+      const enCases = typeof en[ns]?.[key] === "string" ? splitPlural(en[ns][key]) : {};
+
+      for (const [name, frCase] of Object.entries(frCases)) {
+        strings[`${ns}.${key}.${name}`] = {
+          extractionState: "manual",
+          localizations: {
+            fr: { stringUnit: { state: "translated", value: frCase } },
+            en: {
+              stringUnit: { state: "translated", value: enCases[name] ?? frCase },
+            },
+          },
+          comment: "args: count",
+        };
+        carried += 1;
+      }
+      plurals += 1;
+      continue;
+    }
 
     const frText = toFoundation(value);
     const enValue = en[ns]?.[key];
@@ -67,4 +110,4 @@ writeFileSync(
   JSON.stringify({ sourceLanguage: "fr", strings, version: "1.0" }, null, 2) + "\n",
 );
 
-console.log(`${carried} strings carried, ${skipped} ICU plurals left to Swift`);
+console.log(`${carried} strings carried, ${plurals} plurals split, ${skipped} selects skipped`);
