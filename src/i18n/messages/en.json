@@ -641,7 +641,13 @@
     "quality": "Quality",
     "steps": "Steps",
     "avgSleep": "Average sleep",
-    "avgSteps": "Average steps"
+    "avgSteps": "Average steps",
+    "target": "Target",
+    "noTarget": "No step target. Set one on the record.",
+    "met": "{count} days out of {total} above target.",
+    "metOne": "1 day out of {total} above target.",
+    "metNone": "No day above target in the last {total}.",
+    "last14": "Last 14 days"
   },
   "nutritionTab": {
     "none": "No meals logged.",

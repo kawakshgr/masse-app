@@ -21,31 +21,55 @@ export function BarChart({
   bars,
   height = 58,
   ariaLabel,
+  target,
 }: {
   bars: Bar[];
   height?: number;
   ariaLabel: string;
+  /**
+   * A line across the bars. Given one, the scale starts at zero and reaches
+   * past the target — a bar can only be read against a target when the chart
+   * shows the whole distance to it.
+   */
+  target?: number | null;
 }) {
   const values = bars.map((b) => b.value).filter((v): v is number => v != null);
   if (values.length === 0) return null;
 
-  const max = Math.max(...values);
+  const max = Math.max(...values, target ?? 0);
   const min = Math.min(...values);
   // A flat series would otherwise render as seven full-height blocks, which
-  // reads as "no change" far less honestly than a low, even row does.
-  const floor = min === max ? 0 : min - (max - min) * 0.35;
+  // reads as "no change" far less honestly than a low, even row does. That
+  // trick is off when there is a target: a floor above zero would put a bar
+  // below the line that was actually above it.
+  const floor =
+    target != null ? 0 : min === max ? 0 : min - (max - min) * 0.35;
   const span = max - floor || 1;
+  const targetPct =
+    target == null ? null : ((target - floor) / span) * 100;
 
   return (
     <div
       role="img"
       aria-label={ariaLabel}
-      className="flex items-end gap-1"
+      className="relative flex items-end gap-1"
       style={{ height }}
     >
+      {targetPct != null && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 border-t border-dashed border-[var(--accent-soft)]"
+          style={{ bottom: `${Math.min(targetPct, 100)}%` }}
+        />
+      )}
+
       {bars.map((bar, index) => {
+        // A day with nothing recorded gets a stub rather than nothing at all:
+        // an invisible bar reads as a narrower chart, not as a missing day.
         const pct =
-          bar.value == null ? 0 : Math.max(6, ((bar.value - floor) / span) * 100);
+          bar.value == null
+            ? 3
+            : Math.max(6, ((bar.value - floor) / span) * 100);
 
         // A day still being lived is reported, never marked pass or fail.
         const background =

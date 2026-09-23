@@ -984,14 +984,22 @@ async function StepsTab({
   const since = new Date();
   since.setUTCDate(since.getUTCDate() - 27);
 
-  const { data: metrics } = await supabase
-    .from("daily_metrics")
-    .select("day, sleep_h, sleep_quality, steps")
-    .eq("client_id", clientId)
-    .gte("day", since.toISOString().slice(0, 10))
-    .order("day", { ascending: false });
+  const [{ data: metrics }, { data: clientRow }] = await Promise.all([
+    supabase
+      .from("daily_metrics")
+      .select("day, sleep_h, sleep_quality, steps")
+      .eq("client_id", clientId)
+      .gte("day", since.toISOString().slice(0, 10))
+      .order("day", { ascending: false }),
+    supabase
+      .from("clients")
+      .select("steps_target")
+      .eq("id", clientId)
+      .maybeSingle(),
+  ]);
 
   const rows = metrics ?? [];
+  const target = clientRow?.steps_target ?? null;
   if (rows.length === 0) {
     return (
       <section className={panel}>
@@ -1007,9 +1015,64 @@ async function StepsTab({
     .filter((r) => r.steps != null)
     .map((r) => Number(r.steps));
 
+  // The last fourteen days in order, with the gaps kept as gaps: a day she
+  // did not record is not a day she did not walk.
+  const byDay = new Map(rows.map((row) => [row.day, row]));
+  const recent = [...Array(14)].map((_, index) => {
+    const date = new Date();
+    date.setUTCDate(date.getUTCDate() - (13 - index));
+    const iso = date.toISOString().slice(0, 10);
+    const steps = byDay.get(iso)?.steps;
+    return { iso, steps: steps == null ? null : Number(steps) };
+  });
+
+  const counted = recent.filter((d) => d.steps != null);
+  const met = target == null ? 0 : counted.filter((d) => d.steps! >= target).length;
+
   return (
     <section className={panel}>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 className={heading}>{tSteps("last14")}</h3>
+        <span className="tnum text-[12px] text-[var(--ink2)]">
+          {target == null
+            ? tSteps("noTarget")
+            : `${tSteps("target")} ${target.toLocaleString("fr-FR")}`}
+        </span>
+      </div>
+
+      <div className="mt-3">
+        <BarChart
+          ariaLabel={tSteps("steps")}
+          height={72}
+          target={target}
+          bars={recent.map((day) => ({
+            value: day.steps,
+            label: `${day.iso} · ${day.steps?.toLocaleString("fr-FR") ?? "—"}`,
+            // A day that cleared the target is lit; one that did not is
+            // simply quieter. Not coral — that is the attention colour, and a
+            // walk short of a target is not an alarm. The iOS chart reads the
+            // same way, so the two clients agree about what a short day means.
+            tone:
+              day.steps == null
+                ? "future"
+                : target != null && day.steps >= target
+                  ? "near"
+                  : undefined,
+          }))}
+        />
+      </div>
+
+      {target != null && counted.length > 0 && (
+        <p className="tnum mt-2 text-[12px] text-[var(--ink3)]">
+          {met === 0
+            ? tSteps("metNone", { total: counted.length })
+            : met === 1
+              ? tSteps("metOne", { total: counted.length })
+              : tSteps("met", { count: met, total: counted.length })}
+        </p>
+      )}
+
+      <div className="mt-4 flex flex-wrap gap-3">
         <MetricCard
           label={tSteps("avgSleep")}
           kind="sleep"

@@ -641,7 +641,13 @@
     "quality": "Qualité",
     "steps": "Pas",
     "avgSleep": "Sommeil moyen",
-    "avgSteps": "Pas moyens"
+    "avgSteps": "Pas moyens",
+    "target": "Objectif",
+    "noTarget": "Aucun objectif de pas. Fixe-le dans la fiche.",
+    "met": "{count} jours sur {total} au-dessus de l’objectif.",
+    "metOne": "1 jour sur {total} au-dessus de l’objectif.",
+    "metNone": "Aucun jour au-dessus de l’objectif sur les {total} derniers.",
+    "last14": "14 derniers jours"
   },
   "nutritionTab": {
     "none": "Aucun repas enregistré.",
