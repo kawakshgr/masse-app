@@ -1073,7 +1073,12 @@
     "byCoach": "Ton coach a déjà saisi le bilan de cette semaine.",
     "reviewed": "Relu par ton coach",
     "waiting": "En attente de relecture",
-    "notePlaceholder": "Ce que les cases ne disent pas."
+    "notePlaceholder": "Ce que les cases ne disent pas.",
+    "waist": "Taille",
+    "chest": "Poitrine",
+    "hips": "Hanches",
+    "thigh": "Cuisse",
+    "discipline": "Même lumière, même heure — prise avant le petit-déjeuner. Change la pose pour basculer les deux côtés."
   },
   "cycleChart": {
     "title": "Où tu en es",

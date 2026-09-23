@@ -247,6 +247,10 @@ struct CheckIn: Codable, Sendable {
     var pain: String?
     var adherence: String?
     var bodyweightKg: Double?
+    var waistCm: Double?
+    var chestCm: Double?
+    var hipsCm: Double?
+    var thighCm: Double?
     var note: String?
     var author: String
     var reviewedAt: String?
@@ -255,6 +259,10 @@ struct CheckIn: Codable, Sendable {
         case feel, pain, adherence, note, author
         case weekStartDate = "week_start_date"
         case bodyweightKg = "bodyweight_kg"
+        case waistCm = "waist_cm"
+        case chestCm = "chest_cm"
+        case hipsCm = "hips_cm"
+        case thighCm = "thigh_cm"
         case reviewedAt = "reviewed_at"
     }
 
@@ -275,7 +283,10 @@ enum CheckInFeed {
     static func thisWeek() async throws -> CheckIn? {
         let rows: [CheckIn] = try await Backend.client
             .from("check_ins")
-            .select("week_start_date, feel, pain, adherence, bodyweight_kg, note, author, reviewed_at")
+            .select("""
+                week_start_date, feel, pain, adherence, bodyweight_kg, \
+                waist_cm, chest_cm, hips_cm, thigh_cm, note, author, reviewed_at
+                """)
             .eq("week_start_date", value: weekStartIso)
             .limit(1)
             .execute()
@@ -296,6 +307,10 @@ enum CheckInFeed {
             let pain: String?
             let adherence: String?
             let bodyweight_kg: Double?
+            let waist_cm: Double?
+            let chest_cm: Double?
+            let hips_cm: Double?
+            let thigh_cm: Double?
             let note: String?
             let author: String
         }
@@ -310,6 +325,10 @@ enum CheckInFeed {
                     pain: checkIn.pain,
                     adherence: checkIn.adherence,
                     bodyweight_kg: checkIn.bodyweightKg,
+                    waist_cm: checkIn.waistCm,
+                    chest_cm: checkIn.chestCm,
+                    hips_cm: checkIn.hipsCm,
+                    thigh_cm: checkIn.thighCm,
                     note: checkIn.note,
                     // Never 'coach'. The policy checks it too, so a client
                     // build that lied here would simply be refused.
@@ -318,5 +337,134 @@ enum CheckInFeed {
                 onConflict: "client_id,week_start_date"
             )
             .execute()
+    }
+}
+
+
+/// Progress photos on a check-in: three poses, one slot each.
+///
+/// The bucket is private and every read goes through a signed URL — a body
+/// photograph is as sensitive as anything else here. The path's first segment
+/// is the client id, which is what the storage policies filter on, so a path
+/// built any other way is refused rather than merely wrong.
+struct CheckInPhoto: Decodable, Sendable, Identifiable {
+    let id: String
+    let storagePath: String
+    let pose: String
+
+    enum CodingKeys: String, CodingKey {
+        case id, pose
+        case storagePath = "storage_path"
+    }
+}
+
+enum PhotoFeed {
+    static let bucket = "check-in-photos"
+    static let poses = ["front", "side", "back"]
+
+    /// The check-in row for this week, made if it is not there yet. A photo has
+    /// to hang off one, and she should not have to answer three questions
+    /// before she is allowed to take a picture.
+    static func checkInId(weekStart: String) async -> String? {
+        guard let clientId = Backend.auth.currentUser?.id else { return nil }
+
+        struct Row: Decodable { let id: String }
+
+        let existing: [Row]? = try? await Backend.client
+            .from("check_ins")
+            .select("id")
+            .eq("week_start_date", value: weekStart)
+            .limit(1)
+            .execute()
+            .value
+
+        if let id = existing?.first?.id { return id }
+
+        struct New: Encodable {
+            let client_id: String
+            let week_start_date: String
+            let author: String
+        }
+
+        let created: [Row]? = try? await Backend.client
+            .from("check_ins")
+            .insert(New(
+                client_id: clientId.uuidString,
+                week_start_date: weekStart,
+                author: "client"
+            ))
+            .select("id")
+            .execute()
+            .value
+
+        return created?.first?.id
+    }
+
+    static func forCheckIn(_ checkInId: String) async -> [CheckInPhoto] {
+        let rows: [CheckInPhoto]? = try? await Backend.client
+            .from("check_in_photos")
+            .select("id, storage_path, pose")
+            .eq("check_in_id", value: checkInId)
+            .execute()
+            .value
+        return rows ?? []
+    }
+
+    /// A signed URL, because the bucket is private. Short-lived on purpose:
+    /// a link that outlives the screen is a link that can be forwarded.
+    static func signedURL(_ path: String) async -> URL? {
+        try? await Backend.client.storage
+            .from(bucket)
+            .createSignedURL(path: path, expiresIn: 600)
+    }
+
+    /// Uploads and takes the pose's slot, replacing what was there.
+    ///
+    /// The old file is removed as well as its row: a dangling object is still a
+    /// stored photograph of somebody, and deleting only the row would leave it.
+    static func upload(_ data: Data, pose: String, checkInId: String) async -> Bool {
+        guard let clientId = Backend.auth.currentUser?.id else { return false }
+
+        let path = "\(clientId.uuidString)/\(checkInId)/\(UUID().uuidString).jpg"
+
+        do {
+            try await Backend.client.storage
+                .from(bucket)
+                .upload(path, data: data, options: FileOptions(contentType: "image/jpeg"))
+        } catch {
+            return false
+        }
+
+        let previous = await forCheckIn(checkInId).filter { $0.pose == pose }
+        for old in previous {
+            try? await Backend.client
+                .from("check_in_photos").delete().eq("id", value: old.id).execute()
+            try? await Backend.client.storage.from(bucket).remove(paths: [old.storagePath])
+        }
+
+        struct Row: Encodable {
+            let check_in_id: String
+            let client_id: String
+            let storage_path: String
+            let pose: String
+        }
+
+        do {
+            try await Backend.client
+                .from("check_in_photos")
+                .insert(Row(
+                    check_in_id: checkInId,
+                    client_id: clientId.uuidString,
+                    storage_path: path,
+                    pose: pose
+                ))
+                .execute()
+            return true
+        } catch {
+            // The row is what makes the file a photo of anything. Without it
+            // the object is orphaned, so it goes.
+            try? await Backend.client.storage.from(bucket).remove(paths: [path])
+            return false
+        }
     }
 }

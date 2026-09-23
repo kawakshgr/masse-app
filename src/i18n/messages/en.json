@@ -1073,7 +1073,12 @@
     "byCoach": "Your coach has already filed this week's check-in.",
     "reviewed": "Read by your coach",
     "waiting": "Waiting to be read",
-    "notePlaceholder": "What the boxes don't say."
+    "notePlaceholder": "What the boxes don't say.",
+    "waist": "Waist",
+    "chest": "Chest",
+    "hips": "Hips",
+    "thigh": "Thigh",
+    "discipline": "Same light, same time of day — shot before breakfast. Tap a pose to switch both sides."
   },
   "cycleChart": {
     "title": "Where you are",

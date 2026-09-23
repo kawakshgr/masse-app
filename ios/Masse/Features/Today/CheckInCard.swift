@@ -71,8 +71,13 @@ private struct CheckInSheet: View {
     @State private var pain: String?
     @State private var adherence: String?
     @State private var weight = ""
+    @State private var waist = ""
+    @State private var chest = ""
+    @State private var hips = ""
+    @State private var thigh = ""
     @State private var note = ""
     @State private var saving = false
+    @State private var checkInId: String?
 
     var body: some View {
         ZStack {
@@ -96,17 +101,22 @@ private struct CheckInSheet: View {
                     choice(L.t("checkin.pain"), CheckIn.pains, "pain", $pain)
                     choice(L.t("checkin.adherence"), CheckIn.adherences, "adherence", $adherence)
 
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(L.t("checkin.bodyweight"))
-                            .font(Ty.copySmall)
-                            .foregroundStyle(Tk.ink2)
-                        TextField("—", text: $weight)
-                            .keyboardType(.decimalPad)
-                            .font(Ty.rowTitle)
-                            .foregroundStyle(Tk.ink)
-                            .tabular()
-                            .padding(12)
-                            .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.r1))
+                    measure(L.t("checkin.bodyweight"), $weight, unit: "kg")
+
+                    // Measurements ride on the check-in, so a delta is one row
+                    // apart — which is the whole reason they live here and not
+                    // on a screen of their own.
+                    HStack(spacing: 8) {
+                        measure(L.t("bilan.waist"), $waist, unit: "cm")
+                        measure(L.t("bilan.chest"), $chest, unit: "cm")
+                    }
+                    HStack(spacing: 8) {
+                        measure(L.t("bilan.hips"), $hips, unit: "cm")
+                        measure(L.t("bilan.thigh"), $thigh, unit: "cm")
+                    }
+
+                    if let checkInId {
+                        PoseGrid(checkInId: checkInId)
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
@@ -131,6 +141,41 @@ private struct CheckInSheet: View {
             }
         }
         .onAppear(perform: prefill)
+        .task {
+            // A photo hangs off a check-in row, and she should not have to
+            // answer three questions before she is allowed to take one.
+            checkInId = await PhotoFeed.checkInId(weekStart: CheckInFeed.weekStartIso)
+        }
+    }
+
+    private func measure(
+        _ label: String,
+        _ binding: Binding<String>,
+        unit: String
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(label)
+                .font(Ty.copySmall)
+                .foregroundStyle(Tk.ink2)
+            HStack(spacing: 6) {
+                TextField("—", text: binding)
+                    .keyboardType(.decimalPad)
+                    .font(Ty.rowTitle)
+                    .foregroundStyle(Tk.ink)
+                    .tabular()
+                Text(unit)
+                    .font(Ty.copySmall)
+                    .foregroundStyle(Tk.ink3)
+            }
+            .padding(12)
+            .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.r1))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// A blank field is nothing measured, not zero centimetres.
+    private func cm(_ text: String) -> Double? {
+        Double(text.replacingOccurrences(of: ",", with: "."))
     }
 
     private func choice(
@@ -172,6 +217,10 @@ private struct CheckInSheet: View {
         pain = existing.pain
         adherence = existing.adherence
         weight = existing.bodyweightKg.map { $0.clean } ?? ""
+        waist = existing.waistCm.map { $0.clean } ?? ""
+        chest = existing.chestCm.map { $0.clean } ?? ""
+        hips = existing.hipsCm.map { $0.clean } ?? ""
+        thigh = existing.thighCm.map { $0.clean } ?? ""
         note = existing.note ?? ""
     }
 
@@ -183,7 +232,11 @@ private struct CheckInSheet: View {
                 feel: feel,
                 pain: pain,
                 adherence: adherence,
-                bodyweightKg: Double(weight.replacingOccurrences(of: ",", with: ".")),
+                bodyweightKg: cm(weight),
+                waistCm: cm(waist),
+                chestCm: cm(chest),
+                hipsCm: cm(hips),
+                thighCm: cm(thigh),
                 note: note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : note,
                 author: "client",
                 reviewedAt: nil
