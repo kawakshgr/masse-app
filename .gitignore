@@ -43,3 +43,11 @@ yarn-error.log*
 /supabase/.branches
 /supabase/.temp
 /supabase/.env
+
+# ios — Xcode's per-user state and build output. Package.resolved IS committed:
+# it is what makes two machines resolve the same dependency versions.
+ios/**/xcuserdata/
+ios/**/*.xcuserstate
+ios/DerivedData/
+ios/.swiftpm/
+*.xcscmblueprint

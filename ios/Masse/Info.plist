@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>fr</string>
+	<key>CFBundleDisplayName</key>
+	<string>Masse</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<!-- The magic link comes back to the app through this scheme. It has to be
+	     on Supabase's redirect allowlist too, or sign-in dead-ends in Safari. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>fr.masse.client</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>masse</string>
+			</array>
+		</dict>
+	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<!-- The project URL and the publishable key. Not secrets: the web ships the
+	     same pair to every browser, and RLS is what actually guards the data.
+	     A key that could act on its own would never be in a client at all. -->
+	<key>SupabaseURL</key>
+	<string>https://qxlhccvkavvabcekpcrw.supabase.co</string>
+	<key>SupabasePublishableKey</key>
+	<string>sb_publishable_ok8dvMlG6_Fc8_NDcmfMcA_l4cZlxp-</string>
+	<!-- No HealthKit in v1: cycle, sleep and steps are typed by hand, which
+	     keeps the submission clear of the health-data review entirely. -->
+</dict>
+</plist>
