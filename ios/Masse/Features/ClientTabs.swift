@@ -6,10 +6,14 @@ import SwiftUI
 /// feature that disappears from the nav makes the product's shape a lie.
 struct ClientTabs: View {
     let firstName: String?
+    /// Cycle only exists for a client who asked for it during onboarding. A tab
+    /// about her period for someone who never asked is worse than a missing
+    /// feature, and the prototype filters it the same way.
+    let cycleTracking: Bool
 
     @State private var tab: Tab = .today
 
-    enum Tab: Hashable { case today, train, fuel, coach }
+    enum Tab: Hashable { case today, train, fuel, cycle, coach }
 
     var body: some View {
         TabView(selection: $tab) {
@@ -24,6 +28,12 @@ struct ClientTabs: View {
             NutritionView()
                 .tabItem { Label(L.t("clientNav.fuel"), systemImage: "circle.hexagongrid") }
                 .tag(Tab.fuel)
+
+            if cycleTracking {
+                CycleView()
+                    .tabItem { Label(L.t("clientNav.cycle"), systemImage: "hexagon") }
+                    .tag(Tab.cycle)
+            }
 
             SoonView(title: L.t("clientNav.coach"), note: L.t("soonCopy.inbox"))
                 .tabItem { Label(L.t("clientNav.coach"), systemImage: "bubble.left") }

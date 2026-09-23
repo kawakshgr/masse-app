@@ -37,6 +37,8 @@ struct TodayView: View {
                     } else {
                         emptyCard
                     }
+
+                    EntryCard()
                 }
                 .padding(.horizontal, 22)
                 .padding(.top, 12)

@@ -14,8 +14,11 @@ struct RootView: View {
             OnboardingView()
         case .claiming:
             Splash(note: L.t("onboarding.finalising"))
-        case .signedIn(let name):
-            ClientTabs(firstName: name)
+        case .signedIn(let profile):
+            ClientTabs(
+                firstName: profile.firstName,
+                cycleTracking: profile.cycleTracking
+            )
         case .claimFailed:
             ClaimFailedView()
         case .noClientRecord:

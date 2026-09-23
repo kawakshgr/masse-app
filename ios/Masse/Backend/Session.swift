@@ -20,7 +20,7 @@ final class Session {
         case signedOut
         /// Signed in, and the answers still have to be spent on the invite.
         case claiming
-        case signedIn(clientName: String?)
+        case signedIn(profile: ClientProfile)
         case claimFailed
         /// Signed in, but no coach has added this address yet.
         case noClientRecord
@@ -78,9 +78,9 @@ final class Session {
     /// anything, so it is not a state the app rests in.
     private func settle() async {
         do {
-            if let name = try await currentClientName() {
+            if let profile = try await currentClient() {
                 AnswerStore.clear()
-                state = .signedIn(clientName: name)
+                state = .signedIn(profile: profile)
                 return
             }
 
@@ -95,25 +95,38 @@ final class Session {
             state = .claiming
             try await InviteFlow.claim(answers)
             AnswerStore.clear()
-            state = .signedIn(clientName: try await currentClientName())
+            guard let profile = try await currentClient() else {
+                state = .noClientRecord
+                return
+            }
+            state = .signedIn(profile: profile)
         } catch {
             state = .claimFailed
         }
     }
 
-    private struct ClientName: Decodable { let first_name: String?; let name: String }
+    private struct ClientRow: Decodable {
+        let first_name: String?
+        let name: String
+        let cycle_tracking: Bool?
+    }
 
-    private func currentClientName() async throws -> String? {
+    /// Who this client is, as far as the shell needs to know: what to call her,
+    /// and whether she asked for cycle tracking — which decides a whole tab.
+    private func currentClient() async throws -> ClientProfile? {
         guard let userId = Backend.auth.currentUser?.id else { return nil }
-        let rows: [ClientName] = try await Backend.client
+        let rows: [ClientRow] = try await Backend.client
             .from("clients")
-            .select("first_name, name")
+            .select("first_name, name, cycle_tracking")
             .eq("id", value: userId)
             .limit(1)
             .execute()
             .value
         guard let row = rows.first else { return nil }
-        return row.first_name ?? row.name
+        return ClientProfile(
+            firstName: row.first_name ?? row.name,
+            cycleTracking: row.cycle_tracking ?? false
+        )
     }
 
     func signOut() async {
@@ -121,4 +134,11 @@ final class Session {
         AnswerStore.clear()
         state = .signedOut
     }
+}
+
+
+/// The little the shell needs about the person signed in.
+struct ClientProfile: Equatable, Sendable {
+    let firstName: String?
+    let cycleTracking: Bool
 }

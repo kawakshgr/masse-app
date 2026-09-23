@@ -419,7 +419,9 @@
     "cyclePromise": "Seules ces deux valeurs sont envoyées. Tes notes de symptômes restent sur cet appareil.",
     "symptomNote": "Note personnelle (reste sur cet appareil)",
     "symptomHint": "Jamais envoyée. Aucune table ne peut la recevoir.",
-    "phaseNow": "Phase actuelle"
+    "phaseNow": "Phase actuelle",
+    "history": "Tes cycles enregistrés",
+    "remove": "Supprimer"
   },
   "exportW": {
     "title": "Exporter",
