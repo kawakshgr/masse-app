@@ -984,12 +984,14 @@
       "iu": "IU"
     },
     "timing": {
-      "anytime": "Any time",
       "morning": "Morning",
+      "noon": "Midday",
+      "snack": "With a snack",
       "pre": "Before training",
       "post": "After training",
+      "evening": "Evening",
       "meal": "With a meal",
-      "evening": "Evening"
+      "anytime": "Any time"
     },
     "unusable": "Not usable",
     "unusableWhy": "Masse will not put it in a plan. It stays here to answer the question rather than leave it open.",
@@ -1030,6 +1032,10 @@
     "refused": "“{name}” is marked not usable: it cannot be prescribed.",
     "libraryLink": "Open the library",
     "todayTitle": "Your supplements today",
-    "todayNone": "No supplements planned today."
+    "todayNone": "No supplements planned today.",
+    "when": "When",
+    "unit": "Unit",
+    "days": "Days",
+    "macrosLost": "Macros not counted: the known density is per {unit}."
   }
 }

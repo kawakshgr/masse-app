@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { SupplementTiming, SupplementUnit } from "@/lib/supabase/types";
-import { SUPPLEMENT_TIMINGS } from "@/lib/supabase/types";
+import { SUPPLEMENT_TIMINGS, SUPPLEMENT_UNITS } from "@/lib/supabase/types";
 import {
   addClientSupplement,
   deleteClientSupplement,
@@ -21,6 +21,12 @@ export type ProtocolRow = {
   kcal: number | null;
   /** Null means every day. */
   dayTypeId: string | null;
+  /**
+   * The unit the library knows this product's macros in, when that is not the
+   * unit she chose — so they cannot be counted, and the row says which unit
+   * would have worked rather than letting the protein quietly vanish.
+   */
+  knownPerUnit: SupplementUnit | null;
 };
 
 export type PickableSupplement = {
@@ -44,15 +50,15 @@ export function SupplementProtocol({
   clientId,
   firstName,
   dayTypeId,
-  dayTypeName,
+  dayTypes,
   rows,
   library,
 }: {
   clientId: string;
   firstName: string;
-  /** The day type being edited. Null is the default plan. */
+  /** The day type being edited, which the add form starts from. */
   dayTypeId: string | null;
-  dayTypeName: string | null;
+  dayTypes: { id: string; name: string }[];
   rows: ProtocolRow[];
   library: PickableSupplement[];
 }) {
@@ -61,11 +67,18 @@ export function SupplementProtocol({
   const [adding, setAdding] = useState(false);
 
   const order = new Map(SUPPLEMENT_TIMINGS.map((key, index) => [key, index]));
+  // The whole protocol, always: a supplement pinned to OFF must not look
+  // deleted while she is editing Upper. Each row says which days it is for.
   const shown = [...rows].sort(
     (a, b) => (order.get(a.timing) ?? 9) - (order.get(b.timing) ?? 9),
   );
 
-  const fromSupplements = shown.reduce(
+  // Only what applies to the day type on screen counts toward its total.
+  const applies = shown.filter(
+    (row) => row.dayTypeId === null || row.dayTypeId === dayTypeId,
+  );
+
+  const fromSupplements = applies.reduce(
     (acc, row) => ({
       kcal: acc.kcal + Number(row.kcal ?? 0),
       proteinG: acc.proteinG + Number(row.proteinG ?? 0),
@@ -75,6 +88,61 @@ export function SupplementProtocol({
 
   const unitName = (unit: SupplementUnit, count: number) =>
     tSupp(`unit.${unit}`, { count });
+
+  const nameOfType = (id: string | null) =>
+    id === null ? null : (dayTypes.find((type) => type.id === id)?.name ?? null);
+
+  /** Shared by the add form and every row, so one vocabulary, one order. */
+  const whenField = (value: SupplementTiming | undefined) => (
+    <label>
+      <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+        {t("when")}
+      </span>
+      <select name="timing" defaultValue={value} className={`mt-0.5 ${cell}`}>
+        {SUPPLEMENT_TIMINGS.map((timing) => (
+          <option key={timing} value={timing}>
+            {tSupp(`timing.${timing}`)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+
+  const unitField = (value: SupplementUnit | undefined) => (
+    <label>
+      <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+        {t("unit")}
+      </span>
+      <select name="unit" defaultValue={value} className={`mt-0.5 ${cell}`}>
+        {SUPPLEMENT_UNITS.map((unit) => (
+          <option key={unit} value={unit}>
+            {unitName(unit, 1)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+
+  /** Every day, or only one kind of day — a pre-workout is not a rest-day thing. */
+  const daysField = (value: string | null) => (
+    <label>
+      <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+        {t("days")}
+      </span>
+      <select
+        name="day_type_id"
+        defaultValue={value ?? ""}
+        className={`mt-0.5 ${cell}`}
+      >
+        <option value="">{t("everyDay")}</option>
+        {dayTypes.map((type) => (
+          <option key={type.id} value={type.id}>
+            {type.name}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 
   return (
     <section className="glass rounded-r3 p-4">
@@ -98,76 +166,87 @@ export function SupplementProtocol({
         <p className="mt-3 text-[12px] text-[var(--ink3)]">{t("none")}</p>
       ) : (
         <ul className="mt-3 space-y-1.5">
-          {shown.map((row) => (
-            <li
-              key={row.id}
-              className="rounded-r2 border border-[var(--hair)] bg-[var(--glass2)] p-2"
-            >
-              <div className="flex items-center gap-2">
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[13px] font-semibold">
-                    {row.name}
+          {shown.map((row) => {
+            const scope = nameOfType(row.dayTypeId);
+
+            return (
+              <li
+                key={row.id}
+                className="rounded-r2 border border-[var(--hair)] bg-[var(--glass2)] p-2"
+              >
+                <div className="flex items-baseline gap-2">
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[13px] font-semibold">
+                      {row.name}
+                    </span>
+                    <span className="block text-[11px] text-[var(--ink3)]">
+                      {[
+                        tSupp(`timing.${row.timing}`),
+                        scope === null ? t("everyDay") : t("onlyOn", { type: scope }),
+                      ].join(" · ")}
+                    </span>
                   </span>
-                  <span className="block text-[11px] text-[var(--ink3)]">
-                    {[
-                      tSupp(`timing.${row.timing}`),
-                      row.dayTypeId === null
-                        ? t("everyDay")
-                        : dayTypeName
-                          ? t("onlyOn", { type: dayTypeName })
-                          : null,
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </span>
-                </span>
+
+                  {(row.kcal ?? 0) > 0 && (
+                    <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
+                      {Math.round(Number(row.kcal))} kcal ·{" "}
+                      {Math.round(Number(row.proteinG ?? 0))} g P
+                    </span>
+                  )}
+
+                  <form action={deleteClientSupplement} className="shrink-0">
+                    <input type="hidden" name="client_id" value={clientId} />
+                    <input type="hidden" name="id" value={row.id} />
+                    <button
+                      type="submit"
+                      aria-label={t("remove")}
+                      title={t("remove")}
+                      className="px-1 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                    >
+                      ✕
+                    </button>
+                  </form>
+                </div>
 
                 <form
                   action={updateClientSupplement}
-                  className="flex shrink-0 items-center gap-1"
+                  className="mt-1.5 flex flex-wrap items-end gap-1.5"
                 >
                   <input type="hidden" name="client_id" value={clientId} />
                   <input type="hidden" name="id" value={row.id} />
-                  <input
-                    name="dose"
-                    inputMode="decimal"
-                    defaultValue={row.dose ?? ""}
-                    aria-label={t("dose")}
-                    className={`tnum w-[68px] text-right ${cell}`}
-                  />
-                  <span className="text-[11px] text-[var(--ink3)]">
-                    {unitName(row.unit, row.dose ?? 1)}
-                  </span>
+
+                  <label>
+                    <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+                      {t("dose")}
+                    </span>
+                    <input
+                      name="dose"
+                      inputMode="decimal"
+                      defaultValue={row.dose ?? ""}
+                      className={`tnum mt-0.5 w-[64px] text-right ${cell}`}
+                    />
+                  </label>
+
+                  {unitField(row.unit)}
+                  {whenField(row.timing)}
+                  {daysField(row.dayTypeId)}
+
                   <button
                     type="submit"
-                    className="h-8 rounded-r2 border border-[var(--edge)] px-2 text-[11.5px] text-[var(--ink2)]"
+                    className="h-8 rounded-r2 border border-[var(--edge)] px-2.5 text-[11.5px] text-[var(--ink2)]"
                   >
                     {tSupp("save")}
                   </button>
                 </form>
 
-                <form action={deleteClientSupplement} className="shrink-0">
-                  <input type="hidden" name="client_id" value={clientId} />
-                  <input type="hidden" name="id" value={row.id} />
-                  <button
-                    type="submit"
-                    aria-label={t("remove")}
-                    title={t("remove")}
-                    className="px-1 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
-                  >
-                    ✕
-                  </button>
-                </form>
-              </div>
-
-              {(row.kcal ?? 0) > 0 && (
-                <p className="tnum mt-1 text-[11px] text-[var(--ink3)]">
-                  {Math.round(Number(row.kcal))} kcal ·{" "}
-                  {Math.round(Number(row.proteinG ?? 0))} g P
-                </p>
-              )}
-            </li>
-          ))}
+                {row.knownPerUnit !== null && (
+                  <p className="mt-1 text-[11px] leading-[1.4] text-[var(--a3)]">
+                    {t("macrosLost", { unit: unitName(row.knownPerUnit, 1) })}
+                  </p>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -187,7 +266,6 @@ export function SupplementProtocol({
           className="mt-3 flex flex-wrap items-end gap-2"
         >
           <input type="hidden" name="client_id" value={clientId} />
-          <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
 
           <label className="min-w-[180px] flex-1">
             <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
@@ -211,16 +289,21 @@ export function SupplementProtocol({
           </label>
 
           <label>
-            <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
               {t("dose")}
             </span>
             <input
               name="dose"
               inputMode="decimal"
               placeholder="—"
-              className={`tnum mt-1 w-[88px] ${cell}`}
+              className={`tnum mt-0.5 w-[72px] ${cell}`}
             />
           </label>
+
+          {/* The library supplies the defaults; she overrules any of them. */}
+          {unitField(undefined)}
+          {whenField(undefined)}
+          {daysField(dayTypeId)}
 
           <button
             type="submit"

@@ -7,7 +7,7 @@ import { MealsPanel } from "@/components/MealsPanel";
 import { MyWeek } from "@/components/MyWeek";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { deleteCycleLog, deleteSetLog } from "./actions";
-import type { FoodRow, MealRow } from "@/lib/supabase/types";
+import { SUPPLEMENT_TIMINGS, type FoodRow, type MealRow } from "@/lib/supabase/types";
 
 type WeekShape = {
   week_number: number;
@@ -143,10 +143,17 @@ export default async function TodayPage() {
     allTargets.find((row) => row.day_type_id === null) ??
     null;
 
-  // Today's supplements: the ones for today's type, plus the everyday ones.
-  const todaySupplements = (protocolRes.data ?? []).filter(
-    (row) => row.day_type_id === null || row.day_type_id === todayTypeId,
+  // Today's supplements: the ones for today's type, plus the everyday ones,
+  // in the order the day runs rather than the order the coach typed them.
+  const timingOrder = new Map(
+    SUPPLEMENT_TIMINGS.map((key, index) => [key, index] as const),
   );
+  const todaySupplements = (protocolRes.data ?? [])
+    .filter((row) => row.day_type_id === null || row.day_type_id === todayTypeId)
+    .sort(
+      (a, b) =>
+        (timingOrder.get(a.timing) ?? 9) - (timingOrder.get(b.timing) ?? 9),
+    );
 
   return (
     <main className="mx-auto min-h-dvh max-w-[720px] space-y-4 p-5">

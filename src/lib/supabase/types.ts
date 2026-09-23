@@ -240,17 +240,22 @@ export const SUPPLEMENT_UNITS: SupplementUnit[] = [
 export type SupplementTiming =
   | "anytime"
   | "morning"
+  | "noon"
+  | "snack"
   | "pre"
   | "post"
   | "meal"
   | "evening";
 
+/** Ordered the way a day runs, because that is the order a protocol is read in. */
 export const SUPPLEMENT_TIMINGS: SupplementTiming[] = [
   "morning",
+  "noon",
+  "snack",
   "pre",
   "post",
-  "meal",
   "evening",
+  "meal",
   "anytime",
 ];
 

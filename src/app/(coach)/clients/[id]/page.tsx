@@ -706,14 +706,16 @@ async function NutritionTab({
       supabase
         .from("client_supplements")
         .select(
-          "id, name, dose, unit, timing, protein_g, carbs_g, fat_g, kcal, day_type_id, position",
+          "id, name, supplement_id, dose, unit, timing, protein_g, carbs_g, fat_g, kcal, day_type_id, position",
         )
         .eq("client_id", clientId)
         .order("position"),
       // The library she picks from: built-ins plus her own, minus what she hid.
       supabase
         .from("supplements")
-        .select("id, name, dose_min, unit, timing, usable")
+        .select(
+          "id, name, dose_min, unit, timing, usable, protein_per_unit, carbs_per_unit, fat_per_unit",
+        )
         .order("name"),
       supabase.from("supplement_hidden").select("supplement_id"),
     ]);
@@ -739,13 +741,16 @@ async function NutritionTab({
     (suppHiddenRes.data ?? []).map((row) => row.supplement_id),
   );
 
-  // This day type's supplements, plus the ones that apply to every day.
-  const protocol = (protocolRes.data ?? []).filter(
-    (row) =>
-      (row.day_type_id ?? null) === dayTypeId || row.day_type_id === null,
+  const protocol = protocolRes.data ?? [];
+
+  // Only this day type's supplements — plus the everyday ones — belong in this
+  // day type's macros. The panel below still lists the whole protocol, so a
+  // supplement pinned to OFF does not look deleted while she edits Upper.
+  const applies = protocol.filter(
+    (row) => row.day_type_id === null || row.day_type_id === dayTypeId,
   );
 
-  const supplementMacros: Targets = protocol.reduce(
+  const supplementMacros: Targets = applies.reduce(
     (acc, row) => ({
       kcal: acc.kcal + Number(row.kcal ?? 0),
       proteinG: acc.proteinG + Number(row.protein_g ?? 0),
@@ -926,10 +931,10 @@ async function NutritionTab({
         clientId={clientId}
         firstName={firstName}
         dayTypeId={dayTypeId}
-        dayTypeName={
-          (typesRes.data ?? []).find((type) => type.id === dayTypeId)?.name ??
-          null
-        }
+        dayTypes={(typesRes.data ?? []).map((type) => ({
+          id: type.id,
+          name: type.name,
+        }))}
         rows={protocol.map((row) => ({
           id: row.id,
           name: row.name,
@@ -939,6 +944,19 @@ async function NutritionTab({
           proteinG: row.protein_g === null ? null : Number(row.protein_g),
           kcal: row.kcal === null ? null : Number(row.kcal),
           dayTypeId: row.day_type_id,
+          // The library knows this one's macros, but per its own unit, and she
+          // asked for a different one — so they are not counted, and the row
+          // names the unit that would have worked. Creatine carries no macros
+          // at all, which is not the same thing and must not say so.
+          knownPerUnit:
+            (suppRes.data ?? []).find(
+              (entry) =>
+                entry.id === row.supplement_id &&
+                entry.unit !== row.unit &&
+                (entry.protein_per_unit !== null ||
+                  entry.carbs_per_unit !== null ||
+                  entry.fat_per_unit !== null),
+            )?.unit ?? null,
         }))}
         library={(suppRes.data ?? [])
           .filter((row) => !hiddenSupp.has(row.id))

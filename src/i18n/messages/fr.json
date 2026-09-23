@@ -984,12 +984,14 @@
       "iu": "UI"
     },
     "timing": {
-      "anytime": "N'importe quand",
       "morning": "Le matin",
+      "noon": "Le midi",
+      "snack": "À la collation",
       "pre": "Avant la séance",
       "post": "Après la séance",
+      "evening": "Le soir",
       "meal": "Au repas",
-      "evening": "Le soir"
+      "anytime": "N'importe quand"
     },
     "unusable": "Inutilisable",
     "unusableWhy": "Masse ne le propose pas dans un plan. Il reste ici pour répondre à la question plutôt que de la laisser ouverte.",
@@ -1030,6 +1032,10 @@
     "refused": "« {name} » est marqué inutilisable : il ne peut pas être prescrit.",
     "libraryLink": "Voir la bibliothèque",
     "todayTitle": "Tes compléments aujourd'hui",
-    "todayNone": "Aucun complément prévu aujourd'hui."
+    "todayNone": "Aucun complément prévu aujourd'hui.",
+    "when": "Quand",
+    "unit": "Unité",
+    "days": "Jours",
+    "macrosLost": "Macros non déduites : la densité connue est par {unit}."
   }
 }

@@ -2,7 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import type { NutritionMode } from "@/lib/supabase/types";
+import {
+  SUPPLEMENT_TIMINGS,
+  SUPPLEMENT_UNITS,
+  type NutritionMode,
+  type SupplementTiming,
+  type SupplementUnit,
+} from "@/lib/supabase/types";
 
 function intOr(value: FormDataEntryValue | null, fallback: number): number {
   const n = Number(String(value ?? "").trim());
@@ -296,10 +302,62 @@ export async function swapWeekDays(formData: FormData) {
   revalidatePath("/aujourdhui");
 }
 
+function unitOf(
+  value: FormDataEntryValue | null,
+  fallback: SupplementUnit,
+): SupplementUnit {
+  const v = String(value ?? "");
+  return (SUPPLEMENT_UNITS as string[]).includes(v)
+    ? (v as SupplementUnit)
+    : fallback;
+}
+
+function timingOf(
+  value: FormDataEntryValue | null,
+  fallback: SupplementTiming,
+): SupplementTiming {
+  const v = String(value ?? "");
+  return (SUPPLEMENT_TIMINGS as string[]).includes(v)
+    ? (v as SupplementTiming)
+    : fallback;
+}
+
 /**
- * A supplement joins this client's protocol. The dose is hers to set; the macros
- * are computed from the library's per-unit density, so a whey shake lands in the
- * day total instead of sitting beside it uncounted.
+ * What a dose contributes, when we can honestly say.
+ *
+ * The library knows a density per unit of its own unit — per gram for a powder.
+ * Ask for the same product in capsules and that density no longer applies: we do
+ * not know what a capsule of it weighs. Returning nulls there is the honest
+ * answer; scaling the grams figure onto capsules would put invented protein in
+ * the day total.
+ */
+function macrosFor(
+  entry: {
+    unit: string;
+    protein_per_unit: number | null;
+    carbs_per_unit: number | null;
+    fat_per_unit: number | null;
+  },
+  unit: SupplementUnit,
+  dose: number | null,
+) {
+  if (dose === null || entry.unit !== unit) {
+    return { protein_g: null, carbs_g: null, fat_g: null };
+  }
+  const per = (value: number | null) =>
+    value === null ? null : Number((Number(value) * dose).toFixed(2));
+
+  return {
+    protein_g: per(entry.protein_per_unit),
+    carbs_g: per(entry.carbs_per_unit),
+    fat_g: per(entry.fat_per_unit),
+  };
+}
+
+/**
+ * A supplement joins this client's protocol. The dose, the unit, the moment and
+ * the days are all hers to set — the library only supplies the defaults, because
+ * nobody takes the same things on a leg day and a rest day.
  *
  * An entry marked unusable is refused here and not only in the UI: the database
  * cannot express the rule without a subquery in a check, and a rule enforced
@@ -321,10 +379,10 @@ export async function addClientSupplement(formData: FormData) {
 
   if (!entry || !entry.usable) return;
 
-  const dose = num(formData.get("dose")) ?? (entry.dose_min === null ? null : Number(entry.dose_min));
-  const per = (value: number | null) =>
-    value === null || dose === null ? null : Number((Number(value) * dose).toFixed(2));
-
+  const dose =
+    num(formData.get("dose")) ??
+    (entry.dose_min === null ? null : Number(entry.dose_min));
+  const unit = unitOf(formData.get("unit"), entry.unit);
   const rawType = String(formData.get("day_type_id") ?? "");
 
   const { data: last } = await supabase
@@ -340,63 +398,62 @@ export async function addClientSupplement(formData: FormData) {
     supplement_id: entry.id,
     name: entry.name,
     dose,
-    unit: entry.unit,
-    timing: entry.timing,
+    unit,
+    timing: timingOf(formData.get("timing"), entry.timing),
     day_type_id: rawType === "" ? null : rawType,
     position: (last?.position ?? -1) + 1,
-    protein_g: per(entry.protein_per_unit),
-    carbs_g: per(entry.carbs_per_unit),
-    fat_g: per(entry.fat_per_unit),
+    ...macrosFor(entry, unit, dose),
   });
 
   revalidatePath(`/clients/${clientId}`);
   revalidatePath("/aujourdhui");
 }
 
-/** The dose changes, so the macros it contributes change with it. */
+/** Dose, unit, moment or days — and the macros follow whatever changed. */
 export async function updateClientSupplement(formData: FormData) {
   const supabase = await createClient();
   const clientId = String(formData.get("client_id") ?? "");
   const id = String(formData.get("id") ?? "");
   if (!clientId || !id) return;
 
-  const dose = num(formData.get("dose"));
-
   const { data: row } = await supabase
     .from("client_supplements")
-    .select("dose, supplement_id")
+    .select("unit, timing, supplement_id")
     .eq("id", id)
     .maybeSingle();
 
+  if (!row) return;
+
+  const dose = num(formData.get("dose"));
+  const unit = unitOf(formData.get("unit"), row.unit);
+  const rawType = String(formData.get("day_type_id") ?? "");
+
   const patch: {
     dose: number | null;
-    day_type_id?: string | null;
+    unit: SupplementUnit;
+    timing: SupplementTiming;
+    day_type_id: string | null;
     protein_g?: number | null;
     carbs_g?: number | null;
     fat_g?: number | null;
-  } = { dose };
+  } = {
+    dose,
+    unit,
+    timing: timingOf(formData.get("timing"), row.timing),
+    day_type_id: rawType === "" ? null : rawType,
+  };
 
-  if (formData.has("day_type_id")) {
-    const rawType = String(formData.get("day_type_id") ?? "");
-    patch.day_type_id = rawType === "" ? null : rawType;
-  }
-
-  // Recompute from the library entry rather than scaling the stored figures:
-  // scaling would compound its own rounding every time she nudges the dose.
-  if (row?.supplement_id && dose !== null) {
+  // Recomputed from the library entry rather than scaled from the stored
+  // figures: scaling would compound its own rounding on every nudge, and it
+  // would survive a unit change that invalidates it.
+  if (row.supplement_id) {
     const { data: entry } = await supabase
       .from("supplements")
-      .select("protein_per_unit, carbs_per_unit, fat_per_unit")
+      .select("unit, protein_per_unit, carbs_per_unit, fat_per_unit")
       .eq("id", row.supplement_id)
       .maybeSingle();
 
-    if (entry) {
-      const per = (value: number | null) =>
-        value === null ? null : Number((Number(value) * dose).toFixed(2));
-      patch.protein_g = per(entry.protein_per_unit);
-      patch.carbs_g = per(entry.carbs_per_unit);
-      patch.fat_g = per(entry.fat_per_unit);
-    }
+    if (entry) Object.assign(patch, macrosFor(entry, unit, dose));
   }
 
   await supabase.from("client_supplements").update(patch).eq("id", id);
