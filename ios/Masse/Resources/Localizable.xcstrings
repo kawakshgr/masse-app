@@ -819,6 +819,41 @@
         }
       }
     },
+    "today.todayIs": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aujourd’hui, c’est"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today is a"
+          }
+        }
+      }
+    },
+    "today.todayKcal": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kcal visées"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kcal to aim for"
+          }
+        }
+      },
+      "comment": "args: kcal"
+    },
     "goal.Get stronger": {
       "extractionState": "manual",
       "localizations": {

@@ -266,7 +266,9 @@
     "week": "Ta semaine",
     "sets": "{count, plural, =1 {1 série} other {# séries}}",
     "target": "Objectif",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "todayIs": "aujourd’hui, c’est",
+    "todayKcal": "{kcal} kcal visées"
   },
   "editor": {
     "addWeek": "+ Semaine",
@@ -950,5 +952,12 @@
     "confirmDelete": "Supprimer",
     "cancel": "Annuler",
     "deleteBody": "« {name} » part avec ses cibles et ses repas — ils ne décrivent que ce jour-là. Les jours qui le portaient repassent sur le plan par défaut."
+  },
+  "myWeek": {
+    "title": "Ta semaine",
+    "lede": "Touche un jour, puis un autre, pour les échanger.",
+    "pickSecond": "{day} sélectionné. Touche le jour avec lequel l’échanger.",
+    "default": "Jour normal",
+    "note": "Ton alimentation suit le type de jour, pas le jour de la semaine : en décalant, tu emportes le bon plan avec toi. Ton coach le voit."
   }
 }

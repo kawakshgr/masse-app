@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SessionLogger, type LoggerExercise } from "@/components/SessionLogger";
 import { EntryPanel } from "@/components/EntryPanel";
 import { MealsPanel } from "@/components/MealsPanel";
+import { MyWeek } from "@/components/MyWeek";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { deleteCycleLog, deleteSetLog } from "./actions";
 import type { FoodRow, MealRow } from "@/lib/supabase/types";
@@ -49,9 +50,21 @@ export default async function TodayPage() {
   weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
 
   const todayIso = today.toISOString().slice(0, 10);
+  // Monday is 0, as the database counts. Distinct from the index into a pushed
+  // week below, which counts from that week's start date.
+  const todayWeekday = (today.getUTCDay() + 6) % 7;
 
-  const [assignmentsRes, cycleRes, foodsRes, mealsRes, setsRes, cycleLogsRes] =
-    await Promise.all([
+  const [
+    assignmentsRes,
+    cycleRes,
+    foodsRes,
+    mealsRes,
+    setsRes,
+    cycleLogsRes,
+    typesRes,
+    weekRes,
+    targetsRes,
+  ] = await Promise.all([
     supabase
       .from("assignments")
       .select(
@@ -74,6 +87,16 @@ export default async function TodayPage() {
       .select("id, period_start_date, cycle_length_days")
       .order("period_start_date", { ascending: false })
       .limit(6),
+    supabase
+      .from("day_types")
+      .select("id, name, is_rest, position")
+      .eq("client_id", user.id)
+      .order("position"),
+    supabase
+      .from("client_week_days")
+      .select("day_index, day_type_id")
+      .eq("client_id", user.id),
+    supabase.from("nutrition_targets").select("*").eq("client_id", user.id),
   ]);
 
   const assignment = (assignmentsRes.data ?? [])[0];
@@ -97,6 +120,20 @@ export default async function TodayPage() {
     todayIndex === null
       ? undefined
       : week?.sessions?.find((s) => s.day_index === todayIndex);
+
+  // Which kind of day today is for her, and what it asks her to eat. Falls
+  // back to the default row when the day has no type, which is what a client
+  // with no day types at all always gets.
+  const todayTypeId =
+    (weekRes.data ?? []).find((row) => row.day_index === todayWeekday)
+      ?.day_type_id ?? null;
+  const todayType =
+    (typesRes.data ?? []).find((type) => type.id === todayTypeId) ?? null;
+  const allTargets = targetsRes.data ?? [];
+  const todayTarget =
+    allTargets.find((row) => row.day_type_id === todayTypeId) ??
+    allTargets.find((row) => row.day_type_id === null) ??
+    null;
 
   return (
     <main className="mx-auto min-h-dvh max-w-[720px] space-y-4 p-5">
@@ -169,6 +206,34 @@ export default async function TodayPage() {
           </ul>
         </section>
       )}
+
+      {todayType && (
+        <section className="glass rounded-r3 p-4">
+          <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            {t("todayIs")}
+          </h2>
+          <p className="mt-1.5 text-[19px] font-semibold">{todayType.name}</p>
+          {todayTarget && (
+            <p className="tnum mt-1 text-[13px] text-[var(--ink2)]">
+              {t("todayKcal", { kcal: todayTarget.kcal })}
+            </p>
+          )}
+        </section>
+      )}
+
+      <MyWeek
+        clientId={user.id}
+        week={[0, 1, 2, 3, 4, 5, 6].map((day) => {
+          const id = (weekRes.data ?? []).find((row) => row.day_index === day)
+            ?.day_type_id;
+          return (typesRes.data ?? []).find((type) => type.id === id)?.name ?? null;
+        })}
+        types={(typesRes.data ?? []).map((type) => ({
+          id: type.id,
+          name: type.name,
+          isRest: type.is_rest,
+        }))}
+      />
 
       <MealsPanel
         day={todayIso}

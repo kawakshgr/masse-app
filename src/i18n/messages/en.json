@@ -266,7 +266,9 @@
     "week": "Your week",
     "sets": "{count, plural, =1 {1 set} other {# sets}}",
     "target": "Target",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "todayIs": "today is a",
+    "todayKcal": "{kcal} kcal to aim for"
   },
   "editor": {
     "addWeek": "+ Week",
@@ -950,5 +952,12 @@
     "confirmDelete": "Delete",
     "cancel": "Cancel",
     "deleteBody": "“{name}” goes with its targets and its meals — they describe that day and nothing else. Days that carried it fall back to the default plan."
+  },
+  "myWeek": {
+    "title": "Your week",
+    "lede": "Tap one day, then another, to swap them.",
+    "pickSecond": "{day} selected. Tap the day to swap it with.",
+    "default": "Normal day",
+    "note": "Your food follows the kind of day, not the weekday: move one and the right plan moves with you. Your coach sees it."
   }
 }
