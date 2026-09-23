@@ -9,20 +9,35 @@ struct StepsChart: View {
     let days: [DailyMetric]
     let target: Int?
 
+    /// Monday to Sunday, always — the week she is in, not a rolling seven days
+    /// that start on whatever day she opened the app. Her coach reads the same
+    /// week on his side, so they are looking at one thing.
     private var counts: [(label: String, steps: Int?)] {
-        // Seven slots ending today, so the shape of the week is the same
-        // whether she logged every day or two of them.
         let calendar = Calendar(identifier: .iso8601)
-        return (0..<7).reversed().compactMap { back in
-            guard let date = calendar.date(byAdding: .day, value: -back, to: Date())
+        let monday = calendar.date(
+            byAdding: .day, value: -Weekday.today, to: Date()
+        ) ?? Date()
+
+        return (0..<7).compactMap { offset in
+            guard let date = calendar.date(byAdding: .day, value: offset, to: monday)
             else { return nil }
             let iso = date.formatted(.iso8601.year().month().day().dateSeparator(.dash))
-            let weekday = (calendar.component(.weekday, from: date) + 5) % 7
             return (
-                label: L.t("days.\(weekday)"),
+                label: L.t("days.\(offset)"),
                 steps: days.first { $0.day == iso }?.steps
             )
         }
+    }
+
+    /// Days that cleared the target. Only days she logged are counted, so a
+    /// week half entered does not read as a week half failed.
+    private var hit: Int {
+        guard let target else { return 0 }
+        return logged.filter { $0 >= target }.count
+    }
+
+    private var average: Int? {
+        logged.isEmpty ? nil : logged.reduce(0, +) / logged.count
     }
 
     private var logged: [Int] { counts.compactMap(\.steps) }
@@ -51,6 +66,22 @@ struct StepsChart: View {
                     .font(Ty.copySmall)
                     .foregroundStyle(Tk.ink3)
             } else {
+                // Where she is, before the bars: the two figures she would
+                // otherwise have to work out by reading them.
+                HStack(spacing: 8) {
+                    stat(
+                        L.t("stepsChart.avgBox"),
+                        average.map { $0.formatted(.number.grouping(.automatic)) } ?? "—"
+                    )
+                    if target != nil {
+                        stat(
+                            L.t("stepsChart.hitBox"),
+                            L.t("stepsChart.hitOf", String(hit), String(logged.count)),
+                            lit: hit > 0
+                        )
+                    }
+                }
+
                 GeometryReader { proxy in
                     let height = proxy.size.height
 
@@ -83,11 +114,12 @@ struct StepsChart: View {
                     }
                 }
 
-                Text(summary)
-                    .font(Ty.copySmall)
-                    .foregroundStyle(Tk.ink3)
-                    .tabular()
-                    .fixedSize(horizontal: false, vertical: true)
+                if target == nil {
+                    Text(L.t("stepsChart.noTarget"))
+                        .font(Ty.copySmall)
+                        .foregroundStyle(Tk.ink3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
         .accessibilityElement(children: .ignore)
@@ -115,11 +147,21 @@ struct StepsChart: View {
         }
     }
 
-    private var summary: String {
-        guard !logged.isEmpty else { return "" }
-        if target == nil { return L.t("stepsChart.noTarget") }
-        let average = logged.reduce(0, +) / logged.count
-        return L.t("stepsChart.avg", average.formatted(.number.grouping(.automatic)))
+    private func stat(_ label: String, _ value: String, lit: Bool = false) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(Ty.copySmall)
+                .foregroundStyle(Tk.ink2)
+            Text(value)
+                .font(Ty.figure)
+                .tracking(Ty.displayTracking(26))
+                .foregroundStyle(lit ? Tk.a1 : Tk.ink)
+                .tabular()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.r1))
     }
 
     private var spoken: String {

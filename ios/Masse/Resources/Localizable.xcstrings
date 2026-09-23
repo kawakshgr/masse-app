@@ -3843,24 +3843,6 @@
         }
       }
     },
-    "stepsChart.avg": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ en moyenne sur les jours saisis"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ on average across the days logged"
-          }
-        }
-      },
-      "comment": "args: steps"
-    },
     "stepsChart.spoken": {
       "extractionState": "manual",
       "localizations": {
@@ -3878,6 +3860,58 @@
         }
       },
       "comment": "args: day, steps"
+    },
+    "stepsChart.avgBox": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moyenne"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average"
+          }
+        }
+      }
+    },
+    "stepsChart.hitBox": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atteints"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hit"
+          }
+        }
+      }
+    },
+    "stepsChart.hitOf": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ / %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ / %2$@"
+          }
+        }
+      },
+      "comment": "args: count, total"
     },
     "photos.title": {
       "extractionState": "manual",

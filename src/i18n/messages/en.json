@@ -1095,7 +1095,9 @@
     "target": "Target {steps}",
     "noTarget": "Your coach hasn't set a step target.",
     "none": "Nothing logged this week.",
-    "avg": "{steps} on average across the days logged",
-    "spoken": "{day}: {steps} steps."
+    "spoken": "{day}: {steps} steps.",
+    "avgBox": "Average",
+    "hitBox": "Hit",
+    "hitOf": "{count} / {total}"
   }
 }
