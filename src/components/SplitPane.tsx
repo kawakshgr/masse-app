@@ -125,7 +125,7 @@ export function SplitPane({
   }, [min, max, store]);
 
   return (
-    <div className="flex min-h-0 flex-1">
+    <div className="flex min-h-0 w-full min-w-0 flex-1">
       <div
         ref={paneRef}
         style={{ width }}
