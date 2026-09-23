@@ -2,15 +2,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { monthLabel } from "@/lib/billing";
 import { InvoiceSheet } from "@/components/InvoiceSheet";
+import { InvoiceActions } from "@/components/InvoiceActions";
+import { loadInvoice } from "@/lib/invoice";
+import { mailerConfigured } from "@/lib/invoiceMail";
 
 /**
- * The invoice as a page, printed by the browser. No PDF library: print to PDF
- * is a system dialog the coach already knows, and it keeps her fonts.
- *
- * Every mandatory mention comes from her own profile. Masse validates none of
- * it — see the banner, which is on screen and never on the paper.
+ * The invoice as a page: what the browser prints, and what the PDF route
+ * renders from the same rows. Every mandatory mention comes from the coach's
+ * own profile — Masse validates none of it, which the banner says on screen
+ * and never on the paper.
  */
 export default async function InvoicePage({
   params,
@@ -22,48 +23,12 @@ export default async function InvoicePage({
 
   const t = await getTranslations("invoice");
   const tCompany = await getTranslations("company");
-  const tBilling = await getTranslations("billing");
   const supabase = await createClient();
+  const data = await loadInvoice(supabase, clientId, period);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  if (data === "not-found") notFound();
 
-  const [profileRes, clientRes, invoiceRes, arrangementRes] = await Promise.all(
-    [
-      supabase
-        .from("coach_billing_profiles")
-        .select("*")
-        .eq("coach_id", user?.id ?? "")
-        .maybeSingle(),
-      supabase
-        .from("clients")
-        .select("id, name, email, phone")
-        .eq("id", clientId)
-        .maybeSingle(),
-      supabase
-        .from("invoices")
-        .select("invoice_number, amount_cents, issued_at, status, paid_at")
-        .eq("client_id", clientId)
-        .eq("period_start", period)
-        .maybeSingle(),
-      supabase
-        .from("billing_arrangements")
-        .select("amount_cents, type, pack_sessions")
-        .eq("client_id", clientId)
-        .maybeSingle(),
-    ],
-  );
-
-  const client = clientRes.data;
-  if (!client) notFound();
-
-  const profile = profileRes.data;
-  const invoice = invoiceRes.data;
-  const arrangement = arrangementRes.data;
-  const monthName = monthLabel(period);
-
-  if (!profile?.legal_name || !profile?.siret) {
+  if (data === "no-company") {
     return (
       <div className="min-w-0 flex-1 p-5">
         <p className="text-[13px] text-[var(--ink2)]">
@@ -79,42 +44,38 @@ export default async function InvoicePage({
     );
   }
 
-  const net = invoice?.amount_cents ?? arrangement?.amount_cents ?? 0;
-  const description =
-    arrangement?.type === "pack"
-      ? t("linePack", {
-          count: arrangement.pack_sessions ?? 0,
-          month: monthName,
-        })
-      : t("lineMonthly", { month: monthName });
+  const { data: row } = await supabase
+    .from("invoices")
+    .select("archived_at, sent_at")
+    .eq("client_id", clientId)
+    .eq("period_start", period)
+    .maybeSingle();
 
   return (
     <div data-print-sheet className="min-w-0 flex-1 overflow-y-auto p-5">
       {/* On screen only. An invoice does not carry a disclaimer about itself. */}
-      <div className="mb-4 flex flex-wrap items-center gap-3 rounded-r3 border border-[var(--edge)] bg-[var(--glass2)] p-3 print:hidden">
-        <p className="min-w-0 flex-1 text-[12.5px] leading-[1.5] text-[var(--ink2)]">
+      <div className="no-print mx-auto mb-4 max-w-[760px] rounded-r3 border border-[var(--edge)] bg-[var(--glass2)] p-3">
+        <InvoiceActions
+          clientId={clientId}
+          period={period}
+          hasEmail={data.client.email != null}
+          mailerReady={mailerConfigured()}
+          archivedAt={row?.archived_at ?? null}
+          sentAt={row?.sent_at ?? null}
+        />
+        <p className="mt-3 text-[12.5px] leading-[1.5] text-[var(--ink2)]">
           {tCompany("disclaimer")}
         </p>
-        <Link
-          href="/facturation"
-          className="glass2 h-9 shrink-0 rounded-r2 px-3 text-[13px] leading-9 font-semibold text-[var(--ink2)]"
-        >
-          {t("back")}
-        </Link>
       </div>
 
       <InvoiceSheet
-        profile={profile}
-        client={client}
-        invoice={invoice}
-        net={net}
-        description={description}
-        monthName={monthName}
+        profile={data.profile}
+        client={data.client}
+        invoice={data.invoice}
+        net={data.net}
+        description={data.description}
+        monthName={data.monthName}
       />
-
-      <p className="mx-auto mt-4 max-w-[760px] text-[12px] text-[var(--ink3)] print:hidden">
-        {tBilling("nothingAutomaticBody")}
-      </p>
     </div>
   );
 }

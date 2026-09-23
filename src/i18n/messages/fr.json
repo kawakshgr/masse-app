@@ -852,6 +852,18 @@
     "back": "Retour",
     "goToCompany": "Renseigner mon entreprise",
     "open": "Voir la facture",
-    "failed": "L’émission a échoué. Réessaie, ou vérifie ton entreprise dans Admin."
+    "failed": "L’émission a échoué. Réessaie, ou vérifie ton entreprise dans Admin.",
+    "pdf": "Télécharger le PDF",
+    "archive": "Archiver",
+    "archived": "Archivée ✓",
+    "email": "Envoyer par e-mail",
+    "emailed": "Envoyée le {date}",
+    "mailerOff": "L’envoi par e-mail n’est pas configuré. Télécharge le PDF et joins-le toi-même.",
+    "mailSubject": "Facture {number} · {month}",
+    "mailBody": "Bonjour {name},\n\nVoici la facture pour {month} : {amount}.\nElle est en pièce jointe.\n\nMerci,\n{coach}",
+    "doneArchive": "Facture archivée.",
+    "doneSent": "Facture envoyée.",
+    "noAddress": "Ce client n’a pas d’adresse e-mail dans sa fiche.",
+    "sendFailed": "L’envoi a échoué. Le PDF reste téléchargeable."
   }
 }

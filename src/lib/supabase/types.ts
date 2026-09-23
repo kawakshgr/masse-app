@@ -242,6 +242,10 @@ export type InvoiceRow = {
   note: string | null;
   /** Assigned once, by the database, and never reused. */
   invoice_number: string | null;
+  /** The archived PDF, in the private `invoices` bucket. */
+  pdf_path: string | null;
+  archived_at: string | null;
+  sent_at: string | null;
   created_at: string;
 };
 

@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { statusFor, type MonthState } from "@/lib/billing";
+import { getTranslations } from "next-intl/server";
+import { euros, statusFor, type MonthState } from "@/lib/billing";
+import { invoiceFileName, invoiceLabels, loadInvoice } from "@/lib/invoice";
+import { renderInvoicePdf } from "@/lib/invoicePdf";
+import { sendInvoiceMail } from "@/lib/invoiceMail";
 import type { BillingType } from "@/lib/supabase/types";
 
 /** Euros in, integer cents stored. Money never goes through a float. */
@@ -160,4 +164,102 @@ export async function issueInvoice(formData: FormData) {
   }
 
   revalidatePath("/facturation");
+}
+
+/* ---------- the PDF: archived, and sent if a mailer is configured ---------- */
+
+/**
+ * Renders the invoice and keeps it. The file is the record: re-rendering it
+ * next year, after she has moved or changed her rate, would produce a
+ * different document from the one the client received.
+ */
+async function renderAndArchive(clientId: string, period: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const data = await loadInvoice(supabase, clientId, period);
+  if (data === "not-found" || data === "no-company") return { problem: data };
+
+  const pdf = await renderInvoicePdf(data, await invoiceLabels());
+  const fileName = invoiceFileName(data, period);
+  const path = `${user.id}/${clientId}/${period}-${data.invoice?.invoice_number ?? "brouillon"}.pdf`;
+
+  const { error } = await supabase.storage
+    .from("invoices")
+    .upload(path, pdf, { contentType: "application/pdf", upsert: true });
+  if (error) return { problem: "archive" as const };
+
+  await supabase
+    .from("invoices")
+    .update({ pdf_path: path, archived_at: new Date().toISOString() })
+    .eq("client_id", clientId)
+    .eq("period_start", period);
+
+  return { data, pdf, fileName, path };
+}
+
+export async function archiveInvoice(formData: FormData) {
+  const clientId = String(formData.get("client_id") ?? "");
+  const period = String(formData.get("period") ?? "");
+  if (!clientId || !period) return;
+
+  const result = await renderAndArchive(clientId, period);
+  if (!result || "problem" in result) {
+    redirect(`/facturation?ligne=${clientId}&probleme=echec`);
+  }
+
+  revalidatePath("/facturation");
+  redirect(`/facturation?ligne=${clientId}&fait=archive`);
+}
+
+/**
+ * Sends the invoice to the client, from the coach's own configured address.
+ * The send is hers: she presses it, Masse never sends on its own schedule.
+ */
+export async function emailInvoice(formData: FormData) {
+  const clientId = String(formData.get("client_id") ?? "");
+  const period = String(formData.get("period") ?? "");
+  if (!clientId || !period) return;
+
+  const result = await renderAndArchive(clientId, period);
+  if (!result || "problem" in result) {
+    redirect(`/facturation?ligne=${clientId}&probleme=echec`);
+  }
+
+  const to = result.data.client.email;
+  if (!to) redirect(`/facturation?ligne=${clientId}&probleme=adresse`);
+
+  const t = await getTranslations("invoice");
+  const sent = await sendInvoiceMail({
+    to,
+    subject: t("mailSubject", {
+      number: result.data.invoice?.invoice_number ?? "",
+      month: result.data.monthName,
+    }),
+    body: t("mailBody", {
+      name: result.data.client.name,
+      month: result.data.monthName,
+      amount: euros(result.data.gross),
+      coach: result.data.profile.legal_name ?? "",
+    }),
+    fileName: result.fileName,
+    pdf: result.pdf,
+  });
+
+  if (!sent.ok) {
+    redirect(`/facturation?ligne=${clientId}&probleme=envoi`);
+  }
+
+  const supabase = await createClient();
+  await supabase
+    .from("invoices")
+    .update({ sent_at: new Date().toISOString() })
+    .eq("client_id", clientId)
+    .eq("period_start", period);
+
+  revalidatePath("/facturation");
+  redirect(`/facturation?ligne=${clientId}&fait=envoye`);
 }

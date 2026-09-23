@@ -852,6 +852,18 @@
     "back": "Back",
     "goToCompany": "Fill in my company",
     "open": "View invoice",
-    "failed": "Issuing failed. Try again, or check your company under Admin."
+    "failed": "Issuing failed. Try again, or check your company under Admin.",
+    "pdf": "Download the PDF",
+    "archive": "Archive",
+    "archived": "Archived ✓",
+    "email": "Send by email",
+    "emailed": "Sent on {date}",
+    "mailerOff": "Email sending is not configured. Download the PDF and attach it yourself.",
+    "mailSubject": "Invoice {number} · {month}",
+    "mailBody": "Hi {name},\n\nHere is the invoice for {month}: {amount}.\nIt is attached.\n\nThank you,\n{coach}",
+    "doneArchive": "Invoice archived.",
+    "doneSent": "Invoice sent.",
+    "noAddress": "This client has no email address on file.",
+    "sendFailed": "Sending failed. The PDF is still downloadable."
   }
 }
