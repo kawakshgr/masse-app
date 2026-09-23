@@ -16,13 +16,14 @@ import {
   pushWeek,
   renameSession,
   retractWeek,
+  setRestDay,
+  setTrainingDay,
   updateExercise,
 } from "@/app/(coach)/programmes/actions";
 
 /** What a drag is carrying: an existing row, or a catalogue name. */
 type DragPayload =
-  | { kind: "move"; exerciseId: string }
-  | { kind: "new"; name: string };
+  { kind: "move"; exerciseId: string } | { kind: "new"; name: string };
 
 const DRAG_TYPE = "application/x-masse-exercise";
 
@@ -56,6 +57,7 @@ export type EditorExercise = {
 };
 
 export type EditorSession = {
+  kind: "training" | "rest";
   id: string;
   day_index: number;
   name: string | null;
@@ -119,240 +121,299 @@ export function WeekEditor({
     setOverDay(day);
   }
 
+  /** Days that can take an exercise. A rest day is not one of them. */
+  const trainingDays = sessions
+    .filter((session) => session.kind !== "rest")
+    .map((session) => ({
+      index: session.day_index,
+      label: tDays(String(session.day_index)),
+    }));
+
   /** The reliable path: drag is a convenience, this always works. */
   function moveToDay(exerciseId: string, day: number) {
     const target = byDay(day);
     startTransition(() => {
       if (target) {
-        void moveExercise(exerciseId, target.id, target.exercises.length, programmeId);
+        void moveExercise(
+          exerciseId,
+          target.id,
+          target.exercises.length,
+          programmeId,
+        );
       }
     });
   }
 
   return (
     <div className={pending ? "opacity-70 transition-opacity" : ""}>
-      {/* Suggestions, never a restriction: any name she types is accepted, and
+      <div className="flex min-h-0 gap-3">
+        <aside className="glass hidden w-[268px] shrink-0 overflow-hidden rounded-r3 lg:block">
+          <ExerciseLibrary
+            catalogue={catalogue}
+            weekId={weekId}
+            programmeId={programmeId}
+            days={trainingDays}
+          />
+        </aside>
+
+        <div className="min-w-0 flex-1">
+          {/* Suggestions, never a restriction: any name she types is accepted, and
           a new one joins her library on save. */}
-      <datalist id="masse-exercise-catalogue">
-        {catalogue.map((entry) => (
-          <option key={entry.id} value={entry.name} />
-        ))}
-      </datalist>
+          <datalist id="masse-exercise-catalogue">
+            {catalogue.map((entry) => (
+              <option key={entry.id} value={entry.name} />
+            ))}
+          </datalist>
 
-      <div className="mb-3">
-        <ExerciseLibrary
-          catalogue={catalogue}
-          weekId={weekId}
-          programmeId={programmeId}
-          daysWithSessions={sessions.map((s) => s.day_index)}
-        />
-      </div>
+          {/* Seven day columns. Empty days are visibly empty and clickable. */}
+          <div className="grid grid-cols-[repeat(7,minmax(172px,1fr))] gap-2 overflow-x-auto pb-2">
+            {[0, 1, 2, 3, 4, 5, 6].map((day) => {
+              const session = byDay(day);
 
-      {/* Seven day columns. Empty days are visibly empty and clickable. */}
-      <div className="grid grid-cols-7 gap-2 overflow-x-auto pb-2 [grid-auto-columns:minmax(0,1fr)]">
-        {[0, 1, 2, 3, 4, 5, 6].map((day) => {
-          const session = byDay(day);
+              return (
+                <div key={day} className="flex min-w-0 flex-col">
+                  <p className="mb-2 px-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+                    {tDays(String(day))}
+                  </p>
 
-          return (
-            <div key={day} className="flex min-w-0 flex-col">
-              <p className="mb-2 px-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-                {tDays(String(day))}
-              </p>
-
-              {!session ? (
-                <button
-                  type="button"
-                  onDragOver={(event) => allowDrop(event, day)}
-                  onDragLeave={() => setOverDay(null)}
-                  onDrop={(event) => onDrop(event, day, null, 0)}
-                  onClick={() =>
-                    startTransition(() => {
-                      void addSession(weekId, day, programmeId);
-                    })
-                  }
-                  className={`flex h-24 flex-col items-center justify-center rounded-r3 border border-dashed text-[12px] text-[var(--ink3)] hover:text-[var(--accent)] ${
-                    overDay === day
-                      ? "border-[var(--accent)] text-[var(--accent)]"
-                      : "border-[var(--edge)]"
-                  }`}
-                >
-                  <span>{t("emptyDay")}</span>
-                  <span className="mt-1 text-[var(--accent)]">{t("addSession")}</span>
-                </button>
-              ) : (
-                <div
-                  onDragOver={(event) => allowDrop(event, day)}
-                  onDragLeave={() => setOverDay(null)}
-                  onDrop={(event) =>
-                    onDrop(event, day, session.id, session.exercises.length)
-                  }
-                  className={`glass flex-1 rounded-r3 p-2 ${
-                    overDay === day ? "border-[var(--accent)]" : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-1">
-                    <input
-                      defaultValue={session.name ?? ""}
-                      placeholder={t("sessionName")}
-                      onBlur={(e) =>
-                        startTransition(() => {
-                          void renameSession(session.id, e.target.value, programmeId);
-                        })
-                      }
-                      className="min-w-0 flex-1 rounded-r1 bg-transparent px-1 py-1 text-[13px] font-semibold text-[var(--ink)] placeholder:text-[var(--ink3)]"
-                    />
-                    <button
-                      type="button"
-                      aria-label={t("remove")}
-                      onClick={() =>
-                        startTransition(() => {
-                          void deleteSession(session.id, programmeId);
-                        })
-                      }
-                      className="shrink-0 px-1 text-[13px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                  {!session ? (
+                    <div
+                      onDragOver={(event) => allowDrop(event, day)}
+                      onDragLeave={() => setOverDay(null)}
+                      onDrop={(event) => onDrop(event, day, null, 0)}
+                      className={`flex h-28 flex-col items-center justify-center rounded-r3 border border-dashed text-[12px] text-[var(--ink3)] ${
+                        overDay === day
+                          ? "border-[var(--accent)] text-[var(--accent)]"
+                          : "border-[var(--edge)]"
+                      }`}
                     >
-                      ×
-                    </button>
-                  </div>
-
-                  <ul className="mt-1 space-y-1">
-                    {session.exercises.map((exercise, index) => (
-                      <li
-                        key={exercise.id}
-                        onDragOver={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                        onDrop={(event) => onDrop(event, day, session.id, index)}
-                        className={`rounded-r2 border border-[var(--hair)] bg-[var(--glass2)] p-2 ${
-                          dragging === exercise.id ? "opacity-40" : ""
-                        }`}
+                      <span>{t("emptyDay")}</span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          startTransition(() => {
+                            void addSession(weekId, day, programmeId);
+                          })
+                        }
+                        className="mt-1 rounded-r1 px-2 py-0.5 text-[12px] text-[var(--accent)]"
                       >
-                        <div className="flex items-start gap-1">
-                          {/* The handle carries the drag, not the row: the row
-                              is nearly all inputs, which swallow a grab. */}
-                          <span
-                            draggable
-                            role="button"
-                            tabIndex={0}
-                            aria-label={tEditor2("drag")}
-                            title={tEditor2("drag")}
-                            onDragStart={(event) => {
-                              writeDrag(event, {
-                                kind: "move",
-                                exerciseId: exercise.id,
-                              });
-                              setDragging(exercise.id);
-                            }}
-                            onDragEnd={() => {
-                              setDragging(null);
-                              setOverDay(null);
-                            }}
-                            className="-m-1 cursor-grab select-none p-1 text-[13px] leading-none text-[var(--ink3)] active:cursor-grabbing"
-                          >
-                            ⠿
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <input
-                              defaultValue={exercise.name}
-                              list="masse-exercise-catalogue"
-                              aria-label={t("exName")}
-                              onBlur={(e) =>
-                                startTransition(() => {
-                                  void updateExercise(
-                                    exercise.id,
-                                    { name: e.target.value },
-                                    programmeId,
-                                  );
-                                })
-                              }
-                              className="w-full rounded-r1 bg-transparent text-[13px] font-semibold text-[var(--ink)]"
-                            />
-                            <input
-                              defaultValue={exercise.scheme ?? ""}
-                              placeholder={t("scheme")}
-                              aria-label={t("scheme")}
-                              onBlur={(e) =>
-                                startTransition(() => {
-                                  void updateExercise(
-                                    exercise.id,
-                                    { scheme: e.target.value || null },
-                                    programmeId,
-                                  );
-                                })
-                              }
-                              className="tnum w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink2)] placeholder:text-[var(--ink3)]"
-                            />
-                            <input
-                              defaultValue={exercise.cue ?? ""}
-                              placeholder={t("cue")}
-                              aria-label={t("cue")}
-                              onBlur={(e) =>
-                                startTransition(() => {
-                                  void updateExercise(
-                                    exercise.id,
-                                    { cue: e.target.value || null },
-                                    programmeId,
-                                  );
-                                })
-                              }
-                              className="w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink3)] placeholder:text-[var(--ink3)]"
-                            />
-                          </div>
-                          <button
-                            type="button"
-                            aria-label={t("remove")}
-                            onClick={() =>
-                              startTransition(() => {
-                                void deleteExercise(exercise.id, programmeId);
-                              })
-                            }
-                            className="shrink-0 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
-                          >
-                            ×
-                          </button>
-                        </div>
-
-                        <select
-                          aria-label={tEditor2("moveTo")}
-                          value=""
-                          onChange={(event) => {
-                            const target = Number(event.target.value);
-                            if (Number.isInteger(target)) {
-                              moveToDay(exercise.id, target);
-                            }
-                          }}
-                          className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink3)]"
+                        {t("addSession")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          startTransition(() => {
+                            void setRestDay(weekId, day, programmeId);
+                          })
+                        }
+                        className="mt-1.5 rounded-r1 px-2 py-0.5 text-[11.5px] text-[var(--ink3)] hover:text-[var(--ink)]"
+                      >
+                        {t("markRest")}
+                      </button>
+                    </div>
+                  ) : session.kind === "rest" ? (
+                    /* A decision, not an absence — and it says which one it is. */
+                    <div className="glass flex flex-1 flex-col items-center justify-center gap-2 rounded-r3 p-2 text-center">
+                      <span className="text-[13px] font-semibold">
+                        {t("restDay")}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          startTransition(() => {
+                            void setTrainingDay(session.id, programmeId);
+                          })
+                        }
+                        className="rounded-r1 px-2 py-0.5 text-[11.5px] text-[var(--ink3)] hover:text-[var(--accent)]"
+                      >
+                        {t("makeTraining")}
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onDragOver={(event) => allowDrop(event, day)}
+                      onDragLeave={() => setOverDay(null)}
+                      onDrop={(event) =>
+                        onDrop(event, day, session.id, session.exercises.length)
+                      }
+                      className={`glass flex-1 rounded-r3 p-2 ${
+                        overDay === day ? "border-[var(--accent)]" : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-1">
+                        <input
+                          defaultValue={session.name ?? ""}
+                          placeholder={t("sessionName")}
+                          onBlur={(e) =>
+                            startTransition(() => {
+                              void renameSession(
+                                session.id,
+                                e.target.value,
+                                programmeId,
+                              );
+                            })
+                          }
+                          className="min-w-0 flex-1 rounded-r1 bg-transparent px-1 py-1 text-[13px] font-semibold text-[var(--ink)] placeholder:text-[var(--ink3)]"
+                        />
+                        <button
+                          type="button"
+                          aria-label={t("remove")}
+                          onClick={() =>
+                            startTransition(() => {
+                              void deleteSession(session.id, programmeId);
+                            })
+                          }
+                          className="shrink-0 px-1 text-[13px] text-[var(--ink3)] hover:text-[var(--a3)]"
                         >
-                          <option value="">{tEditor2("moveTo")}…</option>
-                          {[0, 1, 2, 3, 4, 5, 6]
-                            .filter((d) => d !== day && byDay(d))
-                            .map((d) => (
-                              <option key={d} value={d}>
-                                {tDays(String(d))}
-                              </option>
-                            ))}
-                        </select>
-                      </li>
-                    ))}
-                  </ul>
+                          ×
+                        </button>
+                      </div>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      startTransition(() => {
-                        void addExercise(session.id, programmeId);
-                      })
-                    }
-                    className="mt-2 w-full rounded-r1 py-1 text-[12px] text-[var(--accent)]"
-                  >
-                    {t("addExercise")}
-                  </button>
+                      <ul className="mt-1 space-y-1">
+                        {session.exercises.map((exercise, index) => (
+                          <li
+                            key={exercise.id}
+                            onDragOver={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                            }}
+                            onDrop={(event) =>
+                              onDrop(event, day, session.id, index)
+                            }
+                            className={`rounded-r2 border border-[var(--hair)] bg-[var(--glass2)] p-2 ${
+                              dragging === exercise.id ? "opacity-40" : ""
+                            }`}
+                          >
+                            <div className="flex items-start gap-1">
+                              {/* The handle carries the drag, not the row: the row
+                              is nearly all inputs, which swallow a grab. */}
+                              <span
+                                draggable
+                                role="button"
+                                tabIndex={0}
+                                aria-label={tEditor2("drag")}
+                                title={tEditor2("drag")}
+                                onDragStart={(event) => {
+                                  writeDrag(event, {
+                                    kind: "move",
+                                    exerciseId: exercise.id,
+                                  });
+                                  setDragging(exercise.id);
+                                }}
+                                onDragEnd={() => {
+                                  setDragging(null);
+                                  setOverDay(null);
+                                }}
+                                className="-m-1 cursor-grab select-none p-1 text-[13px] leading-none text-[var(--ink3)] active:cursor-grabbing"
+                              >
+                                ⠿
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <input
+                                  defaultValue={exercise.name}
+                                  list="masse-exercise-catalogue"
+                                  aria-label={t("exName")}
+                                  onBlur={(e) =>
+                                    startTransition(() => {
+                                      void updateExercise(
+                                        exercise.id,
+                                        { name: e.target.value },
+                                        programmeId,
+                                      );
+                                    })
+                                  }
+                                  className="w-full rounded-r1 bg-transparent text-[13px] font-semibold text-[var(--ink)]"
+                                />
+                                <input
+                                  defaultValue={exercise.scheme ?? ""}
+                                  placeholder={t("scheme")}
+                                  aria-label={t("scheme")}
+                                  onBlur={(e) =>
+                                    startTransition(() => {
+                                      void updateExercise(
+                                        exercise.id,
+                                        { scheme: e.target.value || null },
+                                        programmeId,
+                                      );
+                                    })
+                                  }
+                                  className="tnum w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink2)] placeholder:text-[var(--ink3)]"
+                                />
+                                <input
+                                  defaultValue={exercise.cue ?? ""}
+                                  placeholder={t("cue")}
+                                  aria-label={t("cue")}
+                                  onBlur={(e) =>
+                                    startTransition(() => {
+                                      void updateExercise(
+                                        exercise.id,
+                                        { cue: e.target.value || null },
+                                        programmeId,
+                                      );
+                                    })
+                                  }
+                                  className="w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink3)] placeholder:text-[var(--ink3)]"
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                aria-label={t("remove")}
+                                onClick={() =>
+                                  startTransition(() => {
+                                    void deleteExercise(
+                                      exercise.id,
+                                      programmeId,
+                                    );
+                                  })
+                                }
+                                className="shrink-0 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                              >
+                                ×
+                              </button>
+                            </div>
+
+                            <select
+                              aria-label={tEditor2("moveTo")}
+                              value=""
+                              onChange={(event) => {
+                                const target = Number(event.target.value);
+                                if (Number.isInteger(target)) {
+                                  moveToDay(exercise.id, target);
+                                }
+                              }}
+                              className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink3)]"
+                            >
+                              <option value="">{tEditor2("moveTo")}…</option>
+                              {[0, 1, 2, 3, 4, 5, 6]
+                                .filter((d) => d !== day && byDay(d))
+                                .map((d) => (
+                                  <option key={d} value={d}>
+                                    {tDays(String(d))}
+                                  </option>
+                                ))}
+                            </select>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          startTransition(() => {
+                            void addExercise(session.id, programmeId);
+                          })
+                        }
+                        className="mt-2 w-full rounded-r1 py-1 text-[12px] text-[var(--accent)]"
+                      >
+                        {t("addExercise")}
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* The delivery boundary, made an explicit act. */}
@@ -363,7 +424,9 @@ export function WeekEditor({
         <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("assignLede")}</p>
 
         {clients.length === 0 ? (
-          <p className="mt-3 text-[13px] text-[var(--ink3)]">{t("noClients")}</p>
+          <p className="mt-3 text-[13px] text-[var(--ink3)]">
+            {t("noClients")}
+          </p>
         ) : (
           <>
             <ul className="mt-3 flex flex-wrap gap-2">
@@ -377,7 +440,9 @@ export function WeekEditor({
                         aria-pressed={on}
                         onClick={() =>
                           setSelected((prev) =>
-                            on ? prev.filter((id) => id !== client.id) : [...prev, client.id],
+                            on
+                              ? prev.filter((id) => id !== client.id)
+                              : [...prev, client.id],
                           )
                         }
                         className={`h-8 rounded-r2 border px-3 text-[13px] ${

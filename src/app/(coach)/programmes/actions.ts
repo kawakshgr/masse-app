@@ -397,3 +397,68 @@ export async function addExerciseToDay(
 
   await addExerciseNamed(sessionId, name, programmeId);
 }
+
+/** A rest day is a decision. An empty day is only an undecided one. */
+export async function setRestDay(
+  weekId: string,
+  dayIndex: number,
+  programmeId: string,
+) {
+  const supabase = await createClient();
+  await supabase
+    .from("sessions")
+    .upsert(
+      { week_id: weekId, day_index: dayIndex, kind: "rest", name: null },
+      { onConflict: "week_id,day_index" },
+    );
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+/** Back to a training day, ready to take exercises again. */
+export async function setTrainingDay(sessionId: string, programmeId: string) {
+  const supabase = await createClient();
+  await supabase.from("sessions").update({ kind: "training" }).eq("id", sessionId);
+  revalidatePath(`/programmes/${programmeId}`);
+}
+
+/**
+ * Her own entry, gone for good. A built-in belongs to every coach, so it is
+ * hidden from her list instead — reversible, and nobody else's list moves.
+ */
+export async function removeFromLibrary(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const id = String(formData.get("exercise_id") ?? "");
+  const mine = String(formData.get("mine") ?? "") === "1";
+  if (!user || !id) return;
+
+  if (mine) {
+    await supabase.from("exercises").delete().eq("id", id);
+  } else {
+    await supabase
+      .from("exercise_hidden")
+      .upsert({ coach_id: user.id, exercise_id: id }, { onConflict: "coach_id,exercise_id" });
+  }
+
+  revalidatePath("/programmes", "layout");
+}
+
+/** Puts a hidden built-in back. */
+export async function restoreToLibrary(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const id = String(formData.get("exercise_id") ?? "");
+  if (!user || !id) return;
+
+  await supabase
+    .from("exercise_hidden")
+    .delete()
+    .eq("coach_id", user.id)
+    .eq("exercise_id", id);
+
+  revalidatePath("/programmes", "layout");
+}

@@ -288,7 +288,10 @@
     "pushed": "Poussée",
     "noClients": "Aucun client à qui pousser pour l’instant.",
     "pickWeek": "Choisis un programme à gauche.",
-    "dropHere": "Déposer ici"
+    "dropHere": "Déposer ici",
+    "restDay": "Repos",
+    "markRest": "Jour de repos",
+    "makeTraining": "Remettre une séance"
   },
   "goal": {
     "Get stronger": "Gagner en force",
@@ -647,16 +650,20 @@
     "per100": "pour 100 g"
   },
   "library": {
-    "title": "Bibliothèque",
-    "lede": "Glisse un exercice dans un jour, ou clique pour l’ajouter au jour choisi.",
-    "search": "Filtrer…",
-    "target": "Ajouter à",
-    "none": "Aucun exercice ne correspond.",
-    "builtin": "intégré",
-    "mine": "à moi",
-    "count": "{count, plural, =1 {1 exercice} other {# exercices}}",
-    "hide": "Masquer",
-    "show": "Bibliothèque"
+    "title": "Mouvements",
+    "search": "Chercher un mouvement",
+    "count": "{count, plural, =0 {aucun} =1 {1 mouvement} other {# mouvements}}",
+    "lede": "Glisse-en un dans un jour, ou choisis le jour avec le ＋.",
+    "allGroups": "Tout",
+    "noMatch": "Rien ne correspond à « {query} ».",
+    "addTo": "Ajouter {name} à un jour",
+    "delete": "Supprimer",
+    "hide": "Retirer de ma liste",
+    "deleteBody": "« {name} » est à toi : il disparaît pour de bon. Les séances déjà écrites gardent leur nom.",
+    "hideBody": "« {name} » fait partie du catalogue commun. Il sort de ta liste à toi, et tu peux le remettre.",
+    "cancel": "Annuler",
+    "show": "Bibliothèque",
+    "hidePanel": "Masquer"
   },
   "editor2": {
     "moveTo": "Déplacer vers",

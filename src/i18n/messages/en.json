@@ -288,7 +288,10 @@
     "pushed": "Pushed",
     "noClients": "No clients to push to yet.",
     "pickWeek": "Pick a programme on the left.",
-    "dropHere": "Drop here"
+    "dropHere": "Drop here",
+    "restDay": "Rest",
+    "markRest": "Mark as rest",
+    "makeTraining": "Make it a session"
   },
   "goal": {
     "Get stronger": "Get stronger",
@@ -647,16 +650,20 @@
     "per100": "per 100 g"
   },
   "library": {
-    "title": "Library",
-    "lede": "Drag an exercise onto a day, or click to add it to the chosen day.",
-    "search": "Filter…",
-    "target": "Add to",
-    "none": "No exercise matches.",
-    "builtin": "built-in",
-    "mine": "mine",
-    "count": "{count, plural, =1 {1 exercise} other {# exercises}}",
-    "hide": "Hide",
-    "show": "Library"
+    "title": "Movements",
+    "search": "Search a movement",
+    "count": "{count, plural, =0 {none} =1 {1 movement} other {# movements}}",
+    "lede": "Drag one into a day, or pick the day with ＋.",
+    "allGroups": "All",
+    "noMatch": "Nothing matches “{query}”.",
+    "addTo": "Add {name} to a day",
+    "delete": "Delete",
+    "hide": "Remove from my list",
+    "deleteBody": "“{name}” is yours: it goes for good. Sessions already written keep their name.",
+    "hideBody": "“{name}” is part of the shared catalogue. It leaves your list only, and you can put it back.",
+    "cancel": "Cancel",
+    "show": "Library",
+    "hidePanel": "Hide"
   },
   "editor2": {
     "moveTo": "Move to",

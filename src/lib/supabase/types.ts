@@ -23,6 +23,8 @@ export type ClientGoal =
   | "Build muscle"
   | "Lean out"
   | "Move better";
+export type DayKind = "training" | "rest";
+
 export type ClientStatus = "active" | "paused";
 export type CheckinFeel = "Strong" | "Steady" | "Heavy";
 export type CheckinPain = "None" | "Minor" | "Need to talk";
@@ -125,6 +127,7 @@ export type SessionRow = {
   day_index: number;
   name: string | null;
   notes: string | null;
+  kind: DayKind;
 };
 
 export type SessionExerciseRow = {
@@ -314,6 +317,13 @@ export type BillingArrangementRow = {
   updated_at: string;
 };
 
+/** A built-in this coach does not want in her list. Hers alone. */
+export type ExerciseHiddenRow = {
+  coach_id: string;
+  exercise_id: string;
+  hidden_at: string;
+};
+
 export type AllowedCoachEmailRow = {
   email: string;
   note: string | null;
@@ -439,6 +449,7 @@ export type Database = {
       billing_arrangements: Table<BillingArrangementRow, "client_id" | "coach_id">;
       coach_billing_profiles: Table<CoachBillingProfileRow, "coach_id">;
       allowed_coach_emails: Table<AllowedCoachEmailRow, "email">;
+      exercise_hidden: Table<ExerciseHiddenRow, "coach_id" | "exercise_id">;
       check_in_photos: Table<CheckInPhotoRow, "check_in_id" | "client_id" | "storage_path">;
       cycle_adjustments: Table<CycleAdjustmentRow, "client_id" | "phase">;
       nutrition_targets: Table<NutritionTargetRow, "client_id">;
@@ -547,6 +558,7 @@ export type Database = {
       cycle_phase: CyclePhase;
       admin_action: AdminAction;
       photo_pose: PhotoPose;
+      day_kind: DayKind;
       cycle_mode: CycleMode;
       nutrition_mode: NutritionMode;
       invoice_status: InvoiceStatus;

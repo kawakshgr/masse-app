@@ -44,7 +44,7 @@ export default async function ProgrammeEditorPage({
     const [sessionsRes, assignmentsRes] = await Promise.all([
       supabase
         .from("sessions")
-        .select("id, day_index, name, session_exercises(id, position, name, scheme, cue)")
+        .select("id, day_index, name, kind, session_exercises(id, position, name, scheme, cue)")
         .eq("week_id", current.id)
         .order("day_index"),
       supabase
@@ -57,6 +57,7 @@ export default async function ProgrammeEditorPage({
     sessions = (sessionsRes.data ?? []).map((s) => ({
       id: s.id,
       day_index: s.day_index,
+      kind: s.kind,
       name: s.name,
       exercises: [
         ...((s.session_exercises as unknown as EditorSession["exercises"]) ?? []),
@@ -66,19 +67,24 @@ export default async function ProgrammeEditorPage({
     assignedClientIds = (assignmentsRes.data ?? []).map((a) => a.client_id);
   }
 
-  const [{ data: clients }, { data: catalogue }] = await Promise.all([
-    supabase
-      .from("clients")
-      .select("id, name")
-      .eq("status", "active")
-      .order("name"),
-    // Built-ins plus her own, in one list.
-    supabase
-      .from("exercises")
-      .select("id, name, muscle_group, coach_id")
-      .order("name")
-      .limit(500),
-  ]);
+  const [{ data: clients }, { data: catalogue }, { data: hidden }] =
+    await Promise.all([
+      supabase
+        .from("clients")
+        .select("id, name")
+        .eq("status", "active")
+        .order("name"),
+      // Built-ins plus her own, in one list.
+      supabase
+        .from("exercises")
+        .select("id, name, muscle_group, equipment, coach_id")
+        .order("name")
+        .limit(500),
+      // Built-ins she has put away. Hers alone; nobody else's list changes.
+      supabase.from("exercise_hidden").select("exercise_id"),
+    ]);
+
+  const hiddenIds = new Set((hidden ?? []).map((row) => row.exercise_id));
 
   return (
     <div className="p-5">
@@ -189,12 +195,15 @@ export default async function ProgrammeEditorPage({
           sessions={sessions}
           clients={clients ?? []}
           assignedClientIds={assignedClientIds}
-          catalogue={(catalogue ?? []).map((e) => ({
-            id: e.id,
-            name: e.name,
-            muscleGroup: e.muscle_group,
-            mine: e.coach_id !== null,
-          }))}
+          catalogue={(catalogue ?? [])
+            .filter((e) => !hiddenIds.has(e.id))
+            .map((e) => ({
+              id: e.id,
+              name: e.name,
+              muscleGroup: e.muscle_group,
+              equipment: e.equipment,
+              mine: e.coach_id !== null,
+            }))}
         />
       ) : (
         <p className="text-[13px] text-[var(--ink3)]">{tProg("emptyAction")}</p>
