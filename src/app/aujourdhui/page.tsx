@@ -52,8 +52,9 @@ export default async function TodayPage() {
   weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
 
   const todayIso = today.toISOString().slice(0, 10);
-  // Monday is 0, as the database counts. Distinct from the index into a pushed
-  // week below, which counts from that week's start date.
+  // Monday is 0, as the database counts — and as the programme editor labels
+  // its seven columns. Both sessions.day_index and client_week_days.day_index
+  // mean this same thing.
   const todayWeekday = (today.getUTCDay() + 6) % 7;
 
   const [
@@ -112,17 +113,15 @@ export default async function TodayPage() {
 
   const phase = (cycleRes.data ?? [])[0]?.phase ?? null;
 
-  // Which day of the pushed week is today?
-  let todayIndex: number | null = null;
-  if (assignment) {
-    const start = new Date(`${assignment.start_date}T00:00:00Z`);
-    const elapsed = Math.floor(
-      (Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()) -
-        start.getTime()) /
-        86_400_000,
-    );
-    if (elapsed >= 0 && elapsed < 7) todayIndex = elapsed;
-  }
+  // Which session is today's. day_index is a weekday — the editor labels those
+  // seven columns Lundi to Dimanche — so it is read as one.
+  //
+  // This used to count days elapsed since start_date, which is only the same
+  // number when the coach pushed on a Monday. Push on a Wednesday and the
+  // client was shown Monday's session, while the native app, which always read
+  // the weekday, showed Wednesday's. start_date decides which week is current,
+  // which the query above already does with it; it does not number the days.
+  const todayIndex: number | null = assignment ? todayWeekday : null;
 
   const todaySession =
     todayIndex === null
