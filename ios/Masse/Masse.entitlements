@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Sleep and steps only, and read only. The app asks Health for nothing
+	     else and writes nothing back, which is why there is no
+	     NSHealthUpdateUsageDescription beside the share one.
+
+	     Cycle stays typed by hand on purpose: Health exposes menstrual data,
+	     and reading it would pull in exactly what "dates only, never symptoms"
+	     was written to keep out. -->
+	<key>com.apple.developer.healthkit</key>
+	<true/>
+</dict>
+</plist>

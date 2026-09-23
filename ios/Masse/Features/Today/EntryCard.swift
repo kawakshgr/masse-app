@@ -11,6 +11,8 @@ struct EntryCard: View {
     @State private var steps: String = ""
     @State private var saved = false
     @State private var loaded = false
+    @State private var importing = false
+    @State private var healthEmpty = false
 
     var body: some View {
         GlassCard {
@@ -83,6 +85,20 @@ struct EntryCard: View {
                 CTA(title: L.t(saved ? "entry.saved" : "entry.save")) {
                     Task { await save() }
                 }
+
+                if Health.available {
+                    SecondaryButton(
+                        title: L.t(Health.connected ? "entry.healthAgain" : "entry.health")
+                    ) {
+                        Task { await importFromHealth() }
+                    }
+                    .disabled(importing)
+
+                    Text(L.t(healthEmpty ? "entry.healthNone" : "entry.healthNote"))
+                        .font(Ty.copySmall)
+                        .foregroundStyle(healthEmpty ? Tk.a3 : Tk.ink3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
         .task { await load() }
@@ -96,11 +112,46 @@ struct EntryCard: View {
     private func load() async {
         guard !loaded else { return }
         loaded = true
-        guard let metric = try? await MetricsFeed.today() else { return }
-        sleepH = metric.sleepH ?? 0
-        quality = metric.sleepQuality
-        steps = metric.steps.map(String.init) ?? ""
-        saved = true
+
+        if let metric = try? await MetricsFeed.today() {
+            sleepH = metric.sleepH ?? 0
+            quality = metric.sleepQuality
+            steps = metric.steps.map(String.init) ?? ""
+            saved = true
+        }
+
+        // Once she has connected, the numbers are already there when she opens
+        // the app. Only ever after she asked — the first read is a button.
+        if Health.connected { await readHealth() }
+    }
+
+    /// Fills the fields; it does not save them. She sees what Health said
+    /// before her coach does, and a wrong night is hers to correct first.
+    private func importFromHealth() async {
+        importing = true
+        defer { importing = false }
+
+        if !Health.connected {
+            guard await Health.connect() else { return }
+        }
+        await readHealth()
+    }
+
+    private func readHealth() async {
+        let reading = await Health.todayReading()
+
+        if let hours = reading.sleepH {
+            sleepH = hours
+            saved = false
+        }
+        if let count = reading.steps {
+            steps = String(count)
+            saved = false
+        }
+
+        // Nothing measured is not zero, so nothing is written and the card
+        // says so rather than showing a 0 she would have to trust.
+        healthEmpty = reading.sleepH == nil && reading.steps == nil
     }
 
     private func save() async {

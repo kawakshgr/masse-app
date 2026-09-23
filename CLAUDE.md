@@ -48,7 +48,12 @@ check-in as read.
 - **Check-ins** — **typed by the coach in v1.** She asks by WhatsApp and enters the
   answers. `check_ins.author` is already in the schema; the client-submitted form later
   only changes who writes the row.
-- **Cycle, sleep, steps** — **entered manually.** No HealthKit or Health Connect in v1.
+- **Sleep and steps** — typed, or read from **Apple Health** on iOS. Read only:
+  the app writes nothing back, and sleep *quality* stays typed because Health
+  does not know whether a night was rough.
+- **Cycle** — **entered manually, always.** Health exposes menstrual data and
+  Masse does not ask for it: reading it would pull in exactly what "dates only,
+  never symptoms" exists to keep out.
 - **Messaging** — tab present, **inert**, badged `soon`.
 
 ## Deliberately not in v1
@@ -58,8 +63,9 @@ check-in as read.
   Keep the tab so the product's shape is honest.
 - **Nutrition** — the coach writes targets as text in the programme.
 - **Billing** — a spreadsheet suffices at this scale.
-- **HealthKit / Health Connect** — where platform review and legal exposure live.
-  On iOS this also keeps the App Store submission simple: **no health entitlements.**
+- **Health Connect** on Android. iOS reads Apple Health for sleep and steps
+  (decided 23 Sep 2026, after the cost was weighed); the Android client has no
+  equivalent yet and its clients type both.
 
 ## Ground rules
 
@@ -94,6 +100,10 @@ Each came out of a design decision or an audit. Not style preferences.
 13. **Deferred features keep their nav entry, rendered inert** — greyed label, `soon`
     badge, one line of copy on tap. Driven by one list (`SOON` in the prototype), not
     scattered conditions.
+14. **HealthKit is scoped, not open.** Two read types — `stepCount` and
+    `sleepAnalysis` — and nothing written back. Adding a third is not a one-line
+    change: it means re-reading the privacy label and the Art. 9 basis. The
+    cycle is deliberately not among them.
 
 ## Tables in v1
 

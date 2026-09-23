@@ -421,7 +421,11 @@
     "symptomHint": "Never sent. There is no table that could receive it.",
     "phaseNow": "Current phase",
     "history": "Your logged cycles",
-    "remove": "Remove"
+    "remove": "Remove",
+    "health": "Import from Health",
+    "healthAgain": "Refresh from Health",
+    "healthNone": "Health has nothing for today.",
+    "healthNote": "Sleep and steps come from Health. Quality stays yours, and your cycle is never read."
   },
   "exportW": {
     "title": "Export",

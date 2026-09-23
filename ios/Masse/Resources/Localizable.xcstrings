@@ -2660,6 +2660,74 @@
         }
       }
     },
+    "entry.health": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importer depuis Santé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import from Health"
+          }
+        }
+      }
+    },
+    "entry.healthAgain": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualiser depuis Santé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh from Health"
+          }
+        }
+      }
+    },
+    "entry.healthNone": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Santé n’a rien pour aujourd’hui."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health has nothing for today."
+          }
+        }
+      }
+    },
+    "entry.healthNote": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le sommeil et les pas viennent de Santé. La qualité reste à toi, et ton cycle n’est jamais lu."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep and steps come from Health. Quality stays yours, and your cycle is never read."
+          }
+        }
+      }
+    },
     "supp.timing.morning": {
       "extractionState": "manual",
       "localizations": {
