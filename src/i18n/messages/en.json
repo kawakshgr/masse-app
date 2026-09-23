@@ -932,5 +932,23 @@
       "unauthorised": "Hevy refused the key. Check it is valid and the account is Pro.",
       "failed": "The import failed. Try again in a moment."
     }
+  },
+  "dayTypes": {
+    "title": "day types",
+    "lede": "A leg day is not eaten like an off day. Name your types, give each its targets — and {first} carries the right plan even when the week moves.",
+    "add": "＋ New type",
+    "name": "Type name",
+    "namePlaceholder": "Upper, Lower, OFF…",
+    "isRest": "Off day",
+    "create": "Create",
+    "default": "Default",
+    "noTarget": "—",
+    "week": "her ordinary week",
+    "weekNote": "Change a day here and what is eaten that day changes. {first} can move her off days from her phone: the plan follows the type, not the weekday.",
+    "editing": "Editing: {name}",
+    "delete": "Delete this type",
+    "confirmDelete": "Delete",
+    "cancel": "Cancel",
+    "deleteBody": "“{name}” goes with its targets and its meals — they describe that day and nothing else. Days that carried it fall back to the default plan."
   }
 }

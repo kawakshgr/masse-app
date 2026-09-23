@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { loadClientDetail, formatHours } from "@/lib/clientDetail";
 import { MetricCard } from "@/components/MetricCard";
 import { CheckInPanel } from "@/components/CheckInPanel";
+import { DayTypes } from "@/components/DayTypes";
 import { RecordPanel } from "@/components/RecordPanel";
 import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
@@ -40,10 +41,10 @@ export default async function ClientDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ onglet?: string; portee?: string }>;
+  searchParams: Promise<{ onglet?: string; portee?: string; jour?: string }>;
 }) {
   const { id } = await params;
-  const { onglet, portee } = await searchParams;
+  const { onglet, portee, jour } = await searchParams;
   const supabase = await createClient();
   const detail = await loadClientDetail(supabase, id);
   if (!detail) notFound();
@@ -140,7 +141,7 @@ export default async function ClientDetailPage({
 
       {tab === "checkins" && <CheckInsTab clientId={id} />}
 
-      {tab === "nutrition" && <NutritionTab clientId={id} />}
+      {tab === "nutrition" && <NutritionTab clientId={id} jour={jour} />}
 
       {tab === "cycle" && <CycleTab clientId={id} />}
 
@@ -630,7 +631,14 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
   );
 }
 
-async function NutritionTab({ clientId }: { clientId: string }) {
+async function NutritionTab({
+  clientId,
+  jour,
+}: {
+  clientId: string;
+  /** The day type being edited, from the URL. Absent means the default. */
+  jour?: string;
+}) {
   const supabase = await createClient();
   const tWeek = await getTranslations("nutWeek");
   const tRead = await getTranslations("nutRead");
@@ -646,22 +654,28 @@ async function NutritionTab({ clientId }: { clientId: string }) {
   const weekStartIso = weekStart.toISOString().slice(0, 10);
   const todayIso = today.toISOString().slice(0, 10);
 
-  const [clientRes, targetsRes, mealsRes, foodsRes, loggedRes] =
-    await Promise.all([
+  const [
+    clientRes,
+    targetsRes,
+    mealsRes,
+    foodsRes,
+    loggedRes,
+    typesRes,
+    weekRes,
+  ] = await Promise.all([
       supabase
         .from("clients")
         .select("first_name, name, nutrition_mode")
         .eq("id", clientId)
         .maybeSingle(),
-      supabase
-        .from("nutrition_targets")
-        .select("*")
-        .eq("client_id", clientId)
-        .maybeSingle(),
+      // Every target this client has: one per day type plus the default. The
+      // panel picks the one being edited rather than the query doing it, so
+      // switching types costs no round trip.
+      supabase.from("nutrition_targets").select("*").eq("client_id", clientId),
       supabase
         .from("plan_meals")
         .select(
-          "id, at_time, name, position, plan_meal_items(id, name, quantity_g, kcal, protein_g, carbs_g, fat_g, position)",
+          "id, at_time, name, position, day_type_id, plan_meal_items(id, name, quantity_g, kcal, protein_g, carbs_g, fat_g, position)",
         )
         .eq("client_id", clientId)
         .order("at_time"),
@@ -676,17 +690,37 @@ async function NutritionTab({ clientId }: { clientId: string }) {
         .eq("client_id", clientId)
         .gte("day", weekStartIso)
         .order("day"),
+      supabase
+        .from("day_types")
+        .select("id, name, is_rest, position")
+        .eq("client_id", clientId)
+        .order("position"),
+      supabase
+        .from("client_week_days")
+        .select("day_index, day_type_id")
+        .eq("client_id", clientId),
     ]);
+
+  // Which day type the panel is editing. Absent means the default.
+  const dayTypeId = typeof jour === "string" && jour !== "" ? jour : null;
+  const allTargets = targetsRes.data ?? [];
+  const targetRow =
+    allTargets.find((row) => row.day_type_id === dayTypeId) ??
+    (dayTypeId === null
+      ? undefined
+      : allTargets.find((row) => row.day_type_id === null));
 
   const client = clientRes.data;
   const targets: Targets = {
-    kcal: targetsRes.data?.kcal ?? 2000,
-    proteinG: targetsRes.data?.protein_g ?? 0,
-    carbsG: targetsRes.data?.carbs_g ?? 0,
-    fatG: targetsRes.data?.fat_g ?? 0,
+    kcal: targetRow?.kcal ?? 2000,
+    proteinG: targetRow?.protein_g ?? 0,
+    carbsG: targetRow?.carbs_g ?? 0,
+    fatG: targetRow?.fat_g ?? 0,
   };
 
-  const meals: PlanMeal[] = (mealsRes.data ?? []).map((row) => ({
+  const meals: PlanMeal[] = (mealsRes.data ?? [])
+    .filter((row) => (row.day_type_id ?? null) === dayTypeId)
+    .map((row) => ({
     id: row.id,
     atTime: row.at_time,
     name: row.name,
@@ -806,8 +840,30 @@ async function NutritionTab({ clientId }: { clientId: string }) {
         )}
       </section>
 
+      <DayTypes
+        clientId={clientId}
+        firstName={firstName}
+        selected={dayTypeId}
+        types={(typesRes.data ?? []).map((type) => ({
+          id: type.id,
+          name: type.name,
+          isRest: type.is_rest,
+          kcal:
+            allTargets.find((row) => row.day_type_id === type.id)?.kcal ?? null,
+          meals: (mealsRes.data ?? []).filter(
+            (row) => row.day_type_id === type.id,
+          ).length,
+        }))}
+        week={[0, 1, 2, 3, 4, 5, 6].map(
+          (day) =>
+            (weekRes.data ?? []).find((row) => row.day_index === day)
+              ?.day_type_id ?? null,
+        )}
+      />
+
       <NutritionPlan
         clientId={clientId}
+        dayTypeId={dayTypeId}
         firstName={firstName}
         mode={client?.nutrition_mode ?? "macros"}
         targets={targets}

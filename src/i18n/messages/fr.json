@@ -932,5 +932,23 @@
       "unauthorised": "Hevy a refusé la clé. Vérifie qu’elle est valide et que le compte est Pro.",
       "failed": "L’import a échoué. Réessaie dans un instant."
     }
+  },
+  "dayTypes": {
+    "title": "types de jour",
+    "lede": "Un jour jambes ne se mange pas comme un jour off. Nomme tes types, donne à chacun ses cibles — et {first} emporte le bon plan même en décalant sa semaine.",
+    "add": "＋ Nouveau type",
+    "name": "Nom du type",
+    "namePlaceholder": "Haut du corps, Bas du corps, OFF…",
+    "isRest": "Jour off",
+    "create": "Créer",
+    "default": "Par défaut",
+    "noTarget": "—",
+    "week": "sa semaine type",
+    "weekNote": "Change un jour ici et c’est son alimentation de ce jour qui change. {first} peut décaler ses jours off depuis son téléphone : le plan suit le type, pas le jour de la semaine.",
+    "editing": "Tu modifies : {name}",
+    "delete": "Supprimer ce type",
+    "confirmDelete": "Supprimer",
+    "cancel": "Annuler",
+    "deleteBody": "« {name} » part avec ses cibles et ses repas — ils ne décrivent que ce jour-là. Les jours qui le portaient repassent sur le plan par défaut."
   }
 }

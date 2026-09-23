@@ -353,8 +353,28 @@ export type CycleAdjustmentRow = {
 };
 
 /** What the coach sets. Percentages and the kcal cross-check are derived. */
+/** What a day IS, and therefore how it is eaten. The coach names her own. */
+export type DayTypeRow = {
+  id: string;
+  client_id: string;
+  name: string;
+  is_rest: boolean;
+  position: number;
+  created_at: string;
+};
+
+/** The client's ordinary week. Moving a rest day is swapping two of these. */
+export type ClientWeekDayRow = {
+  client_id: string;
+  /** 0 = Monday, as everywhere else. */
+  day_index: number;
+  day_type_id: string | null;
+};
+
 export type NutritionTargetRow = {
   client_id: string;
+  /** Null is the client's default, used on any day with no type of its own. */
+  day_type_id: string | null;
   kcal: number;
   protein_g: number;
   carbs_g: number;
@@ -364,6 +384,8 @@ export type NutritionTargetRow = {
 
 export type PlanMealRow = {
   id: string;
+  /** Null means the meal belongs to the client's default plan. */
+  day_type_id: string | null;
   client_id: string;
   at_time: string;
   name: string;
@@ -453,6 +475,8 @@ export type Database = {
       check_in_photos: Table<CheckInPhotoRow, "check_in_id" | "client_id" | "storage_path">;
       cycle_adjustments: Table<CycleAdjustmentRow, "client_id" | "phase">;
       nutrition_targets: Table<NutritionTargetRow, "client_id">;
+      day_types: Table<DayTypeRow, "client_id" | "name">;
+      client_week_days: Table<ClientWeekDayRow, "client_id" | "day_index">;
       plan_meals: Table<PlanMealRow, "client_id" | "at_time" | "name">;
       plan_meal_items: Table<PlanMealItemRow, "meal_id" | "name">;
       platform_admins: Table<PlatformAdminRow, "user_id">;

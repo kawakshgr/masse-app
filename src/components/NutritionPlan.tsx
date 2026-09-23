@@ -118,9 +118,11 @@ function Macro({
  */
 function TargetsEditor({
   clientId,
+  dayTypeId,
   targets,
 }: {
   clientId: string;
+  dayTypeId: string | null;
   targets: Targets;
 }) {
   const t = useTranslations("nut");
@@ -134,6 +136,7 @@ function TargetsEditor({
   return (
     <form action={saveNutritionTargets} className="mt-4">
       <input type="hidden" name="client_id" value={clientId} />
+      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
       <input type="hidden" name="kcal" value={draft.kcal} />
       <input type="hidden" name="protein_g" value={draft.proteinG} />
       <input type="hidden" name="carbs_g" value={draft.carbsG} />
@@ -229,10 +232,12 @@ function TargetsEditor({
  */
 function PlanTotals({
   clientId,
+  dayTypeId,
   targets,
   meals,
 }: {
   clientId: string;
+  dayTypeId: string | null;
   targets: Targets;
   meals: PlanMeal[];
 }) {
@@ -284,6 +289,8 @@ function PlanTotals({
       {/* Still hers to set: it is what "under target" is measured against. */}
       <form action={saveNutritionTargets} className="mt-4 flex items-end gap-2">
         <input type="hidden" name="client_id" value={clientId} />
+        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
         <input type="hidden" name="protein_g" value={targets.proteinG} />
         <input type="hidden" name="carbs_g" value={targets.carbsG} />
         <input type="hidden" name="fat_g" value={targets.fatG} />
@@ -321,6 +328,7 @@ function PlanTotals({
 
 export function NutritionPlan({
   clientId,
+  dayTypeId,
   firstName,
   mode,
   targets,
@@ -330,6 +338,8 @@ export function NutritionPlan({
   foodAsks,
 }: {
   clientId: string;
+  /** Which day type these targets and meals belong to. Null is the default. */
+  dayTypeId: string | null;
   firstName: string;
   mode: NutritionMode;
   targets: Targets;
@@ -358,6 +368,8 @@ export function NutritionPlan({
           {(["macros", "plan"] as const).map((value) => (
             <form key={value} action={setNutritionMode} className="min-w-0 flex-1">
               <input type="hidden" name="client_id" value={clientId} />
+        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
               <input type="hidden" name="mode" value={value} />
               <button
                 type="submit"
@@ -385,12 +397,20 @@ export function NutritionPlan({
 
         {mode === "macros" ? (
           <TargetsEditor
-            key={`${targets.kcal}-${targets.proteinG}-${targets.carbsG}-${targets.fatG}`}
+            // Remounted when the figures change, and when the day type does:
+            // editing Upper then switching to OFF must not keep Upper's draft.
+            key={`${dayTypeId ?? "default"}-${targets.kcal}-${targets.proteinG}-${targets.carbsG}-${targets.fatG}`}
             clientId={clientId}
+            dayTypeId={dayTypeId}
             targets={targets}
           />
         ) : (
-          <PlanTotals clientId={clientId} targets={targets} meals={meals} />
+          <PlanTotals
+            clientId={clientId}
+            dayTypeId={dayTypeId}
+            targets={targets}
+            meals={meals}
+          />
         )}
       </section>
 
@@ -420,6 +440,8 @@ export function NutritionPlan({
                     <form action={updatePlanMeal} className="flex items-center gap-2">
                       <input type="hidden" name="meal_id" value={meal.id} />
                       <input type="hidden" name="client_id" value={clientId} />
+        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
                       <input
                         type="time"
                         name="at_time"
@@ -466,6 +488,8 @@ export function NutritionPlan({
                                 <form action={deletePlanMealItem} className="shrink-0">
                                   <input type="hidden" name="item_id" value={item.id} />
                                   <input type="hidden" name="client_id" value={clientId} />
+        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
                                   <button
                                     type="submit"
                                     aria-label={t("remove")}
@@ -490,6 +514,8 @@ export function NutritionPlan({
                     <form action={deletePlanMeal} className="mt-1 flex justify-end">
                       <input type="hidden" name="meal_id" value={meal.id} />
                       <input type="hidden" name="client_id" value={clientId} />
+        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
                       <button
                         type="submit"
                         className="px-1 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
@@ -505,6 +531,8 @@ export function NutritionPlan({
 
           <form action={addPlanMeal} className="mt-2 flex items-center gap-2">
             <input type="hidden" name="client_id" value={clientId} />
+        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
             <input type="time" name="at_time" defaultValue="07:30" aria-label={t("mealTime")} className={`tnum w-[88px] shrink-0 ${cell}`} />
             <input name="name" placeholder={t("mealName")} aria-label={t("mealName")} className={`w-full min-w-0 flex-1 ${cell}`} />
             <button

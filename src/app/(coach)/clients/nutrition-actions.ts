@@ -31,22 +31,34 @@ export async function setNutritionMode(formData: FormData) {
   revalidatePath(`/clients/${clientId}`);
 }
 
+function dayTypeOf(formData: FormData): string | null {
+  const raw = String(formData.get("day_type_id") ?? "").trim();
+  return raw === "" ? null : raw;
+}
+
 export async function saveNutritionTargets(formData: FormData) {
   const supabase = await createClient();
   const clientId = String(formData.get("client_id") ?? "");
   if (!clientId) return;
 
-  await supabase.from("nutrition_targets").upsert(
-    {
-      client_id: clientId,
-      kcal: intOr(formData.get("kcal"), 2000),
-      protein_g: intOr(formData.get("protein_g"), 0),
-      carbs_g: intOr(formData.get("carbs_g"), 0),
-      fat_g: intOr(formData.get("fat_g"), 0),
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: "client_id" },
-  );
+  const dayTypeId = dayTypeOf(formData);
+  const row = {
+    client_id: clientId,
+    day_type_id: dayTypeId,
+    kcal: intOr(formData.get("kcal"), 2000),
+    protein_g: intOr(formData.get("protein_g"), 0),
+    carbs_g: intOr(formData.get("carbs_g"), 0),
+    fat_g: intOr(formData.get("fat_g"), 0),
+    updated_at: new Date().toISOString(),
+  };
+
+  // Two partial unique indexes, so the conflict target differs: the default row
+  // is the one with a null type, and there is exactly one per day type.
+  await supabase
+    .from("nutrition_targets")
+    .upsert(row, {
+      onConflict: dayTypeId === null ? "client_id" : "client_id,day_type_id",
+    });
 
   revalidatePath(`/clients/${clientId}`);
 }
@@ -58,13 +70,20 @@ export async function addPlanMeal(formData: FormData) {
   const at = String(formData.get("at_time") ?? "").trim();
   if (!clientId || name === "" || at === "") return;
 
-  const { count } = await supabase
+  const dayTypeId = dayTypeOf(formData);
+  let counter = supabase
     .from("plan_meals")
     .select("id", { count: "exact", head: true })
     .eq("client_id", clientId);
+  counter =
+    dayTypeId === null
+      ? counter.is("day_type_id", null)
+      : counter.eq("day_type_id", dayTypeId);
+  const { count } = await counter;
 
   await supabase.from("plan_meals").insert({
     client_id: clientId,
+    day_type_id: dayTypeId,
     at_time: at,
     name,
     position: count ?? 0,
@@ -165,4 +184,114 @@ export async function deletePlanMealItem(formData: FormData) {
 
   await supabase.from("plan_meal_items").delete().eq("id", id);
   revalidatePath(`/clients/${clientId}`);
+}
+
+/* ---------- day types ---------- */
+
+/**
+ * A kind of day for this client: "Haut du corps", "OFF". Its targets and its
+ * meals hang off it, so a client who moves a rest day carries the right plan
+ * with them without anybody editing anything.
+ */
+export async function addDayType(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  if (!clientId || name === "") return;
+
+  const { count } = await supabase
+    .from("day_types")
+    .select("id", { count: "exact", head: true })
+    .eq("client_id", clientId);
+
+  await supabase.from("day_types").insert({
+    client_id: clientId,
+    name,
+    is_rest: String(formData.get("is_rest") ?? "") === "1",
+    position: count ?? 0,
+  });
+
+  revalidatePath(`/clients/${clientId}`);
+}
+
+export async function renameDayType(formData: FormData) {
+  const supabase = await createClient();
+  const id = String(formData.get("day_type_id") ?? "");
+  const clientId = String(formData.get("client_id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  if (!id || name === "") return;
+
+  await supabase
+    .from("day_types")
+    .update({ name, is_rest: String(formData.get("is_rest") ?? "") === "1" })
+    .eq("id", id);
+
+  revalidatePath(`/clients/${clientId}`);
+}
+
+/**
+ * Removing a type takes its targets and its meals with it — they describe that
+ * day and nothing else. Any weekday pointing at it falls back to the default.
+ */
+export async function deleteDayType(formData: FormData) {
+  const supabase = await createClient();
+  const id = String(formData.get("day_type_id") ?? "");
+  const clientId = String(formData.get("client_id") ?? "");
+  if (!id) return;
+
+  await supabase.from("day_types").delete().eq("id", id);
+  revalidatePath(`/clients/${clientId}`);
+}
+
+/** Which type a weekday is. Null puts it back on the default. */
+export async function setWeekDay(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const dayIndex = Number(formData.get("day_index"));
+  const raw = String(formData.get("day_type_id") ?? "");
+  if (!clientId || !Number.isInteger(dayIndex)) return;
+
+  await supabase.from("client_week_days").upsert(
+    {
+      client_id: clientId,
+      day_index: dayIndex,
+      day_type_id: raw === "" ? null : raw,
+    },
+    { onConflict: "client_id,day_index" },
+  );
+
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/aujourdhui");
+}
+
+/**
+ * Two days trade places. This is how a rest day moves, and why nutrition is
+ * attached to the type rather than the weekday: nothing else has to change.
+ */
+export async function swapWeekDays(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const a = Number(formData.get("day_a"));
+  const b = Number(formData.get("day_b"));
+  if (!clientId || !Number.isInteger(a) || !Number.isInteger(b) || a === b) return;
+
+  const { data: rows } = await supabase
+    .from("client_week_days")
+    .select("day_index, day_type_id")
+    .eq("client_id", clientId)
+    .in("day_index", [a, b]);
+
+  const typeOf = (day: number) =>
+    rows?.find((row) => row.day_index === day)?.day_type_id ?? null;
+
+  await supabase.from("client_week_days").upsert(
+    [
+      { client_id: clientId, day_index: a, day_type_id: typeOf(b) },
+      { client_id: clientId, day_index: b, day_type_id: typeOf(a) },
+    ],
+    { onConflict: "client_id,day_index" },
+  );
+
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/aujourdhui");
 }
