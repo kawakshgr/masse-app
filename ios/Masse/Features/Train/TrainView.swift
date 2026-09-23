@@ -214,7 +214,7 @@ private struct ExerciseCard: View {
                             .frame(width: 52, height: 52)
                             .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.pill))
                     }
-                    .accessibilityLabel(L.t("common.undo"))
+                    .accessibilityLabel(L.t("log.undo"))
                 }
             }
         }

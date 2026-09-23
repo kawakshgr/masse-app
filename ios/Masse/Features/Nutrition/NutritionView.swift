@@ -183,7 +183,7 @@ struct NutritionView: View {
     private var emptyCard: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 8) {
-                Text(L.t(failed ? "offline.title" : "nut.planEmpty"))
+                Text(L.t(failed ? "offline.title" : "fuel.empty"))
                     .font(Ty.cardTitle)
                     .tracking(Ty.displayTracking(19))
                     .foregroundStyle(Tk.ink)

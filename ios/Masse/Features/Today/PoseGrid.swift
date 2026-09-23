@@ -28,7 +28,7 @@ struct PoseGrid: View {
                 }
             }
 
-            Text(L.t(failed ? "photos.failed" : "review.discipline"))
+            Text(L.t(failed ? "photos.failed" : "bilan.discipline"))
                 .font(Ty.copySmall)
                 .foregroundStyle(failed ? Tk.a3 : Tk.ink3)
                 .fixedSize(horizontal: false, vertical: true)
