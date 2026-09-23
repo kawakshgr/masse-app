@@ -1039,5 +1039,22 @@
     "unit": "Unité",
     "days": "Jours",
     "macrosLost": "Macros non déduites : la densité connue est par {unit}."
+  },
+  "clientNav": {
+    "today": "Aujourd’hui",
+    "train": "Séance",
+    "fuel": "Nutrition",
+    "cycle": "Cycle",
+    "coach": "Coach"
+  },
+  "fuel": {
+    "daily": "Calories du jour",
+    "protein": "Protéines",
+    "carbs": "Glucides",
+    "fat": "Lipides",
+    "meals": "Tes repas",
+    "supplements": "Tes compléments",
+    "empty": "Ton coach n’a pas encore écrit de plan pour toi.",
+    "restDay": "Jour de repos"
   }
 }

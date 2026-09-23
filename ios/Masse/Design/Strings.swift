@@ -28,4 +28,13 @@ enum L {
 
     /// "1 série en attente" / "3 séries en attente".
     static func heldCount(_ n: Int) -> String { plural("log.heldCount", n) }
+
+    /// A dose's unit. Some pluralise — a capsule, two capsules — and most do
+    /// not: grams are grams. A missing key comes back as the key itself, which
+    /// is how the plain ones are told apart from the plural ones.
+    static func unit(_ unit: String, _ count: Int) -> String {
+        let key = "supp.unit.\(unit)"
+        let pluralised = plural(key, count)
+        return pluralised.hasPrefix(key) ? t(key) : pluralised
+    }
 }

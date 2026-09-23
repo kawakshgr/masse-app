@@ -1039,5 +1039,22 @@
     "unit": "Unit",
     "days": "Days",
     "macrosLost": "Macros not counted: the known density is per {unit}."
+  },
+  "clientNav": {
+    "today": "Today",
+    "train": "Train",
+    "fuel": "Fuel",
+    "cycle": "Cycle",
+    "coach": "Coach"
+  },
+  "fuel": {
+    "daily": "Today's calories",
+    "protein": "Protein",
+    "carbs": "Carbs",
+    "fat": "Fat",
+    "meals": "Your meals",
+    "supplements": "Your supplements",
+    "empty": "Your coach hasn't written a plan for you yet.",
+    "restDay": "Rest day"
   }
 }

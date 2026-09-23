@@ -6,20 +6,17 @@ import SwiftUI
 /// and says what the week holds instead.
 struct TodayView: View {
     let firstName: String?
+    /// Switches to the Train tab. Today points at the session; it does not
+    /// become it.
+    let onStart: () -> Void
 
     @Environment(Session.self) private var session
     @State private var week: PushedWeek?
     @State private var loaded = false
     @State private var failed = false
-    @State private var training: PushedWeek.DaySession?
-
-    /// Monday is 0, the way the database counts.
-    private var todayIndex: Int {
-        (Calendar(identifier: .iso8601).component(.weekday, from: Date()) + 5) % 7
-    }
 
     private var todaySession: PushedWeek.DaySession? {
-        week?.week?.sessions.first { $0.dayIndex == todayIndex }
+        week?.week?.sessions.first { $0.dayIndex == Weekday.today }
     }
 
     var body: some View {
@@ -47,7 +44,6 @@ struct TodayView: View {
             }
         }
         .task { await load() }
-        .fullScreenCover(item: $training) { TrainView(day: $0) }
     }
 
     private var header: some View {
@@ -113,7 +109,7 @@ struct TodayView: View {
             }
 
             // The whole point of the screen. Nothing above it moves to make room.
-            CTA(title: L.t("log.title")) { training = day }
+            CTA(title: L.t("log.title"), action: onStart)
         }
     }
 

@@ -13,10 +13,19 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 
+// A dotted entry carries one sub-tree rather than the whole namespace: the
+// client shows the coach's supplement timings and units, and none of the rest
+// of her library's vocabulary.
 const NAMESPACES = [
   "onboarding", "today", "goal", "equipment", "days", "cycle",
   "phase", "offline", "auth", "log", "common", "feel", "pain", "adherence",
+  "clientNav", "fuel", "entry", "supp.timing", "supp.unit",
+  "shell", "soonCopy",
 ];
+
+/** Walks a dotted path, so "supp.timing" resolves to that object. */
+const at = (root, path) =>
+  path.split(".").reduce((node, key) => node?.[key], root);
 
 const read = (locale) =>
   JSON.parse(readFileSync(`src/i18n/messages/${locale}.json`, "utf8"));
@@ -62,7 +71,7 @@ let skipped = 0;
 let plurals = 0;
 
 for (const ns of NAMESPACES) {
-  for (const [key, value] of Object.entries(fr[ns] ?? {})) {
+  for (const [key, value] of Object.entries(at(fr, ns) ?? {})) {
     if (typeof value !== "string") continue;
     // A select is ICU machinery with no catalog equivalent; skip it.
     if (/\{[^}]*,\s*select/.test(value)) { skipped += 1; continue; }
@@ -70,7 +79,8 @@ for (const ns of NAMESPACES) {
     // A plural becomes one key per case, which Swift chooses between.
     if (/\{[^}]*,\s*plural/.test(value)) {
       const frCases = splitPlural(value);
-      const enCases = typeof en[ns]?.[key] === "string" ? splitPlural(en[ns][key]) : {};
+      const enSource = at(en, ns)?.[key];
+      const enCases = typeof enSource === "string" ? splitPlural(enSource) : {};
 
       for (const [name, frCase] of Object.entries(frCases)) {
         strings[`${ns}.${key}.${name}`] = {
@@ -90,7 +100,7 @@ for (const ns of NAMESPACES) {
     }
 
     const frText = toFoundation(value);
-    const enValue = en[ns]?.[key];
+    const enValue = at(en, ns)?.[key];
     const enText = typeof enValue === "string" ? toFoundation(enValue).out : frText.out;
 
     strings[`${ns}.${key}`] = {

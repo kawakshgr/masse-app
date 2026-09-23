@@ -6,14 +6,17 @@ import SwiftUI
 /// carry over from the last set so a working set costs one tap, and nothing
 /// waits on the network.
 struct TrainView: View {
-    let day: PushedWeek.DaySession
-
-    @Environment(\.dismiss) private var dismiss
     @State private var log = TrainingLog()
     @State private var open: String?
+    @State private var week: PushedWeek?
+    @State private var loaded = false
+
+    private var day: PushedWeek.DaySession? {
+        week?.week?.sessions.first { $0.dayIndex == Weekday.today }
+    }
 
     private var exercises: [PushedWeek.Exercise] {
-        day.exercises.sorted { $0.position < $1.position }
+        (day?.exercises ?? []).sorted { $0.position < $1.position }
     }
 
     var body: some View {
@@ -24,6 +27,18 @@ struct TrainView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     header
+
+                    if !loaded {
+                        ProgressView().tint(Tk.a1).frame(maxWidth: .infinity)
+                    } else if exercises.isEmpty {
+                        GlassCard {
+                            Text(L.t("log.noSession"))
+                                .font(Ty.cardTitle)
+                                .tracking(Ty.displayTracking(19))
+                                .foregroundStyle(Tk.ink)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
 
                     ForEach(exercises) { exercise in
                         ExerciseCard(
@@ -53,6 +68,8 @@ struct TrainView: View {
             }
         }
         .task {
+            week = try? await WeekFeed.current()
+            loaded = true
             await log.start(exerciseIds: exercises.map(\.id))
             // Open the first exercise with nothing logged: where she is.
             open = exercises.first { log.sets(for: $0.id).isEmpty }?.id
@@ -62,15 +79,9 @@ struct TrainView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(L.t("log.title")).kicker()
-                Spacer()
-                Button(L.t("common.close")) { dismiss() }
-                    .font(Ty.copySmall)
-                    .foregroundStyle(Tk.ink2)
-            }
+            Text(L.t("log.title")).kicker()
 
-            Text(day.name ?? L.t("log.title"))
+            Text(day?.name ?? L.t("log.title"))
                 .font(Ty.screenTitle)
                 .tracking(Ty.displayTracking(30))
                 .foregroundStyle(Tk.ink)
