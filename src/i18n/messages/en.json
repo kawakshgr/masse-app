@@ -495,7 +495,7 @@
     }
   },
   "meals": {
-    "title": "Today’s meals",
+    "title": "Today's meals",
     "add": "Add",
     "name": "Food",
     "free": "Or type freely",
@@ -1058,5 +1058,16 @@
     "supplements": "Your supplements",
     "empty": "Your coach hasn't written a plan for you yet.",
     "restDay": "Rest day"
+  },
+  "bilan": {
+    "title": "Your check-in",
+    "lede": "Once a week. Your coach reads it before writing what comes next.",
+    "prompt": "This week's check-in isn't filled in yet.",
+    "open": "Fill in my check-in",
+    "done": "Check-in sent",
+    "byCoach": "Your coach has already filed this week's check-in.",
+    "reviewed": "Read by your coach",
+    "waiting": "Waiting to be read",
+    "notePlaceholder": "What the boxes don't say."
   }
 }

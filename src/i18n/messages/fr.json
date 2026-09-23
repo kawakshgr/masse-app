@@ -5,15 +5,15 @@
   },
   "auth": {
     "title": "Connexion",
-    "lede": "Entre ton adresse e-mail. On t'envoie un lien, pas de mot de passe à retenir.",
+    "lede": "Entre ton adresse e-mail. On t’envoie un lien, pas de mot de passe à retenir.",
     "email": "Adresse e-mail",
     "emailPlaceholder": "lucie@exemple.fr",
     "send": "Envoyer le lien",
     "sending": "Envoi…",
     "sent": "Lien envoyé. Ouvre ta boîte mail — il expire dans une heure.",
-    "error": "L'envoi a échoué. Réessaie dans un instant.",
+    "error": "L’envoi a échoué. Réessaie dans un instant.",
     "signOut": "Se déconnecter",
-    "callbackError": "Ce lien n'est plus valable. Demandes-en un nouveau.",
+    "callbackError": "Ce lien n’est plus valable. Demandes-en un nouveau.",
     "rateLimited": "Trop de liens demandés. Supabase limite les envois à quelques-uns par heure tant qu’aucun SMTP n’est configuré. Attends une heure, ou branche un vrai service d’e-mail.",
     "haveAccount": "J’ai déjà un compte",
     "signInTitle": "Te reconnecter",
@@ -29,22 +29,22 @@
     "programmes": "Programmes",
     "soon": "bientôt",
     "messaging": "Inbox",
-    "messagingSoon": "La messagerie est en développement. D'ici là, WhatsApp reste où il est.",
-    "subtitle": "{clients, plural, =0 {Personne n'a besoin de toi} =1 {1 client a besoin de toi} other {# clients ont besoin de toi}} · {checkins, plural, =0 {aucun bilan à relire} =1 {1 bilan à relire} other {# bilans à relire}}"
+    "messagingSoon": "La messagerie est en développement. D’ici là, WhatsApp reste où il est.",
+    "subtitle": "{clients, plural, =0 {Personne n’a besoin de toi} =1 {1 client a besoin de toi} other {# clients ont besoin de toi}} · {checkins, plural, =0 {aucun bilan à relire} =1 {1 bilan à relire} other {# bilans à relire}}"
   },
   "roster": {
     "title": "Roster",
     "count": "{count, plural, =0 {aucun client} =1 {1 client} other {# clients}}",
-    "empty": "Aucun client pour l'instant.",
-    "emptyAction": "Invite ton premier client avec un code — l'inscription se fait toute seule.",
-    "newInvite": "Nouveau code d'invitation",
+    "empty": "Aucun client pour l’instant.",
+    "emptyAction": "Invite ton premier client avec un code — l’inscription se fait toute seule.",
+    "newInvite": "Nouveau code d’invitation",
     "remove": "Retirer",
     "needsYou": "a besoin de toi",
     "noBlock": "Aucun bloc en cours"
   },
   "programmes": {
     "title": "Programmes",
-    "empty": "Aucun programme pour l'instant.",
+    "empty": "Aucun programme pour l’instant.",
     "emptyAction": "Crée un bloc, écris sa première semaine, puis duplique-la.",
     "new": "Nouveau programme",
     "blank": "+ Programme vierge",
@@ -966,7 +966,7 @@
   },
   "supp": {
     "title": "Compléments",
-    "lede": "Les doses sont des fourchettes, parce que c'est ainsi qu'on les connaît. Le commentaire dit ce que l'étiquette ne dira pas.",
+    "lede": "Les doses sont des fourchettes, parce que c’est ainsi qu’on les connaît. Le commentaire dit ce que l’étiquette ne dira pas.",
     "count": "{count, plural, =0 {aucun} =1 {1 complément} other {# compléments}}",
     "search": "Chercher un complément",
     "noMatch": "Rien ne correspond à « {query} ».",
@@ -995,7 +995,7 @@
       "post": "Après la séance",
       "evening": "Le soir",
       "meal": "Au repas",
-      "anytime": "N'importe quand"
+      "anytime": "N’importe quand"
     },
     "unusable": "Inutilisable",
     "unusableWhy": "Masse ne le propose pas dans un plan. Il reste ici pour répondre à la question plutôt que de la laisser ouverte.",
@@ -1024,7 +1024,7 @@
   "proto": {
     "title": "Compléments",
     "lede": "Ce que {first} prend, et quand. Ce qui apporte des macros compte dans le total de la journée.",
-    "none": "Aucun complément pour l'instant.",
+    "none": "Aucun complément pour l’instant.",
     "add": "Ajouter un complément",
     "pick": "Choisir dans la bibliothèque",
     "everyDay": "Tous les jours",
@@ -1032,11 +1032,11 @@
     "dose": "Dose",
     "remove": "Retirer",
     "inTotal": "{kcal} kcal et {protein} g de protéines viennent des compléments.",
-    "noneInTotal": "Aucun complément n'apporte de macros.",
+    "noneInTotal": "Aucun complément n’apporte de macros.",
     "refused": "« {name} » est marqué inutilisable : il ne peut pas être prescrit.",
     "libraryLink": "Voir la bibliothèque",
-    "todayTitle": "Tes compléments aujourd'hui",
-    "todayNone": "Aucun complément prévu aujourd'hui.",
+    "todayTitle": "Tes compléments aujourd’hui",
+    "todayNone": "Aucun complément prévu aujourd’hui.",
     "when": "Quand",
     "unit": "Unité",
     "days": "Jours",
@@ -1058,5 +1058,16 @@
     "supplements": "Tes compléments",
     "empty": "Ton coach n’a pas encore écrit de plan pour toi.",
     "restDay": "Jour de repos"
+  },
+  "bilan": {
+    "title": "Ton bilan",
+    "lede": "Une fois par semaine. Ton coach le lit avant d’écrire la suite.",
+    "prompt": "Le bilan de cette semaine n’est pas encore rempli.",
+    "open": "Remplir mon bilan",
+    "done": "Bilan envoyé",
+    "byCoach": "Ton coach a déjà saisi le bilan de cette semaine.",
+    "reviewed": "Relu par ton coach",
+    "waiting": "En attente de relecture",
+    "notePlaceholder": "Ce que les cases ne disent pas."
   }
 }

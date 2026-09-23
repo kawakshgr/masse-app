@@ -175,3 +175,88 @@ enum SymptomNotes {
         UserDefaults.standard.set(notes, forKey: key)
     }
 }
+
+/// The weekly check-in, as the client files it.
+///
+/// `author` has carried 'coach' and 'client' since the first migration; this is
+/// the client half arriving. A row her coach wrote is not editable here — RLS
+/// decides that, not this struct.
+struct CheckIn: Codable, Sendable {
+    let weekStartDate: String
+    var feel: String?
+    var pain: String?
+    var adherence: String?
+    var bodyweightKg: Double?
+    var note: String?
+    var author: String
+    var reviewedAt: String?
+
+    enum CodingKeys: String, CodingKey {
+        case feel, pain, adherence, note, author
+        case weekStartDate = "week_start_date"
+        case bodyweightKg = "bodyweight_kg"
+        case reviewedAt = "reviewed_at"
+    }
+
+    static let feels = ["Strong", "Steady", "Heavy"]
+    static let pains = ["None", "Minor", "Need to talk"]
+    static let adherences = ["All of it", "Most", "Struggled"]
+}
+
+enum CheckInFeed {
+
+    /// Monday of the week we are in, which is how the row is keyed.
+    static var weekStartIso: String {
+        let calendar = Calendar(identifier: .iso8601)
+        let start = calendar.dateInterval(of: .weekOfYear, for: Date())?.start ?? Date()
+        return start.formatted(.iso8601.year().month().day().dateSeparator(.dash))
+    }
+
+    static func thisWeek() async throws -> CheckIn? {
+        let rows: [CheckIn] = try await Backend.client
+            .from("check_ins")
+            .select("week_start_date, feel, pain, adherence, bodyweight_kg, note, author, reviewed_at")
+            .eq("week_start_date", value: weekStartIso)
+            .limit(1)
+            .execute()
+            .value
+        return rows.first
+    }
+
+    /// Files hers, or corrects the one she filed. Upsert on the week, because
+    /// the table already holds one row per client per week and a second attempt
+    /// is a correction rather than a new entry.
+    static func submit(_ checkIn: CheckIn) async throws {
+        guard let clientId = Backend.auth.currentUser?.id else { return }
+
+        struct Row: Encodable {
+            let client_id: String
+            let week_start_date: String
+            let feel: String?
+            let pain: String?
+            let adherence: String?
+            let bodyweight_kg: Double?
+            let note: String?
+            let author: String
+        }
+
+        try await Backend.client
+            .from("check_ins")
+            .upsert(
+                Row(
+                    client_id: clientId.uuidString,
+                    week_start_date: checkIn.weekStartDate,
+                    feel: checkIn.feel,
+                    pain: checkIn.pain,
+                    adherence: checkIn.adherence,
+                    bodyweight_kg: checkIn.bodyweightKg,
+                    note: checkIn.note,
+                    // Never 'coach'. The policy checks it too, so a client
+                    // build that lied here would simply be refused.
+                    author: "client"
+                ),
+                onConflict: "client_id,week_start_date"
+            )
+            .execute()
+    }
+}

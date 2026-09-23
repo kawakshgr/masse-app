@@ -1304,7 +1304,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Entre ton adresse e-mail. On t'envoie un lien, pas de mot de passe à retenir."
+            "value": "Entre ton adresse e-mail. On t’envoie un lien, pas de mot de passe à retenir."
           }
         },
         "en": {
@@ -1406,7 +1406,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "L'envoi a échoué. Réessaie dans un instant."
+            "value": "L’envoi a échoué. Réessaie dans un instant."
           }
         },
         "en": {
@@ -1440,7 +1440,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ce lien n'est plus valable. Demandes-en un nouveau."
+            "value": "Ce lien n’est plus valable. Demandes-en un nouveau."
           }
         },
         "en": {
@@ -2785,7 +2785,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "N'importe quand"
+            "value": "N’importe quand"
           }
         },
         "en": {
@@ -3027,7 +3027,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "La messagerie est en développement. D'ici là, WhatsApp reste où il est."
+            "value": "La messagerie est en développement. D’ici là, WhatsApp reste où il est."
           }
         },
         "en": {
@@ -3139,6 +3139,414 @@
           "stringUnit": {
             "state": "translated",
             "value": "Billing arrives in v1.1. At this scale a spreadsheet suffices — and nothing will ever be charged automatically."
+          }
+        }
+      }
+    },
+    "bilan.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton bilan"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your check-in"
+          }
+        }
+      }
+    },
+    "bilan.lede": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une fois par semaine. Ton coach le lit avant d’écrire la suite."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once a week. Your coach reads it before writing what comes next."
+          }
+        }
+      }
+    },
+    "bilan.prompt": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le bilan de cette semaine n’est pas encore rempli."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week's check-in isn't filled in yet."
+          }
+        }
+      }
+    },
+    "bilan.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remplir mon bilan"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill in my check-in"
+          }
+        }
+      }
+    },
+    "bilan.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilan envoyé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-in sent"
+          }
+        }
+      }
+    },
+    "bilan.byCoach": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton coach a déjà saisi le bilan de cette semaine."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your coach has already filed this week's check-in."
+          }
+        }
+      }
+    },
+    "bilan.reviewed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relu par ton coach"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read by your coach"
+          }
+        }
+      }
+    },
+    "bilan.waiting": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente de relecture"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting to be read"
+          }
+        }
+      }
+    },
+    "bilan.notePlaceholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce que les cases ne disent pas."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What the boxes don't say."
+          }
+        }
+      }
+    },
+    "checkin.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilan de la semaine"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly check-in"
+          }
+        }
+      }
+    },
+    "checkin.lede": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu demandes par WhatsApp, tu saisis ici. Le formulaire côté client viendra plus tard."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You ask on WhatsApp, you type it here. The client-submitted form comes later."
+          }
+        }
+      }
+    },
+    "checkin.week": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semaine du"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week of"
+          }
+        }
+      }
+    },
+    "checkin.feel": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensation"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feel"
+          }
+        }
+      }
+    },
+    "checkin.pain": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Douleur"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pain"
+          }
+        }
+      }
+    },
+    "checkin.adherence": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assiduité"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adherence"
+          }
+        }
+      }
+    },
+    "checkin.bodyweight": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poids (kg)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight (kg)"
+          }
+        }
+      }
+    },
+    "checkin.note": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        }
+      }
+    },
+    "checkin.save": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer le bilan"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save check-in"
+          }
+        }
+      }
+    },
+    "checkin.saved": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilan enregistré"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-in saved"
+          }
+        }
+      }
+    },
+    "checkin.markReviewed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marquer comme relu"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark reviewed"
+          }
+        }
+      }
+    },
+    "checkin.reviewed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relu"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reviewed"
+          }
+        }
+      }
+    },
+    "checkin.waiting": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente de relecture"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting on you"
+          }
+        }
+      }
+    },
+    "checkin.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun bilan pour l’instant."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No check-ins yet."
+          }
+        }
+      }
+    },
+    "checkin.history": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilans"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-ins"
           }
         }
       }
