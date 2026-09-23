@@ -774,7 +774,7 @@
     "defaultNote": "Non réglé — les valeurs du handoff s’appliquent."
   },
   "nut": {
-    "fed": "Comment {first} est nourrie",
+    "fed": "L’alimentation de {first}",
     "modeMacros": "Cibles de macros",
     "modePlan": "Plan de repas fixe",
     "noteMacros": "{first} voit des cibles et enregistre dessus. Pour les clients capables de juger une portion.",
@@ -807,7 +807,13 @@
     "noOffPlan": "Rien hors plan cette semaine.",
     "planEmpty": "Ajoute des aliments aux repas : les calories et les macros se calculent à partir d’eux.",
     "planDerived": "Calculé à partir des aliments du plan.",
-    "aimFor": "Cible visée"
+    "aimFor": "Cible visée",
+    "addFood": "＋ Ajouter un aliment",
+    "add": "Ajouter",
+    "close": "Fermer",
+    "foodAsks": "Aliments estimés par le client",
+    "foodAsksNote": "Estimés par le client parce qu’ils ne sont pas dans ta base. Ajoute-les et chaque enregistrement futur utilisera tes chiffres au lieu d’une approximation.",
+    "addToLibrary": "Ajouter à la bibliothèque"
   },
   "nutWeek": {
     "title": "Cette semaine",

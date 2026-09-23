@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { MacroDonut } from "@/components/MacroDonut";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { FoodPicker, type PickableFood } from "@/components/FoodPicker";
 import {
   addPlanMeal,
-  addPlanMealItem,
   deletePlanMeal,
   deletePlanMealItem,
   saveNutritionTargets,
@@ -326,14 +327,17 @@ export function NutritionPlan({
   meals,
   foods,
   offPlan,
+  foodAsks,
 }: {
   clientId: string;
   firstName: string;
   mode: NutritionMode;
   targets: Targets;
   meals: PlanMeal[];
-  foods: { id: string; name: string }[];
+  foods: PickableFood[];
   offPlan: { id: string; name: string; day: string; kcal: number | null }[];
+  /** Names the client typed because the library had nothing to match. */
+  foodAsks: string[];
 }) {
   const t = useTranslations("nut");
 
@@ -475,26 +479,11 @@ export function NutritionPlan({
                           </ul>
                         )}
 
-                        <form action={addPlanMealItem} className="mt-1 flex flex-wrap items-center gap-1">
-                          <input type="hidden" name="meal_id" value={meal.id} />
-                          <input type="hidden" name="client_id" value={clientId} />
-                          <select name="food_id" defaultValue="" className={`w-full min-w-0 flex-1 ${cell}`} aria-label={t("pickFood")}>
-                            <option value="">{t("pickFood")}</option>
-                            {foods.map((food) => (
-                              <option key={food.id} value={food.id}>
-                                {food.name}
-                              </option>
-                            ))}
-                          </select>
-                          <input name="name" placeholder={t("freeItem")} aria-label={t("freeItem")} className={`w-[110px] shrink-0 ${cell}`} />
-                          <input name="quantity_g" inputMode="decimal" placeholder={t("grams")} aria-label={t("grams")} className={`tnum w-[60px] shrink-0 ${cell}`} />
-                          <button
-                            type="submit"
-                            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-1 text-[11px] text-[var(--accent)]"
-                          >
-                            +
-                          </button>
-                        </form>
+                        <FoodPicker
+                          mealId={meal.id}
+                          clientId={clientId}
+                          foods={foods}
+                        />
                       </>
                     )}
 
@@ -535,6 +524,36 @@ export function NutritionPlan({
             </p>
           )}
         </section>
+
+        {foodAsks.length > 0 && (
+          <section className="glass rounded-r3 p-4">
+            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+              {t("foodAsks")}
+            </h3>
+            <ul className="mt-2.5 flex flex-col gap-1.5">
+              {foodAsks.map((name) => (
+                <li key={name}>
+                  {/* Straight into the library with the name already searched:
+                      the next log uses her numbers instead of a guess. */}
+                  <Link
+                    href={`/aliments?q=${encodeURIComponent(name)}`}
+                    className="glass2 flex items-center gap-2 rounded-r2 px-3 py-2"
+                  >
+                    <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">
+                      {name}
+                    </span>
+                    <span className="shrink-0 text-[11.5px] font-semibold text-[var(--accent-soft)]">
+                      {t("addToLibrary")}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2.5 text-[12px] leading-[1.5] text-[var(--ink2)]">
+              {t("foodAsksNote")}
+            </p>
+          </section>
+        )}
 
         <section className="glass rounded-r3 p-4">
           <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">

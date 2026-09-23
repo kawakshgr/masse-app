@@ -807,7 +807,13 @@
     "noOffPlan": "Nothing off plan this week.",
     "planEmpty": "Add foods to the meals: calories and macros are computed from them.",
     "planDerived": "Computed from the foods in the plan.",
-    "aimFor": "Aiming for"
+    "aimFor": "Aiming for",
+    "addFood": "＋ Add a food",
+    "add": "Add",
+    "close": "Close",
+    "foodAsks": "Foods the client estimated",
+    "foodAsksNote": "Estimated by the client because the food is not in your database. Add it and every future log uses your numbers instead of a guess.",
+    "addToLibrary": "Add to the library"
   },
   "nutWeek": {
     "title": "This week",

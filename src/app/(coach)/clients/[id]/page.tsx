@@ -665,10 +665,14 @@ async function NutritionTab({ clientId }: { clientId: string }) {
         )
         .eq("client_id", clientId)
         .order("at_time"),
-      supabase.from("foods").select("id, name").order("name").limit(300),
+      supabase
+        .from("foods")
+        .select("id, name, brand, category, serving_label, serving_g, kcal_100g")
+        .order("name")
+        .limit(500),
       supabase
         .from("meals")
-        .select("id, day, name, kcal")
+        .select("id, day, name, kcal, food_id")
         .eq("client_id", clientId)
         .gte("day", weekStartIso)
         .order("day"),
@@ -809,6 +813,13 @@ async function NutritionTab({ clientId }: { clientId: string }) {
         targets={targets}
         meals={meals}
         foods={foodsRes.data ?? []}
+        foodAsks={[
+          ...new Set(
+            logged
+              .filter((m) => m.food_id == null && m.name.trim() !== "")
+              .map((m) => m.name.trim()),
+          ),
+        ]}
         offPlan={logged.map((m) => ({
           id: m.id,
           name: m.name,
