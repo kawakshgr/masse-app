@@ -1,3624 +1,3655 @@
 {
-  "sourceLanguage": "fr",
-  "strings": {
-    "onboarding.step": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Étape %1$@ sur 9"
+  "sourceLanguage" : "fr",
+  "strings" : {
+    "—" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ +" : {
+
+    },
+    "%@ −" : {
+
+    },
+    "%@ g" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld j" : {
+
+    },
+    "adherence.All of it" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All of it"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Step %1$@ of 9"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout fait"
           }
         }
-      },
-      "comment": "args: n"
+      }
     },
-    "onboarding.codeTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton code d’invitation"
+    "adherence.Most" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Most"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your invite code"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’essentiel"
           }
         }
       }
     },
-    "onboarding.codeLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton coach te l’a envoyé. Il ne sert qu’une fois."
+    "adherence.Struggled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Struggled"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your coach sent it to you. It works once."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difficile"
           }
         }
       }
     },
-    "onboarding.codePlaceholder": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MERLET-4K2P"
+    "auth.backToCode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I have an invite code"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "MERLET-4K2P"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J’ai un code d’invitation"
           }
         }
       }
     },
-    "onboarding.codeBad": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ce code n’est pas valable. Vérifie-le, ou demande-en un nouveau à ton coach."
+    "auth.callbackError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That link is no longer valid. Ask for a new one."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "That code is not valid. Check it, or ask your coach for a new one."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce lien n’est plus valable. Demandes-en un nouveau."
           }
         }
       }
     },
-    "onboarding.codeOk": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bienvenue. C’est %1$@ qui t’accompagne."
+    "auth.email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email address"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Welcome. %1$@ is coaching you."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse e-mail"
           }
         }
-      },
-      "comment": "args: coach"
+      }
     },
-    "onboarding.goalTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton objectif"
+    "auth.emailPlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lucie@example.com"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your goal"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lucie@exemple.fr"
           }
         }
       }
     },
-    "onboarding.goalLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un seul. C’est lui qui oriente tes séances."
+    "auth.error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That failed to send. Try again in a moment."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "One only. It steers every session."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’envoi a échoué. Réessaie dans un instant."
           }
         }
       }
     },
-    "onboarding.bodyTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toi, en trois chiffres"
+    "auth.haveAccount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I already have an account"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You, in three numbers"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J’ai déjà un compte"
           }
         }
       }
     },
-    "onboarding.bodyLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pour calibrer les charges. Rien de plus."
+    "auth.lede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter your email. We send a link — no password to remember."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To calibrate loads. Nothing more."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entre ton adresse e-mail. On t’envoie un lien, pas de mot de passe à retenir."
           }
         }
       }
     },
-    "onboarding.height": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taille (cm)"
+    "auth.noRecordAction" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter an invite code"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Height (cm)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrer un code d’invitation"
           }
         }
       }
     },
-    "onboarding.weight": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Poids (kg)"
+    "auth.noRecordBody" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This address is signed in, but no coach has added you yet. If you have just arrived, enter the invite code you were sent."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weight (kg)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette adresse est bien connectée, mais aucun coach ne t’a encore ajouté. Si tu viens d’arriver, entre le code d’invitation qu’on t’a envoyé."
           }
         }
       }
     },
-    "onboarding.birthYear": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Année de naissance"
+    "auth.noRecordTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No record at this address"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Birth year"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune fiche à cette adresse"
           }
         }
       }
     },
-    "onboarding.injuriesTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Des blessures ?"
+    "auth.openOnThisDevice" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the link on this device — it is the one holding the key."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Any injuries?"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre le lien sur cet appareil — c’est lui qui garde la clé."
           }
         }
       }
     },
-    "onboarding.injuriesLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ce qu’il faut contourner. Une par ligne, laisse vide s’il n’y a rien."
+    "auth.rateLimited" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too many links requested. Supabase caps sends to a few per hour until you configure SMTP. Wait an hour, or connect a real email service."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "What to work around. One per line, leave empty if none."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trop de liens demandés. Supabase limite les envois à quelques-uns par heure tant qu’aucun SMTP n’est configuré. Attends une heure, ou branche un vrai service d’e-mail."
           }
         }
       }
     },
-    "onboarding.equipmentTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton matériel"
+    "auth.send" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send the link"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your equipment"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer le lien"
           }
         }
       }
     },
-    "onboarding.equipmentLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ce à quoi tu as accès."
+    "auth.sending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending…"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "What you have access to."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoi…"
           }
         }
       }
     },
-    "onboarding.daysTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ta semaine"
+    "auth.sent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link sent. Check your inbox — it expires in an hour."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your week"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lien envoyé. Ouvre ta boîte mail — il expire dans une heure."
           }
         }
       }
     },
-    "onboarding.daysLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les jours où tu peux t’entraîner."
+    "auth.signInLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The address you signed up with. We send a link, not a password."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The days you can train."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’adresse que tu as utilisée en t’inscrivant. On t’envoie un lien, pas de mot de passe."
           }
         }
       }
     },
-    "onboarding.cycleTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Suivi du cycle"
+    "auth.signInTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign back in"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cycle tracking"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te reconnecter"
           }
         }
       }
     },
-    "onboarding.cycleLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Optionnel, et révocable à tout moment."
+    "auth.signOut" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Optional, and revocable at any time."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se déconnecter"
           }
         }
       }
     },
-    "onboarding.cyclePromise": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Si tu l’actives, seules ta date de règles et la durée de ton cycle sont enregistrées — en Europe. Tes notes de symptômes ne quittent jamais ton téléphone : il n’existe aucune table pour les stocker. Ton coach voit une phase et une charge adaptée, jamais un symptôme."
+    "auth.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "If you turn it on, only your period start date and cycle length are stored — in Europe. Your symptom notes never leave your phone: there is no table to hold them. Your coach sees a phase and an adapted load, never a symptom."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connexion"
           }
         }
       }
     },
-    "onboarding.cycleOn": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activer le suivi"
+    "bilan.byCoach" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your coach has already filed this week's check-in."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Turn tracking on"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton coach a déjà saisi le bilan de cette semaine."
           }
         }
       }
     },
-    "onboarding.cycleOff": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sans suivi"
+    "bilan.done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check-in sent"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No tracking"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilan envoyé"
           }
         }
       }
     },
-    "onboarding.sleepTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une nuit normale"
+    "bilan.lede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Once a week. Your coach reads it before writing what comes next."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A normal night"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une fois par semaine. Ton coach le lit avant d’écrire la suite."
           }
         }
       }
     },
-    "onboarding.sleepLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Combien d’heures, d’habitude ?"
+    "bilan.notePlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What the boxes don't say."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "How many hours, usually?"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce que les cases ne disent pas."
           }
         }
       }
     },
-    "onboarding.summaryTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tout est là"
+    "bilan.open" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fill in my check-in"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "That is everything"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remplir mon bilan"
           }
         }
       }
     },
-    "onboarding.summaryLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vérifie, puis crée ton compte. Ta première semaine t’attend."
+    "bilan.prompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This week's check-in isn't filled in yet."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Check it, then create your account. Your first week is waiting."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le bilan de cette semaine n’est pas encore rempli."
           }
         }
       }
     },
-    "onboarding.emailLabel": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton adresse e-mail"
+    "bilan.reviewed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read by your coach"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your email address"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relu par ton coach"
           }
         }
       }
     },
-    "onboarding.finish": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Créer mon compte"
+    "bilan.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your check-in"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create my account"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton bilan"
           }
         }
       }
     },
-    "onboarding.sent": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lien envoyé. Ouvre ta boîte mail pour terminer."
+    "bilan.waiting" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting to be read"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Link sent. Check your inbox to finish."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de relecture"
           }
         }
       }
     },
-    "onboarding.next": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continuer"
+    "checkin.adherence" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adherence"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assiduité"
           }
         }
       }
     },
-    "onboarding.back": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retour"
+    "checkin.bodyweight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bodyweight (kg)"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids (kg)"
           }
         }
       }
     },
-    "onboarding.skip": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Passer"
+    "checkin.feel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feel"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Skip"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sensation"
           }
         }
       }
     },
-    "onboarding.finalising": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "On termine ton inscription…"
+    "checkin.history" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check-ins"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Finishing your sign-up…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilans"
           }
         }
       }
     },
-    "onboarding.failed": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L’inscription a échoué. Ton code est peut-être déjà utilisé."
+    "checkin.lede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You ask on WhatsApp, you type it here. The client-submitted form comes later."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign-up failed. Your code may already have been used."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu demandes par WhatsApp, tu saisis ici. Le formulaire côté client viendra plus tard."
           }
         }
       }
     },
-    "onboarding.noAnswers": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tes réponses ne sont pas dans ce navigateur."
+    "checkin.markReviewed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark reviewed"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your answers are not in this browser."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquer comme relu"
           }
         }
       }
     },
-    "onboarding.noAnswersBody": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le lien de connexion doit être ouvert sur le même appareil et le même navigateur que celui où tu as rempli les étapes. Reprends-les ici, ça va vite."
+    "checkin.none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No check-ins yet."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The sign-in link has to be opened on the same device and browser where you filled in the steps. Start them again here — it is quick."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun bilan pour l’instant."
           }
         }
       }
     },
-    "onboarding.restart": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recommencer les étapes"
+    "checkin.note" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start the steps again"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note"
           }
         }
       }
     },
-    "onboarding.failedBody": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton code a peut-être déjà été utilisé, ou il a expiré. Demande-en un nouveau à ton coach."
+    "checkin.pain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pain"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your code may already have been used, or it expired. Ask your coach for a new one."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Douleur"
           }
         }
       }
     },
-    "onboarding.nameLabel": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nom"
+    "checkin.reviewed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reviewed"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Name"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relu"
           }
         }
       }
     },
-    "today.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aujourd’hui"
+    "checkin.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save check-in"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer le bilan"
           }
         }
       }
     },
-    "today.none": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune semaine poussée pour l’instant."
+    "checkin.saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check-in saved"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No week pushed yet."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilan enregistré"
           }
         }
       }
     },
-    "today.noneHint": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton coach te l’enverra ; elle apparaîtra ici."
+    "checkin.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly check-in"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your coach will send one; it shows up here."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilan de la semaine"
           }
         }
       }
     },
-    "today.rest": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Repos"
+    "checkin.waiting" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting on you"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rest"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de relecture"
           }
         }
       }
     },
-    "today.week": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ta semaine"
+    "checkin.week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week of"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your week"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Semaine du"
           }
         }
       }
     },
-    "today.sets.one": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 série"
+    "clientNav.coach" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coach"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 set"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coach"
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "today.sets.other": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ séries"
+    "clientNav.cycle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ sets"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle"
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "today.target": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif"
+    "clientNav.fuel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuel"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Target"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutrition"
           }
         }
       }
     },
-    "today.signOut": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se déconnecter"
+    "clientNav.today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign out"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd’hui"
           }
         }
       }
     },
-    "today.todayIs": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "aujourd’hui, c’est"
+    "clientNav.train" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "today is a"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Séance"
           }
         }
       }
     },
-    "today.todayKcal": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ kcal visées"
+    "common.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ kcal to aim for"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         }
-      },
-      "comment": "args: kcal"
+      }
     },
-    "goal.Get stronger": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gagner en force"
+    "common.close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Get stronger"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
           }
         }
       }
     },
-    "goal.Build muscle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prendre du muscle"
+    "common.loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading…"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Build muscle"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chargement…"
           }
         }
       }
     },
-    "goal.Lean out": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "S’affiner"
+    "common.retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lean out"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
           }
         }
       }
     },
-    "goal.Move better": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mieux bouger"
+    "common.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move better"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
           }
         }
       }
     },
-    "equipment.gym": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Salle"
+    "days.0" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gym"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lundi"
           }
         }
       }
     },
-    "equipment.rack": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rack à la maison"
+    "days.1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tuesday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Home rack"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mardi"
           }
         }
       }
     },
-    "equipment.bands": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Élastiques"
+    "days.2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wednesday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bands"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mercredi"
           }
         }
       }
     },
-    "equipment.bodyweight": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Poids du corps"
+    "days.3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thursday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bodyweight only"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeudi"
           }
         }
       }
     },
-    "days.0": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lundi"
+    "days.4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Friday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Monday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vendredi"
           }
         }
       }
     },
-    "days.1": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mardi"
+    "days.5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saturday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tuesday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samedi"
           }
         }
       }
     },
-    "days.2": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mercredi"
+    "days.6" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sunday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wednesday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dimanche"
           }
         }
       }
     },
-    "days.3": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jeudi"
+    "entry.cycleLength" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle length (days)"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Thursday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée du cycle (jours)"
           }
         }
       }
     },
-    "days.4": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vendredi"
+    "entry.cyclePromise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only these two values are sent. Your symptom notes stay on this device."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Friday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seules ces deux valeurs sont envoyées. Tes notes de symptômes restent sur cet appareil."
           }
         }
       }
     },
-    "days.5": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Samedi"
+    "entry.cycleTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saturday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle"
           }
         }
       }
     },
-    "days.6": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dimanche"
+    "entry.health" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import from Health"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sunday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer depuis Santé"
           }
         }
       }
     },
-    "phase.menstrual": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "menstruelle"
+    "entry.healthAgain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh from Health"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "menstrual"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualiser depuis Santé"
           }
         }
       }
     },
-    "phase.follicular": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "folliculaire"
+    "entry.healthNone" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health has nothing for today."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "follicular"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Santé n’a rien pour aujourd’hui."
           }
         }
       }
     },
-    "phase.ovulatory": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ovulatoire"
+    "entry.healthNote" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sleep and steps come from Health. Quality stays yours, and your cycle is never read."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ovulatory"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le sommeil et les pas viennent de Santé. La qualité reste à toi, et ton cycle n’est jamais lu."
           }
         }
       }
     },
-    "phase.luteal": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "lutéale"
+    "entry.history" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your logged cycles"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "luteal"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes cycles enregistrés"
           }
         }
       }
     },
-    "offline.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pas de connexion"
+    "entry.periodStart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Period start"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No connection"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Début des règles"
           }
         }
       }
     },
-    "offline.lede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Masse a besoin du réseau pour charger tes séances."
+    "entry.phaseNow" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current phase"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Masse needs the network to load your sessions."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phase actuelle"
           }
         }
       }
     },
-    "offline.held": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tes séries saisies hors-ligne sont gardées sur cet appareil. Elles partiront dès que la connexion revient — tu n’as rien à faire."
+    "entry.q1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rough"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sets you logged offline are kept on this device. They go as soon as the connection returns — you have nothing to do."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difficile"
           }
         }
       }
     },
-    "offline.retry": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réessayer"
+    "entry.q2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okay"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Try again"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct"
           }
         }
       }
     },
-    "auth.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connexion"
+    "entry.q3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Good"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign in"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bon"
           }
         }
       }
     },
-    "auth.lede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entre ton adresse e-mail. On t’envoie un lien, pas de mot de passe à retenir."
+    "entry.quality" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quality"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter your email. We send a link — no password to remember."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualité"
           }
         }
       }
     },
-    "auth.email": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adresse e-mail"
+    "entry.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Email address"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         }
       }
     },
-    "auth.emailPlaceholder": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "lucie@exemple.fr"
+    "entry.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "lucie@example.com"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
           }
         }
       }
     },
-    "auth.send": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envoyer le lien"
+    "entry.saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Send the link"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistré"
           }
         }
       }
     },
-    "auth.sending": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envoi…"
+    "entry.sleep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sleep (h)"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sending…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommeil (h)"
           }
         }
       }
     },
-    "auth.sent": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lien envoyé. Ouvre ta boîte mail — il expire dans une heure."
+    "entry.steps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steps"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Link sent. Check your inbox — it expires in an hour."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas"
           }
         }
       }
     },
-    "auth.error": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L’envoi a échoué. Réessaie dans un instant."
+    "entry.symptomHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never sent. There is no table that could receive it."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "That failed to send. Try again in a moment."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jamais envoyée. Aucune table ne peut la recevoir."
           }
         }
       }
     },
-    "auth.signOut": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se déconnecter"
+    "entry.symptomNote" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personal note (stays on this device)"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign out"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note personnelle (reste sur cet appareil)"
           }
         }
       }
     },
-    "auth.callbackError": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ce lien n’est plus valable. Demandes-en un nouveau."
+    "entry.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entry"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "That link is no longer valid. Ask for a new one."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisie"
           }
         }
       }
     },
-    "auth.rateLimited": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trop de liens demandés. Supabase limite les envois à quelques-uns par heure tant qu’aucun SMTP n’est configuré. Attends une heure, ou branche un vrai service d’e-mail."
+    "equipment.bands" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bands"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Too many links requested. Supabase caps sends to a few per hour until you configure SMTP. Wait an hour, or connect a real email service."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Élastiques"
           }
         }
       }
     },
-    "auth.haveAccount": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "J’ai déjà un compte"
+    "equipment.bodyweight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bodyweight only"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I already have an account"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids du corps"
           }
         }
       }
     },
-    "auth.signInTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Te reconnecter"
+    "equipment.gym" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gym"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sign back in"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salle"
           }
         }
       }
     },
-    "auth.signInLede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L’adresse que tu as utilisée en t’inscrivant. On t’envoie un lien, pas de mot de passe."
+    "equipment.rack" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home rack"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The address you signed up with. We send a link, not a password."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rack à la maison"
           }
         }
       }
     },
-    "auth.backToCode": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "J’ai un code d’invitation"
+    "feel.Heavy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heavy"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I have an invite code"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans le dur"
           }
         }
       }
     },
-    "auth.openOnThisDevice": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ouvre le lien sur cet appareil — c’est lui qui garde la clé."
+    "feel.Steady" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steady"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open the link on this device — it is the one holding the key."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stable"
           }
         }
       }
     },
-    "auth.noRecordTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune fiche à cette adresse"
+    "feel.Strong" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strong"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No record at this address"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En forme"
           }
         }
       }
     },
-    "auth.noRecordBody": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cette adresse est bien connectée, mais aucun coach ne t’a encore ajouté. Si tu viens d’arriver, entre le code d’invitation qu’on t’a envoyé."
+    "fuel.carbs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carbs"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This address is signed in, but no coach has added you yet. If you have just arrived, enter the invite code you were sent."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glucides"
           }
         }
       }
     },
-    "auth.noRecordAction": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entrer un code d’invitation"
+    "fuel.daily" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today's calories"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter an invite code"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calories du jour"
           }
         }
       }
     },
-    "log.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Séance"
+    "fuel.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your coach hasn't written a plan for you yet."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Session"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton coach n’a pas encore écrit de plan pour toi."
           }
         }
       }
     },
-    "log.target": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Objectif"
+    "fuel.fat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fat"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Target"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lipides"
           }
         }
       }
     },
-    "log.done": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fait"
+    "fuel.meals" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your meals"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Done"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes repas"
           }
         }
       }
     },
-    "log.reps": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reps"
+    "fuel.protein" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protein"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reps"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protéines"
           }
         }
       }
     },
-    "log.weight": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "kg"
+    "fuel.restDay" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rest day"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "kg"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jour de repos"
           }
         }
       }
     },
-    "log.rpe": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RPE"
+    "fuel.supplements" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your supplements"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RPE"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes compléments"
           }
         }
       }
     },
-    "log.addSet": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+ Série"
+    "goal.Build muscle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Build muscle"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+ Set"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre du muscle"
           }
         }
       }
     },
-    "log.held": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En attente de synchro"
+    "goal.Get stronger" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get stronger"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Held until reconnect"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gagner en force"
           }
         }
       }
     },
-    "log.heldCount.one": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 série en attente"
+    "goal.Lean out" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lean out"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 set held"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’affiner"
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "log.heldCount.other": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ séries en attente"
+    "goal.Move better" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move better"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ sets held"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mieux bouger"
           }
         }
-      },
-      "comment": "args: count"
+      }
+    },
+    "kcal" : {
+
     },
-    "log.synced": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synchronisé"
+    "log.addSet" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ Set"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Synced"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+ Série"
           }
         }
       }
     },
-    "log.rest": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Repos"
+    "log.done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rest"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fait"
           }
         }
       }
     },
-    "log.restDone": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Repos terminé"
+    "log.held" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Held until reconnect"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rest done"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de synchro"
           }
         }
       }
     },
-    "log.offline": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hors ligne — tes séries sont gardées ici"
+    "log.heldCount.one" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 set held"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Offline — your sets are kept here"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 série en attente"
           }
         }
       }
     },
-    "log.noSession": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pas de séance prévue aujourd’hui."
+    "log.heldCount.other" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ sets held"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No session scheduled today."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ séries en attente"
           }
         }
       }
     },
-    "log.startRest": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lancer le repos"
+    "log.noSession" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No session scheduled today."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Start rest"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de séance prévue aujourd’hui."
           }
         }
       }
     },
-    "log.undo": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler la dernière série"
+    "log.offline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline — your sets are kept here"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Undo the last set"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hors ligne — tes séries sont gardées ici"
           }
         }
       }
     },
-    "common.loading": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chargement…"
+    "log.reps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reps"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reps"
           }
         }
       }
     },
-    "common.cancel": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler"
+    "log.rest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rest"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repos"
           }
         }
       }
     },
-    "common.save": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer"
+    "log.restDone" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rest done"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repos terminé"
           }
         }
       }
     },
-    "common.retry": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réessayer"
+    "log.rpe" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RPE"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RPE"
           }
         }
       }
     },
-    "common.close": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fermer"
+    "log.startRest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start rest"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Close"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lancer le repos"
           }
         }
       }
     },
-    "feel.Strong": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En forme"
+    "log.synced" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synced"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strong"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisé"
           }
         }
       }
     },
-    "feel.Steady": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stable"
+    "log.target" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Target"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Steady"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif"
           }
         }
       }
     },
-    "feel.Heavy": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dans le dur"
+    "log.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heavy"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Séance"
           }
         }
       }
     },
-    "pain.None": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune"
+    "log.undo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Undo the last set"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "None"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler la dernière série"
           }
         }
       }
     },
-    "pain.Minor": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Légère"
+    "log.weight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Minor"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kg"
           }
         }
       }
     },
-    "pain.Need to talk": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Il faut en parler"
+    "offline.held" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sets you logged offline are kept on this device. They go as soon as the connection returns — you have nothing to do."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Need to talk"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes séries saisies hors-ligne sont gardées sur cet appareil. Elles partiront dès que la connexion revient — tu n’as rien à faire."
           }
         }
       }
     },
-    "adherence.All of it": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tout fait"
+    "offline.lede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masse needs the network to load your sessions."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All of it"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masse a besoin du réseau pour charger tes séances."
           }
         }
       }
     },
-    "adherence.Most": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "L’essentiel"
+    "offline.retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Most"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
           }
         }
       }
     },
-    "adherence.Struggled": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Difficile"
+    "offline.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No connection"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Struggled"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de connexion"
           }
         }
       }
     },
-    "clientNav.today": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aujourd’hui"
+    "onboarding.back" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retour"
           }
         }
       }
     },
-    "clientNav.train": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Séance"
+    "onboarding.birthYear" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Birth year"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Train"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Année de naissance"
           }
         }
       }
     },
-    "clientNav.fuel": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nutrition"
+    "onboarding.bodyLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To calibrate loads. Nothing more."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fuel"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour calibrer les charges. Rien de plus."
           }
         }
       }
     },
-    "clientNav.cycle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cycle"
+    "onboarding.bodyTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You, in three numbers"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cycle"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toi, en trois chiffres"
           }
         }
       }
     },
-    "clientNav.coach": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coach"
+    "onboarding.codeBad" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That code is not valid. Check it, or ask your coach for a new one."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coach"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce code n’est pas valable. Vérifie-le, ou demande-en un nouveau à ton coach."
           }
         }
       }
     },
-    "fuel.daily": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Calories du jour"
+    "onboarding.codeLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your coach sent it to you. It works once."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today's calories"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton coach te l’a envoyé. Il ne sert qu’une fois."
           }
         }
       }
     },
-    "fuel.protein": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Protéines"
+    "onboarding.codeOk" : {
+      "comment" : "args: coach",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome. %1$@ is coaching you."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Protein"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue. C’est %1$@ qui t’accompagne."
           }
         }
       }
     },
-    "fuel.carbs": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glucides"
+    "onboarding.codePlaceholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MERLET-4K2P"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carbs"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MERLET-4K2P"
           }
         }
       }
     },
-    "fuel.fat": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lipides"
+    "onboarding.codeTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your invite code"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fat"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton code d’invitation"
           }
         }
       }
     },
-    "fuel.meals": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tes repas"
+    "onboarding.cycleLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optional, and revocable at any time."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your meals"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optionnel, et révocable à tout moment."
           }
         }
       }
     },
-    "fuel.supplements": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tes compléments"
+    "onboarding.cycleOff" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tracking"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your supplements"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans suivi"
           }
         }
       }
     },
-    "fuel.empty": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton coach n’a pas encore écrit de plan pour toi."
+    "onboarding.cycleOn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn tracking on"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your coach hasn't written a plan for you yet."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer le suivi"
           }
         }
       }
     },
-    "fuel.restDay": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jour de repos"
+    "onboarding.cyclePromise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you turn it on, only your period start date and cycle length are stored — in Europe. Your symptom notes never leave your phone: there is no table to hold them. Your coach sees a phase and an adapted load, never a symptom."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rest day"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si tu l’actives, seules ta date de règles et la durée de ton cycle sont enregistrées — en Europe. Tes notes de symptômes ne quittent jamais ton téléphone : il n’existe aucune table pour les stocker. Ton coach voit une phase et une charge adaptée, jamais un symptôme."
           }
         }
       }
     },
-    "entry.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saisie"
+    "onboarding.cycleTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle tracking"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entry"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivi du cycle"
           }
         }
       }
     },
-    "entry.sleep": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sommeil (h)"
+    "onboarding.daysLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The days you can train."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sleep (h)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les jours où tu peux t’entraîner."
           }
         }
       }
     },
-    "entry.quality": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Qualité"
+    "onboarding.daysTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your week"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quality"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta semaine"
           }
         }
       }
     },
-    "entry.steps": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pas"
+    "onboarding.emailLabel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your email address"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Steps"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton adresse e-mail"
           }
         }
       }
     },
-    "entry.q1": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Difficile"
+    "onboarding.equipmentLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What you have access to."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rough"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce à quoi tu as accès."
           }
         }
       }
     },
-    "entry.q2": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Correct"
+    "onboarding.equipmentTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your equipment"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Okay"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton matériel"
           }
         }
       }
     },
-    "entry.q3": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bon"
+    "onboarding.failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign-up failed. Your code may already have been used."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’inscription a échoué. Ton code est peut-être déjà utilisé."
           }
         }
       }
     },
-    "entry.save": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer"
+    "onboarding.failedBody" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your code may already have been used, or it expired. Ask your coach for a new one."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton code a peut-être déjà été utilisé, ou il a expiré. Demande-en un nouveau à ton coach."
           }
         }
       }
     },
-    "entry.saved": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistré"
+    "onboarding.finalising" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finishing your sign-up…"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saved"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On termine ton inscription…"
           }
         }
       }
     },
-    "entry.cycleTitle": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cycle"
+    "onboarding.finish" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create my account"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cycle"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer mon compte"
           }
         }
       }
     },
-    "entry.periodStart": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Début des règles"
+    "onboarding.goalLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One only. It steers every session."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Period start"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un seul. C’est lui qui oriente tes séances."
           }
         }
       }
     },
-    "entry.cycleLength": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Durée du cycle (jours)"
+    "onboarding.goalTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your goal"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cycle length (days)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton objectif"
           }
         }
       }
     },
-    "entry.cyclePromise": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seules ces deux valeurs sont envoyées. Tes notes de symptômes restent sur cet appareil."
+    "onboarding.height" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Height (cm)"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Only these two values are sent. Your symptom notes stay on this device."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille (cm)"
           }
         }
       }
     },
-    "entry.symptomNote": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Note personnelle (reste sur cet appareil)"
+    "onboarding.injuriesLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What to work around. One per line, leave empty if none."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personal note (stays on this device)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce qu’il faut contourner. Une par ligne, laisse vide s’il n’y a rien."
           }
         }
       }
     },
-    "entry.symptomHint": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jamais envoyée. Aucune table ne peut la recevoir."
+    "onboarding.injuriesTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Any injuries?"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Never sent. There is no table that could receive it."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Des blessures ?"
           }
         }
       }
     },
-    "entry.phaseNow": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Phase actuelle"
+    "onboarding.nameLabel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Current phase"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
           }
         }
       }
     },
-    "entry.history": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tes cycles enregistrés"
+    "onboarding.next" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your logged cycles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer"
           }
         }
       }
     },
-    "entry.remove": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer"
+    "onboarding.noAnswers" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your answers are not in this browser."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remove"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tes réponses ne sont pas dans ce navigateur."
           }
         }
       }
     },
-    "entry.health": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Importer depuis Santé"
+    "onboarding.noAnswersBody" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The sign-in link has to be opened on the same device and browser where you filled in the steps. Start them again here — it is quick."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Import from Health"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le lien de connexion doit être ouvert sur le même appareil et le même navigateur que celui où tu as rempli les étapes. Reprends-les ici, ça va vite."
           }
         }
       }
     },
-    "entry.healthAgain": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actualiser depuis Santé"
+    "onboarding.restart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start the steps again"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Refresh from Health"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommencer les étapes"
           }
         }
       }
     },
-    "entry.healthNone": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Santé n’a rien pour aujourd’hui."
+    "onboarding.sent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link sent. Check your inbox to finish."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Health has nothing for today."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lien envoyé. Ouvre ta boîte mail pour terminer."
           }
         }
       }
     },
-    "entry.healthNote": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le sommeil et les pas viennent de Santé. La qualité reste à toi, et ton cycle n’est jamais lu."
+    "onboarding.skip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sleep and steps come from Health. Quality stays yours, and your cycle is never read."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passer"
           }
         }
       }
     },
-    "supp.timing.morning": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le matin"
+    "onboarding.sleepLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How many hours, usually?"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Morning"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combien d’heures, d’habitude ?"
           }
         }
       }
     },
-    "supp.timing.noon": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le midi"
+    "onboarding.sleepTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A normal night"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Midday"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une nuit normale"
           }
         }
       }
     },
-    "supp.timing.snack": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À la collation"
+    "onboarding.step" : {
+      "comment" : "args: n",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step %1$@ of 9"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With a snack"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape %1$@ sur 9"
           }
         }
       }
     },
-    "supp.timing.pre": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avant la séance"
+    "onboarding.summaryLede" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check it, then create your account. Your first week is waiting."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Before training"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifie, puis crée ton compte. Ta première semaine t’attend."
           }
         }
       }
     },
-    "supp.timing.post": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Après la séance"
+    "onboarding.summaryTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That is everything"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "After training"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout est là"
           }
         }
       }
     },
-    "supp.timing.evening": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le soir"
+    "onboarding.weight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weight (kg)"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Evening"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poids (kg)"
           }
         }
       }
     },
-    "supp.timing.meal": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Au repas"
+    "pain.Minor" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minor"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With a meal"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Légère"
           }
         }
       }
     },
-    "supp.timing.anytime": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "N’importe quand"
+    "pain.Need to talk" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Need to talk"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Any time"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il faut en parler"
           }
         }
       }
     },
-    "supp.unit.g": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
+    "pain.None" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "g"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune"
           }
         }
       }
     },
-    "supp.unit.mg": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "mg"
+    "phase.follicular" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "follicular"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "mg"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "folliculaire"
           }
         }
       }
     },
-    "supp.unit.µg": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "µg"
+    "phase.luteal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "luteal"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "µg"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lutéale"
           }
         }
       }
     },
-    "supp.unit.ml": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ml"
+    "phase.menstrual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "menstrual"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ml"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "menstruelle"
           }
         }
       }
     },
-    "supp.unit.capsule.one": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "capsule"
+    "phase.ovulatory" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ovulatory"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "capsule"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ovulatoire"
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "supp.unit.capsule.other": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "capsules"
+    "shell.clients" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clients"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "capsules"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clients"
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "supp.unit.scoop.one": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dosette"
+    "shell.messaging" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inbox"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "scoop"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inbox"
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "supp.unit.scoop.other": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "dosettes"
+    "shell.messagingSoon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messaging is in development. Until it ships, WhatsApp stays where it is."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "scoops"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La messagerie est en développement. D’ici là, WhatsApp reste où il est."
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "supp.unit.iu": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UI"
+    "shell.programmes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Programmes"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "IU"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Programmes"
           }
         }
       }
     },
-    "shell.clients": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clients"
+    "shell.soon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "soon"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clients"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "bientôt"
           }
         }
       }
     },
-    "shell.programmes": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Programmes"
+    "shell.subtitle.one" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 check-in to review"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Programmes"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 bilan à relire"
           }
         }
       }
     },
-    "shell.soon": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bientôt"
+    "shell.subtitle.other" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ check-ins to review"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "soon"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ bilans à relire"
           }
         }
       }
     },
-    "shell.messaging": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inbox"
+    "shell.subtitle.zero" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no check-ins to review"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inbox"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aucun bilan à relire"
           }
         }
       }
     },
-    "shell.messagingSoon": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La messagerie est en développement. D’ici là, WhatsApp reste où il est."
+    "soonCopy.billing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Billing arrives in v1.1. At this scale a spreadsheet suffices — and nothing will ever be charged automatically."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Messaging is in development. Until it ships, WhatsApp stays where it is."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La facturation viendra en v1.1. À cette échelle, un tableur suffit — et rien ne sera jamais débité automatiquement."
           }
         }
       }
     },
-    "shell.subtitle.zero": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "aucun bilan à relire"
+    "soonCopy.foods" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutrition is not in v1: the coach writes targets as text in the programme."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "no check-ins to review"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La nutrition n’est pas dans v1 : le coach écrit ses cibles en texte dans le programme."
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "shell.subtitle.one": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 bilan à relire"
+    "soonCopy.inbox" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messaging is in development. Until it ships, WhatsApp stays where it is."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1 check-in to review"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La messagerie est en développement. D’ici là, WhatsApp reste où il est."
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "shell.subtitle.other": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ bilans à relire"
+    "supp.timing.anytime" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Any time"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ check-ins to review"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "N’importe quand"
           }
         }
-      },
-      "comment": "args: count"
+      }
     },
-    "soonCopy.foods": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La nutrition n’est pas dans v1 : le coach écrit ses cibles en texte dans le programme."
+    "supp.timing.evening" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evening"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nutrition is not in v1: the coach writes targets as text in the programme."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le soir"
           }
         }
       }
     },
-    "soonCopy.inbox": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La messagerie est en développement. D’ici là, WhatsApp reste où il est."
+    "supp.timing.meal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With a meal"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Messaging is in development. Until it ships, WhatsApp stays where it is."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Au repas"
           }
         }
       }
     },
-    "soonCopy.billing": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La facturation viendra en v1.1. À cette échelle, un tableur suffit — et rien ne sera jamais débité automatiquement."
+    "supp.timing.morning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morning"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Billing arrives in v1.1. At this scale a spreadsheet suffices — and nothing will ever be charged automatically."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le matin"
           }
         }
       }
     },
-    "bilan.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton bilan"
+    "supp.timing.noon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Midday"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your check-in"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le midi"
           }
         }
       }
     },
-    "bilan.lede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une fois par semaine. Ton coach le lit avant d’écrire la suite."
+    "supp.timing.post" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After training"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Once a week. Your coach reads it before writing what comes next."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Après la séance"
           }
         }
       }
     },
-    "bilan.prompt": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Le bilan de cette semaine n’est pas encore rempli."
+    "supp.timing.pre" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before training"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This week's check-in isn't filled in yet."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avant la séance"
           }
         }
       }
     },
-    "bilan.open": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remplir mon bilan"
+    "supp.timing.snack" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With a snack"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fill in my check-in"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À la collation"
           }
         }
       }
     },
-    "bilan.done": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bilan envoyé"
+    "supp.unit.capsule.one" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "capsule"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Check-in sent"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "capsule"
           }
         }
       }
     },
-    "bilan.byCoach": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ton coach a déjà saisi le bilan de cette semaine."
+    "supp.unit.capsule.other" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "capsules"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your coach has already filed this week's check-in."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "capsules"
           }
         }
       }
     },
-    "bilan.reviewed": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Relu par ton coach"
+    "supp.unit.g" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "g"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Read by your coach"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "g"
           }
         }
       }
     },
-    "bilan.waiting": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En attente de relecture"
+    "supp.unit.iu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IU"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Waiting to be read"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UI"
           }
         }
       }
     },
-    "bilan.notePlaceholder": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ce que les cases ne disent pas."
+    "supp.unit.mg" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mg"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "What the boxes don't say."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mg"
           }
         }
       }
     },
-    "checkin.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bilan de la semaine"
+    "supp.unit.ml" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ml"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weekly check-in"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ml"
           }
         }
       }
     },
-    "checkin.lede": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tu demandes par WhatsApp, tu saisis ici. Le formulaire côté client viendra plus tard."
+    "supp.unit.scoop.one" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "scoop"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You ask on WhatsApp, you type it here. The client-submitted form comes later."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dosette"
           }
         }
       }
     },
-    "checkin.week": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Semaine du"
+    "supp.unit.scoop.other" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "scoops"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Week of"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dosettes"
           }
         }
       }
     },
-    "checkin.feel": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sensation"
+    "supp.unit.µg" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "µg"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Feel"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "µg"
           }
         }
       }
     },
-    "checkin.pain": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Douleur"
+    "today.none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No week pushed yet."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pain"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune semaine poussée pour l’instant."
           }
         }
       }
     },
-    "checkin.adherence": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Assiduité"
+    "today.noneHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your coach will send one; it shows up here."
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adherence"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ton coach te l’enverra ; elle apparaîtra ici."
           }
         }
       }
     },
-    "checkin.bodyweight": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Poids (kg)"
+    "today.rest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rest"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bodyweight (kg)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repos"
           }
         }
       }
     },
-    "checkin.note": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Note"
+    "today.sets.one" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 set"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Note"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 série"
           }
         }
       }
     },
-    "checkin.save": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrer le bilan"
+    "today.sets.other" : {
+      "comment" : "args: count",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ sets"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save check-in"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ séries"
           }
         }
       }
     },
-    "checkin.saved": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bilan enregistré"
+    "today.signOut" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Check-in saved"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se déconnecter"
           }
         }
       }
     },
-    "checkin.markReviewed": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Marquer comme relu"
+    "today.target" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Target"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mark reviewed"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif"
           }
         }
       }
     },
-    "checkin.reviewed": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Relu"
+    "today.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reviewed"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd’hui"
           }
         }
       }
     },
-    "checkin.waiting": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En attente de relecture"
+    "today.todayIs" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "today is a"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Waiting on you"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aujourd’hui, c’est"
           }
         }
       }
     },
-    "checkin.none": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun bilan pour l’instant."
+    "today.todayKcal" : {
+      "comment" : "args: kcal",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ kcal to aim for"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No check-ins yet."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ kcal visées"
           }
         }
       }
     },
-    "checkin.history": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bilans"
+    "today.week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your week"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Check-ins"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta semaine"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }
