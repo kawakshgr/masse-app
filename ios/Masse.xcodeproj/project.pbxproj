@@ -6,19 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		A1000000000000000000F1 /* Masse */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A1000000000000000000F2 /* Exceptions */,
-			);
-			path = Masse;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* Begin PBXBuildFile section */
+		A1000000000000000000G2 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A1000000000000000000G1 /* Supabase */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1000000000000000000D1 /* Masse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Masse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A1000000000000000000F2 /* Exceptions */ = {
+		A1000000000000000000F2 /* Exceptions for "Masse" folder in "Masse" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -27,9 +24,16 @@
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
-/* Begin PBXBuildFile section */
-		A1000000000000000000G2 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A1000000000000000000G1 /* Supabase */; };
-/* End PBXBuildFile section */
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A1000000000000000000F1 /* Masse */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A1000000000000000000F2 /* Exceptions for "Masse" folder in "Masse" target */,
+			);
+			path = Masse;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A1000000000000000000C3 /* Frameworks */ = {
@@ -143,29 +147,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXFileReference section */
-		A1000000000000000000D1 /* Masse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Masse.app; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		A1000000000000000000G0 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase/supabase-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.55.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		A1000000000000000000G1 /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A1000000000000000000G0 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
-		};
-/* End XCSwiftPackageProductDependency section */
-
 /* Begin XCBuildConfiguration section */
 		A1000000000000000000E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -220,6 +201,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = VP9Y58VQ3G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Masse/Info.plist;
@@ -244,6 +226,7 @@
 				CODE_SIGN_ENTITLEMENTS = Masse/Masse.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VP9Y58VQ3G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Masse/Info.plist;
@@ -282,6 +265,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A1000000000000000000G0 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.55.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A1000000000000000000G1 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1000000000000000000G0 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A1000000000000000000A0 /* Project object */;
 }

@@ -4,27 +4,20 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>fr</string>
-	<!-- The keys Xcode injects when it generates the plist for you. We write
-	     ours by hand for UIAppFonts and the URL scheme, so these come too —
-	     without CFBundleIdentifier the simulator refuses the bundle outright. -->
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Masse</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleDisplayName</key>
-	<string>Masse</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-	<key>CFBundleVersion</key>
-	<string>1</string>
-	<!-- The magic link comes back to the app through this scheme. It has to be
-	     on Supabase's redirect allowlist too, or sign-in dead-ends in Safari. -->
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -36,6 +29,14 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Masse peut lire tes heures de sommeil et tes pas pour remplir ta saisie du jour. Rien n’est écrit dans Santé, et ton cycle n’est jamais lu.</string>
+	<key>SupabasePublishableKey</key>
+	<string>sb_publishable_ok8dvMlG6_Fc8_NDcmfMcA_l4cZlxp-</string>
+	<key>SupabaseURL</key>
+	<string>https://qxlhccvkavvabcekpcrw.supabase.co</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>
@@ -45,17 +46,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<!-- The project URL and the publishable key. Not secrets: the web ships the
-	     same pair to every browser, and RLS is what actually guards the data.
-	     A key that could act on its own would never be in a client at all. -->
-	<key>SupabaseURL</key>
-	<string>https://qxlhccvkavvabcekpcrw.supabase.co</string>
-	<key>SupabasePublishableKey</key>
-	<string>sb_publishable_ok8dvMlG6_Fc8_NDcmfMcA_l4cZlxp-</string>
-	<!-- Sleep and steps may be read from Health. Nothing is written back, and
-	     the cycle is never read — it stays typed, because Health's menstrual
-	     data is exactly what "dates only, never symptoms" keeps out. -->
-	<key>NSHealthShareUsageDescription</key>
-	<string>Masse peut lire tes heures de sommeil et tes pas pour remplir ta saisie du jour. Rien n’est écrit dans Santé, et ton cycle n’est jamais lu.</string>
 </dict>
 </plist>
