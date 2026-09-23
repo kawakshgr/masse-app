@@ -6,6 +6,8 @@ struct SignInView: View {
     /// Back to the code, for someone who tapped this by mistake.
     let onUseCode: () -> Void
 
+    @Environment(Session.self) private var session
+
     @State private var email = ""
     @State private var sent = false
     @State private var busy = false
@@ -54,7 +56,7 @@ struct SignInView: View {
                             .fixedSize(horizontal: false, vertical: true)
                         }
 
-                        if let error {
+                        if let error = session.linkError ?? error {
                             Text(error)
                                 .font(Ty.copySmall)
                                 .foregroundStyle(Tk.a3)

@@ -1,6 +1,9 @@
 import Foundation
 import Observation
+import OSLog
 import Supabase
+
+private let log = Logger(subsystem: "fr.masse.client", category: "auth")
 
 /// Who is signed in, and what the app should show because of it.
 ///
@@ -24,6 +27,11 @@ final class Session {
     }
 
     private(set) var state: State = .loading
+
+    /// Why the last link failed, if it did. A sign-in that quietly returns to
+    /// the form tells the person nothing, and they will just try the same link
+    /// again.
+    private(set) var linkError: String?
 
     private var watcher: Task<Void, Never>?
 
@@ -51,11 +59,16 @@ final class Session {
     /// The link came back. Completing it is what creates the session; the
     /// answers are spent immediately afterwards, by `settle`.
     func handle(url: URL) async {
+        linkError = nil
         do {
             _ = try await Backend.auth.session(from: url)
         } catch {
-            // A link that has already been used, or one opened on a different
-            // device. Onboarding is where to go, not a dead end.
+            // Almost always one of three: the link was already used, it has
+            // expired, or it was opened on a device that did not ask for it.
+            // Whichever it was, say so — the alternative is someone tapping the
+            // same dead link a second time.
+            log.error("magic link failed: \(error.localizedDescription, privacy: .public)")
+            linkError = L.t("auth.callbackError")
             state = .signedOut
         }
     }

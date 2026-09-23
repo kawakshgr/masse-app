@@ -18,11 +18,11 @@ export function FoodSearch() {
   }
 
   return (
-    <section className="glass rounded-r3 p-4">
-      <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+    <details className="glass2 rounded-r2 px-3 py-2">
+      <summary className="cursor-pointer list-none text-[12.5px] font-semibold text-[var(--ink2)] marker:content-none">
         {t("title")}
-      </h3>
-      <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">
+      </summary>
+      <p className="mt-2 text-[12.5px] leading-[1.5] text-[var(--ink2)]">
         {t("lede")}
       </p>
 
@@ -96,6 +96,6 @@ export function FoodSearch() {
           ))}
         </ul>
       )}
-    </section>
+    </details>
   );
 }
