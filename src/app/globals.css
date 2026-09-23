@@ -8,6 +8,13 @@
 
 :root,
 [data-theme="dark"] {
+  /* Native controls have to be told which theme they are in. Without this,
+     Chrome on Windows draws a select's dropdown on its own light background
+     while the options keep the page's near-white --ink — white on white, and
+     the list is simply gone. macOS never showed it: there the popup follows
+     the OS appearance, so a Mac in dark mode looked correct by accident. */
+  color-scheme: dark;
+
   --bg: #05121b;
   --deep: #020a10;
   --ink: #f3fcfb;
@@ -45,6 +52,8 @@
 }
 
 [data-theme="light"] {
+  color-scheme: light;
+
   --bg: #e7f2f3;
   --deep: #ffffff;
   --ink: #05202a;
@@ -295,6 +304,8 @@ button {
   :root,
   [data-theme="dark"],
   [data-theme="light"] {
+    color-scheme: light;
+
     --bg: #ffffff;
     --deep: #ffffff;
     --ink: #000000;
