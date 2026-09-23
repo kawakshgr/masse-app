@@ -205,6 +205,7 @@ export function RecordPanel({
             placeholder="0,2,4"
           />
           <Field label={t("sleepTarget")} name="sleep_target_h" value={client.sleep_target_h} />
+          <Field label={t("stepsTarget")} name="steps_target" value={client.steps_target} />
           <label className="block min-w-0 sm:col-span-2">
             <span className="block text-[12px] text-[var(--ink2)]">{t("equipment")}</span>
             <textarea
@@ -334,6 +335,7 @@ export function RecordPanel({
                 : null,
             ],
             [t("sleepTarget"), sleepTargetLabel],
+            [t("stepsTarget"), client.steps_target?.toLocaleString("fr-FR") ?? null],
             [t("equipment"), client.equipment.join(", ")],
             [t("cycle"), client.cycle_tracking ? t("cycleOn") : null],
           ]}

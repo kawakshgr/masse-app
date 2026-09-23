@@ -208,7 +208,8 @@
     "edit": "Modifier",
     "save": "Enregistrer",
     "cancel": "Annuler",
-    "saved": "Enregistré"
+    "saved": "Enregistré",
+    "stepsTarget": "Objectif de pas"
   },
   "onboarding": {
     "step": "Étape {n} sur 9",
@@ -1073,5 +1074,19 @@
     "reviewed": "Relu par ton coach",
     "waiting": "En attente de relecture",
     "notePlaceholder": "Ce que les cases ne disent pas."
+  },
+  "cycleChart": {
+    "title": "Où tu en es",
+    "day": "Jour {day} sur {length}",
+    "none": "Pas encore de cycle enregistré.",
+    "spoken": "Phase {phase}, jour {day}."
+  },
+  "stepsChart": {
+    "title": "Tes pas",
+    "target": "Objectif {steps}",
+    "noTarget": "Ton coach n’a pas fixé d’objectif de pas.",
+    "none": "Rien saisi cette semaine.",
+    "avg": "{steps} en moyenne sur les jours saisis",
+    "spoken": "{day} : {steps} pas."
   }
 }

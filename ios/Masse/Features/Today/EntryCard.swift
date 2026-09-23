@@ -13,6 +13,8 @@ struct EntryCard: View {
     @State private var loaded = false
     @State private var importing = false
     @State private var healthEmpty = false
+    @State private var week: [DailyMetric] = []
+    @State private var stepsTarget: Int?
 
     var body: some View {
         GlassCard {
@@ -86,6 +88,11 @@ struct EntryCard: View {
                     Task { await save() }
                 }
 
+                if !week.isEmpty || stepsTarget != nil {
+                    Divider().overlay(Tk.hair)
+                    StepsChart(days: week, target: stepsTarget)
+                }
+
                 if Health.available {
                     SecondaryButton(
                         title: L.t(Health.connected ? "entry.healthAgain" : "entry.health")
@@ -123,6 +130,12 @@ struct EntryCard: View {
         // Once she has connected, the numbers are already there when she opens
         // the app. Only ever after she asked — the first read is a button.
         if Health.connected { await readHealth() }
+        await loadWeek()
+    }
+
+    private func loadWeek() async {
+        week = (try? await MetricsFeed.week()) ?? []
+        stepsTarget = await MetricsFeed.stepsTarget()
     }
 
     /// Fills the fields; it does not save them. She sees what Health said
@@ -164,6 +177,8 @@ struct EntryCard: View {
             )
         )
         saved = true
+        // The chart is about the week this save just changed.
+        await loadWeek()
     }
 }
 

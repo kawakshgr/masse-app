@@ -208,7 +208,8 @@
     "edit": "Edit",
     "save": "Save",
     "cancel": "Cancel",
-    "saved": "Saved"
+    "saved": "Saved",
+    "stepsTarget": "Step target"
   },
   "onboarding": {
     "step": "Step {n} of 9",
@@ -1073,5 +1074,19 @@
     "reviewed": "Read by your coach",
     "waiting": "Waiting to be read",
     "notePlaceholder": "What the boxes don't say."
+  },
+  "cycleChart": {
+    "title": "Where you are",
+    "day": "Day {day} of {length}",
+    "none": "No cycle logged yet.",
+    "spoken": "{phase} phase, day {day}."
+  },
+  "stepsChart": {
+    "title": "Your steps",
+    "target": "Target {steps}",
+    "noTarget": "Your coach hasn't set a step target.",
+    "none": "Nothing logged this week.",
+    "avg": "{steps} on average across the days logged",
+    "spoken": "{day}: {steps} steps."
   }
 }

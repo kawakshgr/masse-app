@@ -3618,6 +3618,181 @@
           }
         }
       }
+    },
+    "cycleChart.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Où tu en es"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where you are"
+          }
+        }
+      }
+    },
+    "cycleChart.day": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jour %1$@ sur %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day %1$@ of %2$@"
+          }
+        }
+      },
+      "comment": "args: day, length"
+    },
+    "cycleChart.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de cycle enregistré."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No cycle logged yet."
+          }
+        }
+      }
+    },
+    "cycleChart.spoken": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase %1$@, jour %2$@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ phase, day %2$@."
+          }
+        }
+      },
+      "comment": "args: phase, day"
+    },
+    "stepsChart.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tes pas"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your steps"
+          }
+        }
+      }
+    },
+    "stepsChart.target": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objectif %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target %1$@"
+          }
+        }
+      },
+      "comment": "args: steps"
+    },
+    "stepsChart.noTarget": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton coach n’a pas fixé d’objectif de pas."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your coach hasn't set a step target."
+          }
+        }
+      }
+    },
+    "stepsChart.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rien saisi cette semaine."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing logged this week."
+          }
+        }
+      }
+    },
+    "stepsChart.avg": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ en moyenne sur les jours saisis"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ on average across the days logged"
+          }
+        }
+      },
+      "comment": "args: steps"
+    },
+    "stepsChart.spoken": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ : %2$@ pas."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: %2$@ steps."
+          }
+        }
+      },
+      "comment": "args: day, steps"
     }
   },
   "version": "1.0"

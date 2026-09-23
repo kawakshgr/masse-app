@@ -8,6 +8,7 @@ import SwiftUI
 struct CycleView: View {
     @State private var entries: [CycleEntry] = []
     @State private var state: CycleState?
+    @State private var spans: [PhaseSpan] = []
     @State private var start = Date()
     @State private var length = 28
     @State private var note = ""
@@ -24,6 +25,7 @@ struct CycleView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     header
+                    if !spans.isEmpty { chartCard }
                     entryCard
                     noteCard
                     if !entries.isEmpty { historyCard }
@@ -53,6 +55,30 @@ struct CycleView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var chartCard: some View {
+        GlassCard {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(L.t("cycleChart.title")).kicker()
+                    Spacer()
+                    if let day = state?.dayOfCycle, let length = state?.cycleLengthDays {
+                        Text(L.t("cycleChart.day", String(day), String(length)))
+                            .font(Ty.copySmall)
+                            .foregroundStyle(Tk.ink2)
+                            .tabular()
+                    }
+                }
+
+                PhaseBar(
+                    spans: spans,
+                    currentPhase: state?.phase,
+                    dayOfCycle: state?.dayOfCycle,
+                    cycleLength: state?.cycleLengthDays ?? 28
+                )
+            }
+        }
     }
 
     private var entryCard: some View {
@@ -155,6 +181,12 @@ struct CycleView: View {
         note = SymptomNotes.note(on: todayIso)
         entries = (try? await CycleFeed.recent()) ?? []
         state = try? await CycleFeed.state()
+        // The phase widths belong to her cycle's length, not to a textbook's.
+        if let length = state?.cycleLengthDays {
+            spans = await CycleFeed.spans(cycleLength: length)
+        } else {
+            spans = []
+        }
         loaded = true
     }
 

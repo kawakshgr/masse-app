@@ -44,11 +44,35 @@ struct CycleState: Decodable, Sendable {
     let phase: String?
     let intensityCoefficient: Double?
     let volumeCoefficient: Double?
+    let dayOfCycle: Int?
+    let cycleLengthDays: Int?
 
     enum CodingKeys: String, CodingKey {
         case phase
         case intensityCoefficient = "intensity_coefficient"
         case volumeCoefficient = "volume_coefficient"
+        case dayOfCycle = "day_of_cycle"
+        case cycleLengthDays = "cycle_length_days"
+    }
+}
+
+/// Where one phase starts and ends, for a cycle of a given length.
+///
+/// Read from the database rather than written here. The boundaries live in
+/// cycle_phase_on and a second copy in Swift would be a second answer waiting
+/// to disagree with the first.
+struct PhaseSpan: Decodable, Sendable, Identifiable {
+    let phase: String
+    let firstDay: Int
+    let lastDay: Int
+
+    var id: String { phase }
+    var length: Int { lastDay - firstDay + 1 }
+
+    enum CodingKeys: String, CodingKey {
+        case phase
+        case firstDay = "first_day"
+        case lastDay = "last_day"
     }
 }
 
@@ -56,6 +80,33 @@ enum MetricsFeed {
 
     static var todayIso: String {
         Date().formatted(.iso8601.year().month().day().dateSeparator(.dash))
+    }
+
+    /// The last seven days, most recent last. Days with nothing logged are
+    /// absent rather than zero — a day she did not record is not a day she
+    /// took no steps, and a chart that draws it as zero says the second thing.
+    static func week() async throws -> [DailyMetric] {
+        let from = Calendar.current.date(byAdding: .day, value: -6, to: Date()) ?? Date()
+        let rows: [DailyMetric] = try await Backend.client
+            .from("daily_metrics")
+            .select("day, sleep_h, sleep_quality, steps")
+            .gte("day", value: from.formatted(.iso8601.year().month().day().dateSeparator(.dash)))
+            .order("day")
+            .execute()
+            .value
+        return rows
+    }
+
+    /// The step target her coach set, or nil when she has not set one.
+    static func stepsTarget() async -> Int? {
+        struct Row: Decodable { let steps_target: Int? }
+        let rows: [Row]? = try? await Backend.client
+            .from("clients")
+            .select("steps_target")
+            .limit(1)
+            .execute()
+            .value
+        return rows?.first?.steps_target
     }
 
     static func today() async throws -> DailyMetric? {
@@ -121,6 +172,15 @@ enum CycleFeed {
             .execute()
             .value
         return rows.first
+    }
+
+    static func spans(cycleLength: Int) async -> [PhaseSpan] {
+        struct Args: Encodable { let p_cycle_length: Int }
+        let rows: [PhaseSpan]? = try? await Backend.client
+            .rpc("cycle_phase_spans", params: Args(p_cycle_length: cycleLength))
+            .execute()
+            .value
+        return rows ?? []
     }
 
     static func add(start: Date, lengthDays: Int) async throws {

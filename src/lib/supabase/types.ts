@@ -69,6 +69,8 @@ export type ClientRow = {
   equipment: string[];
   session_days: number[];
   sleep_target_h: number | null;
+  /** Daily step target. Null means the coach has not set one. */
+  steps_target: number | null;
   cycle_tracking: boolean;
   cycle_mode: CycleMode;
   nutrition_mode: NutritionMode;

@@ -109,6 +109,7 @@ export async function updateClientRecord(formData: FormData) {
       goal: goal === "" ? null : (goal as ClientGoal),
       height_cm: num(formData.get("height_cm")),
       sleep_target_h: num(formData.get("sleep_target_h")),
+      steps_target: num(formData.get("steps_target")),
       injuries: lines("injuries"),
       equipment: lines("equipment"),
       session_days: days,
