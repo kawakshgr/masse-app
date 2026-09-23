@@ -44,6 +44,8 @@ export default async function TodayPage() {
   const tDays = await getTranslations("days");
   const tPhase = await getTranslations("phase");
   const tEntry = await getTranslations("entry");
+  const tProto = await getTranslations("proto");
+  const tSupp = await getTranslations("supp");
 
   const today = new Date();
   const weekAgo = new Date(today);
@@ -64,6 +66,7 @@ export default async function TodayPage() {
     typesRes,
     weekRes,
     targetsRes,
+    protocolRes,
   ] = await Promise.all([
     supabase
       .from("assignments")
@@ -97,6 +100,11 @@ export default async function TodayPage() {
       .select("day_index, day_type_id")
       .eq("client_id", user.id),
     supabase.from("nutrition_targets").select("*").eq("client_id", user.id),
+    supabase
+      .from("client_supplements")
+      .select("id, name, dose, unit, timing, day_type_id, position")
+      .eq("client_id", user.id)
+      .order("position"),
   ]);
 
   const assignment = (assignmentsRes.data ?? [])[0];
@@ -134,6 +142,11 @@ export default async function TodayPage() {
     allTargets.find((row) => row.day_type_id === todayTypeId) ??
     allTargets.find((row) => row.day_type_id === null) ??
     null;
+
+  // Today's supplements: the ones for today's type, plus the everyday ones.
+  const todaySupplements = (protocolRes.data ?? []).filter(
+    (row) => row.day_type_id === null || row.day_type_id === todayTypeId,
+  );
 
   return (
     <main className="mx-auto min-h-dvh max-w-[720px] space-y-4 p-5">
@@ -218,6 +231,37 @@ export default async function TodayPage() {
               {t("todayKcal", { kcal: todayTarget.kcal })}
             </p>
           )}
+        </section>
+      )}
+
+      {todaySupplements.length > 0 && (
+        <section className="glass rounded-r3 p-4">
+          <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            {tProto("todayTitle")}
+          </h2>
+          <ul className="mt-2 space-y-1.5">
+            {todaySupplements.map((row) => (
+              <li
+                key={row.id}
+                className="flex items-baseline justify-between gap-3 rounded-r2 border border-[var(--hair)] px-3 py-2"
+              >
+                <span className="min-w-0">
+                  <span className="block truncate text-[14px] font-semibold">
+                    {row.name}
+                  </span>
+                  <span className="block text-[11.5px] text-[var(--ink3)]">
+                    {tSupp(`timing.${row.timing}`)}
+                  </span>
+                </span>
+                {row.dose !== null && (
+                  <span className="tnum shrink-0 text-[14px] font-semibold text-[var(--ink2)]">
+                    {Number(row.dose).toLocaleString("fr-FR")}{" "}
+                    {tSupp(`unit.${row.unit}`, { count: Number(row.dose) })}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

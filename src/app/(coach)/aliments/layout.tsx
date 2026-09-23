@@ -5,6 +5,7 @@ import { SplitPane } from "@/components/SplitPane";
 import { FoodSearch } from "@/components/FoodSearch";
 import { AddFoodButton } from "@/components/AddFoodButton";
 import { FOOD_CATEGORIES } from "@/lib/supabase/types";
+import { LibrarySwitch } from "@/components/LibrarySwitch";
 
 /**
  * The library is a two-pane editor, like the programme builder: the list on the
@@ -49,6 +50,7 @@ export default async function FoodsLayout({
   const list = (
     <div className="flex h-full min-w-0 flex-col">
       <div className="flex flex-col gap-2.5 border-b border-[var(--hair)] p-3">
+        <LibrarySwitch active="foods" />
         <div className="flex items-center gap-2">
           <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("title")}

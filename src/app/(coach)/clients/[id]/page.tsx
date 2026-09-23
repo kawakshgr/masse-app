@@ -19,6 +19,7 @@ import {
   type PlanMeal,
   type Targets,
 } from "@/components/NutritionPlan";
+import { SupplementProtocol } from "@/components/SupplementProtocol";
 import type { CyclePhase } from "@/lib/supabase/types";
 import { loadHistory, type Range } from "@/lib/history";
 import { dayLabel, euros } from "@/lib/billing";
@@ -662,6 +663,9 @@ async function NutritionTab({
     loggedRes,
     typesRes,
     weekRes,
+    protocolRes,
+    suppRes,
+    suppHiddenRes,
   ] = await Promise.all([
       supabase
         .from("clients")
@@ -699,6 +703,19 @@ async function NutritionTab({
         .from("client_week_days")
         .select("day_index, day_type_id")
         .eq("client_id", clientId),
+      supabase
+        .from("client_supplements")
+        .select(
+          "id, name, dose, unit, timing, protein_g, carbs_g, fat_g, kcal, day_type_id, position",
+        )
+        .eq("client_id", clientId)
+        .order("position"),
+      // The library she picks from: built-ins plus her own, minus what she hid.
+      supabase
+        .from("supplements")
+        .select("id, name, dose_min, unit, timing, usable")
+        .order("name"),
+      supabase.from("supplement_hidden").select("supplement_id"),
     ]);
 
   // Which day type the panel is editing. Absent means the default.
@@ -717,6 +734,26 @@ async function NutritionTab({
     carbsG: targetRow?.carbs_g ?? 0,
     fatG: targetRow?.fat_g ?? 0,
   };
+
+  const hiddenSupp = new Set(
+    (suppHiddenRes.data ?? []).map((row) => row.supplement_id),
+  );
+
+  // This day type's supplements, plus the ones that apply to every day.
+  const protocol = (protocolRes.data ?? []).filter(
+    (row) =>
+      (row.day_type_id ?? null) === dayTypeId || row.day_type_id === null,
+  );
+
+  const supplementMacros: Targets = protocol.reduce(
+    (acc, row) => ({
+      kcal: acc.kcal + Number(row.kcal ?? 0),
+      proteinG: acc.proteinG + Number(row.protein_g ?? 0),
+      carbsG: acc.carbsG + Number(row.carbs_g ?? 0),
+      fatG: acc.fatG + Number(row.fat_g ?? 0),
+    }),
+    { kcal: 0, proteinG: 0, carbsG: 0, fatG: 0 },
+  );
 
   const meals: PlanMeal[] = (mealsRes.data ?? [])
     .filter((row) => (row.day_type_id ?? null) === dayTypeId)
@@ -862,6 +899,7 @@ async function NutritionTab({
       />
 
       <NutritionPlan
+        supplements={supplementMacros}
         clientId={clientId}
         dayTypeId={dayTypeId}
         firstName={firstName}
@@ -882,6 +920,36 @@ async function NutritionTab({
           day: m.day,
           kcal: m.kcal == null ? null : Number(m.kcal),
         }))}
+      />
+
+      <SupplementProtocol
+        clientId={clientId}
+        firstName={firstName}
+        dayTypeId={dayTypeId}
+        dayTypeName={
+          (typesRes.data ?? []).find((type) => type.id === dayTypeId)?.name ??
+          null
+        }
+        rows={protocol.map((row) => ({
+          id: row.id,
+          name: row.name,
+          dose: row.dose === null ? null : Number(row.dose),
+          unit: row.unit,
+          timing: row.timing,
+          proteinG: row.protein_g === null ? null : Number(row.protein_g),
+          kcal: row.kcal === null ? null : Number(row.kcal),
+          dayTypeId: row.day_type_id,
+        }))}
+        library={(suppRes.data ?? [])
+          .filter((row) => !hiddenSupp.has(row.id))
+          .map((row) => ({
+            id: row.id,
+            name: row.name,
+            doseMin: row.dose_min === null ? null : Number(row.dose_min),
+            unit: row.unit,
+            timing: row.timing,
+            usable: row.usable,
+          }))}
       />
     </div>
   );

@@ -235,11 +235,14 @@ function PlanTotals({
   dayTypeId,
   targets,
   meals,
+  supplements,
 }: {
   clientId: string;
   dayTypeId: string | null;
   targets: Targets;
   meals: PlanMeal[];
+  /** What this day's supplements contribute — a shake is food, whatever the tub. */
+  supplements: Targets;
 }) {
   const t = useTranslations("nut");
 
@@ -251,11 +254,16 @@ function PlanTotals({
       carbsG: acc.carbsG + Number(item.carbsG ?? 0),
       fatG: acc.fatG + Number(item.fatG ?? 0),
     }),
-    { kcal: 0, proteinG: 0, carbsG: 0, fatG: 0 },
+    {
+      kcal: supplements.kcal,
+      proteinG: supplements.proteinG,
+      carbsG: supplements.carbsG,
+      fatG: supplements.fatG,
+    },
   );
 
   const gap = Math.round(total.kcal - targets.kcal);
-  const empty = items.length === 0;
+  const empty = items.length === 0 && supplements.kcal === 0;
 
   return (
     <div className="mt-4">
@@ -336,6 +344,7 @@ export function NutritionPlan({
   foods,
   offPlan,
   foodAsks,
+  supplements,
 }: {
   clientId: string;
   /** Which day type these targets and meals belong to. Null is the default. */
@@ -344,6 +353,8 @@ export function NutritionPlan({
   mode: NutritionMode;
   targets: Targets;
   meals: PlanMeal[];
+  /** This day's supplement macros, folded into the day total. */
+  supplements: Targets;
   foods: PickableFood[];
   offPlan: { id: string; name: string; day: string; kcal: number | null }[];
   /** Names the client typed because the library had nothing to match. */
@@ -410,6 +421,7 @@ export function NutritionPlan({
             dayTypeId={dayTypeId}
             targets={targets}
             meals={meals}
+            supplements={supplements}
           />
         )}
       </section>

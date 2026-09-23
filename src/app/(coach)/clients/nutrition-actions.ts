@@ -295,3 +295,124 @@ export async function swapWeekDays(formData: FormData) {
   revalidatePath(`/clients/${clientId}`);
   revalidatePath("/aujourdhui");
 }
+
+/**
+ * A supplement joins this client's protocol. The dose is hers to set; the macros
+ * are computed from the library's per-unit density, so a whey shake lands in the
+ * day total instead of sitting beside it uncounted.
+ *
+ * An entry marked unusable is refused here and not only in the UI: the database
+ * cannot express the rule without a subquery in a check, and a rule enforced
+ * only in a component is not a rule.
+ */
+export async function addClientSupplement(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const supplementId = String(formData.get("supplement_id") ?? "");
+  if (!clientId || !supplementId) return;
+
+  const { data: entry } = await supabase
+    .from("supplements")
+    .select(
+      "id, name, unit, timing, usable, dose_min, protein_per_unit, carbs_per_unit, fat_per_unit",
+    )
+    .eq("id", supplementId)
+    .maybeSingle();
+
+  if (!entry || !entry.usable) return;
+
+  const dose = num(formData.get("dose")) ?? (entry.dose_min === null ? null : Number(entry.dose_min));
+  const per = (value: number | null) =>
+    value === null || dose === null ? null : Number((Number(value) * dose).toFixed(2));
+
+  const rawType = String(formData.get("day_type_id") ?? "");
+
+  const { data: last } = await supabase
+    .from("client_supplements")
+    .select("position")
+    .eq("client_id", clientId)
+    .order("position", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  await supabase.from("client_supplements").insert({
+    client_id: clientId,
+    supplement_id: entry.id,
+    name: entry.name,
+    dose,
+    unit: entry.unit,
+    timing: entry.timing,
+    day_type_id: rawType === "" ? null : rawType,
+    position: (last?.position ?? -1) + 1,
+    protein_g: per(entry.protein_per_unit),
+    carbs_g: per(entry.carbs_per_unit),
+    fat_g: per(entry.fat_per_unit),
+  });
+
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/aujourdhui");
+}
+
+/** The dose changes, so the macros it contributes change with it. */
+export async function updateClientSupplement(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const id = String(formData.get("id") ?? "");
+  if (!clientId || !id) return;
+
+  const dose = num(formData.get("dose"));
+
+  const { data: row } = await supabase
+    .from("client_supplements")
+    .select("dose, supplement_id")
+    .eq("id", id)
+    .maybeSingle();
+
+  const patch: {
+    dose: number | null;
+    day_type_id?: string | null;
+    protein_g?: number | null;
+    carbs_g?: number | null;
+    fat_g?: number | null;
+  } = { dose };
+
+  if (formData.has("day_type_id")) {
+    const rawType = String(formData.get("day_type_id") ?? "");
+    patch.day_type_id = rawType === "" ? null : rawType;
+  }
+
+  // Recompute from the library entry rather than scaling the stored figures:
+  // scaling would compound its own rounding every time she nudges the dose.
+  if (row?.supplement_id && dose !== null) {
+    const { data: entry } = await supabase
+      .from("supplements")
+      .select("protein_per_unit, carbs_per_unit, fat_per_unit")
+      .eq("id", row.supplement_id)
+      .maybeSingle();
+
+    if (entry) {
+      const per = (value: number | null) =>
+        value === null ? null : Number((Number(value) * dose).toFixed(2));
+      patch.protein_g = per(entry.protein_per_unit);
+      patch.carbs_g = per(entry.carbs_per_unit);
+      patch.fat_g = per(entry.fat_per_unit);
+    }
+  }
+
+  await supabase.from("client_supplements").update(patch).eq("id", id);
+
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/aujourdhui");
+}
+
+export async function deleteClientSupplement(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const id = String(formData.get("id") ?? "");
+  if (!clientId || !id) return;
+
+  await supabase.from("client_supplements").delete().eq("id", id);
+
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/aujourdhui");
+}
