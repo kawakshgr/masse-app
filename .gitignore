@@ -51,3 +51,5 @@ ios/**/*.xcuserstate
 ios/DerivedData/
 ios/.swiftpm/
 *.xcscmblueprint
+
+ios/build/

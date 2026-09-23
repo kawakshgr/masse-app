@@ -4,6 +4,19 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>fr</string>
+	<!-- The keys Xcode injects when it generates the plist for you. We write
+	     ours by hand for UIAppFonts and the URL scheme, so these come too —
+	     without CFBundleIdentifier the simulator refuses the bundle outright. -->
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>Masse</string>
 	<key>CFBundleShortVersionString</key>

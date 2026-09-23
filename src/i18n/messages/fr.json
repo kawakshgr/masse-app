@@ -241,7 +241,8 @@
     "noAnswers": "Tes réponses ne sont pas dans ce navigateur.",
     "noAnswersBody": "Le lien de connexion doit être ouvert sur le même appareil et le même navigateur que celui où tu as rempli les étapes. Reprends-les ici, ça va vite.",
     "restart": "Recommencer les étapes",
-    "failedBody": "Ton code a peut-être déjà été utilisé, ou il a expiré. Demande-en un nouveau à ton coach."
+    "failedBody": "Ton code a peut-être déjà été utilisé, ou il a expiré. Demande-en un nouveau à ton coach.",
+    "nameLabel": "Nom"
   },
   "equipment": {
     "gym": "Salle",
