@@ -1,0 +1,108 @@
+import Foundation
+import Observation
+import Supabase
+
+/// Who is signed in, and what the app should show because of it.
+///
+/// Three states, not two: there is a moment after the magic link comes back
+/// where a session exists but the invite has not been spent yet. Showing Today
+/// then would show an account with no client row behind it.
+@MainActor
+@Observable
+final class Session {
+    enum State: Equatable {
+        /// Still asking the keychain. Not "signed out" — saying that for a
+        /// frame would flash onboarding at someone who is already a client.
+        case loading
+        case signedOut
+        /// Signed in, and the answers still have to be spent on the invite.
+        case claiming
+        case signedIn(clientName: String?)
+        case claimFailed
+    }
+
+    private(set) var state: State = .loading
+
+    private var watcher: Task<Void, Never>?
+
+    func start() {
+        guard watcher == nil else { return }
+        watcher = Task { [weak self] in
+            for await (event, session) in Backend.auth.authStateChanges {
+                guard let self else { return }
+                switch event {
+                case .initialSession, .signedIn, .tokenRefreshed:
+                    if session != nil {
+                        await self.settle()
+                    } else {
+                        self.state = .signedOut
+                    }
+                case .signedOut:
+                    self.state = .signedOut
+                default:
+                    break
+                }
+            }
+        }
+    }
+
+    /// The link came back. Completing it is what creates the session; the
+    /// answers are spent immediately afterwards, by `settle`.
+    func handle(url: URL) async {
+        do {
+            _ = try await Backend.auth.session(from: url)
+        } catch {
+            // A link that has already been used, or one opened on a different
+            // device. Onboarding is where to go, not a dead end.
+            state = .signedOut
+        }
+    }
+
+    /// Is there a client row yet? If not, and answers are on this device, spend
+    /// them. A session without a client row is an account that cannot do
+    /// anything, so it is not a state the app rests in.
+    private func settle() async {
+        do {
+            if let name = try await currentClientName() {
+                AnswerStore.clear()
+                state = .signedIn(clientName: name)
+                return
+            }
+
+            guard let answers = AnswerStore.load(), !answers.code.isEmpty else {
+                // Signed in, no client row, and nothing to claim with: this
+                // device did not fill the steps in.
+                state = .claimFailed
+                return
+            }
+
+            state = .claiming
+            try await InviteFlow.claim(answers)
+            AnswerStore.clear()
+            state = .signedIn(clientName: try await currentClientName())
+        } catch {
+            state = .claimFailed
+        }
+    }
+
+    private struct ClientName: Decodable { let first_name: String?; let name: String }
+
+    private func currentClientName() async throws -> String? {
+        guard let userId = Backend.auth.currentUser?.id else { return nil }
+        let rows: [ClientName] = try await Backend.client
+            .from("clients")
+            .select("first_name, name")
+            .eq("id", value: userId)
+            .limit(1)
+            .execute()
+            .value
+        guard let row = rows.first else { return nil }
+        return row.first_name ?? row.name
+    }
+
+    func signOut() async {
+        try? await Backend.auth.signOut()
+        AnswerStore.clear()
+        state = .signedOut
+    }
+}
