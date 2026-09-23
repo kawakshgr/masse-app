@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { HevyImport } from "@/components/HevyImport";
 import { useTranslations } from "next-intl";
 import {
   addExerciseToDay,
@@ -30,12 +31,15 @@ export function ExerciseLibrary({
   weekId,
   programmeId,
   days,
+  hevyConfigured,
 }: {
   catalogue: CatalogueEntry[];
   weekId: string;
   programmeId: string;
   /** Days that can take an exercise — rest days are not among them. */
   days: { index: number; label: string }[];
+  /** A Hevy key exists, so the import is worth offering. */
+  hevyConfigured: boolean;
 }) {
   const t = useTranslations("library");
   const [query, setQuery] = useState("");
@@ -122,6 +126,7 @@ export function ExerciseLibrary({
         </div>
 
         <p className="text-[12px] leading-[1.45] text-[var(--ink3)]">{t("lede")}</p>
+        <HevyImport configured={hevyConfigured} />
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto p-2">

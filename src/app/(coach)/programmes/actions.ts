@@ -3,6 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import {
+  fetchExerciseTemplates,
+  splitTitle,
+  titleise,
+} from "@/lib/hevy";
 
 async function coachId() {
   const supabase = await createClient();
@@ -461,4 +466,55 @@ export async function restoreToLibrary(formData: FormData) {
     .eq("exercise_id", id);
 
   revalidatePath("/programmes", "layout");
+}
+
+/**
+ * Pulls her Hevy exercise templates into the library. Additive and idempotent:
+ * a name she already has is left alone, because her own muscle group and
+ * equipment are edits, not stale data.
+ */
+export async function importHevyTemplates(): Promise<{
+  added: number;
+  skipped: number;
+  reason?: "not-configured" | "unauthorised" | "failed";
+}> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { added: 0, skipped: 0, reason: "failed" };
+
+  const result = await fetchExerciseTemplates();
+  if (!result.ok) return { added: 0, skipped: 0, reason: result.reason };
+
+  // Everything already in the catalogue, built-in or hers, by lowered name.
+  const { data: existing } = await supabase.from("exercises").select("name");
+  const known = new Set(
+    (existing ?? []).map((row) => row.name.trim().toLowerCase()),
+  );
+
+  const rows: { coach_id: string; name: string; muscle_group: string | null; equipment: string | null }[] = [];
+  let skipped = 0;
+
+  for (const template of result.templates) {
+    const { name, equipment } = splitTitle(template);
+    if (!name || known.has(name.toLowerCase())) {
+      skipped += 1;
+      continue;
+    }
+    known.add(name.toLowerCase());
+    rows.push({
+      coach_id: user.id,
+      name,
+      muscle_group: titleise(template.primary_muscle_group),
+      equipment,
+    });
+  }
+
+  if (rows.length > 0) {
+    await supabase.from("exercises").insert(rows);
+  }
+
+  revalidatePath("/programmes", "layout");
+  return { added: rows.length, skipped };
 }

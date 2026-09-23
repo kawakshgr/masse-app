@@ -6,6 +6,7 @@ import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
 import { WeekExport, WeekPrintout } from "@/components/WeekExport";
 import { addWeek, deleteWeek, duplicateWeek, toggleTemplate } from "../actions";
 import { ProgrammeHeader } from "@/components/ProgrammeHeader";
+import { hevyConfigured } from "@/lib/hevy";
 
 export default async function ProgrammeEditorPage({
   params,
@@ -204,6 +205,7 @@ export default async function ProgrammeEditorPage({
               equipment: e.equipment,
               mine: e.coach_id !== null,
             }))}
+          hevyConfigured={hevyConfigured()}
         />
       ) : (
         <p className="text-[13px] text-[var(--ink3)]">{tProg("emptyAction")}</p>

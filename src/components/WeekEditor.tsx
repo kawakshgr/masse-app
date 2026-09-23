@@ -71,6 +71,7 @@ export function WeekEditor({
   clients,
   assignedClientIds,
   catalogue,
+  hevyConfigured,
 }: {
   programmeId: string;
   weekId: string;
@@ -78,6 +79,7 @@ export function WeekEditor({
   clients: { id: string; name: string }[];
   assignedClientIds: string[];
   catalogue: CatalogueEntry[];
+  hevyConfigured: boolean;
 }) {
   const t = useTranslations("editor");
   const tProgramme = useTranslations("programme");
@@ -153,6 +155,7 @@ export function WeekEditor({
             weekId={weekId}
             programmeId={programmeId}
             days={trainingDays}
+            hevyConfigured={hevyConfigured}
           />
         </aside>
 

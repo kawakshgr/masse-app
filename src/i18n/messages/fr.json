@@ -921,5 +921,16 @@
     "doneSent": "Facture envoyée.",
     "noAddress": "Ce client n’a pas d’adresse e-mail dans sa fiche.",
     "sendFailed": "L’envoi a échoué. Le PDF reste téléchargeable."
+  },
+  "hevy": {
+    "import": "Importer depuis Hevy",
+    "running": "Import en cours…",
+    "done": "{added} mouvements ajoutés, {skipped} déjà connus.",
+    "notConfigured": "Import Hevy non configuré. Il faut une clé API Pro dans HEVY_API_KEY — elle se récupère sur hevy.com/settings?developer, depuis le site web et non l’app.",
+    "error": {
+      "not-configured": "Aucune clé Hevy configurée.",
+      "unauthorised": "Hevy a refusé la clé. Vérifie qu’elle est valide et que le compte est Pro.",
+      "failed": "L’import a échoué. Réessaie dans un instant."
+    }
   }
 }

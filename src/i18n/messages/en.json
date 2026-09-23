@@ -921,5 +921,16 @@
     "doneSent": "Invoice sent.",
     "noAddress": "This client has no email address on file.",
     "sendFailed": "Sending failed. The PDF is still downloadable."
+  },
+  "hevy": {
+    "import": "Import from Hevy",
+    "running": "Importing…",
+    "done": "{added} movements added, {skipped} already known.",
+    "notConfigured": "Hevy import is not configured. It needs a Pro API key in HEVY_API_KEY — get it at hevy.com/settings?developer, on the web app rather than the phone.",
+    "error": {
+      "not-configured": "No Hevy key configured.",
+      "unauthorised": "Hevy refused the key. Check it is valid and the account is Pro.",
+      "failed": "The import failed. Try again in a moment."
+    }
   }
 }
