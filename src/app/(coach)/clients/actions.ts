@@ -348,3 +348,29 @@ export async function setCycleMode(formData: FormData) {
 
   revalidatePath(`/clients/${clientId}`);
 }
+
+/**
+ * The step target, set where it is read rather than buried in the record. A
+ * target three tabs away from the chart it governs is a target nobody adjusts.
+ */
+export async function setStepsTarget(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  if (!clientId) return;
+
+  const count = (value: FormDataEntryValue | null): number | null => {
+    const raw = String(value ?? "").replace(/[^0-9]/g, "");
+    if (raw === "") return null;
+    const parsed = Number(raw);
+    return parsed > 0 && parsed <= 100_000 ? parsed : null;
+  };
+
+  await supabase
+    .from("clients")
+    .update({
+      steps_target: count(formData.get("steps_target")),
+    })
+    .eq("id", clientId);
+
+  revalidatePath(`/clients/${clientId}`);
+}

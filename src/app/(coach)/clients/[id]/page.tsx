@@ -12,6 +12,7 @@ import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
 import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
 import { BarChart } from "@/components/BarChart";
+import { StepTarget } from "@/components/StepTarget";
 import { StrengthPanel } from "@/components/StrengthPanel";
 import { CyclePanel, type PhaseLevers } from "@/components/CyclePanel";
 import {
@@ -981,6 +982,7 @@ async function StepsTab({
   tSteps: Translate;
 }) {
   const supabase = await createClient();
+  const tDays = await getTranslations("days");
   const since = new Date();
   since.setUTCDate(since.getUTCDate() - 27);
 
@@ -993,20 +995,12 @@ async function StepsTab({
       .order("day", { ascending: false }),
     supabase
       .from("clients")
-      .select("steps_target")
+      .select("first_name, name, steps_target")
       .eq("id", clientId)
       .maybeSingle(),
   ]);
 
   const rows = metrics ?? [];
-  const target = clientRow?.steps_target ?? null;
-  if (rows.length === 0) {
-    return (
-      <section className={panel}>
-        <p className="text-[13px] text-[var(--ink2)]">{tSteps("none")}</p>
-      </section>
-    );
-  }
 
   const slept = rows
     .filter((r) => r.sleep_h != null)
@@ -1015,64 +1009,40 @@ async function StepsTab({
     .filter((r) => r.steps != null)
     .map((r) => Number(r.steps));
 
-  // The last fourteen days in order, with the gaps kept as gaps: a day she
-  // did not record is not a day she did not walk.
+  // This week, Monday to Sunday: the week a coach is looking at, not a
+  // rolling window that starts on whatever day she opened the tab.
   const byDay = new Map(rows.map((row) => [row.day, row]));
-  const recent = [...Array(14)].map((_, index) => {
-    const date = new Date();
-    date.setUTCDate(date.getUTCDate() - (13 - index));
-    const iso = date.toISOString().slice(0, 10);
-    const steps = byDay.get(iso)?.steps;
-    return { iso, steps: steps == null ? null : Number(steps) };
+  const today = new Date();
+  const monday = new Date(today);
+  monday.setUTCDate(today.getUTCDate() - ((today.getUTCDay() + 6) % 7));
+
+  const days = [0, 1, 2, 3, 4, 5, 6].map((weekday) => {
+    const date = new Date(monday);
+    date.setUTCDate(monday.getUTCDate() + weekday);
+    const steps = byDay.get(date.toISOString().slice(0, 10))?.steps;
+    return {
+      weekday,
+      label: tDays(String(weekday)),
+      steps: steps == null ? null : Number(steps),
+    };
   });
 
-  const counted = recent.filter((d) => d.steps != null);
-  const met = target == null ? 0 : counted.filter((d) => d.steps! >= target).length;
-
   return (
-    <section className={panel}>
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className={heading}>{tSteps("last14")}</h3>
-        <span className="tnum text-[12px] text-[var(--ink2)]">
-          {target == null
-            ? tSteps("noTarget")
-            : `${tSteps("target")} ${target.toLocaleString("fr-FR")}`}
-        </span>
-      </div>
+    <div className="space-y-4">
+      <StepTarget
+        clientId={clientId}
+        firstName={clientRow?.first_name ?? clientRow?.name ?? ""}
+        days={days}
+        target={clientRow?.steps_target ?? null}
+      />
 
-      <div className="mt-3">
-        <BarChart
-          ariaLabel={tSteps("steps")}
-          height={72}
-          target={target}
-          bars={recent.map((day) => ({
-            value: day.steps,
-            label: `${day.iso} · ${day.steps?.toLocaleString("fr-FR") ?? "—"}`,
-            // A day that cleared the target is lit; one that did not is
-            // simply quieter. Not coral — that is the attention colour, and a
-            // walk short of a target is not an alarm. The iOS chart reads the
-            // same way, so the two clients agree about what a short day means.
-            tone:
-              day.steps == null
-                ? "future"
-                : target != null && day.steps >= target
-                  ? "near"
-                  : undefined,
-          }))}
-        />
-      </div>
-
-      {target != null && counted.length > 0 && (
-        <p className="tnum mt-2 text-[12px] text-[var(--ink3)]">
-          {met === 0
-            ? tSteps("metNone", { total: counted.length })
-            : met === 1
-              ? tSteps("metOne", { total: counted.length })
-              : tSteps("met", { count: met, total: counted.length })}
-        </p>
-      )}
-
-      <div className="mt-4 flex flex-wrap gap-3">
+      {rows.length === 0 ? (
+        <section className={panel}>
+          <p className="text-[13px] text-[var(--ink2)]">{tSteps("none")}</p>
+        </section>
+      ) : (
+      <section className={panel}>
+      <div className="flex flex-wrap gap-3">
         <MetricCard
           label={tSteps("avgSleep")}
           kind="sleep"
@@ -1119,6 +1089,8 @@ async function StepsTab({
           </li>
         ))}
       </ul>
-    </section>
+      </section>
+      )}
+    </div>
   );
 }
