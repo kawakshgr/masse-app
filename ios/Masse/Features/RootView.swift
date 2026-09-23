@@ -18,6 +18,8 @@ struct RootView: View {
             TodayView(firstName: name)
         case .claimFailed:
             ClaimFailedView()
+        case .noClientRecord:
+            NoRecordView()
         }
     }
 }
@@ -38,6 +40,35 @@ struct Splash: View {
                         .foregroundStyle(Tk.ink2)
                 }
             }
+        }
+    }
+}
+
+/// Signed in on an address no coach has added. Different from a spent code,
+/// so it says something different and points at the door that would work.
+struct NoRecordView: View {
+    @Environment(Session.self) private var session
+
+    var body: some View {
+        ZStack {
+            Tk.bg.ignoresSafeArea()
+            Atmosphere().ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 16) {
+                Text(L.t("auth.noRecordTitle"))
+                    .font(Ty.cardTitle)
+                    .tracking(Ty.displayTracking(19))
+                    .foregroundStyle(Tk.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(L.t("auth.noRecordBody"))
+                    .font(Ty.copy)
+                    .foregroundStyle(Tk.ink2)
+                    .fixedSize(horizontal: false, vertical: true)
+                CTA(title: L.t("auth.noRecordAction")) {
+                    Task { await session.signOut() }
+                }
+            }
+            .padding(22)
         }
     }
 }

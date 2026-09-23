@@ -19,6 +19,8 @@ final class Session {
         case claiming
         case signedIn(clientName: String?)
         case claimFailed
+        /// Signed in, but no coach has added this address yet.
+        case noClientRecord
     }
 
     private(set) var state: State = .loading
@@ -70,9 +72,10 @@ final class Session {
             }
 
             guard let answers = AnswerStore.load(), !answers.code.isEmpty else {
-                // Signed in, no client row, and nothing to claim with: this
-                // device did not fill the steps in.
-                state = .claimFailed
+                // Signed in, no client row, nothing to claim with. Usually
+                // someone signing back in on an address their coach has not
+                // added — which is not a failed claim and must not say so.
+                state = .noClientRecord
                 return
             }
 

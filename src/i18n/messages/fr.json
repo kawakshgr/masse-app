@@ -14,7 +14,15 @@
     "error": "L'envoi a échoué. Réessaie dans un instant.",
     "signOut": "Se déconnecter",
     "callbackError": "Ce lien n'est plus valable. Demandes-en un nouveau.",
-    "rateLimited": "Trop de liens demandés. Supabase limite les envois à quelques-uns par heure tant qu’aucun SMTP n’est configuré. Attends une heure, ou branche un vrai service d’e-mail."
+    "rateLimited": "Trop de liens demandés. Supabase limite les envois à quelques-uns par heure tant qu’aucun SMTP n’est configuré. Attends une heure, ou branche un vrai service d’e-mail.",
+    "haveAccount": "J’ai déjà un compte",
+    "signInTitle": "Te reconnecter",
+    "signInLede": "L’adresse que tu as utilisée en t’inscrivant. On t’envoie un lien, pas de mot de passe.",
+    "backToCode": "J’ai un code d’invitation",
+    "openOnThisDevice": "Ouvre le lien sur cet appareil — c’est lui qui garde la clé.",
+    "noRecordTitle": "Aucune fiche à cette adresse",
+    "noRecordBody": "Cette adresse est bien connectée, mais aucun coach ne t’a encore ajouté. Si tu viens d’arriver, entre le code d’invitation qu’on t’a envoyé.",
+    "noRecordAction": "Entrer un code d’invitation"
   },
   "shell": {
     "clients": "Clients",

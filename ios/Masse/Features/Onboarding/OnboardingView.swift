@@ -7,8 +7,17 @@ import SwiftUI
 /// is no account to attach them to before then.
 struct OnboardingView: View {
     @State private var model = OnboardingModel()
+    @State private var signingIn = false
 
     var body: some View {
+        if signingIn {
+            SignInView { signingIn = false }
+        } else {
+            steps
+        }
+    }
+
+    private var steps: some View {
         ZStack {
             Tk.bg.ignoresSafeArea()
             Atmosphere().ignoresSafeArea()
@@ -79,6 +88,16 @@ struct OnboardingView: View {
                     .foregroundStyle(Tk.a3)
                     .fixedSize(horizontal: false, vertical: true)
             }
+
+            // A code is spent once, so it cannot be the only way in: a new
+            // phone, a reinstall, or having onboarded on the web all end here.
+            Button { signingIn = true } label: {
+                Text(L.t("auth.haveAccount"))
+                    .font(Ty.copySmall)
+                    .foregroundStyle(Tk.ink2)
+                    .underline()
+            }
+            .frame(minHeight: Tk.tap, alignment: .leading)
         }
     }
 

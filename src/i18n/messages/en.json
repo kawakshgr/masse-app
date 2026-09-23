@@ -14,7 +14,15 @@
     "error": "That failed to send. Try again in a moment.",
     "signOut": "Sign out",
     "callbackError": "That link is no longer valid. Ask for a new one.",
-    "rateLimited": "Too many links requested. Supabase caps sends to a few per hour until you configure SMTP. Wait an hour, or connect a real email service."
+    "rateLimited": "Too many links requested. Supabase caps sends to a few per hour until you configure SMTP. Wait an hour, or connect a real email service.",
+    "haveAccount": "I already have an account",
+    "signInTitle": "Sign back in",
+    "signInLede": "The address you signed up with. We send a link, not a password.",
+    "backToCode": "I have an invite code",
+    "openOnThisDevice": "Open the link on this device — it is the one holding the key.",
+    "noRecordTitle": "No record at this address",
+    "noRecordBody": "This address is signed in, but no coach has added you yet. If you have just arrived, enter the invite code you were sent.",
+    "noRecordAction": "Enter an invite code"
   },
   "shell": {
     "clients": "Clients",

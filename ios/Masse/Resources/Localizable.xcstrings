@@ -1397,6 +1397,142 @@
         }
       }
     },
+    "auth.haveAccount": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J’ai déjà un compte"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I already have an account"
+          }
+        }
+      }
+    },
+    "auth.signInTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Te reconnecter"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign back in"
+          }
+        }
+      }
+    },
+    "auth.signInLede": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’adresse que tu as utilisée en t’inscrivant. On t’envoie un lien, pas de mot de passe."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The address you signed up with. We send a link, not a password."
+          }
+        }
+      }
+    },
+    "auth.backToCode": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J’ai un code d’invitation"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have an invite code"
+          }
+        }
+      }
+    },
+    "auth.openOnThisDevice": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvre le lien sur cet appareil — c’est lui qui garde la clé."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the link on this device — it is the one holding the key."
+          }
+        }
+      }
+    },
+    "auth.noRecordTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune fiche à cette adresse"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No record at this address"
+          }
+        }
+      }
+    },
+    "auth.noRecordBody": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette adresse est bien connectée, mais aucun coach ne t’a encore ajouté. Si tu viens d’arriver, entre le code d’invitation qu’on t’a envoyé."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This address is signed in, but no coach has added you yet. If you have just arrived, enter the invite code you were sent."
+          }
+        }
+      }
+    },
+    "auth.noRecordAction": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrer un code d’invitation"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter an invite code"
+          }
+        }
+      }
+    },
     "feel.Strong": {
       "extractionState": "manual",
       "localizations": {
