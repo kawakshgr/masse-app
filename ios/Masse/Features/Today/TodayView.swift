@@ -14,6 +14,7 @@ struct TodayView: View {
     @State private var week: PushedWeek?
     @State private var loaded = false
     @State private var failed = false
+    @State private var settingsOpen = false
 
     private var todaySession: PushedWeek.DaySession? {
         week?.week?.sessions.first { $0.dayIndex == Weekday.today }
@@ -47,11 +48,25 @@ struct TodayView: View {
             }
         }
         .task { await load() }
+        .sheet(isPresented: $settingsOpen) { SettingsView() }
     }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(L.t("today.title")).kicker()
+            HStack(alignment: .center) {
+                Text(L.t("today.title")).kicker()
+                Spacer()
+                // Settings live on the first screen, top right, where a gear
+                // is looked for — not in a tab of their own.
+                Button { settingsOpen = true } label: {
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Tk.ink2)
+                        .frame(width: Tk.tap, height: Tk.tap)
+                        .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.pill))
+                }
+                .accessibilityLabel(L.t("settings.open"))
+            }
             Text(greeting)
                 .font(Ty.screenTitle)
                 .tracking(Ty.displayTracking(30))

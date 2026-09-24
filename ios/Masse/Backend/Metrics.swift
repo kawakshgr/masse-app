@@ -234,6 +234,12 @@ enum SymptomNotes {
         }
         UserDefaults.standard.set(notes, forKey: key)
     }
+
+    /// Every note, gone. There is no copy anywhere else to restore from, which
+    /// is the point of them — and why Settings asks first.
+    static func clearAll() {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
 }
 
 /// The weekly check-in, as the client files it.

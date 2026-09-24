@@ -1,0 +1,44 @@
+[
+  {
+    "version": "0.3",
+    "date": "2026-09-24",
+    "fr": [
+      "Réglages : notifications, apparence, langue, confidentialité et ces notes de version.",
+      "Rappels sur iPhone : la saisie du jour, et le bilan du dimanche.",
+      "L’app web cliente devient la même que l’app iPhone : Aujourd’hui, Séance, Nutrition, Cycle, Coach."
+    ],
+    "en": [
+      "Settings: notifications, appearance, language, privacy and these release notes.",
+      "Reminders on iPhone: the daily log, and the Sunday check-in.",
+      "The client web app becomes the same as the iPhone app: Today, Session, Fuel, Cycle, Coach."
+    ]
+  },
+  {
+    "version": "0.2",
+    "date": "2026-09-23",
+    "fr": [
+      "Tes pas de la semaine, du lundi au dimanche, face à l’objectif de ton coach.",
+      "Bilan de la semaine avec mensurations et photos : face, profil, dos.",
+      "Cycle : où tu en es, phase par phase.",
+      "Sommeil et pas depuis Apple Santé, en lecture seule."
+    ],
+    "en": [
+      "Your steps for the week, Monday to Sunday, against your coach’s target.",
+      "Weekly check-in with measurements and photos: front, side, back.",
+      "Cycle: where you are, phase by phase.",
+      "Sleep and steps from Apple Health, read only."
+    ]
+  },
+  {
+    "version": "0.1",
+    "date": "2026-09-22",
+    "fr": [
+      "Première version : l’invitation de ton coach, la séance du jour, son plan nutrition et ton cycle.",
+      "Séance hors-ligne : tes séries sont gardées et partent dès que le réseau revient."
+    ],
+    "en": [
+      "First version: your coach’s invitation, today’s session, their nutrition plan and your cycle.",
+      "Offline sessions: your sets are kept and sent as soon as the network is back."
+    ]
+  }
+]

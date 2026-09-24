@@ -8,6 +8,8 @@
  *
  *     node ios/tools/sync-strings.mjs
  *
+ * It also copies src/lib/releases.json into the bundle, for the same reason.
+ *
  * Only the namespaces the client app actually shows are carried over; the
  * coach's vocabulary has no business in a client bundle.
  */
@@ -21,6 +23,7 @@ const NAMESPACES = [
   "phase", "offline", "auth", "log", "common", "feel", "pain", "adherence",
   "clientNav", "fuel", "entry", "supp.timing", "supp.unit",
   "shell", "soonCopy", "bilan", "checkin", "cycleChart", "stepsChart", "photos", "review.poses",
+  "settings", "theme", "app",
 ];
 
 /** Walks a dotted path, so "supp.timing" resolves to that object. */
@@ -118,6 +121,13 @@ for (const ns of NAMESPACES) {
 writeFileSync(
   "ios/Masse/Resources/Localizable.xcstrings",
   JSON.stringify({ sourceLanguage: "fr", strings, version: "1.0" }, null, 2) + "\n",
+);
+
+// Release notes have one author too. The web imports this file; the app reads
+// the copy below from its bundle.
+writeFileSync(
+  "ios/Masse/Resources/releases.json",
+  readFileSync("src/lib/releases.json", "utf8"),
 );
 
 console.log(`${carried} strings carried, ${plurals} plurals split, ${skipped} selects skipped`);

@@ -129,6 +129,14 @@ final class Session {
         )
     }
 
+    /// After she edits her details: the greeting on Today reads the name from
+    /// here, so it has to be asked again rather than left stale.
+    func refreshProfile() async {
+        if let profile = try? await currentClient() {
+            state = .signedIn(profile: profile)
+        }
+    }
+
     func signOut() async {
         try? await Backend.auth.signOut()
         AnswerStore.clear()
