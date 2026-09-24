@@ -1,3 +1,4 @@
+import { isFiled } from "@/lib/checkIns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -581,12 +582,20 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
       .maybeSingle(),
   ]);
 
-  const checkIns = (rows ?? []) as CheckInRow[];
-
   const { data: photos } = await supabase
     .from("check_in_photos")
     .select("id, check_in_id, storage_path, pose")
     .eq("client_id", clientId);
+
+  // Rows she opened and left empty are not weeks: they would count as a
+  // check-in and push the real baseline aside.
+  const photoCount = new Map<string, number>();
+  for (const photo of photos ?? []) {
+    photoCount.set(photo.check_in_id, (photoCount.get(photo.check_in_id) ?? 0) + 1);
+  }
+  const checkIns = ((rows ?? []) as CheckInRow[]).filter((row) =>
+    isFiled(row, photoCount.get(row.id) ?? 0),
+  );
 
   // The bucket is private, so every file is served through a signed URL.
   const paths = (photos ?? []).map((p) => p.storage_path);
@@ -631,6 +640,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
     hips: row.hips_cm == null ? null : Number(row.hips_cm),
     thigh: row.thigh_cm == null ? null : Number(row.thigh_cm),
     photos: photosByCheckIn.get(row.id) ?? {},
+    byClient: row.author === "client",
   }));
 
   const firstName = client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";

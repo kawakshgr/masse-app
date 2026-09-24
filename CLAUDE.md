@@ -50,9 +50,17 @@ check-in as read.
 - **Programme editor** (web) — weeks, seven day columns, sessions, ordered exercises,
   drag between days, duplicate week, save as template, push to clients.
 - **Session logging** (both) — offline-first.
-- **Check-ins** — **typed by the coach in v1.** She asks by WhatsApp and enters the
-  answers. `check_ins.author` is already in the schema; the client-submitted form later
-  only changes who writes the row.
+- **Check-ins** — filed by the client from either app (with measurements and
+  three photos), or typed by the coach when it arrives by WhatsApp.
+  `check_ins.author` says who wrote the row and survives a coach's correction.
+  Opening the form creates an empty row for photos to hang off; `isFiled`
+  (src/lib/checkIns.ts) keeps it out of the coach's review until it holds
+  something.
+- **Cycle levers reach the client** — `client_cycle_state` returns the coach's
+  per-phase load/sets/RPE/kcal/carbs; both clients apply them to what she is
+  shown, never to the stored programme. It returns the day of cycle and the
+  length to the client only, and pins the date to today for the coach: those
+  would date a period.
 - **Sleep and steps** — typed, or read from **Apple Health** on iOS. Read only:
   the app writes nothing back, and sleep *quality* stays typed because Health
   does not know whether a night was rough.

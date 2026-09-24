@@ -29,6 +29,8 @@ export type ReviewWeek = {
   hips: number | null;
   thigh: number | null;
   photos: Partial<Record<PhotoPose, { id: string; url: string | null }>>;
+  /** Filed from the client's own app rather than typed in by the coach. */
+  byClient: boolean;
 };
 
 function Measure({
@@ -292,6 +294,11 @@ export function CheckInReview({
             {t("week", { n: week.number })}
           </button>
         ))}
+        {selected.byClient && (
+          <span className="ml-2 rounded-rp border border-[var(--edge)] px-2.5 py-0.5 text-[12px] text-[var(--a1)]">
+            {t("byClient", { first: firstName })}
+          </span>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-4">

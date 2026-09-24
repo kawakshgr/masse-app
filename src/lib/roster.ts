@@ -1,3 +1,4 @@
+import { isFiled } from "@/lib/checkIns";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
@@ -62,7 +63,9 @@ export async function loadRoster(
     // Waiting on the coach.
     supabase
       .from("check_ins")
-      .select("client_id")
+      .select(
+        "client_id, feel, pain, adherence, bodyweight_kg, note, waist_cm, chest_cm, hips_cm, thigh_cm, check_in_photos(id)",
+      )
       .in("client_id", ids)
       .is("reviewed_at", null),
     // Sleep over the last seven nights.
@@ -86,6 +89,8 @@ export async function loadRoster(
 
   const checkinCount = new Map<string, number>();
   for (const row of checkins.data ?? []) {
+    // An opened-and-abandoned form is not a check-in to review.
+    if (!isFiled(row, row.check_in_photos?.length ?? 0)) continue;
     checkinCount.set(row.client_id, (checkinCount.get(row.client_id) ?? 0) + 1);
   }
 

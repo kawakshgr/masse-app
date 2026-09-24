@@ -369,7 +369,7 @@
   },
   "checkin": {
     "title": "Weekly check-in",
-    "lede": "You ask on WhatsApp, you type it here. The client-submitted form comes later.",
+    "lede": "Clients can fill in their check-in from their app. If it reaches you on WhatsApp, type it here.",
     "week": "Week of",
     "feel": "Feel",
     "pain": "Pain",
@@ -532,7 +532,7 @@
   "billing": {
     "title": "Billing",
     "titleMonth": "Billing · {month}",
-    "lede": "A ledger you tick. Nothing is ever charged automatically — you take payment outside the app.",
+    "lede": "A ledger you tick. Nothing is ever charged automatically — you take payment outside the app. Your clients see their plan and the months you record, read only, in their settings.",
     "subOpen": "{recurring} recurring · {count, plural, =1 {1 payment still open} other {# payments still open}} ({owed})",
     "subSettled": "{recurring} recurring · everyone is settled this month",
     "filter_all": "All",
@@ -768,7 +768,8 @@
     "removePhoto": "Delete the photo",
     "confirmRemovePhoto": "Delete",
     "cancel": "Cancel",
-    "askRemovePhoto": "Delete this photo? It does not come back."
+    "askRemovePhoto": "Delete this photo? It does not come back.",
+    "byClient": "Filed by {first}"
   },
   "hist": {
     "longView": "The long view",

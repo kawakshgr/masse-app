@@ -369,7 +369,7 @@
   },
   "checkin": {
     "title": "Bilan de la semaine",
-    "lede": "Tu demandes par WhatsApp, tu saisis ici. Le formulaire côté client viendra plus tard.",
+    "lede": "Le bilan peut être rempli depuis l’app du client. S’il t’arrive par WhatsApp, saisis-le ici.",
     "week": "Semaine du",
     "feel": "Sensation",
     "pain": "Douleur",
@@ -532,7 +532,7 @@
   "billing": {
     "title": "Facturation",
     "titleMonth": "Facturation · {month}",
-    "lede": "Un registre que tu coches. Rien n’est jamais débité automatiquement — tu encaisses hors de l’app.",
+    "lede": "Un registre que tu coches. Rien n’est jamais débité automatiquement — tu encaisses hors de l’app. Tes clients voient leur formule et les mois enregistrés, en lecture seule, dans leurs réglages.",
     "subOpen": "{recurring} récurrents · {count, plural, =1 {1 paiement encore ouvert} other {# paiements encore ouverts}} ({owed})",
     "subSettled": "{recurring} récurrents · tout le monde est à jour ce mois-ci",
     "filter_all": "Tous",
@@ -768,7 +768,8 @@
     "removePhoto": "Supprimer la photo",
     "confirmRemovePhoto": "Supprimer",
     "cancel": "Annuler",
-    "askRemovePhoto": "Supprimer cette photo ? Elle ne revient pas."
+    "askRemovePhoto": "Supprimer cette photo ? Elle ne revient pas.",
+    "byClient": "Rempli par {first}"
   },
   "hist": {
     "longView": "La vue longue",

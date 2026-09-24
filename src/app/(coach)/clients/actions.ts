@@ -35,6 +35,15 @@ export async function saveCheckIn(formData: FormData) {
     return v === "" ? null : (v as T);
   };
 
+  // A week she filed herself stays hers when the coach corrects it: the
+  // author says who wrote the row, not who touched it last.
+  const { data: existing } = await supabase
+    .from("check_ins")
+    .select("author")
+    .eq("client_id", clientId)
+    .eq("week_start_date", weekStart)
+    .maybeSingle();
+
   await supabase.from("check_ins").upsert(
     {
       client_id: clientId,
@@ -48,7 +57,7 @@ export async function saveCheckIn(formData: FormData) {
       hips_cm: num(formData.get("hips_cm")),
       thigh_cm: num(formData.get("thigh_cm")),
       note: String(formData.get("note") ?? "").trim() || null,
-      author: "coach",
+      author: existing?.author ?? "coach",
       submitted_at: new Date().toISOString(),
     },
     { onConflict: "client_id,week_start_date" },
