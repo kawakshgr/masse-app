@@ -214,6 +214,12 @@ struct OnboardingView: View {
                     .font(Ty.copySmall)
                     .foregroundStyle(model.messageIsError ? Tk.a3 : Tk.a1)
                     .fixedSize(horizontal: false, vertical: true)
+
+                // The answers wait on this phone, so the code finishes the
+                // invitation here even if the email was read elsewhere.
+                if !model.messageIsError {
+                    CodeEntry(email: model.answers.email)
+                }
             }
         }
     }

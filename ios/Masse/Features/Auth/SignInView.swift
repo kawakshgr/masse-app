@@ -54,6 +54,8 @@ struct SignInView: View {
                                     .foregroundStyle(Tk.ink3)
                             }
                             .fixedSize(horizontal: false, vertical: true)
+
+                            CodeEntry(email: email)
                         }
 
                         if let error = session.linkError ?? error {

@@ -73,6 +73,24 @@ final class Session {
         }
     }
 
+    /// The code from the email. A session made this way is announced by
+    /// authStateChanges like any other, so `settle` runs — and spends the
+    /// invite answers waiting on this phone — exactly as it does for a link.
+    func verify(email: String, code: String) async -> Bool {
+        do {
+            _ = try await Backend.auth.verifyOTP(
+                email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+                token: code,
+                type: .email
+            )
+            linkError = nil
+            return true
+        } catch {
+            log.error("code sign-in failed: \(error.localizedDescription, privacy: .public)")
+            return false
+        }
+    }
+
     /// Is there a client row yet? If not, and answers are on this device, spend
     /// them. A session without a client row is an account that cannot do
     /// anything, so it is not a state the app rests in.
