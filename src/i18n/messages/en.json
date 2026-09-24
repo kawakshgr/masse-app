@@ -510,7 +510,10 @@
     "none": "Nothing logged today.",
     "total": "Total",
     "remove": "Remove",
-    "pick": "Pick from the library"
+    "pick": "Pick from the library",
+    "search": "Search a food",
+    "noFood": "Your coach has no foods in their library yet.",
+    "clearPick": "Type it instead"
   },
   "billing": {
     "title": "Billing",

@@ -510,7 +510,10 @@
     "none": "Rien enregistré aujourd’hui.",
     "total": "Total",
     "remove": "Retirer",
-    "pick": "Choisir dans la bibliothèque"
+    "pick": "Choisir dans la bibliothèque",
+    "search": "Chercher un aliment",
+    "noFood": "Ton coach n’a pas encore d’aliments dans sa bibliothèque.",
+    "clearPick": "Saisir librement"
   },
   "billing": {
     "title": "Facturation",

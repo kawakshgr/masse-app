@@ -25,6 +25,9 @@ struct NutritionPlan: Sendable {
     var targets: Targets?
     var meals: [PlanMeal]
     var supplements: [Supplement]
+    /// Monday first: the name of each day's type, nil for the default. Empty
+    /// when her coach has not set any day types — then there is nothing to move.
+    var week: [String?]
 
     struct Targets: Decodable, Sendable {
         let kcal: Int
@@ -165,7 +168,163 @@ enum NutritionFeed {
                 .sorted {
                     (NutritionPlan.timingOrder.firstIndex(of: $0.timing) ?? 9)
                         < (NutritionPlan.timingOrder.firstIndex(of: $1.timing) ?? 9)
-                }
+                },
+            week: types.isEmpty ? [] : (0..<7).map { day in
+                let id = week.first { $0.dayIndex == day }?.dayTypeId
+                return types.first { $0.id == id }?.name
+            }
         )
+    }
+}
+
+/// Her week, and the one thing she does to it: move a day.
+///
+/// Life moves a rest day. Nutrition hangs off the day type rather than the
+/// weekday, so trading two days carries the right plan along with each.
+enum MyWeekFeed {
+    static func swap(_ a: Int, _ b: Int) async throws {
+        guard a != b, let clientId = Backend.auth.currentUser?.id else { return }
+
+        let rows: [WeekDayRow] = try await Backend.client
+            .from("client_week_days")
+            .select("day_index, day_type_id")
+            .in("day_index", values: [a, b])
+            .execute()
+            .value
+        let typeOf = { (day: Int) in rows.first { $0.dayIndex == day }?.dayTypeId }
+
+        struct Row: Encodable {
+            let client_id: String
+            let day_index: Int
+            let day_type_id: String?
+
+            // A null has to be sent as null: the day becomes a default day.
+            func encode(to encoder: Encoder) throws {
+                var c = encoder.container(keyedBy: CodingKeys.self)
+                try c.encode(client_id, forKey: .client_id)
+                try c.encode(day_index, forKey: .day_index)
+                try c.encode(day_type_id, forKey: .day_type_id)
+            }
+            enum CodingKeys: String, CodingKey { case client_id, day_index, day_type_id }
+        }
+
+        try await Backend.client
+            .from("client_week_days")
+            .upsert(
+                [
+                    Row(client_id: clientId.uuidString, day_index: a, day_type_id: typeOf(b)),
+                    Row(client_id: clientId.uuidString, day_index: b, day_type_id: typeOf(a)),
+                ],
+                onConflict: "client_id,day_index"
+            )
+            .execute()
+    }
+}
+
+/// What she ate today, logged by her. Separate from the plan on purpose: the
+/// plan is the coach's instruction, this is her record against it.
+struct LoggedMeal: Decodable, Sendable, Identifiable {
+    let id: String
+    let name: String
+    let slot: String?
+    let quantityG: Double?
+    let kcal: Double?
+    let proteinG: Double?
+    let carbsG: Double?
+    let fatG: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, slot, kcal
+        case quantityG = "quantity_g"
+        case proteinG = "protein_g"
+        case carbsG = "carbs_g"
+        case fatG = "fat_g"
+    }
+}
+
+/// An entry in her coach's food library, readable to her so she can log
+/// against it. Values are per 100 g.
+struct LibraryFood: Decodable, Sendable, Identifiable, Hashable {
+    let id: String
+    let name: String
+    let brand: String?
+    let kcal100g: Double?
+    let protein100g: Double?
+    let carbs100g: Double?
+    let fat100g: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, brand
+        case kcal100g = "kcal_100g"
+        case protein100g = "protein_100g"
+        case carbs100g = "carbs_100g"
+        case fat100g = "fat_100g"
+    }
+}
+
+enum MealsFeed {
+    static func today() async throws -> [LoggedMeal] {
+        try await Backend.client
+            .from("meals")
+            .select("id, name, slot, quantity_g, kcal, protein_g, carbs_g, fat_g")
+            .eq("day", value: MetricsFeed.todayIso)
+            .order("logged_at")
+            .execute()
+            .value
+    }
+
+    static func library() async -> [LibraryFood] {
+        let rows: [LibraryFood]? = try? await Backend.client
+            .from("foods")
+            .select("id, name, brand, kcal_100g, protein_100g, carbs_100g, fat_100g")
+            .order("name")
+            .execute()
+            .value
+        return rows ?? []
+    }
+
+    /// The name and the scaled macros are snapshotted: deleting the library
+    /// entry later must not rewrite what she ate. The web does the same sum.
+    static func log(food: LibraryFood?, name: String, grams: Double?, slot: String?) async throws {
+        guard let clientId = Backend.auth.currentUser?.id else { return }
+
+        let factor = grams.map { $0 / 100 }
+        func scale(_ per100: Double?) -> Double? {
+            guard let factor, let per100 else { return nil }
+            return (per100 * factor * 100).rounded() / 100
+        }
+
+        struct Row: Encodable {
+            let client_id: String
+            let day: String
+            let slot: String?
+            let food_id: String?
+            let name: String
+            let quantity_g: Double?
+            let kcal: Double?
+            let protein_g: Double?
+            let carbs_g: Double?
+            let fat_g: Double?
+        }
+
+        try await Backend.client
+            .from("meals")
+            .insert(Row(
+                client_id: clientId.uuidString,
+                day: MetricsFeed.todayIso,
+                slot: slot,
+                food_id: food?.id,
+                name: name,
+                quantity_g: grams,
+                kcal: scale(food?.kcal100g),
+                protein_g: scale(food?.protein100g),
+                carbs_g: scale(food?.carbs100g),
+                fat_g: scale(food?.fat100g)
+            ))
+            .execute()
+    }
+
+    static func delete(id: String) async throws {
+        try await Backend.client.from("meals").delete().eq("id", value: id).execute()
     }
 }

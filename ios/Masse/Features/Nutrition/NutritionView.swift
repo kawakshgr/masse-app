@@ -34,9 +34,16 @@ struct NutritionView: View {
                         if plan.targets == nil, plan.meals.isEmpty, plan.supplements.isEmpty {
                             emptyCard
                         }
+                        // Moving a day changes what today is, so the plan
+                        // above is asked again once the swap lands.
+                        if !plan.week.isEmpty {
+                            MyWeekCard(week: plan.week) { await load() }
+                        }
                     } else {
                         emptyCard
                     }
+
+                    if loaded { MealsCard() }
                 }
                 .padding(.horizontal, 22)
                 .padding(.top, 12)
