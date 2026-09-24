@@ -232,9 +232,15 @@ export async function emailInvoice(formData: FormData) {
   const to = result.data.client.email;
   if (!to) redirect(`/facturation?ligne=${clientId}&probleme=adresse`);
 
+  // Replies go to the coach who pressed send, not to a no-reply address.
+  const {
+    data: { user },
+  } = await (await createClient()).auth.getUser();
+
   const t = await getTranslations("invoice");
   const sent = await sendInvoiceMail({
     to,
+    replyTo: user?.email ?? null,
     subject: t("mailSubject", {
       number: result.data.invoice?.invoice_number ?? "",
       month: result.data.monthName,
