@@ -44,7 +44,7 @@ export function CheckInNudge({
             rel="noopener noreferrer"
             // The link opens WhatsApp; the click also records the nudge.
             onClick={record}
-            className="cta inline-flex h-9 items-center rounded-rp px-4 text-[13px] font-semibold text-[var(--on-accent)]"
+            className="cta inline-flex h-9 items-center rounded-r2 px-4 text-[13px] font-semibold text-[var(--on-accent)]"
           >
             {t("remindWa")}
           </a>
@@ -53,7 +53,7 @@ export function CheckInNudge({
           type="button"
           disabled={pending}
           onClick={record}
-          className="glass2 h-9 rounded-rp px-4 text-[13px] font-semibold text-[var(--ink)] disabled:opacity-50"
+          className="glass2 h-9 rounded-r2 px-4 text-[13px] font-semibold text-[var(--ink)] disabled:opacity-50"
         >
           {t("remindApp")}
         </button>

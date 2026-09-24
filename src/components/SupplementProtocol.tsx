@@ -95,7 +95,7 @@ export function SupplementProtocol({
   /** Shared by the add form and every row, so one vocabulary, one order. */
   const whenField = (value: SupplementTiming | undefined) => (
     <label>
-      <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+      <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink3)]">
         {t("when")}
       </span>
       <select name="timing" defaultValue={value} className={`mt-0.5 ${cell}`}>
@@ -110,7 +110,7 @@ export function SupplementProtocol({
 
   const unitField = (value: SupplementUnit | undefined) => (
     <label>
-      <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+      <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink3)]">
         {t("unit")}
       </span>
       <select name="unit" defaultValue={value} className={`mt-0.5 ${cell}`}>
@@ -126,7 +126,7 @@ export function SupplementProtocol({
   /** Every day, or only one kind of day — a pre-workout is not a rest-day thing. */
   const daysField = (value: string | null) => (
     <label>
-      <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+      <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink3)]">
         {t("days")}
       </span>
       <select
@@ -216,7 +216,7 @@ export function SupplementProtocol({
                   <input type="hidden" name="id" value={row.id} />
 
                   <label>
-                    <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+                    <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink3)]">
                       {t("dose")}
                     </span>
                     <input
@@ -289,7 +289,7 @@ export function SupplementProtocol({
           </label>
 
           <label>
-            <span className="block text-[10px] uppercase tracking-[.14em] text-[var(--ink3)]">
+            <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink3)]">
               {t("dose")}
             </span>
             <input
@@ -307,7 +307,7 @@ export function SupplementProtocol({
 
           <button
             type="submit"
-            className="h-8 rounded-r2 cta px-3 text-[12.5px] font-semibold text-[var(--on-accent)]"
+            className="h-8 rounded-r2 cta px-3 text-[12px] font-semibold text-[var(--on-accent)]"
           >
             {tSupp("save")}
           </button>

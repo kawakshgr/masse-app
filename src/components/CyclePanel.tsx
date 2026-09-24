@@ -161,7 +161,7 @@ export function CyclePanel({
 
               <button
                 type="submit"
-                className="mt-2 h-7 w-full rounded-r2 cta text-[12px] font-semibold text-[var(--on-accent)]"
+                className="mt-2 h-8 w-full rounded-r2 cta text-[12px] font-semibold text-[var(--on-accent)]"
               >
                 {t("save")}
               </button>

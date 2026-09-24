@@ -95,7 +95,7 @@ export default async function AdminPage() {
           </label>
           <button
             type="submit"
-            className="h-9 rounded-rp cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
+            className="h-9 rounded-r2 cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
           >
             {tDue("save")}
           </button>

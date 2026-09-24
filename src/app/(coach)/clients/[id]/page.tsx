@@ -754,7 +754,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
                     <input type="hidden" name="client_id" value={clientId} />
                     <button
                       type="submit"
-                      className="glass2 h-8 rounded-rp px-3 text-[12px] font-semibold text-[var(--ink)]"
+                      className="glass2 h-8 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
                     >
                       {tStatus("markRead")}
                     </button>
