@@ -408,7 +408,16 @@
     "offline": "Hors ligne — tes séries sont gardées ici",
     "noSession": "Pas de séance prévue aujourd’hui.",
     "startRest": "Lancer le repos",
-    "undo": "Annuler la dernière série"
+    "undo": "Annuler la dernière série",
+    "nextSet": "Série {n}",
+    "skipRest": "Passer",
+    "restMore": "+15 s",
+    "restLess": "−15 s",
+    "ready": "C’est reparti",
+    "finish": "Terminer la séance",
+    "finished": "Séance terminée",
+    "restNotifTitle": "Repos terminé",
+    "restNotifBody": "{exercise} · série {n}"
   },
   "entry": {
     "title": "Saisie",

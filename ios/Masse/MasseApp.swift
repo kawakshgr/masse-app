@@ -11,7 +11,11 @@ struct MasseApp: App {
             RootView()
                 .environment(session)
                 .preferredColorScheme(Appearance(rawValue: appearance)?.scheme)
-                .task { session.start() }
+                .task {
+                    session.start()
+                    // A session from an earlier launch is not still running.
+                    RestTimer.endStale()
+                }
                 // The magic link comes back here through masse://auth-callback.
                 .onOpenURL { url in
                     Task { await session.handle(url: url) }

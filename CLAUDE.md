@@ -27,6 +27,10 @@ The backend is the contract. Build it once, then the two clients in parallel.
    tabs and screens as the iPhone app (`src/app/(client)`), minus Apple Health.
 4. **iOS: native client** — onboarding, Today, Train, Cycle. Reads the same tables.
 5. **iOS: Live Activity + rest timer** — the reason the native app exists at all.
+   Built: `RestTimer` (two dates, a local notification at the end) drives
+   `SessionActivityAttributes`, shared with the `MasseWidgets` extension through
+   `ios/Shared`. The extension has no string catalog — the app sends it words
+   already localised. The web has the same rest bar, without the Lock Screen.
 
 ## What each target owns
 

@@ -14,6 +14,7 @@ import {
 } from "@/lib/setQueue";
 import type { WeekExercise } from "@/lib/clientData";
 import { Card, Choice, Cta, RoundButton, clean } from "./ui";
+import { RestBar, newRest } from "./RestBar";
 
 type LoggedSet = Pick<
   QueuedSet,
@@ -38,6 +39,7 @@ export function TrainLog({
   const t = useTranslations("log");
   const held = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [server, setServer] = useState<LoggedSet[]>(onServer);
+  const [rest, setRest] = useState<{ startedAt: number; endsAt: number } | null>(null);
   const online = useSyncExternalStore(
     (onChange) => {
       window.addEventListener("online", onChange);
@@ -93,6 +95,8 @@ export function TrainLog({
       weight_kg: weight,
       rpe,
     });
+    // The set is in; the rest starts on its own.
+    setRest(newRest());
     await send();
   }
 
@@ -121,7 +125,9 @@ export function TrainLog({
         </p>
       )}
 
-      <div className="space-y-3.5">
+      {rest && <RestBar rest={rest} onChange={setRest} />}
+
+      <div className={`space-y-3.5 ${rest ? "pb-24" : ""}`}>
         {exercises.map((exercise) => (
           <ExerciseCard
             key={exercise.id}

@@ -31,6 +31,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Masse peut lire tes heures de sommeil et tes pas pour remplir ta saisie du jour. Rien n’est écrit dans Santé, et ton cycle n’est jamais lu.</string>
 	<key>SupabasePublishableKey</key>

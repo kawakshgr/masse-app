@@ -408,7 +408,16 @@
     "offline": "Offline — your sets are kept here",
     "noSession": "No session scheduled today.",
     "startRest": "Start rest",
-    "undo": "Undo the last set"
+    "undo": "Undo the last set",
+    "nextSet": "Set {n}",
+    "skipRest": "Skip",
+    "restMore": "+15 s",
+    "restLess": "−15 s",
+    "ready": "Back to it",
+    "finish": "Finish session",
+    "finished": "Session finished",
+    "restNotifTitle": "Rest over",
+    "restNotifBody": "{exercise} · set {n}"
   },
   "entry": {
     "title": "Entry",

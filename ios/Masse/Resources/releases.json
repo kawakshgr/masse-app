@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.4",
+    "date": "2026-09-24",
+    "fr": [
+      "Minuteur de repos : il démarre seul après chaque série, ±15 s, et se souvient de ta durée.",
+      "Sur iPhone, le repos s’affiche sur l’écran verrouillé et dans la Dynamic Island, et une notification sonne à la fin.",
+      "Bouton « Terminer la séance »."
+    ],
+    "en": [
+      "Rest timer: it starts on its own after each set, ±15 s, and remembers your length.",
+      "On iPhone, the rest shows on the Lock Screen and in the Dynamic Island, and a notification rings at the end.",
+      "A “Finish session” button."
+    ]
+  },
+  {
     "version": "0.3",
     "date": "2026-09-24",
     "fr": [

@@ -7,6 +7,8 @@ import SwiftUI
 /// waits on the network.
 struct TrainView: View {
     @State private var log = TrainingLog()
+    @State private var rest = RestTimer()
+    @State private var finished = false
     @State private var open: String?
     @State private var week: PushedWeek?
     @State private var loaded = false
@@ -57,6 +59,13 @@ struct TrainView: View {
                                     weightKg: weight,
                                     rpe: rpe
                                 )
+                                // The set is in; the rest starts on its own.
+                                finished = false
+                                rest.start(
+                                    sessionName: day?.name ?? L.t("log.title"),
+                                    exercise: exercise.name,
+                                    nextSet: log.sets(for: exercise.id).count + 1
+                                )
                             },
                             onUndo: { await log.undoLast(exerciseId: exercise.id) }
                         )
@@ -65,8 +74,35 @@ struct TrainView: View {
                 .padding(.horizontal, 22)
                 .padding(.top, 12)
                 .padding(.bottom, 40)
+
+                if finished {
+                    Text(L.t("log.finished"))
+                        .font(Ty.copySmall)
+                        .foregroundStyle(Tk.a1)
+                        .padding(.bottom, 40)
+                } else if !log.sets.isEmpty {
+                    // Clears the Lock Screen. Her sets are already saved; this
+                    // only says the session is over.
+                    SecondaryButton(title: L.t("log.finish")) {
+                        rest.finish()
+                        finished = true
+                    }
+                    .padding(.horizontal, 22)
+                    .padding(.bottom, rest.endsAt == nil ? 40 : 120)
+                }
             }
         }
+        // The rest sits over the list, where a thumb already is, and never
+        // pushes the next exercise out of reach.
+        .overlay(alignment: .bottom) {
+            if rest.endsAt != nil {
+                RestBar(rest: rest)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 10)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(.snappy, value: rest.endsAt)
         .task {
             week = try? await WeekFeed.current()
             loaded = true
@@ -351,3 +387,64 @@ private struct RPEPicker: View {
         }
     }
 }
+
+/// The rest, counting down. Two dates and a clock — it is right after the app
+/// has been asleep, because it never counted anything itself.
+private struct RestBar: View {
+    let rest: RestTimer
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            let left = max((rest.endsAt ?? context.date).timeIntervalSince(context.date), 0)
+            let done = left <= 0
+
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(L.t(done ? "log.ready" : "log.rest").uppercased())
+                        .font(Ty.emphasis)
+                        .tracking(Ty.kickerTracking)
+                        .foregroundStyle(done ? Tk.a1 : Tk.ink2)
+                    Text(clock(left))
+                        .font(Ty.figure)
+                        .tracking(Ty.displayTracking(26))
+                        .foregroundStyle(Tk.ink)
+                        .tabular()
+                        .contentTransition(.numericText(countsDown: true))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                if !done {
+                    chip(L.t("log.restLess")) { rest.adjust(by: -15) }
+                    chip(L.t("log.restMore")) { rest.adjust(by: 15) }
+                }
+                chip(L.t(done ? "common.close" : "log.skipRest")) { rest.skip() }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(.ultraThinMaterial, in: .rect(cornerRadius: Tk.R.r3))
+            .overlay(
+                RoundedRectangle(cornerRadius: Tk.R.r3)
+                    .strokeBorder(done ? Tk.a1 : Tk.edge, lineWidth: 1)
+            )
+            .sensoryFeedback(.success, trigger: done) { _, isDone in isDone }
+        }
+    }
+
+    private func clock(_ seconds: TimeInterval) -> String {
+        let whole = Int(seconds.rounded(.up))
+        return String(format: "%d:%02d", whole / 60, whole % 60)
+    }
+
+    private func chip(_ title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(Ty.action)
+                .foregroundStyle(Tk.ink)
+                .padding(.horizontal, 12)
+                .frame(minHeight: Tk.tap)
+                .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.pill))
+        }
+        .buttonStyle(.plain)
+    }
+}
+
