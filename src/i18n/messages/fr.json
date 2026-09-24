@@ -1202,5 +1202,14 @@
     "iosConfirm": "Touche « Ajouter »",
     "iosSignIn": "Ouvre Masse depuis l’icône et reconnecte-toi avec le code reçu par e-mail : l’app installée ne partage pas la connexion de Safari.",
     "manual": "Ouvre le menu du navigateur (⋮), puis « Installer l’application » ou « Ajouter à l’écran d’accueil »."
+  },
+  "cycleAdjust": {
+    "title": "Ajusté pour ta phase {phase}",
+    "load": "charge {pct} %",
+    "sets": "séries {delta}",
+    "rpe": "RPE max {rpe}",
+    "kcal": "{delta} kcal",
+    "carbs": "{delta} g de glucides",
+    "planned": "prévu : {value}"
   }
 }

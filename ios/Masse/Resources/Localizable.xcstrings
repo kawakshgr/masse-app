@@ -6063,6 +6063,132 @@
           }
         }
       }
+    },
+    "cycleAdjust.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajusté pour ta phase %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adjusted for your %1$@ phase"
+          }
+        }
+      },
+      "comment": "args: phase"
+    },
+    "cycleAdjust.load": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "charge %1$@ %"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "load %1$@%"
+          }
+        }
+      },
+      "comment": "args: pct"
+    },
+    "cycleAdjust.sets": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "séries %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sets %1$@"
+          }
+        }
+      },
+      "comment": "args: delta"
+    },
+    "cycleAdjust.rpe": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RPE max %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RPE max %1$@"
+          }
+        }
+      },
+      "comment": "args: rpe"
+    },
+    "cycleAdjust.kcal": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kcal"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ kcal"
+          }
+        }
+      },
+      "comment": "args: delta"
+    },
+    "cycleAdjust.carbs": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ g de glucides"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ g carbs"
+          }
+        }
+      },
+      "comment": "args: delta"
+    },
+    "cycleAdjust.planned": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "prévu : %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "planned: %1$@"
+          }
+        }
+      },
+      "comment": "args: value"
     }
   },
   "version": "1.0"

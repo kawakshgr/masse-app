@@ -44,13 +44,26 @@ struct CycleState: Decodable, Sendable {
     let phase: String?
     let intensityCoefficient: Double?
     let volumeCoefficient: Double?
+    /// The coach's levers for today's phase — hers when she set them, the
+    /// handoff's defaults when she did not (`configured` says which).
+    let loadPct: Int?
+    let rpeCap: Double?
+    let setsDelta: Int?
+    let kcalDelta: Int?
+    let carbsDelta: Int?
+    let configured: Bool?
     let dayOfCycle: Int?
     let cycleLengthDays: Int?
 
     enum CodingKeys: String, CodingKey {
-        case phase
+        case phase, configured
         case intensityCoefficient = "intensity_coefficient"
         case volumeCoefficient = "volume_coefficient"
+        case loadPct = "load_pct"
+        case rpeCap = "rpe_cap"
+        case setsDelta = "sets_delta"
+        case kcalDelta = "kcal_delta"
+        case carbsDelta = "carbs_g_delta"
         case dayOfCycle = "day_of_cycle"
         case cycleLengthDays = "cycle_length_days"
     }

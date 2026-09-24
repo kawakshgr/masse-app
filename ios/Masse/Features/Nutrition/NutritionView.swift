@@ -9,6 +9,7 @@ struct NutritionView: View {
     @State private var plan: NutritionPlan?
     @State private var loaded = false
     @State private var failed = false
+    @State private var levers: CycleLevers?
 
     var body: some View {
         ZStack {
@@ -79,7 +80,7 @@ struct NutritionView: View {
                 Text(L.t("fuel.daily")).kicker()
 
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text("\(targets.kcal)")
+                    Text("\(adjust(targets.kcal))")
                         .font(Ty.hero)
                         .tracking(Ty.displayTracking(56))
                         .foregroundStyle(Tk.ink)
@@ -91,12 +92,26 @@ struct NutritionView: View {
 
                 HStack(spacing: 10) {
                     macro(L.t("fuel.protein"), targets.proteinG)
-                    macro(L.t("fuel.carbs"), targets.carbsG)
+                    macro(L.t("fuel.carbs"), nutrition?.carbs(targets.carbsG) ?? targets.carbsG)
                     macro(L.t("fuel.fat"), targets.fatG)
+                }
+
+                if let nutrition {
+                    Text(nutrition.nutritionLine)
+                        .font(Ty.copySmall)
+                        .foregroundStyle(Tk.a2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
     }
+
+    /// The levers, only when they change what she eats today.
+    private var nutrition: CycleLevers? {
+        levers?.changesNutrition == true ? levers : nil
+    }
+
+    private func adjust(_ kcal: Int) -> Int { nutrition?.kcal(kcal) ?? kcal }
 
     private func macro(_ label: String, _ grams: Double?) -> some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -206,6 +221,7 @@ struct NutritionView: View {
     }
 
     private func load() async {
+        levers = await CycleLevers.today()
         do {
             plan = try await NutritionFeed.today()
             failed = false

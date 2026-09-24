@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { clientSession } from "@/lib/clientData";
+import { changesNutrition, clientSession, cycleLevers } from "@/lib/clientData";
+import { LeverLine } from "@/components/client/LeverLine";
 import { SUPPLEMENT_TIMINGS, type FoodRow, type MealRow } from "@/lib/supabase/types";
 import { Card, CardTitle, Kicker, ScreenHeader, clean } from "@/components/client/ui";
 import { MyWeek } from "@/components/MyWeek";
@@ -70,6 +71,15 @@ export default async function NutritionPage() {
 
   const empty = !target && meals.length === 0 && supplements.length === 0;
 
+  // Today's phase, applied to the day's numbers — never to the stored plan.
+  const levers = await cycleLevers();
+  const phaseNutrition = changesNutrition(levers) ? levers : null;
+  const kcal = target ? target.kcal + (phaseNutrition?.kcalDelta ?? 0) : null;
+  const carbs =
+    target?.carbs_g == null
+      ? null
+      : Math.max(0, Number(target.carbs_g) + (phaseNutrition?.carbsDelta ?? 0));
+
   return (
     <>
       <ScreenHeader
@@ -83,15 +93,16 @@ export default async function NutritionPage() {
           <Kicker>{t("daily")}</Kicker>
           <p className="flex items-baseline gap-1.5">
             <span className="tnum font-display text-[56px] font-extrabold leading-none tracking-[-.04em]">
-              {target.kcal}
+              {kcal}
             </span>
             <span className="text-[15px] text-[var(--ink3)]">kcal</span>
           </p>
           <div className="flex gap-2.5">
             <Macro label={t("protein")} grams={target.protein_g} />
-            <Macro label={t("carbs")} grams={target.carbs_g} />
+            <Macro label={t("carbs")} grams={carbs} />
             <Macro label={t("fat")} grams={target.fat_g} />
           </div>
+          {phaseNutrition && <LeverLine levers={phaseNutrition} kind="nutrition" />}
         </Card>
       )}
 

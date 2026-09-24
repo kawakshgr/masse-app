@@ -107,17 +107,25 @@ export const currentWeek = cache(async (): Promise<PushedWeek | null> => {
   return week ?? null;
 });
 
-/** Today's session, exercises in the coach's order. */
+/**
+ * Today's session, exercises in the coach's order and at today's phase: the
+ * loads and sets she is shown are already adjusted, and `levers` says why.
+ */
 export async function todaySession() {
-  const [{ weekday }, week] = await Promise.all([clientSession(), currentWeek()]);
+  const [{ weekday }, week, levers] = await Promise.all([
+    clientSession(),
+    currentWeek(),
+    cycleLevers(),
+  ]);
   const session = week?.sessions?.find((s) => s.day_index === weekday) ?? null;
   return {
     week,
+    levers: changesTraining(levers) ? levers : null,
     session: session && {
       ...session,
-      session_exercises: [...session.session_exercises].sort(
-        (a, b) => a.position - b.position,
-      ),
+      session_exercises: [...session.session_exercises]
+        .sort((a, b) => a.position - b.position)
+        .map((exercise) => adjustExercise(exercise, levers)),
     },
   };
 }
@@ -132,4 +140,63 @@ export function targetLine(exercise: WeekExercise): string | null {
   }
   if (exercise.target_weight_kg) parts.push(`${exercise.target_weight_kg} kg`);
   return parts.length ? parts.join(" · ") : null;
+}
+
+export type CycleLevers = {
+  phase: string;
+  loadPct: number;
+  rpeCap: number | null;
+  setsDelta: number;
+  kcalDelta: number;
+  carbsDelta: number;
+};
+
+/**
+ * Today's phase and what her coach set it to change — CycleLevers.swift. The
+ * database derives both; this only applies them to the numbers on screen. Null
+ * when she does not track her cycle, and then nothing is adjusted.
+ */
+export const cycleLevers = cache(async (): Promise<CycleLevers | null> => {
+  const { supabase, client } = await clientSession();
+  if (!client.cycle_tracking) return null;
+  const { data } = await supabase.rpc("client_cycle_state", { p_client: client.id });
+  const state = (data ?? [])[0];
+  if (!state?.phase) return null;
+  return {
+    phase: state.phase,
+    loadPct: state.load_pct ?? 0,
+    rpeCap: state.rpe_cap == null ? null : Number(state.rpe_cap),
+    setsDelta: state.sets_delta ?? 0,
+    kcalDelta: state.kcal_delta ?? 0,
+    carbsDelta: state.carbs_g_delta ?? 0,
+  };
+});
+
+export const changesTraining = (l: CycleLevers | null) =>
+  !!l && (l.loadPct !== 0 || l.rpeCap !== null || l.setsDelta !== 0);
+
+export const changesNutrition = (l: CycleLevers | null) =>
+  !!l && (l.kcalDelta !== 0 || l.carbsDelta !== 0);
+
+/**
+ * The exercise as she should do it today. The programme row is never
+ * rewritten: the coach's 80 kg stays 80 kg, and she is shown 72 with the
+ * reason beside it. Loads round to the half kilo; sets never drop below one.
+ */
+export function adjustExercise(exercise: WeekExercise, levers: CycleLevers | null): WeekExercise {
+  if (!changesTraining(levers) || !levers) return exercise;
+  return {
+    ...exercise,
+    target_sets:
+      exercise.target_sets == null ? null : Math.max(1, exercise.target_sets + levers.setsDelta),
+    target_weight_kg:
+      exercise.target_weight_kg == null || levers.loadPct === 0
+        ? exercise.target_weight_kg
+        : Math.round(Number(exercise.target_weight_kg) * (1 + levers.loadPct / 100) * 2) / 2,
+  };
+}
+
+/** A real minus sign, and a plus when it adds: "−10", "+5". */
+export function signed(n: number): string {
+  return n > 0 ? `+${n}` : n < 0 ? `−${-n}` : "0";
 }

@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.5",
+    "date": "2026-09-24",
+    "fr": [
+      "Ta phase de cycle ajuste maintenant ta séance et ta nutrition comme ton coach l’a réglé : charge, séries, RPE max, calories et glucides — avec la raison affichée à côté.",
+      "Code à 6 chiffres aussi dans l’app iPhone.",
+      "Correction : une semaine poussée par le coach s’affichera bien dans l’app iPhone."
+    ],
+    "en": [
+      "Your cycle phase now adjusts your session and your nutrition the way your coach set it: load, sets, max RPE, calories and carbs — with the reason shown beside them.",
+      "6-digit code in the iPhone app too.",
+      "Fix: a week pushed by your coach now shows in the iPhone app."
+    ]
+  },
+  {
     "version": "0.4",
     "date": "2026-09-24",
     "fr": [

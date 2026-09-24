@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1000000000000000000HD /* MasseWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A1000000000000000000H4 /* MasseWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
 		A1000000000000000000G2 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = A1000000000000000000G1 /* Supabase */; };
+		A1000000000000000000HD /* MasseWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A1000000000000000000H4 /* MasseWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,18 +36,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A1000000000000000000H4 /* MasseWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MasseWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1000000000000000000D1 /* Masse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Masse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1000000000000000000H4 /* MasseWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MasseWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A1000000000000000000H2 /* Exceptions for "MasseWidgets" folder in "MasseWidgets" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = A1000000000000000000H5 /* MasseWidgets */;
-		};
 		A1000000000000000000F2 /* Exceptions for "Masse" folder in "Masse" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -55,9 +48,24 @@
 			);
 			target = A1000000000000000000B1 /* Masse */;
 		};
+		A1000000000000000000H2 /* Exceptions for "MasseWidgets" folder in "MasseWidgets" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A1000000000000000000H5 /* MasseWidgets */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		A1000000000000000000F1 /* Masse */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A1000000000000000000F2 /* Exceptions for "Masse" folder in "Masse" target */,
+			);
+			path = Masse;
+			sourceTree = "<group>";
+		};
 		A1000000000000000000H1 /* MasseWidgets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -71,29 +79,21 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		A1000000000000000000F1 /* Masse */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A1000000000000000000F2 /* Exceptions for "Masse" folder in "Masse" target */,
-			);
-			path = Masse;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A1000000000000000000H7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A1000000000000000000C3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A1000000000000000000G2 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1000000000000000000H7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,27 +122,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A1000000000000000000H5 /* MasseWidgets */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A1000000000000000000H9 /* Build configuration list for PBXNativeTarget "MasseWidgets" */;
-			buildPhases = (
-				A1000000000000000000H6 /* Sources */,
-				A1000000000000000000H7 /* Frameworks */,
-				A1000000000000000000H8 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				A1000000000000000000H1 /* MasseWidgets */,
-				A1000000000000000000H3 /* Shared */,
-			);
-			name = MasseWidgets;
-			productName = MasseWidgets;
-			productReference = A1000000000000000000H4 /* MasseWidgets.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		A1000000000000000000B1 /* Masse */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A1000000000000000000E2 /* Build configuration list for PBXNativeTarget "Masse" */;
@@ -168,6 +147,27 @@
 			productName = Masse;
 			productReference = A1000000000000000000D1 /* Masse.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A1000000000000000000H5 /* MasseWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1000000000000000000H9 /* Build configuration list for PBXNativeTarget "MasseWidgets" */;
+			buildPhases = (
+				A1000000000000000000H6 /* Sources */,
+				A1000000000000000000H7 /* Frameworks */,
+				A1000000000000000000H8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A1000000000000000000H1 /* MasseWidgets */,
+				A1000000000000000000H3 /* Shared */,
+			);
+			name = MasseWidgets;
+			productName = MasseWidgets;
+			productReference = A1000000000000000000H4 /* MasseWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -212,14 +212,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A1000000000000000000H8 /* Resources */ = {
+		A1000000000000000000C2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A1000000000000000000C2 /* Resources */ = {
+		A1000000000000000000H8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -229,14 +229,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A1000000000000000000H6 /* Sources */ = {
+		A1000000000000000000C1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A1000000000000000000C1 /* Sources */ = {
+		A1000000000000000000H6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -254,54 +254,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		A1000000000000000000HA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = VP9Y58VQ3G;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = MasseWidgets/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = fr.masse.client.widgets;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		A1000000000000000000HB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = VP9Y58VQ3G;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = MasseWidgets/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = fr.masse.client.widgets;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
 		A1000000000000000000E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -353,7 +305,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Masse/Masse.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = VP9Y58VQ3G;
 				ENABLE_PREVIEWS = YES;
@@ -363,7 +315,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.masse.client;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -379,7 +331,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Masse/Masse.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = VP9Y58VQ3G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -388,9 +340,57 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.masse.client;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		A1000000000000000000HA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = VP9Y58VQ3G;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MasseWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.5;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.masse.client.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A1000000000000000000HB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = VP9Y58VQ3G;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MasseWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 0.5;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.masse.client.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -400,15 +400,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A1000000000000000000H9 /* Build configuration list for PBXNativeTarget "MasseWidgets" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A1000000000000000000HA /* Debug */,
-				A1000000000000000000HB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A1000000000000000000E1 /* Build configuration list for PBXProject "Masse" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -423,6 +414,15 @@
 			buildConfigurations = (
 				A1000000000000000000E5 /* Debug */,
 				A1000000000000000000E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1000000000000000000H9 /* Build configuration list for PBXNativeTarget "MasseWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1000000000000000000HA /* Debug */,
+				A1000000000000000000HB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

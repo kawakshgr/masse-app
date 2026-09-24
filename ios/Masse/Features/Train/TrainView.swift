@@ -9,6 +9,7 @@ struct TrainView: View {
     @State private var log = TrainingLog()
     @State private var rest = RestTimer()
     @State private var finished = false
+    @State private var levers: CycleLevers?
     @State private var open: String?
     @State private var week: PushedWeek?
     @State private var loaded = false
@@ -45,6 +46,7 @@ struct TrainView: View {
                     ForEach(exercises) { exercise in
                         ExerciseCard(
                             exercise: exercise,
+                            levers: levers,
                             logged: log.sets(for: exercise.id),
                             expanded: open == exercise.id,
                             onToggle: {
@@ -105,6 +107,7 @@ struct TrainView: View {
         .animation(.snappy, value: rest.endsAt)
         .task {
             week = try? await WeekFeed.current()
+            levers = await CycleLevers.today()
             loaded = true
             await log.start(exerciseIds: exercises.map(\.id))
             // Open the first exercise with nothing logged: where she is.
@@ -121,6 +124,13 @@ struct TrainView: View {
                 .font(Ty.screenTitle)
                 .tracking(Ty.displayTracking(30))
                 .foregroundStyle(Tk.ink)
+
+            if let levers, levers.changesTraining {
+                Text(levers.trainingLine)
+                    .font(Ty.copySmall)
+                    .foregroundStyle(Tk.a2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
             // Offline is a state, not an error: it is reported, in the plural
             // the count actually needs, and never as a failure.
@@ -139,6 +149,8 @@ struct TrainView: View {
 /// One exercise: what was asked, what has been done, and the next set.
 private struct ExerciseCard: View {
     let exercise: PushedWeek.Exercise
+    /// Today's phase, applied to what the coach asked for. Nil changes nothing.
+    let levers: CycleLevers?
     let logged: [SetLog]
     let expanded: Bool
     let onToggle: () -> Void
@@ -189,16 +201,19 @@ private struct ExerciseCard: View {
         }
     }
 
+    private var targetSets: Int? { levers?.sets(exercise.targetSets) ?? exercise.targetSets }
+    private var targetWeight: Double? { levers?.weight(exercise.targetWeightKg) ?? exercise.targetWeightKg }
+
     /// What the coach asked for, assembled from the row — nothing invented
     /// when a part of it is missing.
     private var targetLine: String? {
         var parts: [String] = []
-        if let sets = exercise.targetSets, let reps = exercise.targetReps {
+        if let sets = targetSets, let reps = exercise.targetReps {
             parts.append("\(sets) × \(reps)")
         } else if let scheme = exercise.scheme {
             parts.append(scheme)
         }
-        if let weight = exercise.targetWeightKg {
+        if let weight = targetWeight {
             parts.append("\(weight.clean) kg")
         }
         guard !parts.isEmpty else { return nil }
@@ -267,8 +282,8 @@ private struct ExerciseCard: View {
             rpe = last.rpe
             return
         }
-        reps = exercise.targetReps.flatMap { Int($0.prefix(while: \.isNumber)) } ?? 0
-        weight = exercise.targetWeightKg ?? 0
+        reps = exercise.targetReps ?? 0
+        weight = targetWeight ?? 0
     }
 }
 

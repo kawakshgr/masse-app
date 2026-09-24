@@ -5,6 +5,7 @@ import { Card, CardTitle, CtaLink, ScreenHeader } from "@/components/client/ui";
 import { EntryCard } from "@/components/client/EntryCard";
 import { CheckInCard } from "@/components/client/CheckInCard";
 import { InstallPrompt } from "@/components/client/InstallPrompt";
+import { LeverLine } from "@/components/client/LeverLine";
 
 /**
  * Today — TodayView.swift. The week the coach pushed and the session standing
@@ -17,7 +18,7 @@ export default async function TodayPage() {
   const tLog = await getTranslations("log");
   const tSettings = await getTranslations("settings");
 
-  const [{ week, session }, metricsRes, checkInRes] = await Promise.all([
+  const [{ week, session, levers }, metricsRes, checkInRes] = await Promise.all([
     todaySession(),
     supabase
       .from("daily_metrics")
@@ -72,6 +73,7 @@ export default async function TodayPage() {
         <div className="space-y-3.5">
           <Card className="space-y-3.5">
             {session.name && <CardTitle>{session.name}</CardTitle>}
+            {levers && <LeverLine levers={levers} kind="training" />}
             {session.session_exercises.map((exercise) => {
               const target = targetLine(exercise);
               return (

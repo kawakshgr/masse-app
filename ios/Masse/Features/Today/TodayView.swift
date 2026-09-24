@@ -15,6 +15,7 @@ struct TodayView: View {
     @State private var loaded = false
     @State private var failed = false
     @State private var settingsOpen = false
+    @State private var levers: CycleLevers?
 
     private var todaySession: PushedWeek.DaySession? {
         week?.week?.sessions.first { $0.dayIndex == Weekday.today }
@@ -103,6 +104,14 @@ struct TodayView: View {
                             .foregroundStyle(Tk.ink)
                     }
 
+                    // The numbers below already carry it; this says why.
+                    if let levers, levers.changesTraining {
+                        Text(levers.trainingLine)
+                            .font(Ty.copySmall)
+                            .foregroundStyle(Tk.a2)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
                     ForEach(day.exercises.sorted { $0.position < $1.position }) { exercise in
                         VStack(alignment: .leading, spacing: 3) {
                             Text(exercise.name)
@@ -135,12 +144,13 @@ struct TodayView: View {
     /// with nothing invented when a part of it is missing.
     private func target(_ exercise: PushedWeek.Exercise) -> String? {
         var parts: [String] = []
-        if let sets = exercise.targetSets, let reps = exercise.targetReps {
+        let sets = levers?.sets(exercise.targetSets) ?? exercise.targetSets
+        if let sets, let reps = exercise.targetReps {
             parts.append("\(sets) × \(reps)")
         } else if let scheme = exercise.scheme {
             parts.append(scheme)
         }
-        if let weight = exercise.targetWeightKg {
+        if let weight = levers?.weight(exercise.targetWeightKg) ?? exercise.targetWeightKg {
             parts.append("\(weight.clean) kg")
         }
         return parts.isEmpty ? nil : parts.joined(separator: " · ")
@@ -172,6 +182,7 @@ struct TodayView: View {
     }
 
     private func load() async {
+        levers = await CycleLevers.today()
         do {
             week = try await WeekFeed.current()
             failed = false

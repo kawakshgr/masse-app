@@ -23,7 +23,7 @@ const NAMESPACES = [
   "phase", "offline", "auth", "log", "common", "feel", "pain", "adherence",
   "clientNav", "fuel", "entry", "supp.timing", "supp.unit",
   "shell", "soonCopy", "bilan", "checkin", "cycleChart", "stepsChart", "photos", "review.poses",
-  "settings", "theme", "app", "meals", "myWeek",
+  "settings", "theme", "app", "meals", "myWeek", "cycleAdjust",
 ];
 
 /** Walks a dotted path, so "supp.timing" resolves to that object. */

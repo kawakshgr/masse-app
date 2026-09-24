@@ -1202,5 +1202,14 @@
     "iosConfirm": "Tap “Add”",
     "iosSignIn": "Open Masse from the icon and sign in again with the code from the email: the installed app does not share Safari’s sign-in.",
     "manual": "Open the browser menu (⋮), then “Install app” or “Add to Home screen”."
+  },
+  "cycleAdjust": {
+    "title": "Adjusted for your {phase} phase",
+    "load": "load {pct}%",
+    "sets": "sets {delta}",
+    "rpe": "RPE max {rpe}",
+    "kcal": "{delta} kcal",
+    "carbs": "{delta} g carbs",
+    "planned": "planned: {value}"
   }
 }

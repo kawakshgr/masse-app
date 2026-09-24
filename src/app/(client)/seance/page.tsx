@@ -2,11 +2,12 @@ import { getTranslations } from "next-intl/server";
 import { addDays, clientSession, localDay, todaySession } from "@/lib/clientData";
 import { Card, CardTitle, ScreenHeader } from "@/components/client/ui";
 import { TrainLog } from "@/components/client/TrainLog";
+import { LeverLine } from "@/components/client/LeverLine";
 
 /** Séance — TrainView.swift: today's session, being done. */
 export default async function SessionPage() {
   const { supabase, client, zone, today } = await clientSession();
-  const { session } = await todaySession();
+  const { session, levers } = await todaySession();
   const t = await getTranslations("log");
 
   const exercises = session?.session_exercises ?? [];
@@ -31,6 +32,7 @@ export default async function SessionPage() {
   return (
     <>
       <ScreenHeader kicker={t("title")} title={session?.name ?? t("title")} />
+      {levers && exercises.length > 0 && <LeverLine levers={levers} kind="training" />}
 
       {exercises.length === 0 ? (
         <Card>

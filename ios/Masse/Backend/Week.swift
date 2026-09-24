@@ -50,7 +50,9 @@ struct PushedWeek: Decodable {
         let scheme: String?
         let cue: String?
         let targetSets: Int?
-        let targetReps: String?
+        /// An integer in the database. Decoded as text once, which would have
+        /// failed on the first week any coach pushed.
+        let targetReps: Int?
         let targetWeightKg: Double?
 
         enum CodingKeys: String, CodingKey {
