@@ -1,11 +1,13 @@
-import { isFiled } from "@/lib/checkIns";
+import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { loadClientDetail, formatHours } from "@/lib/clientDetail";
 import { MetricCard } from "@/components/MetricCard";
-import { CheckInPanel } from "@/components/CheckInPanel";
+import { CheckInNudge } from "@/components/CheckInNudge";
+import { markCheckInReviewed } from "@/app/(coach)/clients/actions";
 import { DayTypes } from "@/components/DayTypes";
 import { RecordPanel } from "@/components/RecordPanel";
 import { ClientTabs } from "@/components/ClientTabs";
@@ -577,10 +579,26 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
       .limit(52),
     supabase
       .from("clients")
-      .select("first_name, name")
+      .select("first_name, name, whatsapp, phone, timezone")
       .eq("id", clientId)
       .maybeSingle(),
   ]);
+
+  const { data: reminders } = await supabase
+    .from("check_in_reminders")
+    .select("week_start_date, sent_at")
+    .eq("client_id", clientId);
+
+  // Her own rule for when a check-in is due, set in Admin.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: coachRow } = await supabase
+    .from("coaches")
+    .select("check_in_due_offset")
+    .eq("id", user?.id ?? "")
+    .maybeSingle();
+  const dueOffset = coachRow?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
 
   const { data: photos } = await supabase
     .from("check_in_photos")
@@ -645,10 +663,110 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
 
   const firstName = client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";
 
+  // The week asked of her today, by the same rule her app uses and the due day
+  // this coach set in Admin.
+  const today = localDay(client?.timezone || "Europe/Paris");
+  const weekday = weekdayOf(today);
+  const monday = addDays(today, -weekday);
+  const filedWeek = (week: string) => checkIns.find((row) => row.week_start_date === week);
+  const open = checkInWindow(monday, weekday, dueOffset);
+  const { due, lastChance } = open;
+  const openRow = filedWeek(open.weekStart) ?? null;
+  const reminder = (reminders ?? []).find((row) => row.week_start_date === open.weekStart);
+  const toRead = checkIns.filter((row) => row.reviewed_at === null).reverse();
+
+  const tStatus = await getTranslations("coachCheckin");
+  const day = (iso: string) =>
+    new Date(iso.length === 10 ? `${iso}T12:00:00Z` : iso).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+    });
+  // "dimanche 28 septembre": a due day reads better with its weekday.
+  const weekdayDay = (iso: string) =>
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString("fr-FR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
+
   return (
     <div className="space-y-4">
-      <CheckInPanel clientId={clientId} current={checkIns.at(-1) ?? null} />
-      <CheckInReview clientId={clientId} firstName={firstName} weeks={weeks} />
+      <section className={panel}>
+        <h3 className={heading}>{tStatus("title")}</h3>
+        <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">{tStatus("readOnly")}</p>
+
+        <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
+          <span className="text-[14px] font-semibold">
+            {tStatus("week", { date: day(open.weekStart) })}
+          </span>
+          <span
+            className={`text-[13px] ${
+              openRow
+                ? "text-[var(--accent-soft)]"
+                : open.late
+                  ? "text-[var(--a3)]"
+                  : "text-[var(--ink2)]"
+            }`}
+          >
+            {openRow
+              ? tStatus("filed", { date: day(openRow.submitted_at) })
+              : open.upcoming
+                ? tStatus("upcoming", { day: weekdayDay(due) })
+                : open.late
+                ? tStatus("late", {
+                    first: firstName,
+                    due: weekdayDay(due),
+                    lastChance: weekdayDay(lastChance),
+                  })
+                : tStatus("notFiled", { day: weekdayDay(due) })}
+          </span>
+        </div>
+
+        {!openRow && !open.upcoming && (
+          <>
+            {reminder && (
+              <p className="mt-2 text-[12px] text-[var(--ink3)]">
+                {tStatus("reminded", { date: day(reminder.sent_at) })}
+              </p>
+            )}
+            <CheckInNudge
+              clientId={clientId}
+              weekStart={open.weekStart}
+              firstName={firstName}
+              phone={client?.whatsapp || client?.phone || null}
+            />
+          </>
+        )}
+
+        {toRead.length > 0 && (
+          <div className="mt-4 border-t border-[var(--hair)] pt-3">
+            <h4 className={heading}>{tStatus("toRead")}</h4>
+            <ul className="mt-2">
+              {toRead.map((row) => (
+                <li
+                  key={row.id}
+                  className="flex items-center justify-between gap-3 border-b border-[var(--hair)] last:border-0"
+                  style={{ height: "var(--row-h)" }}
+                >
+                  <span className="text-[13px]">{tStatus("week", { date: day(row.week_start_date) })}</span>
+                  <form action={markCheckInReviewed}>
+                    <input type="hidden" name="check_in_id" value={row.id} />
+                    <input type="hidden" name="client_id" value={clientId} />
+                    <button
+                      type="submit"
+                      className="glass2 h-8 rounded-rp px-3 text-[12px] font-semibold text-[var(--ink)]"
+                    >
+                      {tStatus("markRead")}
+                    </button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+
+      <CheckInReview firstName={firstName} weeks={weeks} />
     </div>
   );
 }

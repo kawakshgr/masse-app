@@ -1,18 +1,11 @@
 "use client";
 
-import { useMemo, useRef, useState, useTransition } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { createClient } from "@/lib/supabase/client";
-import {
-  attachCheckInPhoto,
-  deleteCheckInPhoto,
-} from "@/app/(coach)/clients/actions";
 import { BarChart } from "@/components/BarChart";
 import type { PhotoPose } from "@/lib/supabase/types";
 
 const POSES: PhotoPose[] = ["front", "side", "back"];
-const BUCKET = "check-in-photos";
-const MAX_BYTES = 8 * 1024 * 1024;
 
 export type ReviewWeek = {
   id: string;
@@ -72,144 +65,39 @@ function Measure({
   );
 }
 
+/**
+ * One pose, read only. The photos are hers: she takes them in her app, and the
+ * coach looks. An empty slot says so rather than offering to fill it.
+ */
 function PhotoSlot({
   url,
-  photoId,
   caption,
   weight,
-  clientId,
-  checkInId,
-  pose,
-  addLabel,
-  removeLabel,
-  askLabel,
-  confirmLabel,
-  cancelLabel,
+  emptyLabel,
   onOpen,
 }: {
   url: string | null;
-  photoId: string | null;
   caption: string;
   weight: string;
-  clientId: string;
-  checkInId: string | null;
-  pose: PhotoPose;
-  addLabel: string;
-  removeLabel: string;
-  askLabel: string;
-  confirmLabel: string;
-  cancelLabel: string;
+  emptyLabel: string;
   onOpen: () => void;
 }) {
-  const input = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState(false);
-  // She cannot retake last week's photo. Deleting one asks twice.
-  const [arming, setArming] = useState(false);
-  const [, startTransition] = useTransition();
-
-  async function upload(file: File) {
-    if (!checkInId || file.size > MAX_BYTES) return;
-    setBusy(true);
-
-    const supabase = createClient();
-    const extension = (file.name.split(".").pop() ?? "jpg").toLowerCase();
-    // The client id leads the path: that segment is what storage filters on.
-    const path = `${clientId}/${checkInId}/${crypto.randomUUID()}.${extension}`;
-
-    const { error } = await supabase.storage
-      .from(BUCKET)
-      .upload(path, file, { contentType: file.type, upsert: false });
-
-    setBusy(false);
-    if (error) return;
-
-    startTransition(() => {
-      void attachCheckInPhoto(checkInId, clientId, path, pose);
-    });
-  }
-
   return (
     <div className="min-w-0 flex-1">
       {url ? (
-        <div className="relative">
-          <button
-            type="button"
-            onClick={onOpen}
-            className="block w-full cursor-zoom-in overflow-hidden rounded-r3 border border-[var(--edge)]"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={url} alt="" className="aspect-[3/4] w-full object-cover" />
-          </button>
-
-          {photoId &&
-            (arming ? (
-              // Over the photo rather than beside it: the slot is narrow, and
-              // what is about to be destroyed should be what she is looking at.
-              // The question sits on --chrome, not straight on the scrim, so
-              // the ink is the theme's own in both light and dark.
-              <div
-                className="absolute inset-0 flex items-center justify-center rounded-r3 p-2"
-                style={{ background: "rgba(0, 0, 0, .42)" }}
-              >
-                <div className="chrome lift flex w-full flex-col gap-2.5 rounded-r2 p-3 text-center">
-                  <span className="text-[12px] leading-snug text-balance text-[var(--ink)]">
-                    {askLabel}
-                  </span>
-                  <div className="flex items-center justify-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setArming(false)}
-                      className="glass2 h-7 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
-                    >
-                      {cancelLabel}
-                    </button>
-                    <form action={deleteCheckInPhoto} onSubmit={() => setArming(false)}>
-                      <input type="hidden" name="photo_id" value={photoId} />
-                      <input type="hidden" name="client_id" value={clientId} />
-                      <button
-                        type="submit"
-                        className="h-7 rounded-r2 border border-[var(--a3)] px-3 text-[12px] font-semibold text-[var(--a3)]"
-                      >
-                        {confirmLabel}
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setArming(true)}
-                aria-label={removeLabel}
-                title={removeLabel}
-                className="chrome absolute top-2 right-2 flex size-6 items-center justify-center rounded-rp text-[12px] leading-none text-[var(--ink2)] hover:text-[var(--a3)]"
-              >
-                ✕
-              </button>
-            ))}
-        </div>
-      ) : (
         <button
           type="button"
-          onClick={() => input.current?.click()}
-          disabled={!checkInId || busy}
-          className="flex aspect-[3/4] w-full flex-col items-center justify-center rounded-r3 border border-dashed border-[var(--edge)] text-[12px] text-[var(--ink3)] hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-50"
+          onClick={onOpen}
+          className="block w-full cursor-zoom-in overflow-hidden rounded-r3 border border-[var(--edge)]"
         >
-          <span className="text-[18px] leading-none">＋</span>
-          <span className="mt-1">{addLabel}</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={url} alt="" className="aspect-[3/4] w-full object-cover" />
         </button>
+      ) : (
+        <div className="flex aspect-[3/4] w-full items-center justify-center rounded-r3 border border-dashed border-[var(--edge)] text-[12px] text-[var(--ink3)]">
+          {emptyLabel}
+        </div>
       )}
-
-      <input
-        ref={input}
-        type="file"
-        accept="image/jpeg,image/png,image/webp"
-        className="hidden"
-        onChange={(event) => {
-          const file = event.target.files?.[0];
-          if (file) void upload(file);
-        }}
-      />
 
       <div className="mt-1.5 flex items-baseline justify-between gap-2">
         <span className="truncate text-[12px] font-semibold">{caption}</span>
@@ -220,11 +108,9 @@ function PhotoSlot({
 }
 
 export function CheckInReview({
-  clientId,
   firstName,
   weeks,
 }: {
-  clientId: string;
   firstName: string;
   weeks: ReviewWeek[];
 }) {
@@ -330,32 +216,16 @@ export function CheckInReview({
           <div className="mt-3 flex gap-3">
             <PhotoSlot
               url={selected.photos[pose]?.url ?? null}
-              photoId={selected.photos[pose]?.id ?? null}
               caption={`${t(`poses.${pose}`)} · ${t("thisWeek")}`}
               weight={kg(selected.bodyweight)}
-              clientId={clientId}
-              checkInId={selected.id}
-              pose={pose}
-              addLabel={t("addPose")}
-              removeLabel={t("removePhoto")}
-              askLabel={t("askRemovePhoto")}
-              confirmLabel={t("confirmRemovePhoto")}
-              cancelLabel={t("cancel")}
+              emptyLabel={t("noPhoto")}
               onOpen={() => setZoom(selected.photos[pose]?.url ?? null)}
             />
             <PhotoSlot
               url={baseline.photos[pose]?.url ?? null}
-              photoId={baseline.photos[pose]?.id ?? null}
               caption={`${t(`poses.${pose}`)} · ${t("baseline")}`}
               weight={kg(baseline.bodyweight)}
-              clientId={clientId}
-              checkInId={baseline.id}
-              pose={pose}
-              addLabel={t("addPose")}
-              removeLabel={t("removePhoto")}
-              askLabel={t("askRemovePhoto")}
-              confirmLabel={t("confirmRemovePhoto")}
-              cancelLabel={t("cancel")}
+              emptyLabel={t("noPhoto")}
               onOpen={() => setZoom(baseline.photos[pose]?.url ?? null)}
             />
           </div>

@@ -2,19 +2,21 @@ import SwiftUI
 
 /// Her weekly check-in, filed by her.
 ///
-/// It shows one of three things and never two: her coach already filed this
-/// week, she already filed it, or it is waiting. The form only opens in the
-/// third case — a check-in her coach has written is his assessment, and she
-/// does not edit it.
+/// It shows the week her coach's due day asks for — last week's while its
+/// window is open, else this one — and says when it is due. Not open yet, it
+/// shows the day and no form; filed, it says so; past the due day, it says
+/// until when she can still catch up.
 struct CheckInCard: View {
-    @State private var existing: CheckIn?
+    @State private var state: OpenCheckIn?
     @State private var loaded = false
     @State private var open = false
+
+    private var existing: CheckIn? { state?.existing }
 
     var body: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(L.t("bilan.title")).kicker()
+                Text(L.t(state?.late == true ? "bilan.lastWeekTitle" : "bilan.title")).kicker()
 
                 if !loaded {
                     ProgressView().tint(Tk.a1)
@@ -36,26 +38,64 @@ struct CheckInCard: View {
                     if existing.reviewedAt == nil {
                         SecondaryButton(title: L.t("common.save")) { open = true }
                     }
-                } else {
-                    Text(L.t("bilan.prompt"))
+                } else if let state {
+                    Text(prompt(state))
                         .font(Ty.copy)
                         .foregroundStyle(Tk.ink2)
                         .fixedSize(horizontal: false, vertical: true)
-                    CTA(title: L.t("bilan.open")) { open = true }
+                    if state.nudged {
+                        Text(L.t("bilan.nudged"))
+                            .font(Ty.emphasis)
+                            .foregroundStyle(Tk.a2)
+                    }
+                    if !state.upcoming {
+                        CTA(title: L.t("bilan.open")) { open = true }
+                    }
                 }
             }
         }
         .task { await load() }
         .sheet(isPresented: $open) {
-            CheckInSheet(existing: existing) {
-                open = false
-                Task { await load() }
+            if let state {
+                CheckInSheet(existing: existing, weekStart: state.weekStart) {
+                    open = false
+                    Task { await load() }
+                }
             }
         }
     }
 
+    /// The due day always shows, so she knows when her coach expects it.
+    private func prompt(_ state: OpenCheckIn) -> String {
+        if state.upcoming {
+            return L.t("bilan.upcoming", Self.weekdayDay(state.due))
+        }
+        if state.late {
+            return L.t("bilan.latePrompt", Self.dayMonth(state.weekStart), Self.weekdayDay(state.lastChance))
+        }
+        return L.t("bilan.prompt") + " " + L.t("bilan.due", Self.weekdayDay(state.due))
+    }
+
+    private static var locale: Locale {
+        Locale(identifier: Bundle.main.preferredLocalizations.first == "en" ? "en_GB" : "fr_FR")
+    }
+
+    private static func date(_ iso: String) -> Date? {
+        try? Date(iso, strategy: .iso8601.year().month().day())
+    }
+
+    /// "dimanche 28 septembre"
+    static func weekdayDay(_ iso: String) -> String {
+        date(iso)?.formatted(.dateTime.weekday(.wide).day().month(.wide).locale(locale)) ?? iso
+    }
+
+    /// "15 septembre"
+    static func dayMonth(_ iso: String) -> String {
+        date(iso)?.formatted(.dateTime.day().month(.wide).locale(locale)) ?? iso
+    }
+
     private func load() async {
-        existing = try? await CheckInFeed.thisWeek()
+        state = try? await CheckInFeed.open()
         loaded = true
     }
 }
@@ -64,6 +104,8 @@ struct CheckInCard: View {
 /// what the boxes do not say.
 private struct CheckInSheet: View {
     let existing: CheckIn?
+    /// The week being filed — last week's while it is being caught up.
+    let weekStart: String
     let onDone: () -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -144,7 +186,7 @@ private struct CheckInSheet: View {
         .task {
             // A photo hangs off a check-in row, and she should not have to
             // answer three questions before she is allowed to take one.
-            checkInId = await PhotoFeed.checkInId(weekStart: CheckInFeed.weekStartIso)
+            checkInId = await PhotoFeed.checkInId(weekStart: weekStart)
         }
     }
 
@@ -228,7 +270,7 @@ private struct CheckInSheet: View {
         saving = true
         try? await CheckInFeed.submit(
             CheckIn(
-                weekStartDate: CheckInFeed.weekStartIso,
+                weekStartDate: weekStart,
                 feel: feel,
                 pain: pain,
                 adherence: adherence,

@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.6",
+    "date": "2026-09-24",
+    "fr": [
+      "Le bilan est dû le jour choisi par ton coach, du lundi au dimanche. La carte Bilan affiche toujours la date : « à remplir d’ici… », « prochain bilan… », ou jusqu’à quand tu peux le rattraper.",
+      "Quand ton coach te relance, tu le vois sur Aujourd’hui.",
+      "Sur iPhone, le rappel du bilan tombe le jour où il est dû."
+    ],
+    "en": [
+      "Your check-in is due on the day your coach chose, Monday to Sunday. The check-in card always shows the date: “fill it in by…”, “next check-in…”, or until when you can still catch up.",
+      "When your coach nudges you, you see it on Today.",
+      "On iPhone, the check-in reminder lands on the day it is due."
+    ]
+  },
+  {
     "version": "0.5",
     "date": "2026-09-24",
     "fr": [

@@ -26,10 +26,22 @@ export function CheckInCard({
   weekStart,
   clientId,
   existing,
+  late,
+  upcoming,
+  prompt,
+  nudged,
 }: {
+  /** The week open for filing — last week's while it is late. */
   weekStart: string;
   clientId: string;
   existing: Existing | null;
+  late: boolean;
+  /** Not open yet: the day is shown, the form is not. */
+  upcoming: boolean;
+  /** When it is due, or until when it can be caught up, already worded. */
+  prompt: string;
+  /** Her coach asked for this one. */
+  nudged: boolean;
 }) {
   const t = useTranslations("bilan");
   const tCommon = useTranslations("common");
@@ -37,7 +49,7 @@ export function CheckInCard({
 
   return (
     <Card className="space-y-2.5">
-      <Kicker>{t("title")}</Kicker>
+      <Kicker>{t(late ? "lastWeekTitle" : "title")}</Kicker>
 
       {existing?.author === "coach" ? (
         <p className="text-[15px] leading-[1.45] text-[var(--ink2)]">{t("byCoach")}</p>
@@ -58,8 +70,11 @@ export function CheckInCard({
         </>
       ) : (
         <>
-          <p className="text-[15px] leading-[1.45] text-[var(--ink2)]">{t("prompt")}</p>
-          <Cta onClick={() => setOpen(true)}>{t("open")}</Cta>
+          <p className="text-[15px] leading-[1.45] text-[var(--ink2)]">{prompt}</p>
+          {nudged && (
+            <p className="text-[13px] font-semibold text-[var(--a2)]">{t("nudged")}</p>
+          )}
+          {!upcoming && <Cta onClick={() => setOpen(true)}>{t("open")}</Cta>}
         </>
       )}
 

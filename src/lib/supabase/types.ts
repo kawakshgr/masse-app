@@ -51,6 +51,8 @@ export type CoachRow = {
   pronoun: Pronoun;
   created_at: string;
   suspended_at: string | null;
+  /** Days after a week's Monday its check-in is due (4–8); 6 is Sunday. */
+  check_in_due_offset: number;
 };
 
 export type ClientRow = {
@@ -94,6 +96,13 @@ export type ClientRow = {
   training_age: string | null;
   diet: string | null;
   emergency_contact: string | null;
+};
+
+/** The coach asked for this week's check-in. The client reads, the coach writes. */
+export type CheckInReminderRow = {
+  client_id: string;
+  week_start_date: string;
+  sent_at: string;
 };
 
 /** The coach's note about a client. No client policy: she cannot read it. */
@@ -576,6 +585,7 @@ export type Database = {
       cycle_logs: Table<CycleLogRow, "client_id" | "period_start_date">;
       daily_metrics: Table<DailyMetricRow, "client_id" | "day">;
       client_file_notes: Table<ClientFileNoteRow, "client_id" | "note">;
+      check_in_reminders: Table<CheckInReminderRow, "client_id" | "week_start_date">;
       exercises: Table<ExerciseRow, "name">;
       foods: Table<FoodRow, "coach_id" | "name", "kcal_100g">;
       meals: Table<MealRow, "client_id" | "day" | "name">;

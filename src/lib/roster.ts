@@ -1,8 +1,9 @@
-import { isFiled } from "@/lib/checkIns";
+import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
-export type AttentionKind = "checkin" | "missed" | "sleep";
+export type AttentionKind = "checkin" | "late" | "missed" | "sleep";
 
 export type RosterEntry = {
   id: string;
@@ -59,7 +60,24 @@ export async function loadRoster(
   const weekAgo = new Date(today);
   weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
 
-  const [checkins, metrics, assignments] = await Promise.all([
+  // Late is judged by the rule her app uses, with the due day the coach set:
+  // past it, and still empty. Paris time, like the coaches.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: coachRow } = await supabase
+    .from("coaches")
+    .select("check_in_due_offset")
+    .eq("id", user?.id ?? "")
+    .maybeSingle();
+  const dueOffset = coachRow?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
+
+  const todayLocal = localDay("Europe/Paris");
+  const weekday = weekdayOf(todayLocal);
+  const thisMonday = addDays(todayLocal, -weekday);
+  const lastMonday = addDays(thisMonday, -7);
+
+  const [checkins, metrics, assignments, lastWeek] = await Promise.all([
     // Waiting on the coach.
     supabase
       .from("check_ins")
@@ -85,7 +103,25 @@ export async function loadRoster(
       .not("pushed_at", "is", null)
       .lte("start_date", isoDate(today))
       .gte("start_date", isoDate(weekAgo)),
+    // Last week's and this week's rows, to tell a late check-in from one
+    // that came.
+    supabase
+      .from("check_ins")
+      .select(
+        "client_id, week_start_date, feel, pain, adherence, bodyweight_kg, note, waist_cm, chest_cm, hips_cm, thigh_cm, check_in_photos(id)",
+      )
+      .in("client_id", ids)
+      .in("week_start_date", [lastMonday, thisMonday]),
   ]);
+
+  // The week asked of every client today, by this coach's due day.
+  const asked = checkInWindow(thisMonday, weekday, dueOffset);
+
+  const filed = new Set(
+    (lastWeek.data ?? [])
+      .filter((row) => isFiled(row, row.check_in_photos?.length ?? 0))
+      .map((row) => `${row.client_id}:${row.week_start_date}`),
+  );
 
   const checkinCount = new Map<string, number>();
   for (const row of checkins.data ?? []) {
@@ -162,10 +198,14 @@ export async function loadRoster(
     const due = expectedExercises.get(client.id) ?? [];
     const missed = due.length > 0 && due.every((id) => !logged.has(id));
 
+    const late = asked.late && !filed.has(`${client.id}:${asked.weekStart}`);
+
     // Order matters: the chip opens the tab that answers it.
     const attention: AttentionKind | null = waiting
       ? "checkin"
-      : missed
+      : late
+        ? "late"
+        : missed
         ? "missed"
         : shortSleep
           ? "sleep"

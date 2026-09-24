@@ -50,9 +50,14 @@ check-in as read.
 - **Programme editor** (web) — weeks, seven day columns, sessions, ordered exercises,
   drag between days, duplicate week, save as template, push to clients.
 - **Session logging** (both) — offline-first.
-- **Check-ins** — filed by the client from either app (with measurements and
-  three photos), or typed by the coach when it arrives by WhatsApp.
-  `check_ins.author` says who wrote the row and survives a coach's correction.
+- **Check-ins** — **filed by the client**, from either app, with measurements and
+  three photos. The coach's side is read-only (decided 24 Sep 2026): she reads,
+  marks as read, and nudges (`check_in_reminders`, plus a prefilled WhatsApp
+  message). The database holds her to that — a trigger lets a coach change
+  `reviewed_at` and nothing else. She sets the due weekday in Admin
+  (`coaches.check_in_due_offset`); `checkInWindow` in src/lib/checkIns.ts,
+  mirrored by `CheckInFeed.open` on iOS, decides which week is asked for,
+  when it opens (3 days before) and when it is late (2 days of grace after).
   Opening the form creates an empty row for photos to hang off; `isFiled`
   (src/lib/checkIns.ts) keeps it out of the coach's review until it holds
   something.

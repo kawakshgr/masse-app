@@ -102,12 +102,14 @@
   "attention": {
     "checkin": "check-in to review",
     "missed": "missed session",
-    "sleep": "short sleep"
+    "sleep": "short sleep",
+    "late": "check-in late"
   },
   "chip": {
     "checkin": "Review",
     "missed": "Open",
-    "sleep": "Sleep"
+    "sleep": "Sleep",
+    "late": "Nudge"
   },
   "toolbar": {
     "search": "Search or run a command",
@@ -769,7 +771,8 @@
     "confirmRemovePhoto": "Delete",
     "cancel": "Cancel",
     "askRemovePhoto": "Delete this photo? It does not come back.",
-    "byClient": "Filed by {first}"
+    "byClient": "Filed by {first}",
+    "noPhoto": "No photo"
   },
   "hist": {
     "longView": "The long view",
@@ -1101,7 +1104,12 @@
     "chest": "Chest",
     "hips": "Hips",
     "thigh": "Thigh",
-    "discipline": "Same light, same time of day — shot before breakfast. Tap a pose to switch both sides."
+    "discipline": "Same light, same time of day — shot before breakfast. Tap a pose to switch both sides.",
+    "lastWeekTitle": "Last week’s check-in",
+    "latePrompt": "The check-in for the week of {date} isn’t filled in yet. You have until {day}.",
+    "due": "Fill it in by {day}.",
+    "nudged": "Your coach is waiting for this check-in.",
+    "upcoming": "Next check-in: {day}."
   },
   "cycleChart": {
     "title": "Where you are",
@@ -1131,7 +1139,7 @@
     "dailyHint": "Every day, to note your sleep and steps.",
     "time": "Time",
     "weekly": "Check-in reminder",
-    "weeklyHint": "Sundays at 6 pm, to fill in your weekly check-in.",
+    "weeklyHint": "{day} at 6 pm, the day your check-in is due.",
     "dailyBody": "Note today’s sleep and steps.",
     "weeklyBody": "Your weekly check-in is waiting.",
     "denied": "Notifications are off for Masse. Turn them back on in iPhone Settings.",
@@ -1212,5 +1220,36 @@
     "kcal": "{delta} kcal",
     "carbs": "{delta} g carbs",
     "planned": "planned: {value}"
+  },
+  "coachCheckin": {
+    "title": "This week’s check-in",
+    "readOnly": "Clients fill in the check-in from their app. You read it here, and can nudge them if it’s late.",
+    "week": "Week of {date}",
+    "filed": "Filed on {date}",
+    "notFiled": "Not filled in yet — due {day}.",
+    "late": "Late since {due} — {first} can still fill it in until {lastChance}.",
+    "reminded": "Nudged on {date}",
+    "remindWa": "Nudge on WhatsApp",
+    "remindApp": "Nudge in the app",
+    "remindNote": "{first} will see the nudge on their Today screen.",
+    "waText": "Hi {first}, a quick reminder: your weekly check-in is waiting in Masse.",
+    "toRead": "To read",
+    "markRead": "Mark as read",
+    "read": "Read on {date}",
+    "upcoming": "Next check-in due {day}."
+  },
+  "checkInDue": {
+    "title": "Weekly check-in",
+    "lede": "The day your clients hand in their check-in. It covers a Monday-to-Sunday week: due Friday to Sunday, it is the current week; due Monday to Thursday, the week that just ended. They can fill it in from three days before and have two more days to catch up — past the due day it shows as “late” in your list.",
+    "label": "Check-in due on",
+    "o7": "Monday",
+    "o8": "Tuesday",
+    "o9": "Wednesday",
+    "o10": "Thursday",
+    "o4": "Friday",
+    "o5": "Saturday",
+    "o6": "Sunday",
+    "save": "Save",
+    "saved": "Saved"
   }
 }

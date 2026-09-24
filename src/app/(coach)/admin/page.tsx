@@ -3,8 +3,10 @@ import { createClient } from "@/lib/supabase/server";
 import {
   allowCoachEmail,
   disallowCoachEmail,
+  setCheckInDue,
   setCoachSuspended,
 } from "./actions";
+import { DUE_OFFSETS, DEFAULT_DUE_OFFSET } from "@/lib/checkIns";
 import { CoachBillingProfile } from "@/components/CoachBillingProfile";
 
 export default async function AdminPage() {
@@ -20,6 +22,13 @@ export default async function AdminPage() {
     .select("user_id")
     .eq("user_id", user?.id ?? "")
     .maybeSingle();
+
+  const { data: coach } = await supabase
+    .from("coaches")
+    .select("check_in_due_offset")
+    .eq("id", user?.id ?? "")
+    .maybeSingle();
+  const tDue = await getTranslations("checkInDue");
 
   const { data: profile } = await supabase
     .from("coach_billing_profiles")
@@ -60,6 +69,38 @@ export default async function AdminPage() {
           {t("lede")}
         </p>
       </header>
+
+      {/* Her coaching rules, for all her clients at once. */}
+      <section className="glass rounded-r3 p-4">
+        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+          {tDue("title")}
+        </h3>
+        <p className="mt-1 max-w-[72ch] text-[12px] leading-[1.5] text-[var(--ink2)]">
+          {tDue("lede")}
+        </p>
+        <form action={setCheckInDue} className="mt-3 flex flex-wrap items-end gap-2">
+          <label className="block">
+            <span className="block text-[11px] text-[var(--ink2)]">{tDue("label")}</span>
+            <select
+              name="check_in_due_offset"
+              defaultValue={coach?.check_in_due_offset ?? DEFAULT_DUE_OFFSET}
+              className="mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+            >
+              {DUE_OFFSETS.map((offset) => (
+                <option key={offset} value={offset}>
+                  {tDue(`o${offset}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="submit"
+            className="h-9 rounded-rp cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
+          >
+            {tDue("save")}
+          </button>
+        </form>
+      </section>
 
       <CoachBillingProfile profile={profile} />
 

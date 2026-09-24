@@ -38,13 +38,34 @@ enum Reminders {
         await schedule(id: dailyId, body: L.t("settings.dailyBody"), when: when)
     }
 
-    /// Sunday, 18:00. The check-in is keyed on the week that starts Monday, so
-    /// Sunday evening is the last moment it is still this week's.
-    static func scheduleWeekly() async {
+    /// 18:00 on the day her coach set the check-in due.
+    static func scheduleWeekly(dueOffset: Int) async {
         var when = DateComponents()
-        when.weekday = 1
+        when.weekday = calendarWeekday(dueOffset)
         when.hour = 18
         await schedule(id: weeklyId, body: L.t("settings.weeklyBody"), when: when)
+    }
+
+    /// Her coach may change the day at any time; each launch puts the reminder
+    /// back on the current one.
+    static func refreshWeekly() async {
+        guard UserDefaults.standard.bool(forKey: Key.weekly) else { return }
+        await scheduleWeekly(dueOffset: await CheckInFeed.dueOffset())
+    }
+
+    /// An offset from a Monday (7 is the next Monday) as Calendar counts
+    /// weekdays: Sunday is 1, Monday 2.
+    static func calendarWeekday(_ dueOffset: Int) -> Int {
+        let mondayBased = dueOffset % 7
+        return mondayBased == 6 ? 1 : mondayBased + 2
+    }
+
+    /// "dimanche", in the app's language.
+    static func weekdayName(_ dueOffset: Int) -> String {
+        let locale = Locale(identifier: Bundle.main.preferredLocalizations.first == "en" ? "en_GB" : "fr_FR")
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = locale
+        return calendar.weekdaySymbols[calendarWeekday(dueOffset) - 1]
     }
 
     static func cancel(_ id: String) {

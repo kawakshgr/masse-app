@@ -113,3 +113,20 @@ export async function saveBillingProfile(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/facturation");
 }
+
+/** When her clients' weekly check-in is due. Hers to set, for all of them. */
+export async function setCheckInDue(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const offset = Number(formData.get("check_in_due_offset"));
+  if (!Number.isInteger(offset) || offset < 4 || offset > 10) return;
+
+  await supabase.from("coaches").update({ check_in_due_offset: offset }).eq("id", user.id);
+
+  revalidatePath("/admin");
+  revalidatePath("/clients", "layout");
+}

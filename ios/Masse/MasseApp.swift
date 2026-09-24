@@ -15,6 +15,8 @@ struct MasseApp: App {
                     session.start()
                     // A session from an earlier launch is not still running.
                     RestTimer.endStale()
+                    // Her coach may have moved the check-in day.
+                    await Reminders.refreshWeekly()
                 }
                 // The magic link comes back here through masse://auth-callback.
                 .onOpenURL { url in

@@ -3706,6 +3706,94 @@
         }
       }
     },
+    "bilan.lastWeekTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilan de la semaine dernière"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last week’s check-in"
+          }
+        }
+      }
+    },
+    "bilan.latePrompt": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le bilan de la semaine du %1$@ n’est pas encore rempli. Tu as jusqu’à %2$@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The check-in for the week of %1$@ isn’t filled in yet. You have until %2$@."
+          }
+        }
+      },
+      "comment": "args: date, day"
+    },
+    "bilan.due": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À remplir d’ici %1$@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill it in by %1$@."
+          }
+        }
+      },
+      "comment": "args: day"
+    },
+    "bilan.nudged": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton coach attend ce bilan."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your coach is waiting for this check-in."
+          }
+        }
+      }
+    },
+    "bilan.upcoming": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochain bilan : %1$@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next check-in: %1$@."
+          }
+        }
+      },
+      "comment": "args: day"
+    },
     "checkin.title": {
       "extractionState": "manual",
       "localizations": {
@@ -3729,13 +3817,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tu demandes par WhatsApp, tu saisis ici. Le formulaire côté client viendra plus tard."
+            "value": "Le bilan peut être rempli depuis l’app du client. S’il t’arrive par WhatsApp, saisis-le ici."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You ask on WhatsApp, you type it here. The client-submitted form comes later."
+            "value": "Clients can fill in their check-in from their app. If it reaches you on WhatsApp, type it here."
           }
         }
       }
@@ -4584,16 +4672,17 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le dimanche à 18 h, pour remplir ton bilan de la semaine."
+            "value": "Le %1$@ à 18 h, le jour où ton bilan est dû."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sundays at 6 pm, to fill in your weekly check-in."
+            "value": "%1$@ at 6 pm, the day your check-in is due."
           }
         }
-      }
+      },
+      "comment": "args: day"
     },
     "settings.dailyBody": {
       "extractionState": "manual",

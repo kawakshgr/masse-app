@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
 
 /**
  * What every client screen needs first: who she is, and what day it is for her.
@@ -18,7 +19,7 @@ export const clientSession = cache(async () => {
 
   const { data: client } = await supabase
     .from("clients")
-    .select("id, name, first_name, cycle_tracking, steps_target, timezone")
+    .select("id, coach_id, name, first_name, cycle_tracking, steps_target, timezone")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -199,4 +200,46 @@ export function adjustExercise(exercise: WeekExercise, levers: CycleLevers | nul
 /** A real minus sign, and a plus when it adds: "−10", "+5". */
 export function signed(n: number): string {
   return n > 0 ? `+${n}` : n < 0 ? `−${-n}` : "0";
+}
+
+/**
+ * The check-in she is asked for today, by her coach's due day — checkInWindow
+ * in src/lib/checkIns.ts, the rule the coach's side and the iPhone share. The
+ * row comes back only once it holds something: an empty one is a form she
+ * opened, not a check-in.
+ */
+export async function checkInState() {
+  const { supabase, client, weekday, monday } = await clientSession();
+  const lastMonday = addDays(monday, -7);
+
+  const [coachRes, rowsRes, remindersRes] = await Promise.all([
+    supabase.from("coaches").select("check_in_due_offset").eq("id", client.coach_id).maybeSingle(),
+    supabase
+      .from("check_ins")
+      .select(
+        "week_start_date, feel, pain, adherence, bodyweight_kg, waist_cm, chest_cm, hips_cm, thigh_cm, note, author, reviewed_at, check_in_photos(id)",
+      )
+      .in("week_start_date", [lastMonday, monday]),
+    supabase.from("check_in_reminders").select("week_start_date"),
+  ]);
+
+  const asked = checkInWindow(
+    monday,
+    weekday,
+    coachRes.data?.check_in_due_offset ?? DEFAULT_DUE_OFFSET,
+  );
+  const row = (rowsRes.data ?? []).find(
+    (candidate) =>
+      candidate.week_start_date === asked.weekStart &&
+      isFiled(candidate, candidate.check_in_photos?.length ?? 0),
+  );
+  const existing = row ? { ...row, check_in_photos: undefined } : null;
+
+  return {
+    ...asked,
+    existing,
+    nudged:
+      !existing &&
+      (remindersRes.data ?? []).some((reminder) => reminder.week_start_date === asked.weekStart),
+  };
 }

@@ -17,6 +17,8 @@ struct SettingsView: View {
     @AppStorage(Reminders.Key.weekly) private var weekly = false
 
     @State private var denied = false
+    /// The day her coach set the check-in due; the weekly reminder follows it.
+    @State private var dueOffset = CheckInFeed.defaultDueOffset
     @State private var healthConnected = Health.connected
     @State private var confirmingClear = false
     @State private var cleared = false
@@ -53,7 +55,10 @@ struct SettingsView: View {
                 }
             }
         }
-        .task { await refreshPermission() }
+        .task {
+            await refreshPermission()
+            dueOffset = await CheckInFeed.dueOffset()
+        }
         // Back from the iPhone's Settings, the answer may have changed.
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { Task { await refreshPermission() } }
@@ -116,7 +121,7 @@ struct SettingsView: View {
 
             toggleRow(
                 L.t("settings.weekly"),
-                hint: L.t("settings.weeklyHint"),
+                hint: L.t("settings.weeklyHint", Reminders.weekdayName(dueOffset)),
                 isOn: Binding(get: { weekly }, set: { on in Task { await setWeekly(on) } })
             )
 
@@ -345,7 +350,7 @@ struct SettingsView: View {
         }
         guard await permitted() else { return }
         weekly = true
-        await Reminders.scheduleWeekly()
+        await Reminders.scheduleWeekly(dueOffset: dueOffset)
     }
 
     /// A switch that says "on" while the system has silenced it would be a lie,

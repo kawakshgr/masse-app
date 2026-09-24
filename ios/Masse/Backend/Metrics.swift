@@ -290,6 +290,20 @@ struct CheckIn: Codable, Sendable {
     static let adherences = ["All of it", "Most", "Struggled"]
 }
 
+/// The check-in she is asked for right now, and how to say so.
+struct OpenCheckIn: Sendable {
+    let weekStart: String
+    /// Not open yet: the day is shown, the form is not.
+    let upcoming: Bool
+    let late: Bool
+    let due: String
+    let lastChance: String
+    /// The row, once it holds something. An empty one is a form she opened.
+    let existing: CheckIn?
+    /// Her coach asked for it.
+    let nudged: Bool
+}
+
 enum CheckInFeed {
 
     /// Monday of the week we are in, which is how the row is keyed.
@@ -299,18 +313,95 @@ enum CheckInFeed {
         return start.formatted(.iso8601.year().month().day().dateSeparator(.dash))
     }
 
-    static func thisWeek() async throws -> CheckIn? {
-        let rows: [CheckIn] = try await Backend.client
+    /// Days after a week's Monday its check-in is due, as her coach set it.
+    static let defaultDueOffset = 6
+    static let graceDays = 2
+    static let opensBefore = 3
+
+    static func dueOffset() async -> Int {
+        struct Client: Decodable { let coach_id: String }
+        struct Coach: Decodable { let check_in_due_offset: Int }
+        guard
+            let coachId = (try? await Backend.client
+                .from("clients").select("coach_id").limit(1)
+                .execute().value as [Client])?.first?.coach_id,
+            let offset = (try? await Backend.client
+                .from("coaches").select("check_in_due_offset").eq("id", value: coachId).limit(1)
+                .execute().value as [Coach])?.first?.check_in_due_offset
+        else { return defaultDueOffset }
+        return offset
+    }
+
+    static func addDays(_ iso: String, _ n: Int) -> String {
+        let style = Date.ISO8601FormatStyle().year().month().day().dateSeparator(.dash)
+        guard let date = try? Date(iso, strategy: style),
+              let moved = Calendar(identifier: .iso8601).date(byAdding: .day, value: n, to: date)
+        else { return iso }
+        return moved.formatted(style)
+    }
+
+    /// Which week is asked for today, by checkInWindow in src/lib/checkIns.ts:
+    /// last week's while its window is open (three days before its due day to
+    /// two after), else this week's. The coach's side judges by the same rule.
+    static func open() async throws -> OpenCheckIn {
+        struct Row: Decodable {
+            let week_start_date: String
+            let check_in_photos: [Photo]?
+            struct Photo: Decodable { let id: String }
+        }
+
+        let monday = weekStartIso
+        let lastMonday = addDays(monday, -7)
+        async let offsetValue = dueOffset()
+        async let checkIns: [CheckIn] = Backend.client
             .from("check_ins")
             .select("""
                 week_start_date, feel, pain, adherence, bodyweight_kg, \
                 waist_cm, chest_cm, hips_cm, thigh_cm, note, author, reviewed_at
                 """)
-            .eq("week_start_date", value: weekStartIso)
-            .limit(1)
+            .in("week_start_date", values: [lastMonday, monday])
             .execute()
             .value
-        return rows.first
+        async let photoRows: [Row] = Backend.client
+            .from("check_ins")
+            .select("week_start_date, check_in_photos(id)")
+            .in("week_start_date", values: [lastMonday, monday])
+            .execute()
+            .value
+        struct Reminder: Decodable { let week_start_date: String }
+        async let reminders: [Reminder] = Backend.client
+            .from("check_in_reminders")
+            .select("week_start_date")
+            .execute()
+            .value
+
+        let (offset, rows, photos) = try await (offsetValue, checkIns, photoRows)
+        let asked = (try? await reminders) ?? []
+
+        func filed(_ week: String) -> CheckIn? {
+            guard let row = rows.first(where: { $0.weekStartDate == week }) else { return nil }
+            let photoCount = photos.first { $0.week_start_date == week }?.check_in_photos?.count ?? 0
+            let empty = row.feel == nil && row.pain == nil && row.adherence == nil
+                && row.bodyweightKg == nil && row.note == nil && row.waistCm == nil
+                && row.chestCm == nil && row.hipsCm == nil && row.thighCm == nil
+            return empty && photoCount == 0 ? nil : row
+        }
+
+        let weekday = Weekday.today
+        let inLastWeek = weekday + 7 <= offset + graceDays
+        let week = inLastWeek ? lastMonday : monday
+        let since = inLastWeek ? weekday + 7 : weekday
+
+        let existing = filed(week)
+        return OpenCheckIn(
+            weekStart: week,
+            upcoming: since < offset - opensBefore,
+            late: since > offset,
+            due: addDays(week, offset),
+            lastChance: addDays(week, offset + graceDays),
+            existing: existing,
+            nudged: existing == nil && asked.contains { $0.week_start_date == week }
+        )
     }
 
     /// Files hers, or corrects the one she filed. Upsert on the week, because

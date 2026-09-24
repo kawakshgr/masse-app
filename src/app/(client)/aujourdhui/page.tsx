@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
-import { addDays, clientSession, targetLine, todaySession } from "@/lib/clientData";
+import { getLocale, getTranslations } from "next-intl/server";
+import { addDays, checkInState, clientSession, targetLine, todaySession } from "@/lib/clientData";
 import { Card, CardTitle, CtaLink, ScreenHeader } from "@/components/client/ui";
 import { EntryCard } from "@/components/client/EntryCard";
 import { CheckInCard } from "@/components/client/CheckInCard";
@@ -17,21 +17,26 @@ export default async function TodayPage() {
   const t = await getTranslations("today");
   const tLog = await getTranslations("log");
   const tSettings = await getTranslations("settings");
+  const tBilan = await getTranslations("bilan");
+  const locale = (await getLocale()) === "en" ? "en-GB" : "fr-FR";
+  const dayMonth = (iso: string) =>
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "long" });
+  // "dimanche 28 septembre": a due day reads better with its weekday.
+  const weekdayDay = (iso: string) =>
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString(locale, {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
 
-  const [{ week, session, levers }, metricsRes, checkInRes] = await Promise.all([
+  const [{ week, session, levers }, metricsRes, checkIn] = await Promise.all([
     todaySession(),
     supabase
       .from("daily_metrics")
       .select("day, sleep_h, sleep_quality, steps")
       .gte("day", monday)
       .lte("day", addDays(monday, 6)),
-    supabase
-      .from("check_ins")
-      .select(
-        "feel, pain, adherence, bodyweight_kg, waist_cm, chest_cm, hips_cm, thigh_cm, note, author, reviewed_at",
-      )
-      .eq("week_start_date", monday)
-      .maybeSingle(),
+    checkInState(),
   ]);
 
   const metrics = metricsRes.data ?? [];
@@ -115,9 +120,22 @@ export default async function TodayPage() {
       />
 
       <CheckInCard
-        weekStart={monday}
+        weekStart={checkIn.weekStart}
         clientId={client.id}
-        existing={checkInRes.data ?? null}
+        existing={checkIn.existing}
+        late={checkIn.late}
+        upcoming={checkIn.upcoming}
+        nudged={checkIn.nudged}
+        prompt={
+          checkIn.upcoming
+            ? tBilan("upcoming", { day: weekdayDay(checkIn.due) })
+            : checkIn.late
+              ? tBilan("latePrompt", {
+                  date: dayMonth(checkIn.weekStart),
+                  day: weekdayDay(checkIn.lastChance),
+                })
+              : `${tBilan("prompt")} ${tBilan("due", { day: weekdayDay(checkIn.due) })}`
+        }
       />
     </>
   );

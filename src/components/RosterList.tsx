@@ -64,7 +64,12 @@ export function RosterList({
               return (
                 <li key={entry.id}>
                   <Link
-                    href={`/clients/${entry.id}`}
+                    // The chip opens the tab that answers it.
+                    href={
+                      entry.attention === "checkin" || entry.attention === "late"
+                        ? `/clients/${entry.id}?onglet=checkins`
+                        : `/clients/${entry.id}`
+                    }
                     aria-current={active ? "page" : undefined}
                     className={`flex items-center gap-3 border-b border-[var(--hair)] px-3 transition-colors ${
                       active ? "sel" : "hover:bg-[var(--glass)]"

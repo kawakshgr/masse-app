@@ -102,12 +102,14 @@
   "attention": {
     "checkin": "bilan à relire",
     "missed": "séance manquée",
-    "sleep": "sommeil court"
+    "sleep": "sommeil court",
+    "late": "bilan en retard"
   },
   "chip": {
     "checkin": "Relire",
     "missed": "Voir",
-    "sleep": "Sommeil"
+    "sleep": "Sommeil",
+    "late": "Relancer"
   },
   "toolbar": {
     "search": "Rechercher ou lancer une commande",
@@ -769,7 +771,8 @@
     "confirmRemovePhoto": "Supprimer",
     "cancel": "Annuler",
     "askRemovePhoto": "Supprimer cette photo ? Elle ne revient pas.",
-    "byClient": "Rempli par {first}"
+    "byClient": "Rempli par {first}",
+    "noPhoto": "Pas de photo"
   },
   "hist": {
     "longView": "La vue longue",
@@ -1101,7 +1104,12 @@
     "chest": "Poitrine",
     "hips": "Hanches",
     "thigh": "Cuisse",
-    "discipline": "Même lumière, même heure — prise avant le petit-déjeuner. Change la pose pour basculer les deux côtés."
+    "discipline": "Même lumière, même heure — prise avant le petit-déjeuner. Change la pose pour basculer les deux côtés.",
+    "lastWeekTitle": "Bilan de la semaine dernière",
+    "latePrompt": "Le bilan de la semaine du {date} n’est pas encore rempli. Tu as jusqu’à {day}.",
+    "due": "À remplir d’ici {day}.",
+    "nudged": "Ton coach attend ce bilan.",
+    "upcoming": "Prochain bilan : {day}."
   },
   "cycleChart": {
     "title": "Où tu en es",
@@ -1131,7 +1139,7 @@
     "dailyHint": "Chaque jour, pour noter ton sommeil et tes pas.",
     "time": "Heure",
     "weekly": "Rappel du bilan",
-    "weeklyHint": "Le dimanche à 18 h, pour remplir ton bilan de la semaine.",
+    "weeklyHint": "Le {day} à 18 h, le jour où ton bilan est dû.",
     "dailyBody": "Note ton sommeil et tes pas du jour.",
     "weeklyBody": "Ton bilan de la semaine t’attend.",
     "denied": "Les notifications sont coupées pour Masse. Réactive-les dans les Réglages de l’iPhone.",
@@ -1212,5 +1220,36 @@
     "kcal": "{delta} kcal",
     "carbs": "{delta} g de glucides",
     "planned": "prévu : {value}"
+  },
+  "coachCheckin": {
+    "title": "Bilan de la semaine",
+    "readOnly": "Le bilan se remplit dans l’app du client. Tu le relis ici, et tu peux relancer s’il tarde.",
+    "week": "Semaine du {date}",
+    "filed": "Rempli le {date}",
+    "notFiled": "Pas encore rempli — à rendre {day}.",
+    "late": "En retard depuis {due} — {first} peut encore le remplir jusqu’à {lastChance}.",
+    "reminded": "Relancé le {date}",
+    "remindWa": "Relancer sur WhatsApp",
+    "remindApp": "Relancer dans l’app",
+    "remindNote": "{first} verra la relance sur son écran Aujourd’hui.",
+    "waText": "Bonjour {first}, petit rappel : ton bilan de la semaine t’attend dans Masse.",
+    "toRead": "À relire",
+    "markRead": "Marquer comme relu",
+    "read": "Relu le {date}",
+    "upcoming": "Prochain bilan dû {day}."
+  },
+  "checkInDue": {
+    "title": "Bilan hebdomadaire",
+    "lede": "Le jour où tes clients rendent leur bilan. Il porte sur une semaine du lundi au dimanche : dû du vendredi au dimanche, c’est la semaine en cours ; dû du lundi au jeudi, celle qui vient de finir. Ils peuvent le remplir dès trois jours avant et ont deux jours de plus pour le rattraper — passé le jour dû, il apparaît « en retard » dans ta liste.",
+    "label": "Bilan dû le",
+    "o7": "Lundi",
+    "o8": "Mardi",
+    "o9": "Mercredi",
+    "o10": "Jeudi",
+    "o4": "Vendredi",
+    "o5": "Samedi",
+    "o6": "Dimanche",
+    "save": "Enregistrer",
+    "saved": "Enregistré"
   }
 }
