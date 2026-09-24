@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
 import { WeekExport, WeekPrintout } from "@/components/WeekExport";
 import { addWeek, deleteWeek, duplicateWeek, toggleTemplate } from "../actions";
 import { ProgrammeHeader } from "@/components/ProgrammeHeader";
-import { exerciseName } from "@/lib/exerciseNames";
 import { hevyConfigured } from "@/lib/hevy";
 
 export default async function ProgrammeEditorPage({
@@ -29,7 +28,6 @@ export default async function ProgrammeEditorPage({
   if (!programme) notFound();
 
   const t = await getTranslations("editor");
-  const locale = await getLocale();
   const tProg = await getTranslations("programmes");
   const tProgramme = await getTranslations("programme");
 
@@ -202,8 +200,7 @@ export default async function ProgrammeEditorPage({
             .filter((e) => !hiddenIds.has(e.id))
             .map((e) => ({
               id: e.id,
-              // Shown, dragged and written into sessions in her language.
-              name: exerciseName(e.name, locale),
+              name: e.name,
               // Hevy writes the same muscle two ways and says "None" for no
               // equipment; both are tidied here, once, before anything shows.
               muscleGroup: e.muscle_group === "Quads" ? "Quadriceps" : e.muscle_group,
