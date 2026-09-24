@@ -11,7 +11,7 @@
 const ENDPOINT = "https://search.openfoodfacts.org/search";
 
 // Their policy asks for an identifying User-Agent on every call.
-const USER_AGENT = "Masse/0.1 (coaching software; https://masse-app-bay.vercel.app)";
+const USER_AGENT = "Masse/0.1 (coaching software; https://masseapp.fr)";
 
 export type FoodCandidate = {
   code: string;

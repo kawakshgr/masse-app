@@ -242,6 +242,17 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# The same two templates are pasted into the hosted project's dashboard. Both
+# carry the 6-digit code: on an iPhone the installed web app cannot finish a
+# magic link, which always opens in Safari.
+[auth.email.template.magic_link]
+subject = "Ton code de connexion Masse"
+content_path = "./supabase/templates/magic-link.html"
+
+[auth.email.template.confirmation]
+subject = "Bienvenue sur Masse — ton code"
+content_path = "./supabase/templates/confirmation.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"
