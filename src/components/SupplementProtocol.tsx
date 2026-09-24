@@ -233,7 +233,7 @@ export function SupplementProtocol({
 
                   <button
                     type="submit"
-                    className="h-8 rounded-r2 border border-[var(--edge)] px-2.5 text-[11.5px] text-[var(--ink2)]"
+                    className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
                   >
                     {tSupp("save")}
                   </button>
@@ -323,7 +323,7 @@ export function SupplementProtocol({
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="mt-3 h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12.5px] font-semibold text-[var(--accent)]"
+          className="glass2 mt-3 h-8 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
         >
           {t("add")}
         </button>

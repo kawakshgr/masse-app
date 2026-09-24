@@ -230,7 +230,7 @@ export default async function BillingPage({
               key={value}
               href={`/facturation?filtre=${value}`}
               aria-current={filter === value ? "page" : undefined}
-              className={`rounded-r2 border border-[var(--edge)] px-3 py-2 text-[13px] font-semibold ${
+              className={`rounded-rp border border-[var(--edge)] px-3.5 py-2 text-[13px] font-semibold ${
                 filter === value
                   ? "sel text-[var(--ink)]"
                   : "bg-[var(--glass2)] text-[var(--ink2)]"

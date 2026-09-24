@@ -21,7 +21,7 @@ export function OtpCodeEntry({
 }) {
   const t = useTranslations("auth");
   const [code, setCode] = useState("");
-  const [state, setState] = useState<"idle" | "checking" | "bad">("idle");
+  const [state, setState] = useState<"idle" | "checking" | "bad" | "done">("idle");
 
   async function verify(event: React.FormEvent) {
     event.preventDefault();
@@ -35,6 +35,9 @@ export function OtpCodeEntry({
       setState("bad");
       return;
     }
+    // Said on screen before the page changes, so a slow redirect never reads
+    // as a code that did not work.
+    setState("done");
     onVerified();
   }
 
@@ -52,10 +55,15 @@ export function OtpCodeEntry({
           setCode(event.target.value.replace(/\D/g, "").slice(0, 8));
           setState("idle");
         }}
-        placeholder="••••••"
+        placeholder="••••••••"
         className="tnum mt-2 h-12 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-center text-[20px] font-semibold tracking-[.4em] text-[var(--ink)] placeholder:text-[var(--ink3)]"
       />
       <p className="mt-2 text-[12.5px] leading-[1.45] text-[var(--ink3)]">{t("codeHint")}</p>
+      {state === "done" && (
+        <p role="status" className="mt-2 text-[13px] text-[var(--accent-soft)]">
+          {t("codeDone")}
+        </p>
+      )}
       {state === "bad" && (
         <p role="alert" className="mt-2 text-[13px] text-[var(--a3)]">
           {t("codeBad")}
@@ -63,7 +71,7 @@ export function OtpCodeEntry({
       )}
       <button
         type="submit"
-        disabled={code.length < 6 || state === "checking"}
+        disabled={code.length < 6 || state === "checking" || state === "done"}
         className="mt-3 h-11 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] text-[15px] font-semibold text-[var(--ink)] disabled:opacity-50"
       >
         {state === "checking" ? t("codeChecking") : t("codeVerify")}

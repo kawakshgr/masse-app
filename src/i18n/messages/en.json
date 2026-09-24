@@ -24,10 +24,11 @@
     "noRecordBody": "This address is signed in, but no coach has added you yet. If you have just arrived, enter the invite code you were sent.",
     "noRecordAction": "Enter an invite code",
     "codeLabel": "Or enter the code you received",
-    "codeHint": "The 6-digit code in the email. It works even when the link opens somewhere else — another browser or another device.",
+    "codeHint": "The number code in the email. It works even when the link opens somewhere else — but it is one or the other: once the code is used, the link no longer works.",
     "codeVerify": "Confirm code",
     "codeChecking": "Checking…",
-    "codeBad": "Wrong or expired code. Check it, or ask for a new link."
+    "codeBad": "Wrong or expired code. Check it, or ask for a new link.",
+    "codeDone": "Signed in. Opening the app…"
   },
   "shell": {
     "clients": "Clients",
@@ -112,7 +113,7 @@
     "late": "Nudge"
   },
   "toolbar": {
-    "search": "Search or run a command",
+    "search": "Search…  ⌘K",
     "newProgramme": "+ New programme",
     "addClient": "+ Add client",
     "addClientHint": "“Add client” sends an invite code and waits for their onboarding"
@@ -211,7 +212,7 @@
     "joinedOn": "client since {date}",
     "billing": "Billing",
     "note": "Notes",
-    "fileNote": "Nothing here is derived — it is the notes app you keep beside the product today, inside it instead. Only you and {first} can read it.",
+    "fileNote": "Nothing here is computed — it is the notebook you keep beside the app, in the app. {first} sees their own details and can correct them; your note is visible to you alone.",
     "none": "—",
     "edit": "Edit",
     "save": "Save",
@@ -367,7 +368,8 @@
       "read_client_checkins": "check-ins read",
       "suspend_coach": "coach suspended",
       "restore_coach": "coach restored"
-    }
+    },
+    "coachLede": "Your coaching rules and your company, for all your clients at once."
   },
   "checkin": {
     "title": "Weekly check-in",
@@ -779,7 +781,7 @@
     "r12w": "12 weeks",
     "r6m": "6 months",
     "r1y": "A year",
-    "clientSince": "Client since {date} · {weeks} weeks",
+    "clientSince": "Client since {date} · {weeks, plural, =1 {1 week} other {# weeks}}",
     "withYou": "With you",
     "withYouSub": "since {date}",
     "logged": "Logged",
@@ -815,7 +817,7 @@
     "save": "Apply",
     "noPhase": "No cycle data — nothing to adjust yet.",
     "promise": "You see the phase and the levers you set. Period dates are never shown to you: the database refuses them, this is not the interface hiding them.",
-    "defaultNote": "Unset — the handoff defaults apply."
+    "defaultNote": "Unset — the defaults apply."
   },
   "nut": {
     "fed": "How {first} gets fed",
@@ -1251,5 +1253,47 @@
     "o6": "Sunday",
     "save": "Save",
     "saved": "Saved"
+  },
+  "muscles": {
+    "Abdominals": "Abdominals",
+    "Abductors": "Abductors",
+    "Adductors": "Adductors",
+    "Back": "Back",
+    "Biceps": "Biceps",
+    "Calves": "Calves",
+    "Cardio": "Cardio",
+    "Chest": "Chest",
+    "Conditioning": "Conditioning",
+    "Core": "Core",
+    "Forearms": "Forearms",
+    "Full Body": "Full Body",
+    "Glutes": "Glutes",
+    "Hamstrings": "Hamstrings",
+    "Lats": "Lats",
+    "Lower Back": "Lower Back",
+    "Neck": "Neck",
+    "Other": "Other",
+    "Posterior Chain": "Posterior Chain",
+    "Quadriceps": "Quadriceps",
+    "Rear Delts": "Rear Delts",
+    "Shoulders": "Shoulders",
+    "Traps": "Traps",
+    "Triceps": "Triceps",
+    "Upper Back": "Upper Back"
+  },
+  "gear": {
+    "Barbell": "Barbell",
+    "Bodyweight": "Bodyweight",
+    "Cable": "Cable",
+    "Dumbbell": "Dumbbell",
+    "Kettlebell": "Kettlebell",
+    "Machine": "Machine",
+    "Other": "Other",
+    "Plate": "Plate",
+    "Resistance Band": "Resistance Band",
+    "Rope": "Rope",
+    "Sled": "Sled",
+    "Suspension": "Suspension",
+    "Trap Bar": "Trap Bar"
   }
 }

@@ -39,6 +39,20 @@ function initialsOf(name: string) {
 }
 
 const panel = "glass rounded-r3 p-4";
+
+/** "22 sept. 2026" — never the raw ISO date. */
+function shortDate(iso: string): string {
+  return new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function signedKg(delta: number): string {
+  const figure = Math.abs(delta).toLocaleString("fr-FR");
+  return `${delta > 0 ? "+" : delta < 0 ? "−" : "±"}${figure} kg`;
+}
 const heading = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 
 export default async function ClientDetailPage({
@@ -381,7 +395,7 @@ async function HistoryTab({
           ))}
         </div>
         <span className="ml-auto text-[11px] text-[var(--ink3)]">
-          {t("clientSince", { date: view.since, weeks: view.weeksWithCoach })}
+          {t("clientSince", { date: shortDate(view.since), weeks: view.weeksWithCoach })}
         </span>
       </div>
 
@@ -389,7 +403,7 @@ async function HistoryTab({
         <MetricCard
           label={t("withYou")}
           value={`${view.weeksWithCoach} sem.`}
-          sub={t("withYouSub", { date: view.since })}
+          sub={t("withYouSub", { date: shortDate(view.since) })}
           wash="wash-1"
         />
         <MetricCard
@@ -411,7 +425,8 @@ async function HistoryTab({
           value={
             view.weightFrom == null || view.weightTo == null
               ? "—"
-              : `${Math.round((view.weightTo - view.weightFrom) * 10) / 10} kg`
+              : // A change, so it says so: "+0,5 kg", "−1 kg", "±0 kg".
+                signedKg(Math.round((view.weightTo - view.weightFrom) * 10) / 10)
           }
           sub={
             view.weightFrom == null || view.weightTo == null

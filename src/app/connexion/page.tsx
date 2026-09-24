@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { OtpCodeEntry } from "@/components/OtpCodeEntry";
@@ -13,7 +13,6 @@ function SignInForm() {
   const t = useTranslations("auth");
   const tApp = useTranslations("app");
   const params = useSearchParams();
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [state, setState] = useState<State>("idle");
 
@@ -101,9 +100,10 @@ function SignInForm() {
             {/* Where she was headed, or home: "/" sorts a coach from a client. */}
             <OtpCodeEntry
               email={email}
+              // A full load, not a client transition: the next page is rendered
+              // by the server, which has to see the session just written.
               onVerified={() => {
-                router.replace(params.get("suite") ?? "/");
-                router.refresh();
+                window.location.href = params.get("suite") ?? "/";
               }}
             />
           </>

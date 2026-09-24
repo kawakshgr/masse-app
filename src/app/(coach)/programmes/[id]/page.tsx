@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
 import { WeekExport, WeekPrintout } from "@/components/WeekExport";
 import { addWeek, deleteWeek, duplicateWeek, toggleTemplate } from "../actions";
 import { ProgrammeHeader } from "@/components/ProgrammeHeader";
+import { exerciseName } from "@/lib/exerciseNames";
 import { hevyConfigured } from "@/lib/hevy";
 
 export default async function ProgrammeEditorPage({
@@ -28,6 +29,7 @@ export default async function ProgrammeEditorPage({
   if (!programme) notFound();
 
   const t = await getTranslations("editor");
+  const locale = await getLocale();
   const tProg = await getTranslations("programmes");
   const tProgramme = await getTranslations("programme");
 
@@ -100,7 +102,7 @@ export default async function ProgrammeEditorPage({
         >
           <button
             type="submit"
-            className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
+            className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
           >
             {programme.is_template ? t("untemplate") : t("template")}
           </button>
@@ -123,7 +125,7 @@ export default async function ProgrammeEditorPage({
           >
             <button
               type="submit"
-              className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)]"
+              className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
             >
               {t("duplicate")}
             </button>
@@ -200,9 +202,12 @@ export default async function ProgrammeEditorPage({
             .filter((e) => !hiddenIds.has(e.id))
             .map((e) => ({
               id: e.id,
-              name: e.name,
-              muscleGroup: e.muscle_group,
-              equipment: e.equipment,
+              // Shown, dragged and written into sessions in her language.
+              name: exerciseName(e.name, locale),
+              // Hevy writes the same muscle two ways and says "None" for no
+              // equipment; both are tidied here, once, before anything shows.
+              muscleGroup: e.muscle_group === "Quads" ? "Quadriceps" : e.muscle_group,
+              equipment: e.equipment === "None" ? null : e.equipment,
               mine: e.coach_id !== null,
             }))}
           hevyConfigured={hevyConfigured()}

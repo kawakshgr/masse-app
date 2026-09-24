@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import { HevyImport } from "@/components/HevyImport";
 import { useTranslations } from "next-intl";
 import {
@@ -41,6 +41,15 @@ export function ExerciseLibrary({
   hevyConfigured: boolean;
 }) {
   const t = useTranslations("library");
+  const tMuscle = useTranslations("muscles");
+  const tGear = useTranslations("gear");
+  // The library speaks Hevy's English; the coach reads French. Anything the
+  // dictionary does not know is shown as it came.
+  const muscle = useCallback(
+    (value: string) => (tMuscle.has(value) ? tMuscle(value) : value),
+    [tMuscle],
+  );
+  const gear = (value: string) => (tGear.has(value) ? tGear(value) : value);
   const [query, setQuery] = useState("");
   const [group, setGroup] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<string | null>(null);
@@ -48,8 +57,10 @@ export function ExerciseLibrary({
 
   const groups = useMemo(
     () =>
-      [...new Set(catalogue.map((e) => e.muscleGroup).filter(Boolean))].sort() as string[],
-    [catalogue],
+      ([...new Set(catalogue.map((e) => e.muscleGroup).filter(Boolean))] as string[]).sort((a, b) =>
+        muscle(a).localeCompare(muscle(b), "fr"),
+      ),
+    [catalogue, muscle],
   );
 
   const shown = useMemo(() => {
@@ -72,9 +83,9 @@ export function ExerciseLibrary({
       byGroup.set(key, [...(byGroup.get(key) ?? []), entry]);
     }
     return [...byGroup.entries()]
-      .sort(([a], [b]) => a.localeCompare(b))
+      .sort(([a], [b]) => muscle(a).localeCompare(muscle(b), "fr"))
       .map(([title, rows]) => ({ title, rows }));
-  }, [shown, group, query]);
+  }, [shown, group, query, muscle]);
 
   return (
     <div className="flex h-full min-w-0 flex-col">
@@ -119,7 +130,7 @@ export function ExerciseLibrary({
                 group === value ? "sel text-[var(--ink)]" : "bg-[var(--glass2)] text-[var(--ink2)]"
               }`}
             >
-              {value}
+              {muscle(value)}
             </button>
           ))}
         </div>
@@ -138,7 +149,7 @@ export function ExerciseLibrary({
             <div key={section.title ?? "flat"} className="mb-2">
               {section.title && (
                 <p className="px-2 pt-2 pb-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-                  {section.title}
+                  {section.title === "—" ? section.title : muscle(section.title)}
                 </p>
               )}
               <ul className="flex flex-col gap-1">
@@ -160,7 +171,7 @@ export function ExerciseLibrary({
                         </span>
                         {entry.equipment && (
                           <span className="block truncate text-[11.5px] text-[var(--ink3)]">
-                            {entry.equipment}
+                            {gear(entry.equipment)}
                           </span>
                         )}
                       </span>

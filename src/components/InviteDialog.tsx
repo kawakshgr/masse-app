@@ -68,7 +68,7 @@ export function InviteDialog({
           setCreated(null);
           setOpen(true);
         }}
-        className="h-9 w-full rounded-rp text-[13px] font-semibold text-[var(--on-accent)]"
+        className="h-10 w-full rounded-r2 text-[13px] font-semibold text-[var(--on-accent)]"
         style={{ background: "linear-gradient(140deg, var(--a1), var(--a2))" }}
       >
         {label}

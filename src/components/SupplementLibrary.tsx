@@ -104,7 +104,7 @@ export function SupplementLibrary({
         <button
           type="button"
           onClick={() => setAdding((on) => !on)}
-          className="h-9 rounded-r2 border border-[var(--edge)] px-3 text-[13px] font-semibold text-[var(--accent)]"
+          className="h-9 rounded-r2 cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
         >
           {t("newOne")}
         </button>

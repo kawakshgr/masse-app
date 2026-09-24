@@ -298,7 +298,6 @@ function PlanTotals({
       <form action={saveNutritionTargets} className="mt-4 flex items-end gap-2">
         <input type="hidden" name="client_id" value={clientId} />
         <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
         <input type="hidden" name="protein_g" value={targets.proteinG} />
         <input type="hidden" name="carbs_g" value={targets.carbsG} />
         <input type="hidden" name="fat_g" value={targets.fatG} />
@@ -313,7 +312,7 @@ function PlanTotals({
         </label>
         <button
           type="submit"
-          className="h-8 shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[12px] font-semibold text-[var(--ink2)]"
+          className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
         >
           {t("apply")}
         </button>
@@ -379,22 +378,16 @@ export function NutritionPlan({
           {(["macros", "plan"] as const).map((value) => (
             <form key={value} action={setNutritionMode} className="min-w-0 flex-1">
               <input type="hidden" name="client_id" value={clientId} />
-        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+              <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
               <input type="hidden" name="mode" value={value} />
               <button
                 type="submit"
                 aria-pressed={mode === value}
-                className={`h-9 w-full rounded-r2 text-[13px] font-semibold ${
-                  mode === value
-                    ? "text-[var(--onA)]"
-                    : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
+                // A choice, so it is selected the way every choice is: the
+                // tinted gradient, not the call-to-action fill.
+                className={`h-9 w-full rounded-r2 border border-[var(--edge)] text-[13px] font-semibold ${
+                  mode === value ? "sel text-[var(--ink)]" : "bg-[var(--glass2)] text-[var(--ink2)]"
                 }`}
-                style={
-                  mode === value
-                    ? { background: "linear-gradient(140deg, var(--a1), var(--a2))" }
-                    : undefined
-                }
               >
                 {t(value === "macros" ? "modeMacros" : "modePlan")}
               </button>
@@ -452,8 +445,7 @@ export function NutritionPlan({
                     <form action={updatePlanMeal} className="flex items-center gap-2">
                       <input type="hidden" name="meal_id" value={meal.id} />
                       <input type="hidden" name="client_id" value={clientId} />
-        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+                      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
                       <input
                         type="time"
                         name="at_time"
@@ -474,7 +466,7 @@ export function NutritionPlan({
                       )}
                       <button
                         type="submit"
-                        className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-1 text-[11px] text-[var(--ink2)]"
+                        className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
                       >
                         {t("apply")}
                       </button>
@@ -500,8 +492,7 @@ export function NutritionPlan({
                                 <form action={deletePlanMealItem} className="shrink-0">
                                   <input type="hidden" name="item_id" value={item.id} />
                                   <input type="hidden" name="client_id" value={clientId} />
-        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+                                  <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
                                   <button
                                     type="submit"
                                     aria-label={t("remove")}
@@ -526,8 +517,7 @@ export function NutritionPlan({
                     <form action={deletePlanMeal} className="mt-1 flex justify-end">
                       <input type="hidden" name="meal_id" value={meal.id} />
                       <input type="hidden" name="client_id" value={clientId} />
-        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+                      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
                       <button
                         type="submit"
                         className="px-1 text-[11px] text-[var(--ink3)] hover:text-[var(--a3)]"
@@ -543,13 +533,12 @@ export function NutritionPlan({
 
           <form action={addPlanMeal} className="mt-2 flex items-center gap-2">
             <input type="hidden" name="client_id" value={clientId} />
-        <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-      <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+            <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
             <input type="time" name="at_time" defaultValue="07:30" aria-label={t("mealTime")} className={`tnum w-[88px] shrink-0 ${cell}`} />
             <input name="name" placeholder={t("mealName")} aria-label={t("mealName")} className={`w-full min-w-0 flex-1 ${cell}`} />
             <button
               type="submit"
-              className="shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-3 py-1.5 text-[12px] font-semibold text-[var(--ink2)]"
+              className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
             >
               {t("addMeal")}
             </button>

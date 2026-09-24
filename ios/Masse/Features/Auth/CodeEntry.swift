@@ -20,7 +20,7 @@ struct CodeEntry: View {
 
             Text(L.t("auth.codeLabel")).kicker()
 
-            TextField("••••••", text: $code)
+            TextField("••••••••", text: $code)
                 .keyboardType(.numberPad)
                 .textContentType(.oneTimeCode)
                 .multilineTextAlignment(.center)

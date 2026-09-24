@@ -1627,13 +1627,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Le code à 6 chiffres de l’e-mail. Il marche même si le lien s’ouvre ailleurs — dans un autre navigateur ou sur un autre appareil."
+            "value": "Le code reçu dans l’e-mail. Il marche même si le lien s’ouvre ailleurs — mais c’est l’un ou l’autre : une fois le code utilisé, le lien ne sert plus."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The 6-digit code in the email. It works even when the link opens somewhere else — another browser or another device."
+            "value": "The number code in the email. It works even when the link opens somewhere else — but it is one or the other: once the code is used, the link no longer works."
           }
         }
       }
@@ -1685,6 +1685,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wrong or expired code. Check it, or ask for a new link."
+          }
+        }
+      }
+    },
+    "auth.codeDone": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecté. Ouverture de l’app…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in. Opening the app…"
           }
         }
       }

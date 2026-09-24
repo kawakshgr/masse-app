@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { OtpCodeEntry } from "@/components/OtpCodeEntry";
 import {
@@ -69,7 +68,6 @@ export default function OnboardingPage() {
   const [codeBad, setCodeBad] = useState(false);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
-  const router = useRouter();
 
   const set = (patch: Partial<Answers>) => setA((prev) => ({ ...prev, ...patch }));
 
@@ -343,7 +341,12 @@ export default function OnboardingPage() {
                     code works even when the email was opened on another device. */}
                 <OtpCodeEntry
                   email={email}
-                  onVerified={() => router.replace("/invitation/finaliser")}
+                  onVerified={() => {
+                    // A full load on purpose: the server must render with the
+                    // session the code just wrote.
+                    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+                    window.location.href = "/invitation/finaliser";
+                  }}
                 />
               </>
             )}

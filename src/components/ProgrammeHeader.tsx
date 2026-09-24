@@ -17,7 +17,7 @@ export function ProgrammeHeader({
   const [confirming, setConfirming] = useState(false);
 
   return (
-    <div className="min-w-0 flex-1">
+    <div className="min-w-[260px] flex-1">
       {renaming ? (
         <form action={renameProgramme} className="flex items-center gap-2">
           <input type="hidden" name="programme_id" value={programmeId} />
@@ -49,14 +49,14 @@ export function ProgrammeHeader({
           <button
             type="button"
             onClick={() => setRenaming(true)}
-            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink2)]"
+            className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
           >
             {t("rename")}
           </button>
           <button
             type="button"
             onClick={() => setConfirming((v) => !v)}
-            className="shrink-0 rounded-r1 border border-[var(--edge)] px-2 py-0.5 text-[11px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
+            className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)] hover:text-[var(--a3)]"
           >
             {t("remove")}
           </button>

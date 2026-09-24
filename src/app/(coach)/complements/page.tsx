@@ -29,7 +29,7 @@ export default async function SupplementsPage() {
     <div className="@container min-w-0 flex-1 overflow-y-auto p-5">
       <header className="mb-4">
         <LibrarySwitch active="supplements" />
-        <h1 className="mt-3 font-display text-[26px] font-extrabold leading-[1.05] tracking-[-.03em]">
+        <h1 className="mt-3 font-display text-[23px] font-extrabold leading-[1.05] tracking-[-.03em]">
           {t("title")}
         </h1>
         <p className="mt-1 max-w-[62ch] text-[13px] leading-[1.5] text-[var(--ink2)]">

@@ -24,10 +24,11 @@
     "noRecordBody": "Cette adresse est bien connectée, mais aucun coach ne t’a encore ajouté. Si tu viens d’arriver, entre le code d’invitation qu’on t’a envoyé.",
     "noRecordAction": "Entrer un code d’invitation",
     "codeLabel": "Ou entre le code reçu",
-    "codeHint": "Le code à 6 chiffres de l’e-mail. Il marche même si le lien s’ouvre ailleurs — dans un autre navigateur ou sur un autre appareil.",
+    "codeHint": "Le code reçu dans l’e-mail. Il marche même si le lien s’ouvre ailleurs — mais c’est l’un ou l’autre : une fois le code utilisé, le lien ne sert plus.",
     "codeVerify": "Valider le code",
     "codeChecking": "Vérification…",
-    "codeBad": "Code incorrect ou expiré. Vérifie-le, ou demande un nouveau lien."
+    "codeBad": "Code incorrect ou expiré. Vérifie-le, ou demande un nouveau lien.",
+    "codeDone": "Connecté. Ouverture de l’app…"
   },
   "shell": {
     "clients": "Clients",
@@ -112,7 +113,7 @@
     "late": "Relancer"
   },
   "toolbar": {
-    "search": "Rechercher ou lancer une commande",
+    "search": "Rechercher…  ⌘K",
     "newProgramme": "+ Nouveau programme",
     "addClient": "+ Ajouter un client",
     "addClientHint": "« Ajouter un client » envoie un code d’invitation et attend son onboarding"
@@ -211,7 +212,7 @@
     "joinedOn": "client depuis le {date}",
     "billing": "Facturation",
     "note": "Notes",
-    "fileNote": "Rien ici n’est calculé — c’est le carnet que tu gardes à côté de l’app, dans l’app. Seuls toi et {first} pouvez le lire.",
+    "fileNote": "Rien ici n’est calculé — c’est le carnet que tu gardes à côté de l’app, dans l’app. {first} voit ses propres informations et peut les corriger ; ta note, elle, n’est visible que par toi.",
     "none": "—",
     "edit": "Modifier",
     "save": "Enregistrer",
@@ -367,7 +368,8 @@
       "read_client_checkins": "bilans lus",
       "suspend_coach": "coach suspendu",
       "restore_coach": "coach réactivé"
-    }
+    },
+    "coachLede": "Tes règles de coaching et ton entreprise, pour tous tes clients à la fois."
   },
   "checkin": {
     "title": "Bilan de la semaine",
@@ -779,7 +781,7 @@
     "r12w": "12 semaines",
     "r6m": "6 mois",
     "r1y": "1 an",
-    "clientSince": "Client depuis {date} · {weeks} semaines",
+    "clientSince": "Client depuis le {date} · {weeks, plural, =1 {1 semaine} other {# semaines}}",
     "withYou": "Avec toi",
     "withYouSub": "depuis {date}",
     "logged": "Faites",
@@ -815,7 +817,7 @@
     "save": "Appliquer",
     "noPhase": "Aucune donnée de cycle — rien à ajuster pour l’instant.",
     "promise": "Tu vois la phase et les leviers que tu as réglés. Les dates de règles ne te sont jamais montrées : la base les refuse, ce n’est pas l’interface qui les cache.",
-    "defaultNote": "Non réglé — les valeurs du handoff s’appliquent."
+    "defaultNote": "Non réglé — les valeurs par défaut s’appliquent."
   },
   "nut": {
     "fed": "L’alimentation de {first}",
@@ -1251,5 +1253,47 @@
     "o6": "Dimanche",
     "save": "Enregistrer",
     "saved": "Enregistré"
+  },
+  "muscles": {
+    "Abdominals": "Abdominaux",
+    "Abductors": "Abducteurs",
+    "Adductors": "Adducteurs",
+    "Back": "Dos",
+    "Biceps": "Biceps",
+    "Calves": "Mollets",
+    "Cardio": "Cardio",
+    "Chest": "Pectoraux",
+    "Conditioning": "Conditionnement",
+    "Core": "Gainage",
+    "Forearms": "Avant-bras",
+    "Full Body": "Corps entier",
+    "Glutes": "Fessiers",
+    "Hamstrings": "Ischio-jambiers",
+    "Lats": "Grand dorsal",
+    "Lower Back": "Bas du dos",
+    "Neck": "Cou",
+    "Other": "Autre",
+    "Posterior Chain": "Chaîne postérieure",
+    "Quadriceps": "Quadriceps",
+    "Rear Delts": "Deltoïdes postérieurs",
+    "Shoulders": "Épaules",
+    "Traps": "Trapèzes",
+    "Triceps": "Triceps",
+    "Upper Back": "Haut du dos"
+  },
+  "gear": {
+    "Barbell": "Barre",
+    "Bodyweight": "Poids du corps",
+    "Cable": "Poulie",
+    "Dumbbell": "Haltères",
+    "Kettlebell": "Kettlebell",
+    "Machine": "Machine",
+    "Other": "Autre",
+    "Plate": "Disque",
+    "Resistance Band": "Élastique",
+    "Rope": "Corde",
+    "Sled": "Traîneau",
+    "Suspension": "Sangles de suspension",
+    "Trap Bar": "Trap bar"
   }
 }

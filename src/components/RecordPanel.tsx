@@ -121,7 +121,14 @@ export function RecordPanel({
 
   const firstName = client.first_name ?? client.name.split(/\s+/)[0] ?? "";
   const dateFmt = (iso: string | null) =>
-    iso ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC" }) : null;
+    iso
+      ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", {
+          timeZone: "UTC",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
+      : null;
 
   const age = (() => {
     const year = client.birth_date
@@ -363,7 +370,7 @@ export function RecordPanel({
             [
               t("joined"),
               t("joinedOn", {
-                date: new Date(client.created_at).toLocaleDateString("fr-FR"),
+                date: dateFmt(client.created_at.slice(0, 10)) ?? "",
               }),
             ],
             [t("billing"), billingLine],

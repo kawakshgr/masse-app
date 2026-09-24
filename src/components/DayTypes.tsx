@@ -62,7 +62,7 @@ export function DayTypes({
         <button
           type="button"
           onClick={() => setAdding((v) => !v)}
-          className="text-[12px] font-semibold text-[var(--accent-soft)]"
+          className="text-[12px] font-semibold text-[var(--accent)]"
         >
           {t("add")}
         </button>

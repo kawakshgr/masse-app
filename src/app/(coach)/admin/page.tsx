@@ -62,11 +62,12 @@ export default async function AdminPage() {
   return (
     <div className="space-y-4 p-5">
       <header>
-        <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
+        <h2 className="font-display text-[23px] font-extrabold tracking-[-.03em]">
           {t("title")}
         </h2>
         <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">
-          {t("lede")}
+          {/* The platform line only means something to whoever runs it. */}
+          {t(admin ? "lede" : "coachLede")}
         </p>
       </header>
 
