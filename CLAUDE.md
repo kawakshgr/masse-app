@@ -23,7 +23,8 @@ The backend is the contract. Build it once, then the two clients in parallel.
 
 1. **Supabase project + schema + RLS** — EU region, from day one.
 2. **Web: coach auth, roster, programme editor.** The coach's job is the product.
-3. **Web: client screens** as a PWA — this is also the Android client.
+3. **Web: client screens** as a PWA — this is also the Android client. Same
+   tabs and screens as the iPhone app (`src/app/(client)`), minus Apple Health.
 4. **iOS: native client** — onboarding, Today, Train, Cycle. Reads the same tables.
 5. **iOS: Live Activity + rest timer** — the reason the native app exists at all.
 
@@ -55,6 +56,14 @@ check-in as read.
   Masse does not ask for it: reading it would pull in exactly what "dates only,
   never symptoms" exists to keep out.
 - **Messaging** — tab present, **inert**, badged `soon`.
+- **Settings** (both) — behind the gear on Today: her details, her payments,
+  appearance, language, privacy, release notes. Reminders are local
+  notifications on iOS only; the web says so instead of hiding the section.
+- **Her own billing, read only** — the client reads her arrangement, her
+  non-draft invoices and their archived PDFs. She never writes a money row.
+- **Her own details** — a client may update `first_name`, `name`, `phone`,
+  `birth_date`, `height_cm`, `occupation`, `emergency_contact` on her row and
+  nothing else; the trigger `clients_self_update_guard` enforces the list.
 
 ## Deliberately not in v1
 

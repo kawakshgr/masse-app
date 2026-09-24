@@ -74,7 +74,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "retry": "Retry",
-    "close": "Close"
+    "close": "Close",
+    "back": "Back"
   },
   "welcome": {
     "title": "Welcome",

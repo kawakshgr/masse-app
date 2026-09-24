@@ -49,7 +49,7 @@ export function MyWeek({
   }
 
   return (
-    <section className="glass rounded-r3 p-4">
+    <section className="glass rounded-r4 p-[18px]">
       <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
         {t("title")}
       </h2>

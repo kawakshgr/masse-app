@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { deleteMeal, logMeal } from "@/app/aujourdhui/actions";
+import { deleteMeal, logMeal } from "@/app/(client)/actions";
 import type { FoodRow, MealRow } from "@/lib/supabase/types";
 
 const cell =
@@ -32,7 +32,7 @@ export function MealsPanel({
   );
 
   return (
-    <section className="glass rounded-r3 p-4">
+    <section className="glass rounded-r4 p-[18px]">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
           {t("title")}

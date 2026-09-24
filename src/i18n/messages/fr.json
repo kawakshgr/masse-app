@@ -74,7 +74,8 @@
     "cancel": "Annuler",
     "save": "Enregistrer",
     "retry": "Réessayer",
-    "close": "Fermer"
+    "close": "Fermer",
+    "back": "Retour"
   },
   "welcome": {
     "title": "Bienvenue",

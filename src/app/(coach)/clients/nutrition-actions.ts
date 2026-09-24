@@ -300,6 +300,7 @@ export async function swapWeekDays(formData: FormData) {
 
   revalidatePath(`/clients/${clientId}`);
   revalidatePath("/aujourdhui");
+  revalidatePath("/nutrition");
 }
 
 function unitOf(

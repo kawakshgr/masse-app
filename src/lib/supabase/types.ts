@@ -610,7 +610,14 @@ export type Database = {
           carbs_g_delta: number;
           /** False when the handoff defaults are in play. */
           configured: boolean;
+          day_of_cycle: number;
+          cycle_length_days: number;
         }[];
+      };
+      /** Where each phase starts and ends, for a cycle of this length. */
+      cycle_phase_spans: {
+        Args: { p_cycle_length: number };
+        Returns: { phase: CyclePhase; first_day: number; last_day: number }[];
       };
       /** Spends one number from the coach's sequence, under a row lock. */
       assign_invoice_number: {

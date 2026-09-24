@@ -22,7 +22,16 @@ export default async function CoachLayout({
     .select("name, first_name")
     .eq("id", user.id)
     .maybeSingle();
-  if (!coach) redirect("/bienvenue");
+  if (!coach) {
+    // A client who lands here — the installed app opens at "/" — belongs on
+    // her own screens, not on a page telling her she cannot be a coach.
+    const { data: client } = await supabase
+      .from("clients")
+      .select("id")
+      .eq("id", user.id)
+      .maybeSingle();
+    redirect(client ? "/aujourdhui" : "/bienvenue");
+  }
 
   const t = await getTranslations("shell");
   const { entries, clientsNeedingYou, checkinsToReview } =
