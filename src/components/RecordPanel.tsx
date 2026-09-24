@@ -101,10 +101,13 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
  */
 export function RecordPanel({
   client,
+  fileNote,
   sleepTargetLabel,
   billingLine,
 }: {
   client: ClientRow;
+  /** Read from client_file_notes, which the client herself cannot open. */
+  fileNote: string | null;
   sleepTargetLabel: string | null;
   /** What was agreed, said once here and owned by the billing tab. */
   billingLine: string | null;
@@ -249,7 +252,7 @@ export function RecordPanel({
             <textarea
               name="file_note"
               rows={3}
-              defaultValue={client.file_note ?? ""}
+              defaultValue={fileNote ?? ""}
               className="mt-1 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] p-2.5 text-[13px] text-[var(--ink)]"
             />
           </label>
@@ -364,7 +367,7 @@ export function RecordPanel({
               }),
             ],
             [t("billing"), billingLine],
-            [t("note"), client.file_note],
+            [t("note"), fileNote],
           ]}
         />
       </div>

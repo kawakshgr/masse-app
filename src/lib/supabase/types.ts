@@ -94,7 +94,13 @@ export type ClientRow = {
   training_age: string | null;
   diet: string | null;
   emergency_contact: string | null;
-  file_note: string | null;
+};
+
+/** The coach's note about a client. No client policy: she cannot read it. */
+export type ClientFileNoteRow = {
+  client_id: string;
+  note: string;
+  updated_at: string;
 };
 
 export type InviteCodeRow = {
@@ -569,6 +575,7 @@ export type Database = {
       check_ins: Table<CheckInRow, "client_id" | "week_start_date">;
       cycle_logs: Table<CycleLogRow, "client_id" | "period_start_date">;
       daily_metrics: Table<DailyMetricRow, "client_id" | "day">;
+      client_file_notes: Table<ClientFileNoteRow, "client_id" | "note">;
       exercises: Table<ExerciseRow, "name">;
       foods: Table<FoodRow, "coach_id" | "name", "kcal_100g">;
       meals: Table<MealRow, "client_id" | "day" | "name">;

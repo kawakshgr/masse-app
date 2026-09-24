@@ -129,9 +129,21 @@ export async function updateClientRecord(formData: FormData) {
       training_age: text("training_age"),
       diet: text("diet"),
       emergency_contact: text("emergency_contact"),
-      file_note: text("file_note"),
     })
     .eq("id", clientId);
+
+  // The note lives apart from her row, where only the coach can read it.
+  const note = text("file_note");
+  if (note) {
+    await supabase
+      .from("client_file_notes")
+      .upsert(
+        { client_id: clientId, note, updated_at: new Date().toISOString() },
+        { onConflict: "client_id" },
+      );
+  } else {
+    await supabase.from("client_file_notes").delete().eq("client_id", clientId);
+  }
 
   revalidatePath(`/clients/${clientId}`);
   revalidatePath("/clients");

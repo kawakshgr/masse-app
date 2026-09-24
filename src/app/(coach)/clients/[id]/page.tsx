@@ -60,6 +60,15 @@ export default async function ClientDetailPage({
 
   const { client, sleep } = detail;
 
+  const fileNote =
+    (
+      await supabase
+        .from("client_file_notes")
+        .select("note")
+        .eq("client_id", id)
+        .maybeSingle()
+    ).data?.note ?? null;
+
   let tab: ClientTab = isClientTab(onglet) ? onglet : "overview";
   // Cycle is absent, not disabled: a hand-typed URL must not reach it either.
   if (tab === "cycle" && !client.cycle_tracking) tab = "overview";
@@ -152,6 +161,7 @@ export default async function ClientDetailPage({
       {tab === "file" && (
         <RecordPanel
           client={client}
+          fileNote={fileNote}
           sleepTargetLabel={targetLabel}
           billingLine={billingLine}
         />
