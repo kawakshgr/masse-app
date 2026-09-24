@@ -22,7 +22,12 @@
     "openOnThisDevice": "Ouvre le lien sur cet appareil — c’est lui qui garde la clé.",
     "noRecordTitle": "Aucune fiche à cette adresse",
     "noRecordBody": "Cette adresse est bien connectée, mais aucun coach ne t’a encore ajouté. Si tu viens d’arriver, entre le code d’invitation qu’on t’a envoyé.",
-    "noRecordAction": "Entrer un code d’invitation"
+    "noRecordAction": "Entrer un code d’invitation",
+    "codeLabel": "Ou entre le code reçu",
+    "codeHint": "Le code à 6 chiffres de l’e-mail. Il marche même si le lien s’ouvre ailleurs — dans un autre navigateur ou sur un autre appareil.",
+    "codeVerify": "Valider le code",
+    "codeChecking": "Vérification…",
+    "codeBad": "Code incorrect ou expiré. Vérifie-le, ou demande un nouveau lien."
   },
   "shell": {
     "clients": "Clients",
@@ -1177,5 +1182,16 @@
     "invoicePdf": "Voir la facture",
     "invoiceNumber": "Facture {number}",
     "pdfFailed": "La facture n’a pas pu s’ouvrir."
+  },
+  "install": {
+    "title": "Installe Masse sur ton téléphone",
+    "lede": "Une icône sur ton écran d’accueil, en plein écran, sans barre de navigateur.",
+    "action": "Installer",
+    "later": "Plus tard",
+    "iosShare": "Touche le bouton Partager",
+    "iosAdd": "Choisis « Sur l’écran d’accueil »",
+    "iosConfirm": "Touche « Ajouter »",
+    "iosSignIn": "Ouvre Masse depuis l’icône et reconnecte-toi avec le code reçu par e-mail : l’app installée ne partage pas la connexion de Safari.",
+    "manual": "Ouvre le menu du navigateur (⋮), puis « Installer l’application » ou « Ajouter à l’écran d’accueil »."
   }
 }

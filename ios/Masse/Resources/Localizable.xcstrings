@@ -1604,6 +1604,91 @@
         }
       }
     },
+    "auth.codeLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ou entre le code reçu"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Or enter the code you received"
+          }
+        }
+      }
+    },
+    "auth.codeHint": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le code à 6 chiffres de l’e-mail. Il marche même si le lien s’ouvre ailleurs — dans un autre navigateur ou sur un autre appareil."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The 6-digit code in the email. It works even when the link opens somewhere else — another browser or another device."
+          }
+        }
+      }
+    },
+    "auth.codeVerify": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valider le code"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm code"
+          }
+        }
+      }
+    },
+    "auth.codeChecking": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérification…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking…"
+          }
+        }
+      }
+    },
+    "auth.codeBad": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code incorrect ou expiré. Vérifie-le, ou demande un nouveau lien."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wrong or expired code. Check it, or ask for a new link."
+          }
+        }
+      }
+    },
     "log.title": {
       "extractionState": "manual",
       "localizations": {

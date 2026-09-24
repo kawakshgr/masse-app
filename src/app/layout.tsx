@@ -68,6 +68,13 @@ export default async function RootLayout({
             __html: `(function(){try{var c=localStorage.getItem("masse:theme");var r=(c==="light"||c==="dark")?c:(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=r;}catch(e){}})();`,
           }}
         />
+        {/* Chrome offers installation once, early — often before React has
+            mounted anything to listen. Kept here until the prompt asks. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__masseInstall=e;window.dispatchEvent(new Event("masse:installable"));});`,
+          }}
+        />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
         <ServiceWorker />
       </body>

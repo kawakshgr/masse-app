@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { OtpCodeEntry } from "@/components/OtpCodeEntry";
 import {
   EMPTY,
   EQUIPMENT,
@@ -67,6 +69,7 @@ export default function OnboardingPage() {
   const [codeBad, setCodeBad] = useState(false);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const router = useRouter();
 
   const set = (patch: Partial<Answers>) => setA((prev) => ({ ...prev, ...patch }));
 
@@ -332,9 +335,17 @@ export default function OnboardingPage() {
               {t("finish")}
             </button>
             {sent && (
-              <p role="status" className="mt-3 text-[14px] text-[var(--accent)]">
-                {t("sent")}
-              </p>
+              <>
+                <p role="status" className="mt-3 text-[14px] text-[var(--accent)]">
+                  {t("sent")}
+                </p>
+                {/* The answers wait in this browser, so finishing here with the
+                    code works even when the email was opened on another device. */}
+                <OtpCodeEntry
+                  email={email}
+                  onVerified={() => router.replace("/invitation/finaliser")}
+                />
+              </>
             )}
           </>
         )}

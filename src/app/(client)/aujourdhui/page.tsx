@@ -4,6 +4,7 @@ import { addDays, clientSession, targetLine, todaySession } from "@/lib/clientDa
 import { Card, CardTitle, CtaLink, ScreenHeader } from "@/components/client/ui";
 import { EntryCard } from "@/components/client/EntryCard";
 import { CheckInCard } from "@/components/client/CheckInCard";
+import { InstallPrompt } from "@/components/client/InstallPrompt";
 
 /**
  * Today — TodayView.swift. The week the coach pushed and the session standing
@@ -63,6 +64,9 @@ export default async function TodayPage() {
           </Link>
         }
       />
+
+      {/* Only in a browser, never once installed. */}
+      <InstallPrompt />
 
       {session && session.session_exercises.length > 0 ? (
         <div className="space-y-3.5">

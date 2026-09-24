@@ -22,7 +22,12 @@
     "openOnThisDevice": "Open the link on this device — it is the one holding the key.",
     "noRecordTitle": "No record at this address",
     "noRecordBody": "This address is signed in, but no coach has added you yet. If you have just arrived, enter the invite code you were sent.",
-    "noRecordAction": "Enter an invite code"
+    "noRecordAction": "Enter an invite code",
+    "codeLabel": "Or enter the code you received",
+    "codeHint": "The 6-digit code in the email. It works even when the link opens somewhere else — another browser or another device.",
+    "codeVerify": "Confirm code",
+    "codeChecking": "Checking…",
+    "codeBad": "Wrong or expired code. Check it, or ask for a new link."
   },
   "shell": {
     "clients": "Clients",
@@ -1177,5 +1182,16 @@
     "invoicePdf": "View invoice",
     "invoiceNumber": "Invoice {number}",
     "pdfFailed": "The invoice could not be opened."
+  },
+  "install": {
+    "title": "Install Masse on your phone",
+    "lede": "An icon on your home screen, full screen, no browser bar.",
+    "action": "Install",
+    "later": "Later",
+    "iosShare": "Tap the Share button",
+    "iosAdd": "Choose “Add to Home Screen”",
+    "iosConfirm": "Tap “Add”",
+    "iosSignIn": "Open Masse from the icon and sign in again with the code from the email: the installed app does not share Safari’s sign-in.",
+    "manual": "Open the browser menu (⋮), then “Install app” or “Add to Home screen”."
   }
 }
