@@ -68,7 +68,7 @@ struct SettingsView: View {
     // MARK: - Sections
 
     private var account: some View {
-        section(L.t("settings.account")) {
+        section(L.t("settings.account"), symbol: "person.crop.circle") {
             if let email = Backend.auth.currentUser?.email {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(L.t("settings.email"))
@@ -93,13 +93,13 @@ struct SettingsView: View {
     }
 
     private var billing: some View {
-        section(L.t("settings.billing")) {
+        section(L.t("settings.billing"), symbol: "creditcard") {
             navRow(L.t("settings.billingOpen")) { BillingView() }
         }
     }
 
     private var notifications: some View {
-        section(L.t("settings.notifications")) {
+        section(L.t("settings.notifications"), symbol: "bell") {
             toggleRow(
                 L.t("settings.daily"),
                 hint: L.t("settings.dailyHint"),
@@ -136,7 +136,7 @@ struct SettingsView: View {
     }
 
     private var health: some View {
-        section(L.t("settings.health")) {
+        section(L.t("settings.health"), symbol: "heart") {
             HStack(spacing: 10) {
                 Circle()
                     .fill(healthConnected ? Tk.a1 : Tk.ink3)
@@ -162,7 +162,7 @@ struct SettingsView: View {
     }
 
     private var appearanceCard: some View {
-        section(L.t("settings.appearance")) {
+        section(L.t("settings.appearance"), symbol: "circle.lefthalf.filled") {
             HStack(spacing: 6) {
                 ForEach(Appearance.allCases) { option in
                     Button {
@@ -184,7 +184,7 @@ struct SettingsView: View {
     }
 
     private var language: some View {
-        section(L.t("settings.language")) {
+        section(L.t("settings.language"), symbol: "globe") {
             HStack {
                 Text(currentLanguage)
                     .font(Ty.rowTitle)
@@ -202,7 +202,7 @@ struct SettingsView: View {
     }
 
     private var privacy: some View {
-        section(L.t("settings.privacy")) {
+        section(L.t("settings.privacy"), symbol: "lock") {
             Text(L.t("settings.privacyCoach"))
                 .font(Ty.copySmall)
                 .foregroundStyle(Tk.ink2)
@@ -234,7 +234,7 @@ struct SettingsView: View {
     }
 
     private var about: some View {
-        section(L.t("settings.about")) {
+        section(L.t("settings.about"), symbol: "info.circle") {
             navRow(L.t("settings.releases")) { ReleaseNotesView() }
 
             Text(L.t("settings.build", AppVersion.version, AppVersion.build))
@@ -248,14 +248,10 @@ struct SettingsView: View {
 
     private func section<Content: View>(
         _ title: String,
+        symbol: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        GlassCard {
-            VStack(alignment: .leading, spacing: 14) {
-                Text(title).kicker()
-                content()
-            }
-        }
+        FoldCard(title: title, symbol: symbol, content: content())
     }
 
     /// A row that opens a screen of its own, chevron and all.
@@ -431,6 +427,39 @@ enum Appearance: String, CaseIterable, Identifiable {
         case .auto: nil
         case .light: .light
         case .dark: .dark
+        }
+    }
+}
+
+/// One setting, folded: a large symbol and its name in capitals, opening on a
+/// tap. The web's settings fold the same way.
+private struct FoldCard<Content: View>: View {
+    let title: String
+    let symbol: String
+    let content: Content
+    @State private var open = false
+
+    var body: some View {
+        GlassCard {
+            VStack(alignment: .leading, spacing: 14) {
+                Button {
+                    withAnimation(.snappy(duration: 0.25)) { open.toggle() }
+                } label: {
+                    HStack(spacing: 8) {
+                        SectionHeader(title: title, symbol: symbol)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(Tk.ink3)
+                            .rotationEffect(.degrees(open ? 90 : 0))
+                    }
+                    .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+
+                if open {
+                    content
+                }
+            }
         }
     }
 }

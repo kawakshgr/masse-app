@@ -56,12 +56,13 @@ struct NutritionView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(L.t("clientNav.fuel")).kicker()
+            Text(L.t("clientNav.fuel")).screenKicker()
 
             // The day type is what today IS, so it is the title. The kcal
             // underneath belong to it, not to the weekday.
             Text(plan?.dayTypeName ?? L.t("clientNav.fuel"))
                 .font(Ty.screenTitle)
+                .textCase(.uppercase)
                 .tracking(Ty.displayTracking(30))
                 .foregroundStyle(Tk.ink)
 
@@ -77,7 +78,7 @@ struct NutritionView: View {
     private func targetsCard(_ targets: NutritionPlan.Targets, mode: String) -> some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 12) {
-                Text(L.t("fuel.daily")).kicker()
+                SectionHeader(title: L.t("fuel.daily"), symbol: "chart.pie")
 
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text("\(adjust(targets.kcal))")
@@ -132,7 +133,7 @@ struct NutritionView: View {
     private func mealsCard(_ meals: [NutritionPlan.PlanMeal]) -> some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 14) {
-                Text(L.t("fuel.meals")).kicker()
+                SectionHeader(title: L.t("fuel.meals"), symbol: "fork.knife")
 
                 ForEach(meals) { meal in
                     VStack(alignment: .leading, spacing: 6) {
@@ -171,7 +172,7 @@ struct NutritionView: View {
     private func supplementsCard(_ supplements: [NutritionPlan.Supplement]) -> some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(L.t("fuel.supplements")).kicker()
+                SectionHeader(title: L.t("fuel.supplements"), symbol: "pills")
 
                 ForEach(supplements) { supplement in
                     HStack(alignment: .firstTextBaseline, spacing: 10) {

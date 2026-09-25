@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.7",
+    "date": "2026-09-25",
+    "fr": [
+      "Nouveau style, plus lisible : fond sombre neutre, titres en capitales, une grande icône en tête de chaque carte.",
+      "Les réglages se déplient section par section.",
+      "Sur le web, la barre du bas devient une capsule flottante : l’onglet ouvert affiche son nom."
+    ],
+    "en": [
+      "A new, clearer look: a neutral dark background, titles in capitals, a large icon at the head of each card.",
+      "Settings fold open one section at a time.",
+      "On the web, the bottom bar becomes a floating capsule: the open tab shows its name."
+    ]
+  },
+  {
     "version": "0.6",
     "date": "2026-09-24",
     "fr": [

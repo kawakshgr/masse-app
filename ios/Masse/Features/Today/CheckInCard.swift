@@ -16,7 +16,7 @@ struct CheckInCard: View {
     var body: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(L.t(state?.late == true ? "bilan.lastWeekTitle" : "bilan.title")).kicker()
+                SectionHeader(title: L.t(state?.late == true ? "bilan.lastWeekTitle" : "bilan.title"), symbol: "calendar.badge.checkmark")
 
                 if !loaded {
                     ProgressView().tint(Tk.a1)
@@ -131,6 +131,7 @@ private struct CheckInSheet: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(L.t("bilan.title"))
                             .font(Ty.screenTitle)
+                            .textCase(.uppercase)
                             .tracking(Ty.displayTracking(30))
                             .foregroundStyle(Tk.ink)
                         Text(L.t("bilan.lede"))

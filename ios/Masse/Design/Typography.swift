@@ -120,6 +120,15 @@ extension View {
             .foregroundStyle(Tk.ink2)
     }
 
+    /// The line over a screen's title: the kicker, in the accent and bold.
+    func screenKicker() -> some View {
+        self
+            .font(Ty.body(11, weight: 700, relativeTo: .caption))
+            .tracking(Ty.kickerTracking)
+            .textCase(.uppercase)
+            .foregroundStyle(Tk.a2)
+    }
+
     /// Every figure that changes, so it does not jitter as it counts.
     func tabular() -> some View {
         self.monospacedDigit()

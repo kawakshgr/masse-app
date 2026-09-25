@@ -40,9 +40,10 @@ struct CycleView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(L.t("clientNav.cycle")).kicker()
+            Text(L.t("clientNav.cycle")).screenKicker()
             Text(L.t("entry.cycleTitle"))
                 .font(Ty.screenTitle)
+                .textCase(.uppercase)
                 .tracking(Ty.displayTracking(30))
                 .foregroundStyle(Tk.ink)
 
@@ -61,7 +62,7 @@ struct CycleView: View {
         GlassCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text(L.t("cycleChart.title")).kicker()
+                    SectionHeader(title: L.t("cycleChart.title"), symbol: "circle.lefthalf.filled")
                     Spacer()
                     if let day = state?.dayOfCycle, let length = state?.cycleLengthDays {
                         Text(L.t("cycleChart.day", String(day), String(length)))
@@ -125,7 +126,7 @@ struct CycleView: View {
     private var noteCard: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(L.t("entry.symptomNote")).kicker()
+                SectionHeader(title: L.t("entry.symptomNote"), symbol: "note.text")
 
                 TextEditor(text: $note)
                     .font(Ty.copy)
@@ -149,7 +150,7 @@ struct CycleView: View {
     private var historyCard: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(L.t("entry.history")).kicker()
+                SectionHeader(title: L.t("entry.history"), symbol: "clock.arrow.circlepath")
 
                 ForEach(entries) { entry in
                     HStack {

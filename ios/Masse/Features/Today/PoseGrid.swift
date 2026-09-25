@@ -20,7 +20,7 @@ struct PoseGrid: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(L.t("photos.title")).kicker()
+            SectionHeader(title: L.t("photos.title"), symbol: "camera")
 
             HStack(spacing: 8) {
                 ForEach(PhotoFeed.poses, id: \.self) { pose in

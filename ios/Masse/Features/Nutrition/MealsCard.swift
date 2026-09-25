@@ -20,7 +20,7 @@ struct MealsCard: View {
         GlassCard {
             VStack(alignment: .leading, spacing: 14) {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(L.t("meals.title")).kicker()
+                    SectionHeader(title: L.t("meals.title"), symbol: "fork.knife")
                     if !meals.isEmpty {
                         Text(totalLine)
                             .font(Ty.copySmall)

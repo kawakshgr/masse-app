@@ -25,6 +25,7 @@ struct SignInView: View {
                             Text(L.t("auth.title")).kicker()
                             Text(L.t("auth.signInTitle"))
                                 .font(Ty.screenTitle)
+                                .textCase(.uppercase)
                                 .tracking(Ty.displayTracking(30))
                                 .foregroundStyle(Tk.ink)
                                 .fixedSize(horizontal: false, vertical: true)

@@ -28,7 +28,7 @@ struct BillingView: View {
                     } else {
                         GlassCard {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text(L.t("settings.plan")).kicker()
+                                SectionHeader(title: L.t("settings.plan"), symbol: "creditcard")
                                 Text(BillingView.planLine(arrangement) ?? L.t("settings.noPlan"))
                                     .font(arrangement == nil ? Ty.copy : Ty.rowTitle)
                                     .foregroundStyle(arrangement == nil ? Tk.ink2 : Tk.ink)
@@ -38,7 +38,7 @@ struct BillingView: View {
 
                         GlassCard {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text(L.t("settings.payments")).kicker()
+                                SectionHeader(title: L.t("settings.payments"), symbol: "list.bullet.rectangle")
 
                                 if failed {
                                     Text(L.t("offline.lede"))

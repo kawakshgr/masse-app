@@ -197,3 +197,29 @@ struct StepHeader: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
+/// A card's heading: a large SF Symbol in a glass square and the name in
+/// capitals — the web's `Kicker icon=…`, so both clients open a card the
+/// same way.
+struct SectionHeader: View {
+    let title: String
+    let symbol: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: symbol)
+                .font(.system(size: 19, weight: .semibold))
+                .foregroundStyle(Tk.a2)
+                .frame(width: 40, height: 40)
+                .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.r1))
+            Text(title)
+                .font(Ty.body(13, weight: 700, relativeTo: .headline))
+                .tracking(13 * 0.12)
+                .textCase(.uppercase)
+                .foregroundStyle(Tk.ink)
+            Spacer(minLength: 0)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+    }
+}

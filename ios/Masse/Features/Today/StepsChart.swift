@@ -50,8 +50,8 @@ struct StepsChart: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .firstTextBaseline) {
-                Text(L.t("stepsChart.title")).kicker()
+            HStack(alignment: .center) {
+                SectionHeader(title: L.t("stepsChart.title"), symbol: "figure.walk")
                 Spacer()
                 if let target {
                     Text(L.t("stepsChart.target", target.formatted(.number.grouping(.automatic))))

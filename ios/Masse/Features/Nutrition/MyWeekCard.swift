@@ -14,7 +14,7 @@ struct MyWeekCard: View {
     var body: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 12) {
-                Text(L.t("myWeek.title")).kicker()
+                SectionHeader(title: L.t("myWeek.title"), symbol: "calendar")
 
                 Text(picked.map { L.t("myWeek.pickSecond", L.t("days.\($0)")) } ?? L.t("myWeek.lede"))
                     .font(Ty.copySmall)

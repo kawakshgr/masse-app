@@ -118,10 +118,11 @@ struct TrainView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(L.t("log.title")).kicker()
+            Text(L.t("log.title")).screenKicker()
 
             Text(day?.name ?? L.t("log.title"))
                 .font(Ty.screenTitle)
+                .textCase(.uppercase)
                 .tracking(Ty.displayTracking(30))
                 .foregroundStyle(Tk.ink)
 

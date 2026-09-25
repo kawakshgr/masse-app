@@ -19,7 +19,7 @@ struct EntryCard: View {
     var body: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 14) {
-                Text(L.t("entry.title")).kicker()
+                SectionHeader(title: L.t("entry.title"), symbol: "moon.zzz")
 
                 HStack(spacing: 12) {
                     Text(L.t("entry.sleep"))

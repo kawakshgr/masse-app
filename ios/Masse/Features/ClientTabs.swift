@@ -58,6 +58,7 @@ struct SoonView: View {
                 HStack(spacing: 8) {
                     Text(title)
                         .font(Ty.screenTitle)
+                        .textCase(.uppercase)
                         .tracking(Ty.displayTracking(30))
                         .foregroundStyle(Tk.ink3)
                     Text(L.t("shell.soon").uppercased())

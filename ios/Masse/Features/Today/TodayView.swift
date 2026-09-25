@@ -55,7 +55,7 @@ struct TodayView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center) {
-                Text(L.t("today.title")).kicker()
+                Text(L.t("today.title")).screenKicker()
                 Spacer()
                 // Settings live on the first screen, top right, where a gear
                 // is looked for — not in a tab of their own.
@@ -70,6 +70,7 @@ struct TodayView: View {
             }
             Text(greeting)
                 .font(Ty.screenTitle)
+                .textCase(.uppercase)
                 .tracking(Ty.displayTracking(30))
                 .foregroundStyle(Tk.ink)
             if let body = week?.week {
