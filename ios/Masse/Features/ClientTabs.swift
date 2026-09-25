@@ -11,35 +11,61 @@ struct ClientTabs: View {
     /// feature, and the prototype filters it the same way.
     let cycleTracking: Bool
 
-    @State private var tab: Tab = .today
+    @State private var page: Page = .today
+    /// Owned here, not by Train, so the rest can ride above the tab bar and
+    /// follow her to any tab.
+    @State private var rest = RestTimer()
 
-    enum Tab: Hashable { case today, train, fuel, cycle, coach }
+    enum Page: Hashable { case today, train, fuel, cycle, coach }
 
     var body: some View {
-        TabView(selection: $tab) {
-            TodayView(firstName: firstName, onStart: { tab = .train })
-                .tabItem { Label(L.t("clientNav.today"), systemImage: "house") }
-                .tag(Tab.today)
-
-            TrainView()
-                .tabItem { Label(L.t("clientNav.train"), systemImage: "figure.strengthtraining.traditional") }
-                .tag(Tab.train)
-
-            NutritionView()
-                .tabItem { Label(L.t("clientNav.fuel"), systemImage: "circle.hexagongrid") }
-                .tag(Tab.fuel)
-
-            if cycleTracking {
-                CycleView()
-                    .tabItem { Label(L.t("clientNav.cycle"), systemImage: "hexagon") }
-                    .tag(Tab.cycle)
+        TabView(selection: $page) {
+            Tab(L.t("clientNav.today"), systemImage: "house", value: Page.today) {
+                TodayView(firstName: firstName, onStart: { page = .train })
             }
 
-            SoonView(title: L.t("clientNav.coach"), note: L.t("soonCopy.inbox"))
-                .tabItem { Label(L.t("clientNav.coach"), systemImage: "bubble.left") }
-                .tag(Tab.coach)
+            Tab(L.t("clientNav.train"), systemImage: "figure.strengthtraining.traditional", value: Page.train) {
+                TrainView(rest: rest)
+            }
+
+            Tab(L.t("clientNav.fuel"), systemImage: "fork.knife", value: Page.fuel) {
+                NutritionView()
+            }
+
+            if cycleTracking {
+                Tab(L.t("clientNav.cycle"), systemImage: "circle.lefthalf.filled", value: Page.cycle) {
+                    CycleView()
+                }
+            }
+
+            Tab(L.t("clientNav.coach"), systemImage: "bubble.left", value: Page.coach) {
+                SoonView(title: L.t("clientNav.coach"), note: L.t("soonCopy.inbox"))
+            }
         }
         .tint(Tk.a1)
+        .modifier(CurrentTabBar(rest: rest, openTrain: { page = .train }))
+    }
+}
+
+/// What the tab bar of the iOS she runs can do. From 26 it shrinks while she
+/// scrolls; from 26.1 the rest rides above it, on every tab. The branch is
+/// fixed for a given device, so the TabView's identity never changes.
+private struct CurrentTabBar: ViewModifier {
+    let rest: RestTimer
+    let openTrain: () -> Void
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.1, *) {
+            content
+                .tabBarMinimizeBehavior(.onScrollDown)
+                .tabViewBottomAccessory(isEnabled: rest.endsAt != nil) {
+                    RestAccessory(rest: rest, open: openTrain)
+                }
+        } else if #available(iOS 26.0, *) {
+            content.tabBarMinimizeBehavior(.onScrollDown)
+        } else {
+            content
+        }
     }
 }
 

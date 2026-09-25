@@ -7,7 +7,8 @@ import SwiftUI
 /// waits on the network.
 struct TrainView: View {
     @State private var log = TrainingLog()
-    @State private var rest = RestTimer()
+    /// Owned by the tab view, which also shows it above the tab bar.
+    let rest: RestTimer
     @State private var finished = false
     @State private var levers: CycleLevers?
     @State private var open: String?
@@ -97,7 +98,8 @@ struct TrainView: View {
         // The rest sits over the list, where a thumb already is, and never
         // pushes the next exercise out of reach.
         .overlay(alignment: .bottom) {
-            if rest.endsAt != nil {
+            // From iOS 26.1 the rest lives above the tab bar instead.
+            if rest.endsAt != nil && !RestPlacement.aboveTabBar {
                 RestBar(rest: rest)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 10)
@@ -464,3 +466,76 @@ private struct RestBar: View {
     }
 }
 
+
+/// The rest above the tab bar, on every tab. Expanded, it carries the clock
+/// and the three controls; when the bar shrinks on scroll, the clock alone
+/// and a way to end it. A tap on the clock brings her back to the session.
+@available(iOS 26.1, *)
+struct RestAccessory: View {
+    let rest: RestTimer
+    let open: () -> Void
+    @Environment(\.tabViewBottomAccessoryPlacement) private var placement
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            let left = max((rest.endsAt ?? context.date).timeIntervalSince(context.date), 0)
+            let done = left <= 0
+
+            HStack(spacing: 6) {
+                Button(action: open) {
+                    HStack(spacing: 8) {
+                        Image(systemName: done ? "checkmark.circle.fill" : "timer")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(done ? Tk.a1 : Tk.a2)
+                        Text(L.t(done ? "log.ready" : "log.rest").uppercased())
+                            .font(Ty.emphasis)
+                            .tracking(Ty.kickerTracking)
+                            .foregroundStyle(Tk.ink2)
+                        Text(Self.clock(left))
+                            .font(Ty.body(17, weight: 700, relativeTo: .headline))
+                            .foregroundStyle(Tk.ink)
+                            .tabular()
+                            .contentTransition(.numericText(countsDown: true))
+                    }
+                    .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+
+                Spacer(minLength: 0)
+
+                if placement != .inline && !done {
+                    control("gobackward.15", L.t("log.restLess")) { rest.adjust(by: -15) }
+                    control("goforward.15", L.t("log.restMore")) { rest.adjust(by: 15) }
+                }
+                control("xmark", L.t(done ? "common.close" : "log.skipRest")) { rest.skip() }
+            }
+            .padding(.horizontal, 14)
+            .sensoryFeedback(.success, trigger: done) { _, isDone in isDone }
+        }
+    }
+
+    private func control(_ symbol: String, _ label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(Tk.ink)
+                .frame(width: 36, height: 36)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+    }
+
+    static func clock(_ seconds: TimeInterval) -> String {
+        let whole = Int(seconds.rounded(.up))
+        return String(format: "%d:%02d", whole / 60, whole % 60)
+    }
+}
+
+/// Where the rest shows on this device: above the tab bar from iOS 26.1,
+/// over the session's list before that.
+enum RestPlacement {
+    static var aboveTabBar: Bool {
+        if #available(iOS 26.1, *) { return true }
+        return false
+    }
+}

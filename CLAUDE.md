@@ -31,6 +31,10 @@ The backend is the contract. Build it once, then the two clients in parallel.
    `SessionActivityAttributes`, shared with the `MasseWidgets` extension through
    `ios/Shared`. The extension has no string catalog — the app sends it words
    already localised. The web has the same rest bar, without the Lock Screen.
+   From iOS 26.1 the rest also rides above the tab bar on every tab
+   (`tabViewBottomAccessory`, `RestAccessory`); `RestTimer` is owned by
+   `ClientTabs` for that reason. The tab bar uses the `Tab` API and shrinks
+   on scroll from iOS 26. Deployment target: iOS 18.
 
 ## What each target owns
 
