@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { BarChart } from "@/components/BarChart";
@@ -18,9 +19,7 @@ export function StrengthPanel({
   if (names.length === 0 || !selected) {
     return (
       <section className="glass rounded-r3 p-4">
-        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("strength")}
-        </h3>
+        <SectionTitle icon="trophy">{t("strength")}</SectionTitle>
         <p className="mt-2 text-[12px] text-[var(--ink2)]">{t("noStrength")}</p>
       </section>
     );
@@ -34,27 +33,21 @@ export function StrengthPanel({
 
   return (
     <section className="glass rounded-r3 p-4">
-      <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-        {t("strength")}
-      </h3>
+      <SectionTitle icon="trophy">{t("strength")}</SectionTitle>
 
-      <div className="mt-2 flex flex-wrap gap-1">
+      {/* Movement names stay as written — in English. */}
+      <select
+        aria-label={t("strength")}
+        value={selected}
+        onChange={(e) => setSelected(e.target.value)}
+        className="mt-3 max-w-full h-9 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] pl-3.5 text-[11.5px] font-bold text-[var(--ink)]"
+      >
         {names.map((name) => (
-          <button
-            key={name}
-            type="button"
-            aria-pressed={name === selected}
-            onClick={() => setSelected(name)}
-            className={`h-7 rounded-rp px-2.5 text-[12px] font-semibold ${
-              name === selected
-                ? "sel text-[var(--ink)]"
-                : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
-            }`}
-          >
+          <option key={name} value={name}>
             {name}
-          </button>
+          </option>
         ))}
-      </div>
+      </select>
 
       <div className="mt-3 flex flex-wrap items-baseline gap-2">
         <span className="tnum font-display text-[24px] font-extrabold leading-none tracking-[-.03em]">

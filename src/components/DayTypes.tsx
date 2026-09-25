@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -58,7 +59,7 @@ export function DayTypes({
   return (
     <section className="glass flex flex-col gap-3 rounded-r3 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className={micro}>{t("title")}</h3>
+        <SectionTitle icon="checkIns">{t("title")}</SectionTitle>
         <button
           type="button"
           onClick={() => setAdding((v) => !v)}

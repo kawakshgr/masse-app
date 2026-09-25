@@ -38,6 +38,45 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
         <circle cx="12" cy="10" r="2.4" />
       </>
     ),
+    sleep: <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />,
+    chart: <path d="M4 20V10M10 20V4M16 20v-8M22 20H2" />,
+    trophy: (
+      <>
+        <path d="M8 4h8v5a4 4 0 0 1-8 0z" />
+        <path d="M8 6H5a2.5 2.5 0 0 0 3 4M16 6h3a2.5 2.5 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4" />
+      </>
+    ),
+    steps: (
+      <>
+        <path d="M7 3.5c1.7 0 2.7 1.8 2.7 4.3S8.8 12 7.5 12 5 10.6 5 8s.3-4.5 2-4.5zM5.5 14.5l4 .5-.4 3a2 2 0 0 1-4-.5z" />
+        <path d="M17 7.5c1.7 0 2 1.9 2 4.5s-1.2 4-2.5 4-2.2-1.8-2.2-4.3.9-4.2 2.7-4.2zM14.9 18.5l4-.5.1 1.5a2 2 0 0 1-4 .5z" />
+      </>
+    ),
+    cycle: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 3.5a8.5 8.5 0 0 1 0 17" />
+      </>
+    ),
+    photo: (
+      <>
+        <rect x="3.5" y="5.5" width="17" height="14" rx="2.5" />
+        <circle cx="12" cy="12.5" r="3.2" />
+        <path d="M9 5.5 10.2 3.5h3.6L15 5.5" />
+      </>
+    ),
+    scale: (
+      <>
+        <rect x="3.5" y="3.5" width="17" height="17" rx="4" />
+        <path d="M8.5 9a5 5 0 0 1 7 0M12 9.5l1.5-2" />
+      </>
+    ),
+    note: (
+      <>
+        <path d="M6 3.5h9l3.5 3.5v13.5H6z" />
+        <path d="M9 11h6M9 14.5h6M9 18h3" />
+      </>
+    ),
     inbox: <path d="M4 5.5h16v10.5H9l-5 4z" />,
     billing: (
       <>

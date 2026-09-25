@@ -80,23 +80,18 @@ export function FoodPicker({
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-1">
+      <select
+        aria-label={tFoods("cat.all")}
+        value={cat}
+        onChange={(e) => setCat(e.target.value as typeof cat)}
+        className="w-full h-9 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] pl-3.5 text-[11.5px] font-bold uppercase tracking-[.1em] text-[var(--ink)]"
+      >
         {(["all", ...FOOD_CATEGORIES] as const).map((value) => (
-          <button
-            key={value}
-            type="button"
-            aria-pressed={cat === value}
-            onClick={() => setCat(value)}
-            className={`rounded-rp border border-[var(--edge)] px-2.5 py-1 text-[11.5px] font-semibold ${
-              cat === value
-                ? "sel text-[var(--ink)]"
-                : "bg-[var(--glass2)] text-[var(--ink2)]"
-            }`}
-          >
+          <option key={value} value={value}>
             {tFoods(`cat.${value}`)}
-          </button>
+          </option>
         ))}
-      </div>
+      </select>
 
       {shown.length === 0 ? (
         <p className="px-1 py-3 text-center text-[12px] text-[var(--ink3)]">

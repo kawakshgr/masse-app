@@ -50,7 +50,7 @@ export default async function CoachLayout({
       <div className="no-print contents">
         <TabBar
           name={coach.first_name ?? coach.name}
-          initials={initialsOf(coach.first_name ?? coach.name)}
+          initials={initialsOf(coach.name)}
           subtitle={t("subtitle", {
             clients: clientsNeedingYou,
             checkins: checkinsToReview,

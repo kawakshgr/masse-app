@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { ClientRow } from "@/lib/supabase/types";
@@ -287,7 +288,7 @@ export function RecordPanel({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3">
-        <h3 className={micro}>{t("title")}</h3>
+        <SectionTitle icon="note">{t("title")}</SectionTitle>
         <div className="flex gap-2">
           <button
             type="button"

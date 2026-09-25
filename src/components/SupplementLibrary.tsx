@@ -1,12 +1,11 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { SupplementUnit } from "@/lib/supabase/types";
 import { doseLabel, type LibraryEntry } from "@/lib/supplementEntry";
 import { removeSupplement } from "@/app/(coach)/complements/actions";
-
-const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 
 /** A label and its value, on the same row the food sheet uses. */
 function Row({ label, value }: { label: string; value: string }) {
@@ -88,7 +87,7 @@ export function SupplementDetail({ entry }: { entry: LibraryEntry }) {
 
       <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(268px,1fr))] items-start gap-3">
         <section className="glass flex flex-col gap-2.5 rounded-r3 p-4">
-          <span className={micro}>{t("dose")}</span>
+          <SectionTitle icon="scale">{t("dose")}</SectionTitle>
           <Row label={t("dose")} value={dose ?? t("doseNone")} />
           <Row label={t("timingLabel")} value={t(`timing.${entry.timing}`)} />
           <Row label={t("category")} value={t(`cat.${entry.category}`)} />
@@ -96,7 +95,7 @@ export function SupplementDetail({ entry }: { entry: LibraryEntry }) {
         </section>
 
         <section className="glass flex flex-col gap-2.5 rounded-r3 p-4">
-          <span className={micro}>{t("note")}</span>
+          <SectionTitle icon="note">{t("note")}</SectionTitle>
           <p className="text-[13px] leading-[1.5] text-[var(--ink2)]">
             {entry.note ?? t("noNote")}
           </p>
@@ -111,7 +110,7 @@ export function SupplementDetail({ entry }: { entry: LibraryEntry }) {
         </section>
 
         <section className="glass flex flex-col gap-2.5 rounded-r3 p-4">
-          <span className={micro}>{t("macrosPerUnit")}</span>
+          <SectionTitle icon="foods">{t("macrosPerUnit")}</SectionTitle>
           {macros.length === 0 ? (
             <p className="text-[13px] leading-[1.5] text-[var(--ink3)]">{t("noMacros")}</p>
           ) : (

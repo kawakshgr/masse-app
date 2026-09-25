@@ -1,5 +1,6 @@
 "use client";
 
+import { PaneHead } from "@/components/Pane";
 import { useCallback, useMemo, useState, useTransition } from "react";
 import { HevyImport } from "@/components/HevyImport";
 import { useTranslations } from "next-intl";
@@ -89,16 +90,8 @@ export function ExerciseLibrary({
 
   return (
     <div className="flex h-full min-w-0 flex-col">
-      <div className="flex flex-col gap-2.5 border-b border-[var(--hair)] p-3">
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-            {t("title")}
-          </span>
-          <div className="flex-1" />
-          <span className="tnum text-[12px] text-[var(--ink3)]">
-            {t("count", { count: shown.length })}
-          </span>
-        </div>
+      <div className="flex flex-col gap-3 border-b border-[var(--hair)] p-3 pt-4">
+        <PaneHead kicker={t("count", { count: shown.length })} title={t("title")} />
 
         <input
           type="search"
@@ -109,31 +102,20 @@ export function ExerciseLibrary({
           className="h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
         />
 
-        <div className="flex flex-wrap gap-1.5">
-          <button
-            type="button"
-            aria-pressed={group === null}
-            onClick={() => setGroup(null)}
-            className={`rounded-rp border border-[var(--edge)] px-2.5 py-1 text-[11.5px] font-semibold ${
-              group === null ? "sel text-[var(--ink)]" : "bg-[var(--glass2)] text-[var(--ink2)]"
-            }`}
-          >
-            {t("allGroups")}
-          </button>
+        {/* One dropdown rather than a wall of muscle chips. */}
+        <select
+          aria-label={t("allGroups")}
+          value={group ?? ""}
+          onChange={(e) => setGroup(e.target.value || null)}
+          className="h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] pl-3 text-[11.5px] font-bold uppercase tracking-[.1em] text-[var(--ink)]"
+        >
+          <option value="">{t("allGroups")}</option>
           {groups.map((value) => (
-            <button
-              key={value}
-              type="button"
-              aria-pressed={group === value}
-              onClick={() => setGroup(group === value ? null : value)}
-              className={`rounded-rp border border-[var(--edge)] px-2.5 py-1 text-[11.5px] font-semibold ${
-                group === value ? "sel text-[var(--ink)]" : "bg-[var(--glass2)] text-[var(--ink2)]"
-              }`}
-            >
+            <option key={value} value={value}>
               {muscle(value)}
-            </button>
+            </option>
           ))}
-        </div>
+        </select>
 
         <p className="text-[12px] leading-[1.45] text-[var(--ink3)]">{t("lede")}</p>
         <HevyImport configured={hevyConfigured} />

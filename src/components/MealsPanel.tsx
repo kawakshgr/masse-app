@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { deleteMeal, logMeal } from "@/app/(client)/actions";
@@ -34,9 +35,7 @@ export function MealsPanel({
   return (
     <section className="glass rounded-r4 p-[18px]">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("title")}
-        </h2>
+        <SectionTitle icon="foods">{t("title")}</SectionTitle>
         {meals.length > 0 && (
           <span className="tnum text-[12px] text-[var(--ink2)]">
             {t("total")} · {Math.round(total.kcal)} kcal · P {Math.round(total.protein)} ·

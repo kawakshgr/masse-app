@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import {
@@ -171,7 +172,7 @@ export function FoodEditor({
 
       <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(268px,1fr))] items-start gap-3">
         <section className="glass flex flex-col gap-3 rounded-r3 p-4">
-          <span className={micro}>{t("serving")}</span>
+          <SectionTitle icon="scale">{t("serving")}</SectionTitle>
           <div className="flex gap-2">
             <input
               value={servingLabel}
@@ -232,7 +233,7 @@ export function FoodEditor({
         </section>
 
         <section className="glass flex flex-col gap-2.5 rounded-r3 p-4">
-          <span className={micro}>{t("macrosPer100")}</span>
+          <SectionTitle icon="chart">{t("macrosPer100")}</SectionTitle>
 
           {macros.map((macro) => (
             <div
@@ -305,7 +306,7 @@ export function FoodEditor({
         </section>
 
         <section className="glass flex flex-col gap-2.5 rounded-r3 p-4">
-          <span className={micro}>{t("usage")}</span>
+          <SectionTitle icon="clients">{t("usage")}</SectionTitle>
           {[
             { glyph: "◍", label: t("usagePlans"), count: usage.plans },
             { glyph: "◉", label: t("usageClients"), count: usage.clients },

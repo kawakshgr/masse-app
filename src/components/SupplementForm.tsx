@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SectionTitle } from "@/components/Pane";
 import { getTranslations } from "next-intl/server";
 import {
   SUPPLEMENT_CATEGORIES,
@@ -55,7 +56,7 @@ export async function SupplementForm() {
 
       <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(268px,1fr))] items-start gap-3">
         <section className="glass flex flex-col gap-3 rounded-r3 p-4">
-          <span className={micro}>{t("identity")}</span>
+          <SectionTitle icon="supplements">{t("identity")}</SectionTitle>
           <Field label={t("name")}>
             <input name="name" required autoFocus className={`${cell} w-full`} />
           </Field>
@@ -74,7 +75,7 @@ export async function SupplementForm() {
         </section>
 
         <section className="glass flex flex-col gap-3 rounded-r3 p-4">
-          <span className={micro}>{t("dose")}</span>
+          <SectionTitle icon="scale">{t("dose")}</SectionTitle>
           <div className="grid grid-cols-2 gap-2">
             <Field label={t("doseMin")}>
               <input name="dose_min" inputMode="decimal" className={`tnum ${cell} w-full`} />
@@ -105,7 +106,7 @@ export async function SupplementForm() {
 
         {/* Macros per unit of the dose — how a whey ends up in the day total. */}
         <section className="glass flex flex-col gap-3 rounded-r3 p-4">
-          <span className={micro}>{t("macrosPerUnit")}</span>
+          <SectionTitle icon="foods">{t("macrosPerUnit")}</SectionTitle>
           {(
             [
               ["protein_per_unit", tf("protein")],

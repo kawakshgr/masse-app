@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SplitPane } from "@/components/SplitPane";
 import { LibrarySwitch } from "@/components/LibrarySwitch";
 import { PaneEmpty, PaneHead, Tile, rowClass } from "@/components/Pane";
+import { LinkSelect } from "@/components/LinkSelect";
 
 /**
  * The frame both nutrition libraries share: the list on the left — switch,
@@ -64,20 +65,11 @@ export function LibraryPane({
           />
         </form>
 
-        <div className="flex flex-wrap gap-1.5">
-          {chips.map((chip) => (
-            <Link
-              key={chip.key}
-              href={chip.href}
-              aria-current={chip.on ? "page" : undefined}
-              className={`rounded-rp border border-[var(--edge)] px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[.1em] ${
-                chip.on ? "sel text-[var(--ink)]" : "bg-[var(--glass2)] text-[var(--ink2)]"
-              }`}
-            >
-              {chip.label}
-            </Link>
-          ))}
-        </div>
+        <LinkSelect
+          label={title}
+          value={chips.find((chip) => chip.on)?.key ?? chips[0]?.key ?? ""}
+          options={chips.map((chip) => ({ value: chip.key, label: chip.label, href: chip.href }))}
+        />
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto p-2">{list}</div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { swapWeekDays } from "@/app/(coach)/clients/nutrition-actions";
@@ -50,9 +51,7 @@ export function MyWeek({
 
   return (
     <section className="glass rounded-r4 p-[18px]">
-      <h2 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-        {t("title")}
-      </h2>
+      <SectionTitle icon="checkIns">{t("title")}</SectionTitle>
       <p className="mt-1.5 text-[13px] leading-[1.5] text-[var(--ink2)]">
         {picked === null ? t("lede") : t("pickSecond", { day: tDays(String(picked)) })}
       </p>

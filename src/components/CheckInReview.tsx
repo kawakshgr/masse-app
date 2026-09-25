@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { BarChart } from "@/components/BarChart";
@@ -162,24 +163,23 @@ export function CheckInReview({
     <>
       {/* Which week is on screen — the whole panel follows this. */}
       <div className="flex flex-wrap items-center gap-1">
-        <span className="mr-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+        <span className="mr-2 text-[12px] font-bold uppercase tracking-[.12em]">
           {t("pickWeek")}
         </span>
-        {weeks.slice(-6).map((week) => (
-          <button
-            key={week.id}
-            type="button"
-            aria-pressed={week.id === selected.id}
-            onClick={() => setSelectedId(week.id)}
-            className={`tnum h-7 rounded-rp px-2.5 text-[12px] font-semibold ${
-              week.id === selected.id
-                ? "sel text-[var(--ink)]"
-                : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
-            }`}
-          >
-            {t("week", { n: week.number })}
-          </button>
-        ))}
+        {/* Every week she has filed, newest first, in one dropdown. */}
+        <select
+          aria-label={t("pickWeek")}
+          value={selected.id}
+          onChange={(e) => setSelectedId(e.target.value)}
+          className="tnum h-9 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] pl-3.5 text-[11.5px] font-bold uppercase tracking-[.1em] text-[var(--ink)]"
+          style={{ boxShadow: "var(--spec)" }}
+        >
+          {[...weeks].reverse().map((week) => (
+            <option key={week.id} value={week.id}>
+              {t("week", { n: week.number })}
+            </option>
+          ))}
+        </select>
         {selected.byClient && (
           <span className="ml-2 rounded-rp border border-[var(--edge)] px-2.5 py-0.5 text-[12px] text-[var(--a1)]">
             {t("byClient", { first: firstName })}
@@ -190,20 +190,16 @@ export function CheckInReview({
       <div className="flex flex-wrap gap-4">
         <section className="glass min-w-[280px] flex-1 rounded-r3 p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-              {t("photos")}
-            </h3>
-            <div className="flex gap-1">
+            <SectionTitle icon="photo">{t("photos")}</SectionTitle>
+            <div className="glass2 flex gap-0.5 rounded-rp p-1">
               {POSES.map((p) => (
                 <button
                   key={p}
                   type="button"
                   aria-pressed={p === pose}
                   onClick={() => setPose(p)}
-                  className={`h-7 rounded-rp px-2.5 text-[12px] font-semibold ${
-                    p === pose
-                      ? "sel text-[var(--ink)]"
-                      : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
+                  className={`h-7 rounded-rp border px-3 text-[10.5px] font-bold uppercase tracking-[.1em] ${
+                    p === pose ? "sel text-[var(--ink)]" : "border-transparent text-[var(--ink2)]"
                   }`}
                 >
                   {t(`poses.${p}`)}
@@ -240,9 +236,7 @@ export function CheckInReview({
 
         <div className="min-w-[280px] flex-1 space-y-4">
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-              {t("weight", { weeks: Math.min(8, weeks.length) })}
-            </h3>
+            <SectionTitle icon="scale">{t("weight", { weeks: Math.min(8, weeks.length) })}</SectionTitle>
             <p className="tnum mt-2 font-display text-[24px] font-extrabold leading-none tracking-[-.03em]">
               {kg(selected.bodyweight)}
               {sinceBaseline !== null && sinceBaseline !== 0 && (
@@ -265,9 +259,7 @@ export function CheckInReview({
           </section>
 
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-              {t("measures")}
-            </h3>
+            <SectionTitle icon="scale">{t("measures")}</SectionTitle>
             <div className="mt-3 grid grid-cols-2 gap-2">
               <Measure label={t("waist")} value={selected.waist} previous={previous?.waist ?? null} noChange={t("noChange")} />
               <Measure label={t("chest")} value={selected.chest} previous={previous?.chest ?? null} noChange={t("noChange")} />
@@ -277,9 +269,7 @@ export function CheckInReview({
           </section>
 
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-              {t("answers")}
-            </h3>
+            <SectionTitle icon="note">{t("answers")}</SectionTitle>
             <ul className="mt-2">
               {(
                 [

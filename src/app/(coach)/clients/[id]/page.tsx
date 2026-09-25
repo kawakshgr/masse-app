@@ -1,11 +1,12 @@
 import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { loadClientDetail, formatHours } from "@/lib/clientDetail";
 import { MetricCard } from "@/components/MetricCard";
+import { SECTION_TITLE, SectionTitle } from "@/components/Pane";
+import { LinkSelect } from "@/components/LinkSelect";
 import { CheckInNudge } from "@/components/CheckInNudge";
 import { markCheckInReviewed } from "@/app/(coach)/clients/actions";
 import { DayTypes } from "@/components/DayTypes";
@@ -53,7 +54,6 @@ function signedKg(delta: number): string {
   const figure = Math.abs(delta).toLocaleString("fr-FR");
   return `${delta > 0 ? "+" : delta < 0 ? "−" : "±"}${figure} kg`;
 }
-const heading = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 
 export default async function ClientDetailPage({
   params,
@@ -121,25 +121,22 @@ export default async function ClientDetailPage({
 
   return (
     <div className="space-y-4 p-5">
-      <header className="flex items-start gap-3">
+      <header className="flex items-center gap-4">
         <span
           aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-full text-[14px] font-semibold text-[var(--onA)]"
-          style={{
-            background: "linear-gradient(140deg, var(--a1), var(--a2))",
-          }}
+          className="cta flex size-14 shrink-0 items-center justify-center rounded-r3 text-[18px] font-extrabold text-[var(--onA)]"
         >
           {initialsOf(client.name)}
         </span>
         <div className="min-w-0 flex-1">
-          <h2 className="truncate font-display text-[22px] font-extrabold leading-tight tracking-[-.03em]">
-            {client.name}
-          </h2>
           {meta.length > 0 && (
-            <p className="truncate text-[12px] text-[var(--ink2)]">
+            <p className="truncate text-[11px] font-bold uppercase tracking-[.14em] text-[var(--accent)]">
               {meta.join(" · ")}
             </p>
           )}
+          <h2 className="mt-1 truncate font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
+            {client.name}
+          </h2>
         </div>
       </header>
 
@@ -294,7 +291,7 @@ function OverviewTab({
       </div>
 
       <section className={panel}>
-        <h3 className={heading}>{t("sleepSeven")}</h3>
+        <SectionTitle icon="sleep">{t("sleepSeven")}</SectionTitle>
         <div className="mt-3 flex gap-2">
           {sleep.nights.map((night) => (
             <div
@@ -316,14 +313,16 @@ function OverviewTab({
       </section>
 
       <section className={panel}>
-        <div className="flex items-center justify-between">
-          <h3 className={heading}>{t("thisWeek")}</h3>
-          {detail.blockLabel && (
-            <span className="truncate text-[12px] text-[var(--ink3)]">
-              {detail.blockLabel}
-            </span>
-          )}
-        </div>
+        <SectionTitle
+          icon="checkIns"
+          aside={
+            detail.blockLabel && (
+              <span className="truncate text-[12px] text-[var(--ink3)]">{detail.blockLabel}</span>
+            )
+          }
+        >
+          {t("thisWeek")}
+        </SectionTitle>
 
         {detail.blockLabel == null ? (
           <p className="mt-3 text-[12px] text-[var(--ink2)]">{t("noWeek")}</p>
@@ -375,25 +374,16 @@ async function HistoryTab({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("longView")}
-        </span>
-        <div className="flex gap-1">
-          {ranges.map((r) => (
-            <Link
-              key={r}
-              href={`/clients/${clientId}?onglet=history&portee=${r}`}
-              aria-current={r === range ? "page" : undefined}
-              className={`h-7 rounded-rp px-2.5 text-[12px] font-semibold leading-7 ${
-                r === range
-                  ? "sel text-[var(--ink)]"
-                  : "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink2)]"
-              }`}
-            >
-              {t(r === "12w" ? "r12w" : r === "6m" ? "r6m" : "r1y")}
-            </Link>
-          ))}
-        </div>
+        <span className={SECTION_TITLE}>{t("longView")}</span>
+        <LinkSelect
+          label={t("longView")}
+          value={range}
+          options={ranges.map((r) => ({
+            value: r,
+            label: t(r === "12w" ? "r12w" : r === "6m" ? "r6m" : "r1y"),
+            href: `/clients/${clientId}?onglet=history&portee=${r}`,
+          }))}
+        />
         <span className="ml-auto text-[11px] text-[var(--ink3)]">
           {t("clientSince", { date: shortDate(view.since), weeks: view.weeksWithCoach })}
         </span>
@@ -438,7 +428,7 @@ async function HistoryTab({
       </div>
 
       <section className={panel}>
-        <h3 className={heading}>{t("perWeek")}</h3>
+        <SectionTitle icon="chart">{t("perWeek")}</SectionTitle>
         {view.weeks.length === 0 ? (
           <p className="mt-2 text-[12px] text-[var(--ink2)]">
             {t("perWeekNone")}
@@ -472,7 +462,7 @@ async function HistoryTab({
         </div>
 
         <section className={`${panel} min-w-[260px] flex-1`}>
-          <h3 className={heading}>{t("records")}</h3>
+          <SectionTitle icon="trophy">{t("records")}</SectionTitle>
           {view.records.length === 0 ? (
             <p className="mt-2 text-[12px] text-[var(--ink2)]">
               {t("noRecords")}
@@ -707,7 +697,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
   return (
     <div className="space-y-4">
       <section className={panel}>
-        <h3 className={heading}>{tStatus("title")}</h3>
+        <SectionTitle icon="checkIns">{tStatus("title")}</SectionTitle>
         <p className="mt-1 text-[12px] leading-[1.5] text-[var(--ink2)]">{tStatus("readOnly")}</p>
 
         <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
@@ -755,7 +745,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
 
         {toRead.length > 0 && (
           <div className="mt-4 border-t border-[var(--hair)] pt-3">
-            <h4 className={heading}>{tStatus("toRead")}</h4>
+            <h4 className={SECTION_TITLE}>{tStatus("toRead")}</h4>
             <ul className="mt-2">
               {toRead.map((row) => (
                 <li
@@ -1008,7 +998,7 @@ async function NutritionTab({
   return (
     <div className="space-y-4">
       <section className={panel}>
-        <h3 className={heading}>{tWeek("title")}</h3>
+        <SectionTitle icon="foods">{tWeek("title")}</SectionTitle>
         {logged.length === 0 ? (
           <p className="mt-2 text-[12px] text-[var(--ink2)]">{tWeek("none")}</p>
         ) : (

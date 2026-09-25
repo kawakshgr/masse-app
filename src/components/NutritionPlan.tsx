@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { MacroDonut } from "@/components/MacroDonut";
 import Link from "next/link";
@@ -370,9 +371,7 @@ export function NutritionPlan({
   return (
     <div className="flex flex-wrap gap-4">
       <section className="glass min-w-[300px] flex-1 rounded-r3 p-4">
-        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("fed", { first: firstName })}
-        </h3>
+        <SectionTitle icon="foods">{t("fed", { first: firstName })}</SectionTitle>
 
         <div className="mt-3 flex gap-2">
           {(["macros", "plan"] as const).map((value) => (
@@ -422,9 +421,7 @@ export function NutritionPlan({
       <div className="min-w-[300px] flex-1 space-y-4">
         <section className="glass rounded-r3 p-4">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-              {t(mode === "plan" ? "fixedPlan" : "mealTimes")}
-            </h3>
+            <SectionTitle icon="checkIns">{t(mode === "plan" ? "fixedPlan" : "mealTimes")}</SectionTitle>
             <span className="tnum text-[11px] text-[var(--ink3)]">
               {t("mealsCount", { count: meals.length })}
             </span>
@@ -556,9 +553,7 @@ export function NutritionPlan({
 
         {foodAsks.length > 0 && (
           <section className="glass rounded-r3 p-4">
-            <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-              {t("foodAsks")}
-            </h3>
+            <SectionTitle icon="foods">{t("foodAsks")}</SectionTitle>
             <ul className="mt-2.5 flex flex-col gap-1.5">
               {foodAsks.map((name) => (
                 <li key={name}>
@@ -585,9 +580,7 @@ export function NutritionPlan({
         )}
 
         <section className="glass rounded-r3 p-4">
-          <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-            {t("offPlan")}
-          </h3>
+          <SectionTitle icon="note">{t("offPlan")}</SectionTitle>
           {offPlan.length === 0 ? (
             <p className="mt-2 text-[12px] text-[var(--ink2)]">{t("noOffPlan")}</p>
           ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
@@ -190,7 +191,7 @@ export function BillingInspector({
         </div>
 
         <div className="flex flex-col gap-2">
-          <span className={micro}>{t("howTheyPay")}</span>
+          <SectionTitle icon="billing">{t("howTheyPay")}</SectionTitle>
           <div className="grid grid-cols-2 gap-2">
             {(["monthly", "pack"] as const).map((value) => (
               <Chip
@@ -300,7 +301,7 @@ export function BillingInspector({
         )}
 
         <div className="flex flex-col gap-2">
-          <span className={micro}>{t("thisMonth")}</span>
+          <SectionTitle icon="checkIns">{t("thisMonth")}</SectionTitle>
           {/* Three states, all of them hers to pick. Whether the day has gone
               by is said underneath, so choosing one never contradicts it. */}
           <div className="grid grid-cols-3 gap-2">
@@ -350,7 +351,7 @@ export function BillingInspector({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <span className={micro}>{t("lastSixMonths")}</span>
+          <SectionTitle icon="chart">{t("lastSixMonths")}</SectionTitle>
           <div className="flex gap-1.5">
             {client.history.map((h) => (
               <div

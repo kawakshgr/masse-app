@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -147,9 +148,7 @@ export function SupplementProtocol({
   return (
     <section className="glass rounded-r3 p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("title")}
-        </h3>
+        <SectionTitle icon="supplements">{t("title")}</SectionTitle>
         <Link
           href="/complements"
           className="text-[11px] text-[var(--accent)] hover:underline"

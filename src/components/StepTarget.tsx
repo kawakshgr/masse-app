@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { setStepsTarget } from "@/app/(coach)/clients/actions";
@@ -54,9 +55,7 @@ export function StepTarget({
   return (
     <section className={`glass rounded-r3 p-4 ${pending ? "opacity-70" : ""}`}>
       <div className="flex flex-wrap items-center gap-2">
-        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("targetTitle")}
-        </h3>
+        <SectionTitle icon="steps">{t("targetTitle")}</SectionTitle>
         <div className="flex-1" />
         <span className="tnum text-[12px] text-[var(--ink2)]">
           {counted.length === 0

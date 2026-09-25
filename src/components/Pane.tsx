@@ -113,3 +113,31 @@ export function PaneEmpty({
     </div>
   );
 }
+
+/** A section's title: a large icon in a glass square, the name in capitals,
+ *  and an optional aside on the right (a count, a date, an action). */
+export const SECTION_TITLE = "text-[12px] font-bold uppercase tracking-[.12em] text-[var(--ink)]";
+
+export function SectionTitle({
+  icon,
+  children,
+  aside,
+  as: Tag = "h3",
+}: {
+  icon?: string;
+  children: React.ReactNode;
+  aside?: React.ReactNode;
+  as?: "h2" | "h3";
+}) {
+  return (
+    <div className="flex min-h-9 items-center gap-2.5">
+      {icon && (
+        <span className="glass2 flex size-9 shrink-0 items-center justify-center rounded-r2 text-[var(--accent)]">
+          <Icon name={icon} size={19} />
+        </span>
+      )}
+      <Tag className={`min-w-0 flex-1 truncate ${SECTION_TITLE}`}>{children}</Tag>
+      {aside && <div className="shrink-0">{aside}</div>}
+    </div>
+  );
+}

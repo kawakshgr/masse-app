@@ -1,5 +1,6 @@
 "use client";
 
+import { SectionTitle } from "@/components/Pane";
 import { useState, useTransition } from "react";
 import {
   ExerciseLibrary,
@@ -406,9 +407,7 @@ export function WeekEditor({
 
       {/* The delivery boundary, made an explicit act. */}
       <section className="glass mt-4 rounded-r3 p-4">
-        <h3 className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("assign")}
-        </h3>
+        <SectionTitle icon="clients">{t("assign")}</SectionTitle>
         <p className="mt-1 text-[12px] text-[var(--ink2)]">{t("assignLede")}</p>
 
         {clients.length === 0 ? (
