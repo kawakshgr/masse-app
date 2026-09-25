@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   description: "Le logiciel des coachs de force.",
   applicationName: "Masse",
   appleWebApp: { capable: true, title: "Masse", statusBarStyle: "black-translucent" },
-  icons: { icon: "/icon-192.png", apple: "/apple-icon.png" },
+  icons: { icon: "/icon-192.png?v=2", apple: "/apple-icon.png?v=2" },
 };
 
 export const viewport: Viewport = {
