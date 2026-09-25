@@ -58,3 +58,10 @@ create table public.assignments (
 
 create index assignments_client_idx on public.assignments (client_id);
 create index assignments_week_idx   on public.assignments (week_id);
+
+-- Data API grants, stated rather than inherited: from 30 Oct 2026 Supabase
+-- stops granting new public tables to the API roles by default, and a fresh
+-- project, a preview branch or `supabase db reset` would otherwise leave
+-- these tables unreachable. RLS still decides which rows. anon gets nothing:
+-- every screen that reads them is behind sign-in.
+grant select, insert, update, delete on public.programmes, public.programme_weeks, public.sessions, public.session_exercises, public.assignments to authenticated, service_role;

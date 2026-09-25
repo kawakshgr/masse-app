@@ -30,3 +30,10 @@ create policy billing_arrangements_own on public.billing_arrangements
   for all to authenticated
   using (private.owns_client(client_id))
   with check (private.owns_client(client_id) and coach_id = auth.uid());
+
+-- Data API grants, stated rather than inherited: from 30 Oct 2026 Supabase
+-- stops granting new public tables to the API roles by default, and a fresh
+-- project, a preview branch or `supabase db reset` would otherwise leave
+-- this table unreachable. RLS still decides which rows. anon gets nothing:
+-- every screen that reads it is behind sign-in.
+grant select, insert, update, delete on public.billing_arrangements to authenticated, service_role;

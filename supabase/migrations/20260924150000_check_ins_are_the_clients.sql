@@ -67,3 +67,11 @@ create policy check_in_reminders_coach on public.check_in_reminders
 create policy check_in_reminders_read_own on public.check_in_reminders
   for select to authenticated
   using (client_id = (select auth.uid()));
+
+-- Data API grants, stated rather than inherited: from 30 Oct 2026 Supabase
+-- stops granting new public tables to the API roles by default, and a fresh
+-- project, a preview branch or `supabase db reset` would otherwise leave
+-- this table unreachable. RLS still decides which rows. anon gets nothing:
+-- every screen that reads it is behind sign-in.
+grant select, insert, update, delete on public.check_in_reminders to authenticated, service_role;
+revoke all on public.check_in_reminders from anon;

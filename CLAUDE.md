@@ -130,6 +130,14 @@ Each came out of a design decision or an audit. Not style preferences.
     `sleepAnalysis` — and nothing written back. Adding a third is not a one-line
     change: it means re-reading the privacy label and the Art. 9 basis. The
     cycle is deliberately not among them.
+15. **Every new table states its grants, in the migration that creates it.**
+    From 30 Oct 2026 Supabase no longer grants new `public` tables to the API
+    roles, so a table without them is unreachable on a fresh project, a
+    preview branch or `supabase db reset`. The pattern:
+    `grant select, insert, update, delete on public.x to authenticated, service_role;`
+    and `revoke all on public.x from anon;` — nothing is read signed out; the
+    one signed-out need (invite preview) goes through a function. RLS still
+    decides the rows.
 
 ## Tables in v1
 

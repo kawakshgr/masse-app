@@ -93,3 +93,10 @@ create policy meals_select_by_coach on public.meals for select to authenticated
 create policy invoices_all_by_coach on public.invoices for all to authenticated
   using (coach_id = (select auth.uid()) and private.owns_client(client_id))
   with check (coach_id = (select auth.uid()) and private.owns_client(client_id));
+
+-- Data API grants, stated rather than inherited: from 30 Oct 2026 Supabase
+-- stops granting new public tables to the API roles by default, and a fresh
+-- project, a preview branch or `supabase db reset` would otherwise leave
+-- these tables unreachable. RLS still decides which rows. anon gets nothing:
+-- every screen that reads them is behind sign-in.
+grant select, insert, update, delete on public.foods, public.meals, public.invoices to authenticated, service_role;

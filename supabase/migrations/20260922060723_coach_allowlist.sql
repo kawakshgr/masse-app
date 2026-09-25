@@ -59,3 +59,10 @@ insert into public.allowed_coach_emails (email, note) values
   ('cordeiro.kevin@gmail.com', 'Owner'),
   ('lucie.merlet2@gmail.com',  'Coach')
 on conflict (email) do nothing;
+
+-- Data API grants, stated rather than inherited: from 30 Oct 2026 Supabase
+-- stops granting new public tables to the API roles by default, and a fresh
+-- project, a preview branch or `supabase db reset` would otherwise leave
+-- this table unreachable. RLS still decides which rows. anon gets nothing:
+-- every screen that reads it is behind sign-in.
+grant select, insert, update, delete on public.allowed_coach_emails to authenticated, service_role;

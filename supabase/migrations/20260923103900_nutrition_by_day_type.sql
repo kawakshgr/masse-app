@@ -68,3 +68,10 @@ create policy client_week_days_coach on public.client_week_days for all to authe
 -- move is a rest day she trains through.
 create policy client_week_days_own on public.client_week_days for all to authenticated
   using (client_id = (select auth.uid())) with check (client_id = (select auth.uid()));
+
+-- Data API grants, stated rather than inherited: from 30 Oct 2026 Supabase
+-- stops granting new public tables to the API roles by default, and a fresh
+-- project, a preview branch or `supabase db reset` would otherwise leave
+-- these tables unreachable. RLS still decides which rows. anon gets nothing:
+-- every screen that reads them is behind sign-in.
+grant select, insert, update, delete on public.day_types, public.client_week_days to authenticated, service_role;

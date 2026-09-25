@@ -62,3 +62,10 @@ create table public.invite_codes (
 
 create index invite_codes_coach_id_idx on public.invite_codes (coach_id);
 create index invite_codes_code_idx     on public.invite_codes (code);
+
+-- Data API grants, stated rather than inherited: from 30 Oct 2026 Supabase
+-- stops granting new public tables to the API roles by default, and a fresh
+-- project, a preview branch or `supabase db reset` would otherwise leave
+-- these tables unreachable. RLS still decides which rows. anon gets nothing:
+-- every screen that reads them is behind sign-in.
+grant select, insert, update, delete on public.coaches, public.clients, public.invite_codes to authenticated, service_role;
