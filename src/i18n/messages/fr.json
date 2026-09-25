@@ -43,7 +43,8 @@
     "locale": {
       "fr": "Français",
       "en": "English"
-    }
+    },
+    "myAccount": "Mon compte"
   },
   "roster": {
     "title": "Roster",
@@ -703,7 +704,8 @@
     "searching": "Recherche…",
     "import": "Ajouter à ma bibliothèque",
     "none": "Aucun résultat. Tu peux toujours le saisir à la main.",
-    "per100": "pour 100 g"
+    "per100": "pour 100 g",
+    "clear": "Effacer"
   },
   "library": {
     "title": "Mouvements",
@@ -1331,5 +1333,26 @@
     "Sled": "Traîneau",
     "Suspension": "Sangles de suspension",
     "Trap Bar": "Trap bar"
+  },
+  "account": {
+    "title": "Mon compte",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "error": "Rien n’a été enregistré — réessaie.",
+    "identity": "Identité",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "phone": "Téléphone",
+    "email": "Adresse e-mail",
+    "emailHint": "C’est ton adresse de connexion ; elle ne se change pas ici.",
+    "address": "Adresse",
+    "line1": "Adresse",
+    "line2": "Complément",
+    "postcode": "Code postal",
+    "city": "Ville",
+    "country": "Pays",
+    "addressHint": "La même que sur tes factures : la changer ici la change là-bas.",
+    "companyTitle": "Mon entreprise",
+    "companyHint": "SIRET, TVA, IBAN, numérotation des factures — dans Admin."
   }
 }

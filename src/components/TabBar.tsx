@@ -56,7 +56,10 @@ export function TabBar({
     "relative flex size-10 shrink-0 items-center justify-center rounded-full border border-transparent transition-colors";
 
   return (
-    <div className="shrink-0 px-3 pt-3">
+    // relative z-40: the capsule's blur makes it a stacking context of its
+    // own, so without a z-index its menu would sit under any later panel
+    // that has one (billing's cards did).
+    <div className="relative z-40 shrink-0 px-3 pt-3">
       {/* One floating capsule: who she is on the left, where she can go in the
           centre — icons, the current one opened out with its name — and her
           own switches on the right. The side columns share the free width
@@ -220,6 +223,18 @@ function AccountMenu({ name, initials }: { name: string; initials: string }) {
           role="menu"
           className="chrome lift absolute right-0 top-[calc(100%+8px)] z-50 w-[240px] rounded-r3 p-1.5"
         >
+          <Link
+            href="/compte"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+            className={row}
+          >
+            <Icon name="account" size={18} />
+            <span className="flex-1">{t("myAccount")}</span>
+          </Link>
+
+          <div className="my-1.5 border-t border-[var(--hair)]" />
+
           <p className="px-2.5 pb-1 pt-2 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {tTheme("label")}
           </p>

@@ -26,6 +26,18 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
         <path d="m9.5 9.5 5 5" />
       </>
     ),
+    account: (
+      <>
+        <circle cx="12" cy="8.5" r="4" />
+        <path d="M4.5 20.5c.8-4 3.8-6 7.5-6s6.7 2 7.5 6" />
+      </>
+    ),
+    address: (
+      <>
+        <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" />
+        <circle cx="12" cy="10" r="2.4" />
+      </>
+    ),
     inbox: <path d="M4 5.5h16v10.5H9l-5 4z" />,
     billing: (
       <>

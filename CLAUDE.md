@@ -81,6 +81,12 @@ check-in as read.
 - **Her own details** — a client may update `first_name`, `name`, `phone`,
   `birth_date`, `height_cm`, `occupation`, `emergency_contact` on her row and
   nothing else; the trigger `clients_self_update_guard` enforces the list.
+- **The coach's own details** — "Mon compte", behind her name in the top bar:
+  first and last name, phone, and the address her invoices print (kept once,
+  on `coach_billing_profiles`). On her `coaches` row she may change `name`,
+  `first_name`, `pronoun`, `phone`, `check_in_due_offset` and nothing else —
+  `coaches_self_update_guard`, so a suspended coach cannot lift her own
+  suspension. Platform admins pass.
 
 ## Deliberately not in v1
 

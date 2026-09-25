@@ -40,6 +40,18 @@ export function FoodSearch() {
           aria-label={t("search")}
           className="h-9 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
         />
+        {(term !== "" || results !== null) && (
+          <button
+            type="button"
+            onClick={() => {
+              setTerm("");
+              setResults(null);
+            }}
+            className="glass2 h-9 shrink-0 rounded-r2 px-3 text-[13px] font-semibold text-[var(--ink2)] hover:text-[var(--ink)]"
+          >
+            {t("clear")}
+          </button>
+        )}
         <button
           type="submit"
           disabled={pending || term.trim().length < 2}

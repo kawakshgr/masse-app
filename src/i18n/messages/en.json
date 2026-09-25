@@ -43,7 +43,8 @@
     "locale": {
       "fr": "Français",
       "en": "English"
-    }
+    },
+    "myAccount": "My account"
   },
   "roster": {
     "title": "Roster",
@@ -703,7 +704,8 @@
     "searching": "Searching…",
     "import": "Add to my library",
     "none": "No results. You can still type it in by hand.",
-    "per100": "per 100 g"
+    "per100": "per 100 g",
+    "clear": "Clear"
   },
   "library": {
     "title": "Movements",
@@ -1331,5 +1333,26 @@
     "Sled": "Sled",
     "Suspension": "Suspension",
     "Trap Bar": "Trap Bar"
+  },
+  "account": {
+    "title": "My account",
+    "save": "Save",
+    "saved": "Saved",
+    "error": "Nothing was saved — try again.",
+    "identity": "Identity",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone",
+    "email": "Email",
+    "emailHint": "Your sign-in address; it is not changed here.",
+    "address": "Address",
+    "line1": "Address",
+    "line2": "Address line 2",
+    "postcode": "Postcode",
+    "city": "City",
+    "country": "Country",
+    "addressHint": "The one your invoices print: changing it here changes it there.",
+    "companyTitle": "My company",
+    "companyHint": "SIRET, VAT, IBAN, invoice numbering — in Admin."
   }
 }
