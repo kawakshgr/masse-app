@@ -90,7 +90,7 @@ export function InviteDialog({
             tabIndex={-1}
             className="chrome lift w-full max-w-[460px] rounded-r4 p-6 outline-none"
           >
-            <h2 className="font-display text-[20px] font-extrabold tracking-[-.03em]">
+            <h2 className="font-display text-[24px] font-extrabold uppercase leading-none tracking-[-.01em]">
               {t("title")}
             </h2>
             <p className="mt-2 text-[13px] leading-[1.5] text-[var(--ink2)]">

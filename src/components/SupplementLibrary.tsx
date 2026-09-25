@@ -41,7 +41,7 @@ export function SupplementDetail({ entry }: { entry: LibraryEntry }) {
     <div className="min-w-0 flex-1 overflow-y-auto p-5">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h1 className="truncate py-1 font-display text-[23px] font-extrabold tracking-[-.03em]">
+          <h1 className="truncate py-1 font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
             {entry.name}
           </h1>
           <p className="tnum mt-1 pl-0.5 text-[13px] text-[var(--ink2)]">

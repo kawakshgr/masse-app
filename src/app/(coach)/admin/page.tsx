@@ -119,7 +119,7 @@ export default async function AdminPage() {
   return (
     <div className="mx-auto max-w-[860px] space-y-6 p-5">
       <header>
-        <h2 className="font-display text-[23px] font-extrabold tracking-[-.03em]">
+        <h2 className="font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
           {t("title")}
         </h2>
         <p className="mt-1 text-[13px] leading-[1.5] text-[var(--ink2)]">

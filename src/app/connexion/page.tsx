@@ -45,10 +45,10 @@ function SignInForm() {
   return (
     <main className="flex min-h-dvh items-center justify-center p-6">
       <div className="glass lift w-full max-w-[420px] rounded-r4 p-8">
-        <p className="font-display text-[14px] font-extrabold tracking-[-.02em] text-[var(--accent)]">
+        <p className="text-[12px] font-extrabold uppercase tracking-[.16em] text-[var(--accent)]">
           {tApp("name")}
         </p>
-        <h1 className="mt-2 font-display text-[28px] font-extrabold tracking-[-.03em]">
+        <h1 className="mt-2 font-display text-[30px] font-extrabold uppercase leading-none tracking-[-.01em]">
           {t("title")}
         </h1>
         <p className="mt-2 text-[14px] leading-[1.5] text-[var(--ink2)]">

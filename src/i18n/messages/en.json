@@ -628,7 +628,8 @@
     "cancel": "Cancel",
     "removeWeek": "Delete week",
     "retract": "Retract",
-    "retractHint": "Makes the week invisible to this client again"
+    "retractHint": "Makes the week invisible to this client again",
+    "actions": "Actions"
   },
   "allowlist": {
     "title": "Allowed coaches",

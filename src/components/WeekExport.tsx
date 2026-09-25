@@ -1,5 +1,6 @@
 "use client";
 
+import { MENU_ITEM } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { EditorSession } from "@/components/WeekEditor";
@@ -59,18 +60,18 @@ export function WeekExport({
   }
 
   return (
-    <div className="flex gap-2 print:hidden">
+    <div className="flex flex-col print:hidden">
       <button
         type="button"
         onClick={copy}
-        className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
+        className={MENU_ITEM}
       >
         {copied ? t("copied") : t("copy")}
       </button>
       <button
         type="button"
         onClick={() => window.print()}
-        className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
+        className={MENU_ITEM}
       >
         {t("print")}
       </button>

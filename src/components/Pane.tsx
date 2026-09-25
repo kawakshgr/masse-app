@@ -141,3 +141,10 @@ export function SectionTitle({
     </div>
   );
 }
+
+/** One row of an ActionMenu — a plain button or a form's submit. */
+const MENU_ROW =
+  "flex h-10 w-full items-center rounded-r2 px-2.5 text-left text-[13px] font-semibold transition-colors hover:bg-[var(--glass2)]";
+export const MENU_ITEM = `${MENU_ROW} text-[var(--ink)]`;
+/** The destructive row, last in the menu, in coral. */
+export const MENU_DANGER = `${MENU_ROW} text-[var(--a3)]`;

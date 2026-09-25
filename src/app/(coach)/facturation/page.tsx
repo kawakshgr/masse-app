@@ -1,4 +1,5 @@
 import { SubNav } from "@/components/SubNav";
+import { Icon } from "@/components/Icon";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -23,7 +24,6 @@ type Filter = "all" | "open" | "monthly" | "pack";
 
 const FILTERS: Filter[] = ["all", "open", "monthly", "pack"];
 
-const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 
 function initialsOf(name: string): string {
   return name
@@ -162,12 +162,14 @@ export default async function BillingPage({
 
   const totals = [
     {
+      icon: "billing",
       label: t("recurring"),
       value: euros(recurring),
       sub: t("monthlyClients", { count: monthly.length }),
       tone: "",
     },
     {
+      icon: "chart",
       label: t("collected"),
       value: euros(collected),
       sub: t("settled", {
@@ -177,6 +179,7 @@ export default async function BillingPage({
       tone: "",
     },
     {
+      icon: "checkIns",
       label: t("stillOpen"),
       value: euros(owed),
       sub:
@@ -186,6 +189,7 @@ export default async function BillingPage({
       tone: owed > 0 ? "text-[var(--a3)]" : "",
     },
     {
+      icon: "programmes",
       label: t("packsLive"),
       value: String(packs.length),
       sub: t("packsLiveSub"),
@@ -196,7 +200,7 @@ export default async function BillingPage({
   if (clients.length === 0) {
     return (
       <div className="min-w-0 flex-1 overflow-y-auto p-5">
-        <h2 className="font-display text-[22px] font-extrabold tracking-[-.03em]">
+        <h2 className="font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
           {t("title")}
         </h2>
         <p className="mt-1 text-[13px] leading-[1.5] text-[var(--ink2)]">
@@ -211,7 +215,7 @@ export default async function BillingPage({
     <div className="@container flex min-w-0 flex-1 flex-col gap-3.5 overflow-y-auto p-5">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="font-display text-[23px] font-extrabold tracking-[-.03em]">
+          <h2 className="font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
             {t("titleMonth", { month: periodLabel })}
           </h2>
           <p className="mt-1 text-[13px] text-[var(--ink2)]">
@@ -239,11 +243,21 @@ export default async function BillingPage({
         {totals.map((total) => (
           <div
             key={total.label}
-            className="glass flex flex-col gap-1 rounded-r3 px-4 py-3.5"
+            className="glass flex flex-col gap-1 rounded-r3 p-4"
           >
-            <span className={`truncate ${micro}`}>{total.label}</span>
+            <div className="mb-2 flex items-center gap-2.5">
+              <span
+                aria-hidden
+                className="glass2 flex size-9 shrink-0 items-center justify-center rounded-r2 text-[var(--ink)]"
+              >
+                <Icon name={total.icon} size={19} />
+              </span>
+              <span className="truncate text-[11.5px] font-bold uppercase tracking-[.12em]">
+                {total.label}
+              </span>
+            </div>
             <span
-              className={`tnum font-display text-[21px] font-extrabold tracking-[-.03em] ${total.tone}`}
+              className={`tnum font-display text-[28px] font-extrabold leading-none tracking-[-.03em] ${total.tone}`}
             >
               {total.value}
             </span>

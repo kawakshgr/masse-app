@@ -628,7 +628,8 @@
     "cancel": "Annuler",
     "removeWeek": "Supprimer la semaine",
     "retract": "Retirer",
-    "retractHint": "Rend la semaine invisible pour ce client"
+    "retractHint": "Rend la semaine invisible pour ce client",
+    "actions": "Actions"
   },
   "allowlist": {
     "title": "Coachs autorisés",

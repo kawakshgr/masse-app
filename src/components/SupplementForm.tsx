@@ -33,7 +33,7 @@ export async function SupplementForm() {
     <form action={addSupplement} className="min-w-0 flex-1 overflow-y-auto p-5">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h1 className="py-1 font-display text-[23px] font-extrabold tracking-[-.03em]">
+          <h1 className="py-1 font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
             {t("newTitle")}
           </h1>
           <p className="mt-1 pl-0.5 text-[13px] text-[var(--ink2)]">{t("newLede")}</p>

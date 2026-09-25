@@ -1,4 +1,5 @@
 import { SubNav } from "@/components/SubNav";
+import { MENU_ITEM } from "@/components/Pane";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
@@ -89,46 +90,46 @@ export default async function ProgrammeEditorPage({
 
   return (
     <div className="p-5">
-      <header className="mb-4 flex flex-wrap items-center gap-2 print:hidden">
-        <ProgrammeHeader programmeId={programme.id} name={programme.name} />
+      <header className="mb-4 print:hidden">
+        <ProgrammeHeader
+          programmeId={programme.id}
+          name={programme.name}
+          actions={
+            <>
+              <form
+                action={async () => {
+                  "use server";
+                  await toggleTemplate(programme.id, !programme.is_template);
+                }}
+              >
+                <button type="submit" className={MENU_ITEM}>
+                  {programme.is_template ? t("untemplate") : t("template")}
+                </button>
+              </form>
 
-        <form
-          action={async () => {
-            "use server";
-            await toggleTemplate(programme.id, !programme.is_template);
-          }}
-        >
-          <button
-            type="submit"
-            className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
-          >
-            {programme.is_template ? t("untemplate") : t("template")}
-          </button>
-        </form>
+              {current && (
+                <form
+                  action={async () => {
+                    "use server";
+                    await duplicateWeek(current.id, programme.id);
+                  }}
+                >
+                  <button type="submit" className={MENU_ITEM}>
+                    {t("duplicate")}
+                  </button>
+                </form>
+              )}
 
-        {current && (
-          <WeekExport
-            programmeName={programme.name}
-            weekNumber={current.week_number}
-            sessions={sessions}
-          />
-        )}
-
-        {current && (
-          <form
-            action={async () => {
-              "use server";
-              await duplicateWeek(current.id, programme.id);
-            }}
-          >
-            <button
-              type="submit"
-              className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
-            >
-              {t("duplicate")}
-            </button>
-          </form>
-        )}
+              {current && (
+                <WeekExport
+                  programmeName={programme.name}
+                  weekNumber={current.week_number}
+                  sessions={sessions}
+                />
+              )}
+            </>
+          }
+        />
       </header>
 
       <div className="mb-4 flex flex-wrap items-center gap-2 print:hidden">
