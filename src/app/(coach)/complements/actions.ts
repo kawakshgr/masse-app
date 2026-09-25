@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   SUPPLEMENT_CATEGORIES,
@@ -55,7 +56,7 @@ export async function addSupplement(formData: FormData) {
   const min = num(formData.get("dose_min"));
   const max = num(formData.get("dose_max"));
 
-  await supabase.from("supplements").insert({
+  const { data } = await supabase.from("supplements").insert({
     coach_id: user.id,
     name,
     category: category(formData.get("category")),
@@ -69,9 +70,10 @@ export async function addSupplement(formData: FormData) {
     protein_per_unit: num(formData.get("protein_per_unit")),
     carbs_per_unit: num(formData.get("carbs_per_unit")),
     fat_per_unit: num(formData.get("fat_per_unit")),
-  });
+  }).select("id").single();
 
   revalidatePath("/complements");
+  if (data?.id) redirect(`/complements?complement=${data.id}`);
 }
 
 /**
@@ -97,6 +99,7 @@ export async function removeSupplement(formData: FormData) {
   }
 
   revalidatePath("/complements");
+  redirect("/complements");
 }
 
 export async function unhideSupplement(formData: FormData) {

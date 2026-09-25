@@ -1052,7 +1052,21 @@
     "perUnit": "Par {unit} : {protein} g de protéines",
     "empty": "Ta bibliothèque de compléments est vide.",
     "switchFoods": "Aliments",
-    "switchSupplements": "Compléments"
+    "switchSupplements": "Compléments",
+    "pick": "Choisis un complément à gauche.",
+    "gone": "Ce complément n’existe plus.",
+    "newTitle": "Nouveau complément",
+    "newLede": "Il rejoint ta bibliothèque, visible par toi seulement.",
+    "dose": "Dose",
+    "doseNone": "Pas de dose indiquée",
+    "unitLabel": "Unité",
+    "timingLabel": "Moment",
+    "category": "Catégorie",
+    "origin": "Origine",
+    "noNote": "Aucun commentaire.",
+    "perUnitOf": "{macro} par unité",
+    "macrosPerUnit": "Apport par unité",
+    "identity": "Complément"
   },
   "proto": {
     "title": "Compléments",

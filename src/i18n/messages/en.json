@@ -1052,7 +1052,21 @@
     "perUnit": "Per {unit}: {protein} g protein",
     "empty": "Your supplement library is empty.",
     "switchFoods": "Foods",
-    "switchSupplements": "Supplements"
+    "switchSupplements": "Supplements",
+    "pick": "Pick a supplement on the left.",
+    "gone": "This supplement no longer exists.",
+    "newTitle": "New supplement",
+    "newLede": "It joins your library. Only you see it.",
+    "dose": "Dose",
+    "doseNone": "No dose given",
+    "unitLabel": "Unit",
+    "timingLabel": "When",
+    "category": "Category",
+    "origin": "Source",
+    "noNote": "No comment.",
+    "perUnitOf": "{macro} per unit",
+    "macrosPerUnit": "Per unit",
+    "identity": "Supplement"
   },
   "proto": {
     "title": "Supplements",

@@ -1,63 +1,175 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { SupplementLibrary } from "@/components/SupplementLibrary";
-import { LibrarySwitch } from "@/components/LibrarySwitch";
-import type { SupplementRow } from "@/lib/supabase/types";
+import {
+  LibraryEmpty,
+  LibraryPane,
+  LibraryRow,
+  libraryHref,
+} from "@/components/LibraryPane";
+import { SupplementDetail, doseLabel, type LibraryEntry } from "@/components/SupplementLibrary";
+import { SupplementForm } from "@/components/SupplementForm";
+import { unhideSupplement } from "./actions";
+import {
+  SUPPLEMENT_CATEGORIES,
+  type SupplementRow,
+  type SupplementUnit,
+} from "@/lib/supabase/types";
+
+function entryOf(row: SupplementRow): LibraryEntry {
+  const n = (value: number | null) => (value === null ? null : Number(value));
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    doseMin: n(row.dose_min),
+    doseMax: n(row.dose_max),
+    unit: row.unit,
+    timing: row.timing,
+    note: row.note,
+    proteinPerUnit: n(row.protein_per_unit),
+    carbsPerUnit: n(row.carbs_per_unit),
+    fatPerUnit: n(row.fat_per_unit),
+    usable: row.usable,
+    mine: row.coach_id !== null,
+  };
+}
 
 /**
- * The supplement library. It sits beside the food library rather than inside it:
- * a food is quantified in grams and carries macros, a supplement is quantified
- * in doses and mostly carries nothing, and one list cannot honestly do both.
+ * The supplement library. It sits beside the food library rather than inside
+ * it — a food is quantified in grams and carries macros, a supplement in doses
+ * and mostly carries nothing — but in the same frame, so the switch between
+ * them changes the content and not the page.
  */
-export default async function SupplementsPage() {
+export default async function SupplementsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; cat?: string; complement?: string; nouveau?: string }>;
+}) {
   const t = await getTranslations("supp");
+  const params = await searchParams;
+  const query = (params.q ?? "").trim();
+  const cat = (SUPPLEMENT_CATEGORIES as string[]).includes(params.cat ?? "")
+    ? params.cat!
+    : "all";
+  const selected = params.complement;
   const supabase = await createClient();
 
-  const [{ data: rows }, { data: hidden }] = await Promise.all([
-    supabase
-      .from("supplements")
-      .select("*")
-      .order("category")
-      .order("name"),
+  const [{ data: rows }, { data: hiddenRows }] = await Promise.all([
+    supabase.from("supplements").select("*").order("category").order("name"),
     supabase.from("supplement_hidden").select("supplement_id"),
   ]);
 
-  const hiddenIds = new Set((hidden ?? []).map((row) => row.supplement_id));
+  const hiddenIds = new Set((hiddenRows ?? []).map((row) => row.supplement_id));
   const all = (rows ?? []) as SupplementRow[];
+  const hidden = all.filter((row) => hiddenIds.has(row.id));
+  const needle = query.toLowerCase();
+  const shown = all
+    .filter((row) => !hiddenIds.has(row.id))
+    .map(entryOf)
+    .filter(
+      (entry) =>
+        (cat === "all" || entry.category === cat) &&
+        (!needle ||
+          entry.name.toLowerCase().includes(needle) ||
+          (entry.note ?? "").toLowerCase().includes(needle)),
+    )
+    .sort((a, b) => a.name.localeCompare(b.name, "fr"));
+
+  const current = { q: query || undefined, cat: cat === "all" ? undefined : cat };
+  const href = (next: Record<string, string | undefined>) =>
+    libraryHref("/complements", current, next);
+  const unitName = (unit: SupplementUnit, count: number) => t(`unit.${unit}`, { count });
+
+  const picked = selected ? all.find((row) => row.id === selected) : undefined;
 
   return (
-    <div className="@container min-w-0 flex-1 overflow-y-auto p-5">
-      <header className="mb-4">
-        <LibrarySwitch active="supplements" />
-        <h1 className="mt-3 font-display text-[23px] font-extrabold leading-[1.05] tracking-[-.03em]">
-          {t("title")}
-        </h1>
-        <p className="mt-1 max-w-[62ch] text-[13px] leading-[1.5] text-[var(--ink2)]">
-          {t("lede")}
-        </p>
-      </header>
-
-      <SupplementLibrary
-        entries={all
-          .filter((row) => !hiddenIds.has(row.id))
-          .map((row) => ({
-            id: row.id,
-            name: row.name,
-            category: row.category,
-            doseMin: row.dose_min === null ? null : Number(row.dose_min),
-            doseMax: row.dose_max === null ? null : Number(row.dose_max),
-            unit: row.unit,
-            timing: row.timing,
-            note: row.note,
-            proteinPerUnit:
-              row.protein_per_unit === null ? null : Number(row.protein_per_unit),
-            usable: row.usable,
-            mine: row.coach_id !== null,
-          }))}
-        hidden={all
-          .filter((row) => hiddenIds.has(row.id))
-          .map((row) => ({ id: row.id, name: row.name }))}
-      />
-    </div>
+    <LibraryPane
+      active="supplements"
+      title={t("title")}
+      count={t("count", { count: shown.length })}
+      path="/complements"
+      query={query}
+      searchLabel={t("search")}
+      keep={{ cat: current.cat }}
+      chips={["all", ...SUPPLEMENT_CATEGORIES].map((value) => ({
+        key: value,
+        label: value === "all" ? t("allGroups") : t(`cat.${value}`),
+        href: href({ cat: value === "all" ? undefined : value, complement: selected }),
+        on: cat === value,
+      }))}
+      footer={
+        <Link
+          href={href({ nouveau: "1" })}
+          className="cta block h-10 w-full rounded-r2 text-center text-[13px] font-semibold leading-10 text-[var(--onA)]"
+        >
+          {t("newOne")}
+        </Link>
+      }
+      list={
+        shown.length === 0 ? (
+          <p className="p-5 text-center text-[12.5px] leading-[1.5] text-[var(--ink3)]">
+            {query ? t("noMatch", { query }) : t("empty")}
+          </p>
+        ) : (
+          <ul className="flex flex-col gap-1">
+            {shown.map((entry) => (
+              <LibraryRow
+                key={entry.id}
+                href={href({ complement: entry.id })}
+                on={selected === entry.id}
+                muted={!entry.usable}
+                name={entry.name}
+                line={[doseLabel(entry, unitName), t(`cat.${entry.category}`)]
+                  .filter(Boolean)
+                  .join(" · ")}
+                trailing={
+                  <span
+                    className={`rounded-rp border px-2 py-px text-[10px] uppercase tracking-[.14em] ${
+                      entry.usable
+                        ? "border-[var(--edge)] text-[var(--ink3)]"
+                        : "border-[var(--a3)] text-[var(--a3)]"
+                    }`}
+                  >
+                    {t(!entry.usable ? "unusable" : entry.mine ? "mine" : "builtIn")}
+                  </span>
+                }
+              />
+            ))}
+          </ul>
+        )
+      }
+    >
+      {params.nouveau ? (
+        <SupplementForm />
+      ) : picked ? (
+        <SupplementDetail entry={entryOf(picked)} />
+      ) : (
+        <LibraryEmpty title={selected ? t("gone") : t("pick")} lede={selected ? undefined : t("lede")}>
+          {!selected && hidden.length > 0 && (
+            <div className="mt-5 border-t border-[var(--hair)] pt-4">
+              <p className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+                {t("hidden", { count: hidden.length })}
+              </p>
+              <ul className="mt-2 flex flex-wrap justify-center gap-2">
+                {hidden.map((row) => (
+                  <li key={row.id}>
+                    <form action={unhideSupplement}>
+                      <input type="hidden" name="supplement_id" value={row.id} />
+                      <button
+                        type="submit"
+                        className="h-8 rounded-rp border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)] hover:text-[var(--ink)]"
+                      >
+                        {row.name} · {t("unhide")}
+                      </button>
+                    </form>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </LibraryEmpty>
+      )}
+    </LibraryPane>
   );
 }
