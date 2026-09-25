@@ -7,7 +7,8 @@ import {
   LibraryRow,
   libraryHref,
 } from "@/components/LibraryPane";
-import { SupplementDetail, doseLabel, type LibraryEntry } from "@/components/SupplementLibrary";
+import { SupplementDetail } from "@/components/SupplementLibrary";
+import { doseLabel, type LibraryEntry } from "@/lib/supplementEntry";
 import { SupplementForm } from "@/components/SupplementForm";
 import { unhideSupplement } from "./actions";
 import {

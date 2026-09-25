@@ -2,43 +2,11 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import type { SupplementCategory, SupplementTiming, SupplementUnit } from "@/lib/supabase/types";
+import type { SupplementUnit } from "@/lib/supabase/types";
+import { doseLabel, type LibraryEntry } from "@/lib/supplementEntry";
 import { removeSupplement } from "@/app/(coach)/complements/actions";
 
-export type LibraryEntry = {
-  id: string;
-  name: string;
-  category: SupplementCategory;
-  doseMin: number | null;
-  doseMax: number | null;
-  unit: SupplementUnit;
-  timing: SupplementTiming;
-  note: string | null;
-  proteinPerUnit: number | null;
-  carbsPerUnit: number | null;
-  fatPerUnit: number | null;
-  usable: boolean;
-  mine: boolean;
-};
-
 const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
-
-/** "3 – 5 g", "1 capsule", "1 000 UI" — never a bare number. */
-export function doseLabel(
-  entry: Pick<LibraryEntry, "doseMin" | "doseMax" | "unit">,
-  unitName: (unit: SupplementUnit, count: number) => string,
-): string | null {
-  if (entry.doseMin === null && entry.doseMax === null) return null;
-
-  const fmt = (n: number) => n.toLocaleString("fr-FR");
-  const count = entry.doseMax ?? entry.doseMin ?? 1;
-  const unit = unitName(entry.unit, count);
-
-  if (entry.doseMin !== null && entry.doseMax !== null && entry.doseMax !== entry.doseMin) {
-    return `${fmt(entry.doseMin)} – ${fmt(entry.doseMax)} ${unit}`;
-  }
-  return `${fmt(entry.doseMin ?? entry.doseMax!)} ${unit}`;
-}
 
 /** A label and its value, on the same row the food sheet uses. */
 function Row({ label, value }: { label: string; value: string }) {
