@@ -3,36 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Icon } from "@/components/Icon";
 
 /*
- * The client's tab bar, the iPhone's five tabs in the iPhone's order. Coach
- * keeps its place, greyed: a deferred feature that leaves the nav makes the
- * product's shape a lie. Cycle only exists for a client who asked for it.
+ * The client's tab bar, the iPhone's five tabs in the iPhone's order, as the
+ * coach's top bar is: one floating glass capsule, icons, and the current tab
+ * opened out to its name in capitals. Coach keeps its place, greyed: a
+ * deferred feature that leaves the nav makes the product's shape a lie.
+ * Cycle only exists for a client who asked for it.
  */
 
-const stroke = {
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 1.8,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-};
-
-const ICONS: Record<string, React.ReactNode> = {
-  today: <path {...stroke} d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-5V21H5a1 1 0 0 1-1-1z" />,
-  train: (
-    <g {...stroke}>
-      <path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12" />
-    </g>
-  ),
-  fuel: (
-    <g {...stroke}>
-      <path d="m12 3 3.5 2v4L12 11 8.5 9V5z" />
-      <path d="m7.5 12 3.5 2v4l-3.5 2L4 18v-4zM16.5 12l3.5 2v4l-3.5 2-3.5-2v-4z" />
-    </g>
-  ),
-  cycle: <path {...stroke} d="m12 3 7.8 4.5v9L12 21l-7.8-4.5v-9z" />,
-  coach: <path {...stroke} d="M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-8l-4.5 3.5V16H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" />,
+const ICON: Record<string, string> = {
+  today: "home",
+  train: "programmes",
+  fuel: "foods",
+  cycle: "cycle",
+  coach: "inbox",
 };
 
 export function ClientNav({ cycleTracking }: { cycleTracking: boolean }) {
@@ -50,31 +36,43 @@ export function ClientNav({ cycleTracking }: { cycleTracking: boolean }) {
   return (
     <nav
       aria-label="Masse"
-      className="topbar fixed inset-x-0 bottom-0 z-20 border-t border-[var(--hair)] pb-[env(safe-area-inset-bottom)]"
-      style={{ borderBottom: 0 }}
+      className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+10px)] z-20 mx-auto max-w-[520px]"
     >
-      <ul className="mx-auto flex max-w-[560px]">
+      <ul className="glass lift flex h-[62px] items-center justify-between gap-1 rounded-rp px-2">
         {items.map((item) => {
           // Settings open from Today, so Today stays lit while she is in them.
           const active =
-            pathname.startsWith(item.href) ||
-            (item.key === "today" && pathname.startsWith("/reglages"));
-          const tone = item.soon
-            ? "text-[var(--ink3)]"
-            : active
-              ? "text-[var(--a1)]"
-              : "text-[var(--ink2)]";
+            !item.soon &&
+            (pathname.startsWith(item.href) ||
+              (item.key === "today" && pathname.startsWith("/reglages")));
+
           return (
-            <li key={item.key} className="flex-1">
+            <li key={item.key} className={active ? "shrink-0" : "flex flex-1 justify-center"}>
               <Link
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-[58px] flex-col items-center justify-center gap-1 text-[10.5px] font-semibold ${tone}`}
+                aria-label={t(item.key)}
+                className={
+                  active
+                    ? "sel flex h-12 items-center gap-2 rounded-rp border pl-1.5 pr-4 text-[var(--ink)]"
+                    : `flex size-12 items-center justify-center rounded-full ${
+                        item.soon ? "text-[var(--ink3)]" : "text-[var(--ink2)]"
+                      }`
+                }
+                style={active ? { boxShadow: "var(--spec)" } : undefined}
               >
-                <svg viewBox="0 0 24 24" aria-hidden className="size-[22px]">
-                  {ICONS[item.key]}
-                </svg>
-                {t(item.key)}
+                {active ? (
+                  <>
+                    <span className="cta flex size-9 items-center justify-center rounded-full text-[var(--onA)]">
+                      <Icon name={ICON[item.key]} size={19} />
+                    </span>
+                    <span className="text-[11.5px] font-bold uppercase tracking-[.1em]">
+                      {t(item.key)}
+                    </span>
+                  </>
+                ) : (
+                  <Icon name={ICON[item.key]} size={24} />
+                )}
               </Link>
             </li>
           );

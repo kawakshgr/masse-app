@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Icon } from "@/components/Icon";
 
 /*
  * The client screens' atoms — the web twins of Components.swift, so a card, a
@@ -6,9 +7,38 @@ import Link from "next/link";
  * composes these; it does not reach for a size or a radius of its own.
  */
 
-export function Kicker({ children }: { children: React.ReactNode }) {
+/**
+ * A card's title. With an icon it is the section's heading — a large line
+ * icon in a glass square and the name in capitals; without, the small
+ * uppercase line that sits over a screen's title.
+ */
+export function Kicker({
+  children,
+  icon,
+  accent = false,
+}: {
+  children: React.ReactNode;
+  icon?: string;
+  accent?: boolean;
+}) {
+  if (icon) {
+    return (
+      <div className="flex min-h-10 items-center gap-3">
+        <span className="glass2 flex size-10 shrink-0 items-center justify-center rounded-r2 text-[var(--accent)]">
+          <Icon name={icon} size={21} />
+        </span>
+        <h2 className="min-w-0 flex-1 text-[13px] font-bold uppercase tracking-[.12em] text-[var(--ink)]">
+          {children}
+        </h2>
+      </div>
+    );
+  }
   return (
-    <p className="text-[11px] font-semibold uppercase tracking-[.14em] text-[var(--ink2)]">
+    <p
+      className={`text-[11px] font-bold uppercase tracking-[.14em] ${
+        accent ? "text-[var(--accent)]" : "text-[var(--ink2)]"
+      }`}
+    >
       {children}
     </p>
   );
@@ -27,7 +57,7 @@ export function Card({
 
 export function CardTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="font-display text-[19px] font-extrabold leading-tight tracking-[-.03em]">
+    <h2 className="font-display text-[20px] font-extrabold uppercase leading-tight tracking-[-.01em]">
       {children}
     </h2>
   );
@@ -50,10 +80,10 @@ export function ScreenHeader({
   return (
     <header className="space-y-2 pb-1">
       <div className="flex min-h-11 items-center justify-between gap-3">
-        <Kicker>{kicker}</Kicker>
+        <Kicker accent>{kicker}</Kicker>
         {aside}
       </div>
-      <h1 className="font-display text-[30px] font-extrabold leading-[1.05] tracking-[-.035em]">
+      <h1 className="font-display text-[32px] font-extrabold uppercase leading-none tracking-[-.01em]">
         {title}
       </h1>
       {sub && (
@@ -189,7 +219,7 @@ export function BackHeader({
       >
         ‹
       </Link>
-      <h1 className="font-display text-[30px] font-extrabold leading-[1.05] tracking-[-.035em]">
+      <h1 className="font-display text-[32px] font-extrabold uppercase leading-none tracking-[-.01em]">
         {title}
       </h1>
       {lede && <p className="text-[13px] leading-[1.45] text-[var(--ink2)]">{lede}</p>}
@@ -198,10 +228,26 @@ export function BackHeader({
 }
 
 /** A row that opens a screen of its own, chevron and all. */
-export function NavRow({ href, children }: { href: string; children: React.ReactNode }) {
+export function NavRow({
+  href,
+  icon,
+  children,
+}: {
+  href: string;
+  icon?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <Link href={href} className="flex min-h-11 items-center justify-between gap-3 text-[15px] font-semibold">
-      {children}
+    <Link
+      href={href}
+      className="glass2 flex min-h-[52px] items-center gap-3 rounded-r2 px-3.5 text-[15px] font-semibold"
+    >
+      {icon && (
+        <span className="shrink-0 text-[var(--ink2)]">
+          <Icon name={icon} size={20} />
+        </span>
+      )}
+      <span className="min-w-0 flex-1">{children}</span>
       <span aria-hidden className="text-[18px] text-[var(--ink3)]">
         ›
       </span>

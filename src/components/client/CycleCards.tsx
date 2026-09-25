@@ -117,7 +117,7 @@ export function SymptomNoteCard({ today }: { today: string }) {
 
   return (
     <Card className="space-y-2.5">
-      <Kicker>{t("symptomNote")}</Kicker>
+      <Kicker icon="note">{t("symptomNote")}</Kicker>
       <textarea
         rows={4}
         value={notes[today] ?? ""}

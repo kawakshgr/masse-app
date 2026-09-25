@@ -90,7 +90,7 @@ export default async function NutritionPage() {
 
       {target && (
         <Card className="space-y-3">
-          <Kicker>{t("daily")}</Kicker>
+          <Kicker icon="chart">{t("daily")}</Kicker>
           <p className="flex items-baseline gap-1.5">
             <span className="tnum font-display text-[56px] font-extrabold leading-none tracking-[-.04em]">
               {kcal}
@@ -108,7 +108,7 @@ export default async function NutritionPage() {
 
       {meals.length > 0 && (
         <Card className="space-y-3.5">
-          <Kicker>{t("meals")}</Kicker>
+          <Kicker icon="foods">{t("meals")}</Kicker>
           {meals.map((meal) => (
             <div key={meal.id} className="space-y-1.5">
               <p className="flex items-baseline justify-between gap-2">
@@ -132,7 +132,7 @@ export default async function NutritionPage() {
 
       {supplements.length > 0 && (
         <Card className="space-y-2.5">
-          <Kicker>{t("supplements")}</Kicker>
+          <Kicker icon="supplements">{t("supplements")}</Kicker>
           {supplements.map((row) => (
             <div key={row.id} className="flex items-baseline justify-between gap-2.5">
               <span>

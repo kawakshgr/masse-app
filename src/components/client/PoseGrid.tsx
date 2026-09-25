@@ -81,7 +81,7 @@ export function PoseGrid({ checkInId, clientId }: { checkInId: string; clientId:
 
   return (
     <div className="space-y-2.5">
-      <Kicker>{t("title")}</Kicker>
+      <Kicker icon="photo">{t("title")}</Kicker>
       <div className="flex gap-2">
         {POSES.map((pose) => (
           <button

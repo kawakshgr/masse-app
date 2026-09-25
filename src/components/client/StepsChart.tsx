@@ -36,7 +36,7 @@ export function StepsChart({
   return (
     <div className="space-y-3" role="img" aria-label={spoken || t("none")}>
       <div className="flex items-baseline justify-between gap-2">
-        <Kicker>{t("title")}</Kicker>
+        <Kicker icon="steps">{t("title")}</Kicker>
         {target !== null && (
           <span className="tnum text-[13px] text-[var(--ink2)]">
             {t("target", { steps: fmt(target) })}

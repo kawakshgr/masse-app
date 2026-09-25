@@ -71,7 +71,7 @@ export default async function BillingPage({
       />
 
       <Card className="space-y-2">
-        <Kicker>{t("plan")}</Kicker>
+        <Kicker icon="billing">{t("plan")}</Kicker>
         <p
           className={
             planLine ? "text-[15px] font-semibold" : "text-[15px] leading-[1.45] text-[var(--ink2)]"
@@ -82,7 +82,7 @@ export default async function BillingPage({
       </Card>
 
       <Card className="space-y-2.5">
-        <Kicker>{t("payments")}</Kicker>
+        <Kicker icon="chart">{t("payments")}</Kicker>
         {invoices.length === 0 ? (
           <p className="text-[15px] text-[var(--ink2)]">{t("noPayments")}</p>
         ) : (

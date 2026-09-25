@@ -55,7 +55,7 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
     cycle: (
       <>
         <circle cx="12" cy="12" r="8.5" />
-        <path d="M12 3.5a8.5 8.5 0 0 1 0 17" />
+        <path d="M12 12V3.5A8.5 8.5 0 0 1 20.5 12z" fill="currentColor" />
       </>
     ),
     photo: (
@@ -77,6 +77,37 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
         <path d="M9 11h6M9 14.5h6M9 18h3" />
       </>
     ),
+    bell: (
+      <>
+        <path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z" />
+        <path d="M10 21h4" />
+      </>
+    ),
+    appearance: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 3.5v17a8.5 8.5 0 0 0 0-17z" fill="currentColor" stroke="none" />
+      </>
+    ),
+    language: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M3.5 12h17M12 3.5c2.4 2.3 3.6 5.2 3.6 8.5s-1.2 6.2-3.6 8.5c-2.4-2.3-3.6-5.2-3.6-8.5S9.6 5.8 12 3.5z" />
+      </>
+    ),
+    privacy: (
+      <>
+        <rect x="5" y="10.5" width="14" height="10" rx="2.5" />
+        <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" />
+      </>
+    ),
+    info: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 11v5.5M12 7.8h.01" />
+      </>
+    ),
+    home: <path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-5V21H5a1 1 0 0 1-1-1z" />,
     inbox: <path d="M4 5.5h16v10.5H9l-5 4z" />,
     billing: (
       <>

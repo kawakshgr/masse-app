@@ -49,7 +49,7 @@ export function CheckInCard({
 
   return (
     <Card className="space-y-2.5">
-      <Kicker>{t(late ? "lastWeekTitle" : "title")}</Kicker>
+      <Kicker icon="checkIns">{t(late ? "lastWeekTitle" : "title")}</Kicker>
 
       {existing?.author === "coach" ? (
         <p className="text-[15px] leading-[1.45] text-[var(--ink2)]">{t("byCoach")}</p>

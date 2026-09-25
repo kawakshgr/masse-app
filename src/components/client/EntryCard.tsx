@@ -53,7 +53,7 @@ export function EntryCard({
 
   return (
     <Card className="space-y-3.5">
-      <Kicker>{t("title")}</Kicker>
+      <Kicker icon="sleep">{t("title")}</Kicker>
 
       <div className="flex items-center gap-3">
         <span className="flex-1 text-[15px] text-[var(--ink2)]">{t("sleep")}</span>

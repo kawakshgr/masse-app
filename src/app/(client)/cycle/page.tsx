@@ -52,7 +52,7 @@ export default async function CyclePage() {
       {spans.length > 0 && (
         <Card className="space-y-3">
           <div className="flex items-baseline justify-between gap-2">
-            <Kicker>{tChart("title")}</Kicker>
+            <Kicker icon="cycle">{tChart("title")}</Kicker>
             {state?.day_of_cycle && state.cycle_length_days && (
               <span className="tnum text-[13px] text-[var(--ink2)]">
                 {tChart("day", { day: state.day_of_cycle, length: state.cycle_length_days })}
@@ -73,7 +73,7 @@ export default async function CyclePage() {
 
       {entries.length > 0 && (
         <Card className="space-y-2.5">
-          <Kicker>{t("history")}</Kicker>
+          <Kicker icon="chart">{t("history")}</Kicker>
           <ul>
             {entries.map((entry) => (
               <li key={entry.id} className="flex items-center gap-2">
