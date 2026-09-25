@@ -42,11 +42,13 @@ function Field({
   );
 }
 
+/** A titled run of fields, divided by a hairline rather than boxed: the
+ *  section around it is already a panel, and a panel inside it reads as fog. */
 function Group({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <fieldset className="glass2 rounded-r3 p-3.5">
-      <legend className={`px-1 ${micro}`}>{title}</legend>
-      <div className="mt-2 grid gap-3 sm:grid-cols-2">{children}</div>
+    <fieldset className="border-t border-[var(--hair)] pt-3.5">
+      <legend className={`float-left mb-2.5 w-full ${micro}`}>{title}</legend>
+      <div className="clear-left grid gap-3 sm:grid-cols-2">{children}</div>
     </fieldset>
   );
 }
@@ -65,22 +67,12 @@ export function CoachBillingProfile({
   const [regime, setRegime] = useState(profile?.vat_regime ?? "franchise");
 
   return (
-    <section className="glass rounded-r3 p-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className={micro}>{t("title")}</h3>
-        {profile?.updated_at && (
-          <span className="text-[11px] text-[var(--ink3)]">
-            {t("updated", {
-              date: new Date(profile.updated_at).toLocaleDateString("fr-FR"),
-            })}
-          </span>
-        )}
-      </div>
-      <p className="mt-1.5 max-w-[70ch] text-[13px] leading-[1.5] text-[var(--ink2)]">
+    <div>
+      <p className="max-w-[70ch] text-[13px] leading-[1.5] text-[var(--ink2)]">
         {t("lede")}
       </p>
 
-      <form action={saveBillingProfile} className="mt-4 space-y-3">
+      <form action={saveBillingProfile} className="mt-4 space-y-4">
         <Group title={t("identity")}>
           <Field label={t("legalName")} name="legal_name" value={profile?.legal_name ?? ""} />
           <Field
@@ -207,6 +199,6 @@ export function CoachBillingProfile({
           </p>
         </div>
       </form>
-    </section>
+    </div>
   );
 }

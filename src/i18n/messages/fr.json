@@ -369,7 +369,17 @@
       "suspend_coach": "coach suspendu",
       "restore_coach": "coach réactivé"
     },
-    "coachLede": "Tes règles de coaching et ton entreprise, pour tous tes clients à la fois."
+    "coachLede": "Tes règles de coaching et ton entreprise, pour tous tes clients à la fois.",
+    "mine": "Mes réglages",
+    "platform": "Plateforme",
+    "coachCount": "{count, plural, =0 {Aucun coach} =1 {1 coach} other {# coachs}}",
+    "suspendedCount": "{count, plural, =1 {1 suspendu} other {# suspendus}}",
+    "logCount": "{count, plural, =0 {Aucun accès enregistré} =1 {1 accès récent} other {# accès récents}}",
+    "suspendOpen": "Suspendre…",
+    "restoreOpen": "Réactiver…",
+    "clientCount": "{count, plural, =0 {aucun client} =1 {1 client} other {# clients}}",
+    "programmeCount": "{count, plural, =0 {aucun programme} =1 {1 programme} other {# programmes}}",
+    "since": "depuis le {date}"
   },
   "checkin": {
     "title": "Bilan de la semaine",
@@ -619,7 +629,8 @@
     "add": "Autoriser",
     "remove": "Retirer",
     "empty": "Aucune adresse autorisée — plus personne ne peut devenir coach.",
-    "added": "Ajoutée le"
+    "added": "Ajoutée le",
+    "count": "{count, plural, =0 {Aucune adresse} =1 {1 adresse} other {# adresses}}"
   },
   "theme": {
     "label": "Thème",
@@ -922,7 +933,9 @@
     "footerNote": "Mention de pied de page",
     "save": "Enregistrer",
     "disclaimer": "Masse n’est pas un conseil juridique ni comptable. Fais valider une première facture par ton comptable avant de l’envoyer.",
-    "incomplete": "Renseigne ton entreprise dans Admin pour pouvoir éditer une facture."
+    "incomplete": "Renseigne ton entreprise dans Admin pour pouvoir éditer une facture.",
+    "missing": "{count, plural, =1 {1 mention manquante} other {# mentions manquantes}}",
+    "complete": "Complet · mis à jour le {date}"
   },
   "invoice": {
     "title": "Facture",
@@ -1266,7 +1279,8 @@
     "o5": "Samedi",
     "o6": "Dimanche",
     "save": "Enregistrer",
-    "saved": "Enregistré"
+    "saved": "Enregistré",
+    "summary": "Dû le {day}"
   },
   "muscles": {
     "Abdominals": "Abdominaux",

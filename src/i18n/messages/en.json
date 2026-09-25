@@ -369,7 +369,17 @@
       "suspend_coach": "coach suspended",
       "restore_coach": "coach restored"
     },
-    "coachLede": "Your coaching rules and your company, for all your clients at once."
+    "coachLede": "Your coaching rules and your company, for all your clients at once.",
+    "mine": "My settings",
+    "platform": "Platform",
+    "coachCount": "{count, plural, =0 {No coaches} =1 {1 coach} other {# coaches}}",
+    "suspendedCount": "{count} suspended",
+    "logCount": "{count, plural, =0 {No access logged} =1 {1 recent access} other {# recent accesses}}",
+    "suspendOpen": "Suspend…",
+    "restoreOpen": "Restore…",
+    "clientCount": "{count, plural, =0 {no clients} =1 {1 client} other {# clients}}",
+    "programmeCount": "{count, plural, =0 {no programmes} =1 {1 programme} other {# programmes}}",
+    "since": "since {date}"
   },
   "checkin": {
     "title": "Weekly check-in",
@@ -619,7 +629,8 @@
     "add": "Allow",
     "remove": "Remove",
     "empty": "No allowed addresses — nobody can become a coach.",
-    "added": "Added"
+    "added": "Added",
+    "count": "{count, plural, =0 {No addresses} =1 {1 address} other {# addresses}}"
   },
   "theme": {
     "label": "Theme",
@@ -922,7 +933,9 @@
     "footerNote": "Footer note",
     "save": "Save",
     "disclaimer": "Masse is not legal or accounting advice. Have your accountant check a first invoice before you send it.",
-    "incomplete": "Fill in your company under Admin before you can write an invoice."
+    "incomplete": "Fill in your company under Admin before you can write an invoice.",
+    "missing": "{count, plural, =1 {1 required detail missing} other {# required details missing}}",
+    "complete": "Complete · updated {date}"
   },
   "invoice": {
     "title": "Invoice",
@@ -1266,7 +1279,8 @@
     "o5": "Saturday",
     "o6": "Sunday",
     "save": "Save",
-    "saved": "Saved"
+    "saved": "Saved",
+    "summary": "Due {day}"
   },
   "muscles": {
     "Abdominals": "Abdominals",
