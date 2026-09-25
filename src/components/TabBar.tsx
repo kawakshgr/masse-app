@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { setLocale, signOut } from "@/app/(client)/actions";
 import { locales } from "@/i18n/config";
+import {
+  getResolvedTheme,
+  getServerResolvedTheme,
+  setTheme,
+  subscribeTheme,
+  watchSystemTheme,
+} from "@/lib/theme";
 import { Icon } from "@/components/Icon";
 
 /**
@@ -23,14 +30,11 @@ export function TabBar({
   name,
   initials,
   subtitle,
-  children,
 }: {
   name: string;
   initials: string;
   /** Derived from the roster, singular and plural handled by the caller. */
   subtitle: string;
-  /** The theme switch, rendered by the layout. */
-  children?: React.ReactNode;
 }) {
   const t = useTranslations("nav");
   const tSoon = useTranslations("soonCopy");
@@ -134,7 +138,6 @@ export function TabBar({
         </nav>
 
         <div className="flex min-w-0 flex-1 basis-0 items-center justify-end gap-2">
-          {children}
           <AccountMenu name={name} initials={initials} />
         </div>
       </header>
@@ -149,12 +152,16 @@ export function TabBar({
 }
 
 /**
- * Her name, which opens a small menu: the interface language and signing
- * out. Closes on Escape, on a click elsewhere, and after a choice.
+ * Her name, which opens a small menu: appearance, the interface language and
+ * signing out. Closes on Escape, on a click elsewhere, and after a choice.
  */
 function AccountMenu({ name, initials }: { name: string; initials: string }) {
   const t = useTranslations("shell");
+  const tTheme = useTranslations("theme");
   const locale = useLocale();
+  const theme = useSyncExternalStore(subscribeTheme, getResolvedTheme, getServerResolvedTheme);
+  // Until she picks one, the app follows the system — and keeps following it.
+  useEffect(() => watchSystemTheme(), []);
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const box = useRef<HTMLDivElement>(null);
@@ -213,6 +220,28 @@ function AccountMenu({ name, initials }: { name: string; initials: string }) {
           role="menu"
           className="chrome lift absolute right-0 top-[calc(100%+8px)] z-50 w-[240px] rounded-r3 p-1.5"
         >
+          <p className="px-2.5 pb-1 pt-2 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            {tTheme("label")}
+          </p>
+          {(["dark", "light"] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              role="menuitemradio"
+              aria-checked={theme === option}
+              onClick={() => {
+                setOpen(false);
+                setTheme(option);
+              }}
+              className={row}
+            >
+              <span className="flex-1">{tTheme(option)}</span>
+              {theme === option && <span className="text-[var(--accent)]">✓</span>}
+            </button>
+          ))}
+
+          <div className="my-1.5 border-t border-[var(--hair)]" />
+
           <p className="px-2.5 pb-1 pt-2 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
             {t("language")}
           </p>

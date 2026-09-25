@@ -1,11 +1,9 @@
 import { getTranslations } from "next-intl/server";
+import { PaneEmpty } from "@/components/Pane";
 
 export default async function ProgrammesIndexPage() {
   const t = await getTranslations("editor");
+  const tProg = await getTranslations("programmes");
 
-  return (
-    <div className="grid h-full place-items-center p-6">
-      <p className="text-[13px] text-[var(--ink3)]">{t("pickWeek")}</p>
-    </div>
-  );
+  return <PaneEmpty icon="programmes" title={tProg("title")} hint={t("pickWeek")} />;
 }

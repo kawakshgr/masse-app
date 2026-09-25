@@ -1,11 +1,9 @@
 import { getTranslations } from "next-intl/server";
+import { PaneEmpty } from "@/components/Pane";
 
 export default async function ClientsIndexPage() {
   const t = await getTranslations("detail");
+  const tRoster = await getTranslations("roster");
 
-  return (
-    <div className="grid h-full place-items-center p-6">
-      <p className="text-[13px] text-[var(--ink3)]">{t("pickClient")}</p>
-    </div>
-  );
+  return <PaneEmpty icon="clients" title={tRoster("title")} hint={t("pickClient")} />;
 }

@@ -10,6 +10,7 @@ import {
 import { SupplementDetail } from "@/components/SupplementLibrary";
 import { doseLabel, type LibraryEntry } from "@/lib/supplementEntry";
 import { SupplementForm } from "@/components/SupplementForm";
+import { Badge } from "@/components/Pane";
 import { unhideSupplement } from "./actions";
 import {
   SUPPLEMENT_CATEGORIES,
@@ -125,15 +126,9 @@ export default async function SupplementsPage({
                   .filter(Boolean)
                   .join(" · ")}
                 trailing={
-                  <span
-                    className={`rounded-rp border px-2 py-px text-[10px] uppercase tracking-[.14em] ${
-                      entry.usable
-                        ? "border-[var(--edge)] text-[var(--ink3)]"
-                        : "border-[var(--a3)] text-[var(--a3)]"
-                    }`}
-                  >
+                  <Badge tone={entry.usable ? "plain" : "alert"}>
                     {t(!entry.usable ? "unusable" : entry.mine ? "mine" : "builtIn")}
-                  </span>
+                  </Badge>
                 }
               />
             ))}
@@ -146,7 +141,7 @@ export default async function SupplementsPage({
       ) : picked ? (
         <SupplementDetail entry={entryOf(picked)} />
       ) : (
-        <LibraryEmpty title={selected ? t("gone") : t("pick")} lede={selected ? undefined : t("lede")}>
+        <LibraryEmpty icon="supplements" title={selected ? t("gone") : t("pick")} lede={selected ? undefined : t("lede")}>
           {!selected && hidden.length > 0 && (
             <div className="mt-5 border-t border-[var(--hair)] pt-4">
               <p className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">

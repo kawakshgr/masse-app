@@ -4,7 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { loadRoster } from "@/lib/roster";
 import { TabBar } from "@/components/TabBar";
 import { CommandPalette } from "@/components/CommandPalette";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 /** "Kevin Cordeiro" → "KC"; one name gives its first two letters. */
 function initialsOf(name: string) {
@@ -56,9 +55,7 @@ export default async function CoachLayout({
             clients: clientsNeedingYou,
             checkins: checkinsToReview,
           })}
-        >
-          <ThemeToggle />
-        </TabBar>
+        />
       </div>
 
       <CommandPalette clients={entries.map((e) => ({ id: e.id, name: e.name }))} />

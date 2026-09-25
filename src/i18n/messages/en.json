@@ -71,7 +71,8 @@
     "addSession": "Add a session",
     "push": "Push to clients",
     "pushed": "Pushed on {date}",
-    "notPushed": "Never pushed — invisible to the client"
+    "notPushed": "Never pushed — invisible to the client",
+    "count": "{count, plural, =0 {no programmes} =1 {1 programme} other {# programmes}}"
   },
   "days": {
     "0": "Monday",

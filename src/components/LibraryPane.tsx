@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SplitPane } from "@/components/SplitPane";
 import { LibrarySwitch } from "@/components/LibrarySwitch";
+import { PaneEmpty, PaneHead, Tile, rowClass } from "@/components/Pane";
 
 /**
  * The frame both nutrition libraries share: the list on the left — switch,
@@ -45,15 +46,9 @@ export function LibraryPane({
 }) {
   const pane = (
     <div className="flex h-full min-w-0 flex-col">
-      <div className="flex flex-col gap-2.5 border-b border-[var(--hair)] p-3">
+      <div className="flex flex-col gap-3 border-b border-[var(--hair)] p-3 pt-4">
         <LibrarySwitch active={active} />
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-            {title}
-          </span>
-          <div className="flex-1" />
-          <span className="tnum text-[12px] text-[var(--ink3)]">{count}</span>
-        </div>
+        <PaneHead kicker={count} title={title} />
 
         <form action={path} className="contents">
           {Object.entries(keep).map(([name, value]) =>
@@ -75,7 +70,7 @@ export function LibraryPane({
               key={chip.key}
               href={chip.href}
               aria-current={chip.on ? "page" : undefined}
-              className={`rounded-rp border border-[var(--edge)] px-2.5 py-1 text-[11.5px] font-semibold ${
+              className={`rounded-rp border border-[var(--edge)] px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[.1em] ${
                 chip.on ? "sel text-[var(--ink)]" : "bg-[var(--glass2)] text-[var(--ink2)]"
               }`}
             >
@@ -108,7 +103,7 @@ export function LibraryPane({
   );
 }
 
-/** One row of either list: name, a line under it, and a figure or badge. */
+/** One row of either list: a tile, the name, a line under it, a figure or badge. */
 export function LibraryRow({
   href,
   on,
@@ -129,14 +124,11 @@ export function LibraryRow({
       <Link
         href={href}
         aria-current={on ? "page" : undefined}
-        className={`flex items-center gap-2.5 rounded-r2 border px-3 py-2.5 ${
-          on
-            ? "border-[var(--accent-soft)] bg-[var(--glass2)]"
-            : "border-transparent hover:bg-[var(--glass)]"
-        } ${muted ? "opacity-55" : ""}`}
+        className={`${rowClass(on)} ${muted ? "opacity-55" : ""}`}
       >
+        <Tile>{name.trim().charAt(0).toUpperCase()}</Tile>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-semibold">{name}</span>
+          <span className="block truncate text-[13.5px] font-semibold">{name}</span>
           <span className="block truncate text-[11.5px] text-[var(--ink2)]">{line}</span>
         </span>
         <span className="shrink-0">{trailing}</span>
@@ -147,24 +139,20 @@ export function LibraryRow({
 
 /** The detail pane when nothing is selected. */
 export function LibraryEmpty({
+  icon = "foods",
   title,
   lede,
   children,
 }: {
+  icon?: string;
   title: string;
   lede?: string;
   children?: React.ReactNode;
 }) {
   return (
-    <div className="grid min-w-0 flex-1 place-items-center p-6">
-      <div className="max-w-[46ch] text-center">
-        <p className="text-[14px] font-semibold">{title}</p>
-        {lede && (
-          <p className="mt-1.5 text-[13px] leading-[1.5] text-[var(--ink2)]">{lede}</p>
-        )}
-        {children}
-      </div>
-    </div>
+    <PaneEmpty icon={icon} title={title} hint={lede}>
+      {children}
+    </PaneEmpty>
   );
 }
 

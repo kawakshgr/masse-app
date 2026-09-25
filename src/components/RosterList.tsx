@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Toolbar } from "@/components/Toolbar";
+import { Badge, PaneHead, Tile, rowClass } from "@/components/Pane";
 import type { RosterEntry } from "@/lib/roster";
 import { InviteDialog, type PendingInvite } from "@/components/InviteDialog";
 
@@ -31,17 +32,9 @@ export function RosterList({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="px-3 pt-3">
+      <div className="flex flex-col gap-3 border-b border-[var(--hair)] p-3 pt-4">
+        <PaneHead kicker={t("count", { count: entries.length })} title={t("title")} />
         <Toolbar query={query} onQueryChange={setQuery} />
-      </div>
-
-      <div className="mt-3 flex h-10 shrink-0 items-center justify-between border-y border-[var(--hair)] px-3">
-        <span className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-          {t("title")}
-        </span>
-        <span className="tnum text-[11px] text-[var(--ink3)]">
-          {t("count", { count: entries.length })}
-        </span>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -54,7 +47,7 @@ export function RosterList({
             </p>
           </div>
         ) : (
-          <ul>
+          <ul className="flex flex-col gap-1 p-2">
             {shown.map((entry) => {
               const active = params?.id === entry.id;
               const secondLine = entry.attention
@@ -71,24 +64,13 @@ export function RosterList({
                         : `/clients/${entry.id}`
                     }
                     aria-current={active ? "page" : undefined}
-                    className={`flex items-center gap-3 border-b border-[var(--hair)] px-3 transition-colors ${
-                      active ? "sel" : "hover:bg-[var(--glass)]"
-                    }`}
-                    style={{ height: "var(--row-h)" }}
+                    className={rowClass(active)}
                   >
-                    <span
-                      aria-hidden
-                      className="flex size-8 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold text-[var(--on-accent)]"
-                      style={{
-                        background: "linear-gradient(140deg, var(--a1), var(--a2))",
-                      }}
-                    >
-                      {entry.initials}
-                    </span>
+                    <Tile accent>{entry.initials}</Tile>
 
                     <span className="min-w-0 flex-1">
                       <span
-                        className="block truncate text-[14px] font-semibold leading-tight"
+                        className="block truncate text-[13.5px] font-semibold leading-tight"
                         title={entry.name}
                       >
                         {entry.name}
@@ -103,11 +85,7 @@ export function RosterList({
                       </span>
                     </span>
 
-                    {entry.attention && (
-                      <span className="shrink-0 rounded-rp border border-[var(--a3)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--a3)]">
-                        {tChip(entry.attention)}
-                      </span>
-                    )}
+                    {entry.attention && <Badge tone="alert">{tChip(entry.attention)}</Badge>}
                   </Link>
                 </li>
               );

@@ -20,6 +20,12 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
         <path d="M12 7.5c0-2 1-3.6 3-4.5" />
       </>
     ),
+    supplements: (
+      <>
+        <rect x="3.5" y="8.5" width="17" height="7" rx="3.5" transform="rotate(-45 12 12)" />
+        <path d="m9.5 9.5 5 5" />
+      </>
+    ),
     inbox: <path d="M4 5.5h16v10.5H9l-5 4z" />,
     billing: (
       <>

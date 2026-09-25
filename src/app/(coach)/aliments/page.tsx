@@ -74,8 +74,11 @@ export default async function FoodsPage({
                   .filter(Boolean)
                   .join(" · ")}
                 trailing={
-                  <span className="tnum text-[12px] font-bold text-[var(--ink2)]">
+                  <span className="tnum text-right text-[13px] font-extrabold leading-none">
                     {Math.round(Number(food.kcal_100g ?? 0))}
+                    <span className="block pt-1 text-[9.5px] font-bold uppercase tracking-[.12em] text-[var(--ink3)]">
+                      kcal
+                    </span>
                   </span>
                 }
               />
