@@ -287,8 +287,14 @@ function PlanTotals({
               proteinG={Math.round(total.proteinG)}
               carbsG={Math.round(total.carbsG)}
               fatG={Math.round(total.fatG)}
-              centre={`${Math.round(total.proteinG)} / ${Math.round(total.carbsG)} / ${Math.round(total.fatG)}`}
-              caption="g"
+              // Energy from the same grams the ring splits, so the centre and
+              // the segments can never tell two stories.
+              centre={Math.round(
+                Math.round(total.proteinG) * 4 +
+                  Math.round(total.carbsG) * 4 +
+                  Math.round(total.fatG) * 9,
+              ).toLocaleString("fr-FR")}
+              caption="kcal"
               labels={{ protein: t("protein"), carbs: t("carbs"), fat: t("fat") }}
             />
           </div>
