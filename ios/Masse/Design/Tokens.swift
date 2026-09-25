@@ -9,17 +9,18 @@ enum Tk {
 
     // MARK: - Colour
 
-    /// App background.
-    static let bg = dynamic(dark: 0x05121B, light: 0xE7F2F3)
+    /// App background. Dark is a neutral #161616; the surfaces around it —
+    /// ink, glass, edges, the atmosphere — lean violet, as on the web.
+    static let bg = dynamic(dark: 0x161616, light: 0xE7F2F3)
     /// The surface a sheet sits on, and the knob of a toggle.
-    static let deep = dynamic(dark: 0x020A10, light: 0xFFFFFF)
+    static let deep = dynamic(dark: 0x161616, light: 0xFFFFFF)
 
     /// Primary text.
-    static let ink = dynamic(dark: 0xF3FCFB, light: 0x05202A)
+    static let ink = dynamic(dark: 0xF4F2FB, light: 0x05202A)
     /// Secondary text. Most labels are this, not `ink3`.
-    static let ink2 = dynamic(dark: 0xF3FCFB, light: 0x05202A, darkAlpha: 0.74, lightAlpha: 0.76)
+    static let ink2 = dynamic(dark: 0xF4F2FB, light: 0x05202A, darkAlpha: 0.74, lightAlpha: 0.76)
     /// Tertiary: hints, placeholders, states that are inert.
-    static let ink3 = dynamic(dark: 0xF3FCFB, light: 0x05202A, darkAlpha: 0.48, lightAlpha: 0.52)
+    static let ink3 = dynamic(dark: 0xF4F2FB, light: 0x05202A, darkAlpha: 0.48, lightAlpha: 0.52)
 
     /// Primary accent, teal.
     static let a1 = dynamic(dark: 0x5FE3D2, light: 0x0A8579)
@@ -31,8 +32,8 @@ enum Tk {
     static let onA = dynamic(dark: 0x022B2A, light: 0xFFFFFF)
 
     /// The deep pair behind the blurred atmosphere. Not for ink or fills.
-    static let b1 = dynamic(dark: 0x0F6F80, light: 0x9FE6DD)
-    static let b2 = dynamic(dark: 0x4B2FA8, light: 0xC9BCFF)
+    static let b1 = dynamic(dark: 0x2B2F7A, light: 0x9FE6DD)
+    static let b2 = dynamic(dark: 0x52309E, light: 0xC9BCFF)
 
     // MARK: - Glass
     //
@@ -40,13 +41,13 @@ enum Tk {
     // web uses, so the two clients read as one product.
 
     /// A panel.
-    static let glass = dynamic(dark: 0xFFFFFF, light: 0xFFFFFF, darkAlpha: 0.09, lightAlpha: 0.62)
+    static let glass = dynamic(dark: 0xF6F3FF, light: 0xFFFFFF, darkAlpha: 0.09, lightAlpha: 0.62)
     /// Anything nested inside a panel: a field, a chip, a rail.
-    static let glass2 = dynamic(dark: 0xFFFFFF, light: 0xFFFFFF, darkAlpha: 0.17, lightAlpha: 0.82)
+    static let glass2 = dynamic(dark: 0xF6F3FF, light: 0xFFFFFF, darkAlpha: 0.17, lightAlpha: 0.82)
     /// A hairline that separates two surfaces.
-    static let edge = dynamic(dark: 0xFFFFFF, light: 0x05202A, darkAlpha: 0.17, lightAlpha: 0.13)
+    static let edge = dynamic(dark: 0xECE7FF, light: 0x05202A, darkAlpha: 0.17, lightAlpha: 0.13)
     /// Fainter still: a divider inside one surface.
-    static let hair = dynamic(dark: 0xFFFFFF, light: 0x05202A, darkAlpha: 0.10, lightAlpha: 0.09)
+    static let hair = dynamic(dark: 0xECE7FF, light: 0x05202A, darkAlpha: 0.10, lightAlpha: 0.09)
 
     /// The accent veil a metric card carries.
     static func wash(_ accent: Color) -> Color { accent.opacity(0.20) }

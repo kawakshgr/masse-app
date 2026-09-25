@@ -125,8 +125,8 @@ private func resting(_ state: SessionActivityAttributes.ContentState) -> Bool {
 /// The handful of tokens the Lock Screen needs, from Tokens.swift. The Lock
 /// Screen is always dark enough for the dark set.
 private enum W {
-    static let bg = Color(red: 0x05 / 255, green: 0x12 / 255, blue: 0x1B / 255)
-    static let ink = Color(red: 0xF3 / 255, green: 0xFC / 255, blue: 0xFB / 255)
+    static let bg = Color(red: 0x16 / 255, green: 0x16 / 255, blue: 0x16 / 255)
+    static let ink = Color(red: 0xF4 / 255, green: 0xF2 / 255, blue: 0xFB / 255)
     static let ink2 = ink.opacity(0.74)
     static let a1 = Color(red: 0x5F / 255, green: 0xE3 / 255, blue: 0xD2 / 255)
 }

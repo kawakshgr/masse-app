@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#05121b" },
+    { media: "(prefers-color-scheme: dark)", color: "#161616" },
     { media: "(prefers-color-scheme: light)", color: "#e7f2f3" },
   ],
   // Her thumb is on the screen mid-set; a stray double-tap must not zoom.

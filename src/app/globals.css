@@ -15,14 +15,17 @@
      the OS appearance, so a Mac in dark mode looked correct by accident. */
   color-scheme: dark;
 
-  --bg: #05121b;
-  --deep: #020a10;
-  --ink: #f3fcfb;
-  --ink2: rgba(243, 252, 251, 0.74);
-  --ink3: rgba(243, 252, 251, 0.48);
-  --gw: 255, 255, 255;
-  --ew: 255, 255, 255;
-  --dw: 7, 18, 26;
+  /* A neutral #161616, and every surface around it leaning violet: ink, glass,
+     edges and chrome are tinted towards the --a2 hue so the grey never reads
+     cold. The accents themselves do not move. */
+  --bg: #161616;
+  --deep: #161616;
+  --ink: #f4f2fb;
+  --ink2: rgba(244, 242, 251, 0.74);
+  --ink3: rgba(244, 242, 251, 0.48);
+  --gw: 246, 243, 255;
+  --ew: 236, 231, 255;
+  --dw: 17, 15, 22;
   --a1: #5fe3d2;
   --a2: #9c86ff;
   --a3: #ff8069;
@@ -32,10 +35,10 @@
   --accent: var(--a2);
   --on-accent: #16093c;
   --accent-soft: var(--a1);
-  --b1: #0f6f80;
-  --b2: #4b2fa8;
+  --b1: #2b2f7a;
+  --b2: #52309e;
   --b3: #8f3a4f;
-  --sel: linear-gradient(180deg, color-mix(in oklab, var(--a1) 30%, rgba(4, 16, 22, 0.84)), color-mix(in oklab, var(--a2) 26%, rgba(4, 16, 22, 0.84)));
+  --sel: linear-gradient(180deg, color-mix(in oklab, var(--a1) 30%, rgba(22, 20, 30, 0.84)), color-mix(in oklab, var(--a2) 26%, rgba(22, 20, 30, 0.84)));
   --spec: inset 0 1px 0 rgba(255, 255, 255, 0.26), inset 0 -1px 0 rgba(0, 0, 0, 0.22);
   --lift: 0 16px 40px rgba(0, 0, 0, 0.32);
   --wash1: color-mix(in oklab, var(--a1) 20%, transparent);
