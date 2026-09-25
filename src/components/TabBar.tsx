@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { setLocale, signOut } from "@/app/(client)/actions";
+import { locales } from "@/i18n/config";
 import { Icon } from "@/components/Icon";
 
 /**
@@ -133,17 +135,7 @@ export function TabBar({
 
         <div className="flex min-w-0 flex-1 basis-0 items-center justify-end gap-2">
           {children}
-          <span className="glass2 hidden h-10 min-w-0 items-center gap-2 rounded-rp pl-1 pr-3.5 lg:flex">
-            <span
-              aria-hidden
-              className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--edge)] text-[11px] font-bold tracking-[.04em]"
-            >
-              {initials}
-            </span>
-            <span className="truncate text-[12.5px] font-semibold">
-              {name} <span className="text-[var(--ink2)]">· {tShell("role")}</span>
-            </span>
-          </span>
+          <AccountMenu name={name} initials={initials} />
         </div>
       </header>
 
@@ -151,6 +143,112 @@ export function TabBar({
         <p className="pt-2 text-center text-[12px] leading-[1.5] text-[var(--ink3)]">
           {t(revealed)} — {tSoon(revealed)}
         </p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Her name, which opens a small menu: the interface language and signing
+ * out. Closes on Escape, on a click elsewhere, and after a choice.
+ */
+function AccountMenu({ name, initials }: { name: string; initials: string }) {
+  const t = useTranslations("shell");
+  const locale = useLocale();
+  const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const box = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const away = (event: MouseEvent) => {
+      if (!box.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", away);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("mousedown", away);
+      document.removeEventListener("keydown", escape);
+    };
+  }, [open]);
+
+  const row =
+    "flex h-10 w-full items-center gap-2.5 rounded-r2 px-2.5 text-left text-[13px] font-semibold transition-colors hover:bg-[var(--glass2)]";
+
+  return (
+    <div ref={box} className="relative">
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((on) => !on)}
+        className={`flex h-10 min-w-0 items-center gap-2 rounded-rp border pl-1 pr-1 transition-colors lg:pr-3 ${
+          open ? "sel" : "glass2 hover:border-[var(--edge)]"
+        }`}
+      >
+        <span
+          aria-hidden
+          className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--edge)] text-[11px] font-bold tracking-[.04em]"
+        >
+          {initials}
+        </span>
+        <span className="hidden truncate text-[12.5px] font-semibold lg:inline">
+          {name} <span className="text-[var(--ink2)]">· {t("role")}</span>
+        </span>
+        <span
+          aria-hidden
+          className={`hidden text-[13px] leading-none text-[var(--ink3)] transition-transform lg:inline ${
+            open ? "rotate-90" : ""
+          }`}
+        >
+          ›
+        </span>
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="chrome lift absolute right-0 top-[calc(100%+8px)] z-50 w-[240px] rounded-r3 p-1.5"
+        >
+          <p className="px-2.5 pb-1 pt-2 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            {t("language")}
+          </p>
+          {locales.map((option) => {
+            const current = option === locale;
+            return (
+              <button
+                key={option}
+                type="button"
+                role="menuitemradio"
+                aria-checked={current}
+                disabled={pending}
+                onClick={() => {
+                  setOpen(false);
+                  if (!current) startTransition(() => setLocale(option));
+                }}
+                className={row}
+              >
+                <span className="flex-1">{t(`locale.${option}`)}</span>
+                {current && <span className="text-[var(--accent)]">✓</span>}
+              </button>
+            );
+          })}
+
+          <div className="my-1.5 border-t border-[var(--hair)]" />
+
+          <button
+            type="button"
+            role="menuitem"
+            disabled={pending}
+            onClick={() => startTransition(() => signOut())}
+            className={`${row} text-[var(--a3)]`}
+          >
+            {t("signOut")}
+          </button>
+        </div>
       )}
     </div>
   );

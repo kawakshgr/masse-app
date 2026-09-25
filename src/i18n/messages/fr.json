@@ -37,7 +37,13 @@
     "messaging": "Inbox",
     "messagingSoon": "La messagerie est en développement. D’ici là, WhatsApp reste où il est.",
     "subtitle": "{clients, plural, =0 {Personne n’a besoin de toi} =1 {1 client a besoin de toi} other {# clients ont besoin de toi}} · {checkins, plural, =0 {aucun bilan à relire} =1 {1 bilan à relire} other {# bilans à relire}}",
-    "role": "Coach"
+    "role": "Coach",
+    "language": "Langue",
+    "signOut": "Se déconnecter",
+    "locale": {
+      "fr": "Français",
+      "en": "English"
+    }
   },
   "roster": {
     "title": "Roster",
