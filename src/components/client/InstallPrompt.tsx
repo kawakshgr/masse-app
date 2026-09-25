@@ -101,7 +101,7 @@ export function InstallPrompt() {
     <Card className="space-y-3">
       <div className="flex items-center gap-3">
         {/* eslint-disable-next-line @next/next/no-img-element -- the app's own icon */}
-        <img src="/icon-192.png" alt="" className="size-11 rounded-r2" />
+        <img src="/icon-192.png?v=2" alt="" className="size-11 rounded-r2" />
         <CardTitle>{t("title")}</CardTitle>
       </div>
       <p className="text-[15px] leading-[1.45] text-[var(--ink2)]">{t("lede")}</p>

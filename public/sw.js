@@ -10,7 +10,7 @@
  * and opening the app with no connection lands on a page that says so.
  */
 
-const VERSION = "masse-v1";
+const VERSION = "masse-v2";
 const SHELL = `${VERSION}-shell`;
 const OFFLINE_URL = "/hors-ligne";
 
@@ -19,7 +19,7 @@ self.addEventListener("install", (event) => {
     caches
       .open(SHELL)
       .then((cache) =>
-        cache.addAll([OFFLINE_URL, "/icon-192.png", "/icon-512.png"]),
+        cache.addAll([OFFLINE_URL, "/icon-192.png?v=2", "/icon-512.png?v=2"]),
       )
       .then(() => self.skipWaiting()),
   );
