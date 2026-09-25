@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SubNav } from "@/components/SubNav";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -224,24 +224,15 @@ export default async function BillingPage({
                 })}
           </p>
         </div>
-        <nav className="flex flex-wrap items-center gap-2">
-          {FILTERS.map((value) => (
-            <Link
-              key={value}
-              href={`/facturation?filtre=${value}`}
-              aria-current={filter === value ? "page" : undefined}
-              className={`rounded-rp border border-[var(--edge)] px-3.5 py-2 text-[13px] font-semibold ${
-                filter === value
-                  ? "sel text-[var(--ink)]"
-                  : "bg-[var(--glass2)] text-[var(--ink2)]"
-              }`}
-            >
-              {value === "open" && open.length > 0
-                ? `${t("filterOpen")} · ${open.length}`
-                : t(`filter_${value}`)}
-            </Link>
-          ))}
-        </nav>
+        <SubNav
+          items={FILTERS.map((value) => ({
+            key: value,
+            href: `/facturation?filtre=${value}`,
+            label: t(value === "open" ? "filterOpen" : `filter_${value}`),
+            count: value === "open" && open.length > 0 ? open.length : undefined,
+            active: filter === value,
+          }))}
+        />
       </header>
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(166px,1fr))] gap-2.5">

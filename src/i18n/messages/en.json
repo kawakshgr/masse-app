@@ -36,7 +36,8 @@
     "soon": "soon",
     "messaging": "Inbox",
     "messagingSoon": "Messaging is in development. Until it ships, WhatsApp stays where it is.",
-    "subtitle": "{clients, plural, =0 {Nobody needs you} =1 {1 client needs you} other {# clients need you}} · {checkins, plural, =0 {no check-ins to review} =1 {1 check-in to review} other {# check-ins to review}}"
+    "subtitle": "{clients, plural, =0 {Nobody needs you} =1 {1 client needs you} other {# clients need you}} · {checkins, plural, =0 {no check-ins to review} =1 {1 check-in to review} other {# check-ins to review}}",
+    "role": "Coach"
   },
   "roster": {
     "title": "Roster",

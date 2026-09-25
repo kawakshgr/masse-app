@@ -8,6 +8,7 @@ import {
 } from "./actions";
 import { DUE_OFFSETS, DEFAULT_DUE_OFFSET } from "@/lib/checkIns";
 import { CoachBillingProfile } from "@/components/CoachBillingProfile";
+import { Icon } from "@/components/Icon";
 
 /** What an invoice cannot go out without; the section header counts them. */
 const REQUIRED_MENTIONS = [
@@ -30,13 +31,13 @@ const cell =
  * server action that re-renders the page leaves it open.
  */
 function Section({
-  glyph,
+  icon,
   title,
   status,
   alert = false,
   children,
 }: {
-  glyph: string;
+  icon: string;
   title: string;
   status: string;
   alert?: boolean;
@@ -44,15 +45,14 @@ function Section({
 }) {
   return (
     <details className="group glass rounded-r3">
-      <summary className="flex h-[64px] cursor-pointer list-none items-center gap-3 px-4 [&::-webkit-details-marker]:hidden">
-        <span
-          aria-hidden
-          className="glass2 flex size-9 shrink-0 items-center justify-center rounded-r2 text-[15px] text-[var(--ink2)]"
-        >
-          {glyph}
+      <summary className="flex h-[68px] cursor-pointer list-none items-center gap-3 px-4 [&::-webkit-details-marker]:hidden">
+        <span className="glass2 flex size-11 shrink-0 items-center justify-center rounded-r2 text-[var(--ink2)] group-open:text-[var(--accent)]">
+          <Icon name={icon} size={24} />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[14px] font-semibold">{title}</span>
+          <span className="block truncate text-[12px] font-bold uppercase tracking-[.14em]">
+            {title}
+          </span>
           <span
             className={`block truncate text-[12px] ${
               alert ? "text-[var(--a3)]" : "text-[var(--ink2)]"
@@ -132,7 +132,7 @@ export default async function AdminPage() {
         {admin && <h3 className={`px-1 ${micro}`}>{t("mine")}</h3>}
 
         <Section
-          glyph="◷"
+          icon="checkIns"
           title={tDue("title")}
           status={tDue("summary", {
             day: locale === "fr" ? dueDay.toLocaleLowerCase("fr") : dueDay,
@@ -162,7 +162,7 @@ export default async function AdminPage() {
         </Section>
 
         <Section
-          glyph="€"
+          icon="company"
           title={tCompany("title")}
           alert={missing > 0}
           status={
@@ -183,7 +183,7 @@ export default async function AdminPage() {
           <h3 className={`px-1 ${micro}`}>{t("platform")}</h3>
 
           <Section
-            glyph="◉"
+            icon="clients"
             title={t("coaches")}
             status={[
               t("coachCount", { count: coaches.length }),
@@ -260,7 +260,7 @@ export default async function AdminPage() {
           </Section>
 
           <Section
-            glyph="✓"
+            icon="allowlist"
             title={tAllow("title")}
             alert={allowlist.length === 0}
             status={tAllow("count", { count: allowlist.length })}
@@ -314,7 +314,7 @@ export default async function AdminPage() {
             )}
           </Section>
 
-          <Section glyph="≡" title={t("log")} status={t("logCount", { count: log.length })}>
+          <Section icon="log" title={t("log")} status={t("logCount", { count: log.length })}>
             {log.length === 0 ? (
               <p className="text-[13px] text-[var(--ink2)]">{t("logEmpty")}</p>
             ) : (

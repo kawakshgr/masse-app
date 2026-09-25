@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Icon } from "@/components/Icon";
 
 /**
  * Deferred features keep their nav entry, rendered inert: greyed label, soon
@@ -16,11 +17,22 @@ const SOON = ["inbox"] as const;
 
 type SoonKey = (typeof SOON)[number];
 
-export function TabBar() {
+export function TabBar({
+  name,
+  initials,
+  subtitle,
+  children,
+}: {
+  name: string;
+  initials: string;
+  /** Derived from the roster, singular and plural handled by the caller. */
+  subtitle: string;
+  /** The theme switch, rendered by the layout. */
+  children?: React.ReactNode;
+}) {
   const t = useTranslations("nav");
   const tSoon = useTranslations("soonCopy");
   const tShell = useTranslations("shell");
-  const tToolbar = useTranslations("toolbar");
   const pathname = usePathname();
   const [revealed, setRevealed] = useState<SoonKey | null>(null);
 
@@ -34,10 +46,32 @@ export function TabBar() {
     { key: "admin", href: "/admin", chord: "⌘6" },
   ];
 
+  const circle =
+    "relative flex size-10 shrink-0 items-center justify-center rounded-full border border-transparent transition-colors";
+
   return (
-    <div className="border-b border-[var(--hair)]">
-      <div className="flex items-center gap-2 px-4 py-2">
-        <nav className="flex flex-wrap items-center gap-1">
+    <div className="shrink-0 px-3 pt-3">
+      {/* One floating capsule: who she is on the left, where she can go in the
+          centre — icons, the current one opened out with its name — and her
+          own switches on the right. The side columns share the free width
+          equally, so the centre stays centred whatever the name's length. */}
+      <header className="glass lift flex h-[60px] items-center gap-3 rounded-rp px-2.5">
+        <div className="flex min-w-0 flex-1 basis-0 items-center gap-2.5">
+          <span
+            aria-hidden
+            className="cta flex size-10 shrink-0 items-center justify-center rounded-full font-display text-[15px] font-extrabold text-[var(--onA)]"
+          >
+            M
+          </span>
+          <span className="hidden min-w-0 flex-col md:flex">
+            <span className="text-[13px] font-extrabold uppercase leading-tight tracking-[.16em]">
+              Masse
+            </span>
+            <span className="tnum truncate text-[11.5px] text-[var(--ink2)]">{subtitle}</span>
+          </span>
+        </div>
+
+        <nav className="flex items-center gap-1">
           {items.map((item) => {
             const isSoon = (SOON as readonly string[]).includes(item.key);
             const active = !isSoon && pathname.startsWith(item.href);
@@ -48,16 +82,38 @@ export function TabBar() {
                 <button
                   key={item.key}
                   type="button"
+                  title={`${t(item.key)} · ${tShell("soon")}`}
+                  aria-label={`${t(item.key)} · ${tShell("soon")}`}
                   aria-disabled="true"
                   aria-expanded={revealed === key}
                   onClick={() => setRevealed((c) => (c === key ? null : key))}
-                  className="flex h-8 items-center gap-2 rounded-r2 px-3.5 text-[14px] font-semibold text-[var(--ink3)]"
+                  className={`${circle} text-[var(--ink3)] hover:bg-[var(--glass2)]`}
                 >
-                  {t(item.key)}
-                  <span className="rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2 py-px text-[10px] uppercase tracking-[.14em]">
+                  <Icon name={item.key} size={20} />
+                  <span className="absolute -bottom-1 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-1 text-[7.5px] font-bold uppercase leading-[11px] tracking-[.1em]">
                     {tShell("soon")}
                   </span>
                 </button>
+              );
+            }
+
+            if (active) {
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  title={item.chord}
+                  aria-current="page"
+                  className="sel flex h-10 items-center gap-2 rounded-rp border pl-1 pr-4 text-[var(--ink)]"
+                  style={{ boxShadow: "var(--spec)" }}
+                >
+                  <span className="cta flex size-8 items-center justify-center rounded-full text-[var(--onA)]">
+                    <Icon name={item.key} size={17} />
+                  </span>
+                  <span className="text-[11.5px] font-bold uppercase tracking-[.12em]">
+                    {t(item.key)}
+                  </span>
+                </Link>
               );
             }
 
@@ -65,30 +121,35 @@ export function TabBar() {
               <Link
                 key={item.key}
                 href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`flex h-8 items-center gap-2 rounded-r2 px-3.5 text-[14px] font-semibold transition-colors ${
-                  active
-                    ? "sel border border-[var(--edge)] text-[var(--ink)]"
-                    : "text-[var(--ink2)] hover:bg-[var(--glass)]"
-                }`}
+                title={`${t(item.key)} · ${item.chord}`}
+                aria-label={t(item.key)}
+                className={`${circle} text-[var(--ink2)] hover:border-[var(--edge)] hover:bg-[var(--glass2)] hover:text-[var(--ink)]`}
               >
-                {t(item.key)}
-                <span className="tnum text-[11px] text-[var(--ink3)]">
-                  {item.chord}
-                </span>
+                <Icon name={item.key} size={20} />
               </Link>
             );
           })}
         </nav>
 
-        <p className="ml-auto hidden truncate pl-4 text-[12px] text-[var(--ink3)] xl:block">
-          {tToolbar("addClientHint")}
-        </p>
-      </div>
+        <div className="flex min-w-0 flex-1 basis-0 items-center justify-end gap-2">
+          {children}
+          <span className="glass2 hidden h-10 min-w-0 items-center gap-2 rounded-rp pl-1 pr-3.5 lg:flex">
+            <span
+              aria-hidden
+              className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--edge)] text-[11px] font-bold tracking-[.04em]"
+            >
+              {initials}
+            </span>
+            <span className="truncate text-[12.5px] font-semibold">
+              {name} <span className="text-[var(--ink2)]">· {tShell("role")}</span>
+            </span>
+          </span>
+        </div>
+      </header>
 
       {revealed && (
-        <p className="px-4 pb-2 text-[12px] leading-[1.5] text-[var(--ink3)]">
-          {tSoon(revealed)}
+        <p className="pt-2 text-center text-[12px] leading-[1.5] text-[var(--ink3)]">
+          {t(revealed)} — {tSoon(revealed)}
         </p>
       )}
     </div>

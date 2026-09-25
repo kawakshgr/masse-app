@@ -6,6 +6,14 @@ import { TabBar } from "@/components/TabBar";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
+/** "Kevin Cordeiro" → "KC"; one name gives its first two letters. */
+function initialsOf(name: string) {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  const letters =
+    words.length > 1 ? words[0][0] + words[words.length - 1][0] : (words[0] ?? "").slice(0, 2);
+  return letters.toUpperCase();
+}
+
 export default async function CoachLayout({
   children,
 }: {
@@ -40,27 +48,17 @@ export default async function CoachLayout({
 
   return (
     <div className="desk flex h-dvh flex-col">
-      <header className="topbar flex h-14 shrink-0 items-center gap-3 px-4">
-        <div className="min-w-0">
-          <h1 className="truncate font-display text-[15px] font-extrabold tracking-[-.02em]">
-            Masse — {coach.first_name ?? coach.name}
-          </h1>
-          {/* Derived from rows, with correct singular and plural. */}
-          <p className="tnum truncate text-[12px] text-[var(--ink2)]">
-            {t("subtitle", {
-              clients: clientsNeedingYou,
-              checkins: checkinsToReview,
-            })}
-          </p>
-        </div>
-
-        <div className="ml-auto">
-          <ThemeToggle />
-        </div>
-      </header>
-
       <div className="no-print contents">
-        <TabBar />
+        <TabBar
+          name={coach.first_name ?? coach.name}
+          initials={initialsOf(coach.first_name ?? coach.name)}
+          subtitle={t("subtitle", {
+            clients: clientsNeedingYou,
+            checkins: checkinsToReview,
+          })}
+        >
+          <ThemeToggle />
+        </TabBar>
       </div>
 
       <CommandPalette clients={entries.map((e) => ({ id: e.id, name: e.name }))} />

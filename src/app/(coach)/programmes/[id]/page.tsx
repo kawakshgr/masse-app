@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SubNav } from "@/components/SubNav";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
@@ -131,24 +131,15 @@ export default async function ProgrammeEditorPage({
         )}
       </header>
 
-      <nav className="mb-4 flex flex-wrap items-center gap-1 print:hidden">
-        {weeks.map((week) => {
-          const active = current?.id === week.id;
-          return (
-            <Link
-              key={week.id}
-              href={`/programmes/${programme.id}?semaine=${week.week_number}`}
-              aria-current={active ? "page" : undefined}
-              className={`h-8 rounded-r2 px-3 text-[13px] font-semibold leading-8 ${
-                active
-                  ? "border border-[var(--edge)] bg-[var(--glass2)] text-[var(--ink)]"
-                  : "text-[var(--ink2)] hover:bg-[var(--glass)]"
-              }`}
-            >
-              {tProg("week", { number: week.week_number })}
-            </Link>
-          );
-        })}
+      <div className="mb-4 flex flex-wrap items-center gap-2 print:hidden">
+        <SubNav
+          items={weeks.map((week) => ({
+            key: week.id,
+            href: `/programmes/${programme.id}?semaine=${week.week_number}`,
+            label: tProg("week", { number: week.week_number }),
+            active: current?.id === week.id,
+          }))}
+        />
 
         <form
           action={async () => {
@@ -179,7 +170,7 @@ export default async function ProgrammeEditorPage({
             </button>
           </form>
         )}
-      </nav>
+      </div>
 
       {current && (
         <WeekPrintout
