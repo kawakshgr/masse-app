@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
 
   if (client) {
     // Back where she was headed, when that was one of her own screens.
-    const hers = ["/aujourdhui", "/seance", "/nutrition", "/cycle", "/coach", "/reglages"];
+    const hers = ["/aujourdhui", "/seance", "/nutrition", "/cycle", "/reglages"];
     const back = suite && hers.some((path) => suite.startsWith(path)) ? suite : "/aujourdhui";
     return NextResponse.redirect(`${origin}${back}`);
   }

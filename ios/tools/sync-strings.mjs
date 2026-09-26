@@ -22,7 +22,7 @@ const NAMESPACES = [
   "onboarding", "today", "goal", "equipment", "days", "cycle",
   "phase", "offline", "auth", "log", "common", "feel", "pain", "adherence",
   "clientNav", "fuel", "entry", "supp.timing", "supp.unit",
-  "shell", "soonCopy", "bilan", "checkin", "cycleChart", "stepsChart", "photos", "review.poses",
+  "shell", "bilan", "checkin", "cycleChart", "stepsChart", "photos", "review.poses",
   "settings", "theme", "app", "meals", "myWeek", "cycleAdjust",
 ];
 

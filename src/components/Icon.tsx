@@ -108,7 +108,6 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
       </>
     ),
     home: <path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-5V21H5a1 1 0 0 1-1-1z" />,
-    inbox: <path d="M4 5.5h16v10.5H9l-5 4z" />,
     billing: (
       <>
         <path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" />

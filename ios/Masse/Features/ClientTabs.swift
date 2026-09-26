@@ -2,8 +2,8 @@ import SwiftUI
 
 /// The client's app.
 ///
-/// Coach keeps its place and is rendered inert, badged `soon`: a deferred
-/// feature that disappears from the nav makes the product's shape a lie.
+/// No messaging tab: a client and her coach talk on WhatsApp (decided
+/// 26 Sep 2026).
 struct ClientTabs: View {
     let firstName: String?
     /// Cycle only exists for a client who asked for it during onboarding. A tab
@@ -16,7 +16,7 @@ struct ClientTabs: View {
     /// follow her to any tab.
     @State private var rest = RestTimer()
 
-    enum Page: Hashable { case today, train, fuel, cycle, coach }
+    enum Page: Hashable { case today, train, fuel, cycle }
 
     var body: some View {
         TabView(selection: $page) {
@@ -36,10 +36,6 @@ struct ClientTabs: View {
                 Tab(L.t("clientNav.cycle"), systemImage: "circle.lefthalf.filled", value: Page.cycle) {
                     CycleView()
                 }
-            }
-
-            Tab(L.t("clientNav.coach"), systemImage: "bubble.left", value: Page.coach) {
-                SoonView(title: L.t("clientNav.coach"), note: L.t("soonCopy.inbox"))
             }
         }
         .tint(Tk.a1)
@@ -65,43 +61,6 @@ private struct CurrentTabBar: ViewModifier {
             content.tabBarMinimizeBehavior(.onScrollDown)
         } else {
             content
-        }
-    }
-}
-
-/// A tab that is present and honest about not being built. One line of copy,
-/// and nothing that looks tappable.
-struct SoonView: View {
-    let title: String
-    let note: String
-
-    var body: some View {
-        ZStack {
-            Tk.bg.ignoresSafeArea()
-            Atmosphere().ignoresSafeArea()
-
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 8) {
-                    Text(title)
-                        .font(Ty.screenTitle)
-                        .textCase(.uppercase)
-                        .tracking(Ty.displayTracking(30))
-                        .foregroundStyle(Tk.ink3)
-                    Text(L.t("shell.soon").uppercased())
-                        .font(Ty.emphasis)
-                        .tracking(Ty.kickerTracking)
-                        .foregroundStyle(Tk.ink3)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(Tk.glass2, in: .rect(cornerRadius: Tk.R.pill))
-                }
-
-                Text(note)
-                    .font(Ty.copy)
-                    .foregroundStyle(Tk.ink2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(22)
         }
     }
 }

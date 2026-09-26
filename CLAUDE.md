@@ -45,7 +45,7 @@ The backend is the contract. Build it once, then the two clients in parallel.
 timers, Dynamic Type, offline set queue in local storage.
 
 **Both:** onboarding by invite code, Today, session logging, cycle entry, the weekly
-check-in as read.
+check-in as read. Neither has messaging: WhatsApp is the channel.
 
 ## In v1
 
@@ -76,7 +76,9 @@ check-in as read.
 - **Cycle** — **entered manually, always.** Health exposes menstrual data and
   Masse does not ask for it: reading it would pull in exactly what "dates only,
   never symptoms" exists to keep out.
-- **Messaging** — tab present, **inert**, badged `soon`.
+- **No messaging.** Coach and client talk on WhatsApp — the nudge to file a
+  check-in already opens a prefilled WhatsApp message. There is no inbox tab
+  on either side (removed 26 Sep 2026); do not add one back.
 - **Settings** (both) — behind the gear on Today: her details, her payments,
   appearance, language, privacy, release notes. Reminders are local
   notifications on iOS only; the web says so instead of hiding the section.
@@ -94,9 +96,9 @@ check-in as read.
 
 ## Deliberately not in v1
 
-- **Messaging implementation.** A credible thread needs real time, read states, push and
-  media upload — a month of work to be worse than WhatsApp, which coaches already have.
-  Keep the tab so the product's shape is honest.
+- **Messaging, at all.** A credible thread needs real time, read states, push and
+  media upload — a month of work to be worse than WhatsApp, which coaches already
+  have. Dropped entirely on 26 Sep 2026, tab included.
 - **Nutrition** — the coach writes targets as text in the programme.
 - **Billing** — a spreadsheet suffices at this scale.
 - **Health Connect** on Android. iOS reads Apple Health for sleep and steps
@@ -134,8 +136,8 @@ Each came out of a design decision or an audit. Not style preferences.
 12. **One radius scale per family.** Web 6/10/14/18; iOS 12/16/20/26 (sheets 38);
     chart bars `5px 5px 2px 2px`. Nothing in between.
 13. **Deferred features keep their nav entry, rendered inert** — greyed label, `soon`
-    badge, one line of copy on tap. Driven by one list (`SOON` in the prototype), not
-    scattered conditions.
+    badge, one line of copy on tap — while they are genuinely coming. A feature
+    that is dropped (messaging, 26 Sep 2026) leaves the nav altogether.
 14. **HealthKit is scoped, not open.** Two read types — `stepCount` and
     `sleepAnalysis` — and nothing written back. Adding a third is not a one-line
     change: it means re-reading the privacy label and the Art. 9 basis. The

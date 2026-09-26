@@ -15,16 +15,6 @@ import {
 } from "@/lib/theme";
 import { Icon } from "@/components/Icon";
 
-/**
- * Deferred features keep their nav entry, rendered inert: greyed label, soon
- * badge, one line of copy on tap. Driven by this one list — never by a
- * condition scattered across the tab bar, a sidebar and a rail.
- */
-// Messaging alone: a credible thread needs real time, read states, push and
-// media upload — a month of work to end up worse than WhatsApp.
-const SOON = ["inbox"] as const;
-
-type SoonKey = (typeof SOON)[number];
 
 export function TabBar({
   name,
@@ -37,19 +27,15 @@ export function TabBar({
   subtitle: string;
 }) {
   const t = useTranslations("nav");
-  const tSoon = useTranslations("soonCopy");
-  const tShell = useTranslations("shell");
   const pathname = usePathname();
-  const [revealed, setRevealed] = useState<SoonKey | null>(null);
 
   const items = [
     { key: "clients", href: "/clients", chord: "⌘1" },
     { key: "programmes", href: "/programmes", chord: "⌘2" },
     { key: "foods", href: "/aliments", chord: "⌘3" },
-    { key: "inbox", href: "/inbox", chord: "⌘4" },
-    { key: "billing", href: "/facturation", chord: "⌘5" },
+    { key: "billing", href: "/facturation", chord: "⌘4" },
     // Every coach has one: it holds her own company and her own exports.
-    { key: "admin", href: "/admin", chord: "⌘6" },
+    { key: "admin", href: "/admin", chord: "⌘5" },
   ];
 
   const circle =
@@ -82,29 +68,7 @@ export function TabBar({
 
         <nav className="flex items-center gap-1">
           {items.map((item) => {
-            const isSoon = (SOON as readonly string[]).includes(item.key);
-            const active = !isSoon && pathname.startsWith(item.href);
-
-            if (isSoon) {
-              const key = item.key as SoonKey;
-              return (
-                <button
-                  key={item.key}
-                  type="button"
-                  title={`${t(item.key)} · ${tShell("soon")}`}
-                  aria-label={`${t(item.key)} · ${tShell("soon")}`}
-                  aria-disabled="true"
-                  aria-expanded={revealed === key}
-                  onClick={() => setRevealed((c) => (c === key ? null : key))}
-                  className={`${circle} text-[var(--ink3)] hover:bg-[var(--glass2)]`}
-                >
-                  <Icon name={item.key} size={20} />
-                  <span className="absolute -bottom-1 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-1 text-[7.5px] font-bold uppercase leading-[11px] tracking-[.1em]">
-                    {tShell("soon")}
-                  </span>
-                </button>
-              );
-            }
+            const active = pathname.startsWith(item.href);
 
             if (active) {
               return (
@@ -145,11 +109,6 @@ export function TabBar({
         </div>
       </header>
 
-      {revealed && (
-        <p className="pt-2 text-center text-[12px] leading-[1.5] text-[var(--ink3)]">
-          {t(revealed)} — {tSoon(revealed)}
-        </p>
-      )}
     </div>
   );
 }

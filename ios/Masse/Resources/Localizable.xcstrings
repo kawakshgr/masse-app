@@ -2475,23 +2475,6 @@
         }
       }
     },
-    "clientNav.coach": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coach"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coach"
-          }
-        }
-      }
-    },
     "fuel.daily": {
       "extractionState": "manual",
       "localizations": {
@@ -3329,57 +3312,6 @@
         }
       }
     },
-    "shell.soon": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "bientôt"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "soon"
-          }
-        }
-      }
-    },
-    "shell.messaging": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inbox"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inbox"
-          }
-        }
-      }
-    },
-    "shell.messagingSoon": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La messagerie est en développement. D’ici là, WhatsApp reste où il est."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Messaging is in development. Until it ships, WhatsApp stays where it is."
-          }
-        }
-      }
-    },
     "shell.subtitle.zero": {
       "extractionState": "manual",
       "localizations": {
@@ -3498,57 +3430,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "My account"
-          }
-        }
-      }
-    },
-    "soonCopy.foods": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La nutrition n’est pas dans v1 : le coach écrit ses cibles en texte dans le programme."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nutrition is not in v1: the coach writes targets as text in the programme."
-          }
-        }
-      }
-    },
-    "soonCopy.inbox": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La messagerie est en développement. D’ici là, WhatsApp reste où il est."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Messaging is in development. Until it ships, WhatsApp stays where it is."
-          }
-        }
-      }
-    },
-    "soonCopy.billing": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La facturation viendra en v1.1. À cette échelle, un tableur suffit — et rien ne sera jamais débité automatiquement."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Billing arrives in v1.1. At this scale a spreadsheet suffices — and nothing will ever be charged automatically."
           }
         }
       }

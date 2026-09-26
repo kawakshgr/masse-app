@@ -33,9 +33,6 @@
   "shell": {
     "clients": "Clients",
     "programmes": "Programmes",
-    "soon": "bientôt",
-    "messaging": "Inbox",
-    "messagingSoon": "La messagerie est en développement. D’ici là, WhatsApp reste où il est.",
     "subtitle": "{clients, plural, =0 {Personne n’a besoin de toi} =1 {1 client a besoin de toi} other {# clients ont besoin de toi}} · {checkins, plural, =0 {aucun bilan à relire} =1 {1 bilan à relire} other {# bilans à relire}}",
     "role": "Coach",
     "language": "Langue",
@@ -346,14 +343,8 @@
     "clients": "Roster",
     "programmes": "Programmes",
     "foods": "Aliments",
-    "inbox": "Inbox",
     "billing": "Facturation",
     "admin": "Admin"
-  },
-  "soonCopy": {
-    "foods": "La nutrition n’est pas dans v1 : le coach écrit ses cibles en texte dans le programme.",
-    "inbox": "La messagerie est en développement. D’ici là, WhatsApp reste où il est.",
-    "billing": "La facturation viendra en v1.1. À cette échelle, un tableur suffit — et rien ne sera jamais débité automatiquement."
   },
   "admin": {
     "title": "Administration",
@@ -1117,8 +1108,7 @@
     "today": "Aujourd’hui",
     "train": "Séance",
     "fuel": "Nutrition",
-    "cycle": "Cycle",
-    "coach": "Coach"
+    "cycle": "Cycle"
   },
   "fuel": {
     "daily": "Calories du jour",
