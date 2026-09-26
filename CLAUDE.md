@@ -150,8 +150,10 @@ Each came out of a design decision or an audit. Not style preferences.
     and `revoke all on public.x from anon;` — nothing is read signed out; the
     one signed-out need (invite preview) goes through a function. RLS still
     decides the rows.
-16. **One visual grammar on the coach side** (decided 25 Sep 2026, after the
-    Ink Factory reference). Page and pane titles in capitals under a coloured
+16. **One visual grammar, on every target** (decided 25 Sep 2026, after the
+    Ink Factory reference; applies to every feature from then on, coach web,
+    client web, iOS and onboarding alike — the client's twins are `Kicker
+    icon=…` / `ScreenHeader` on web and `SectionHeader` / `screenKicker` on iOS). Page and pane titles in capitals under a coloured
     kicker that carries the key figure (`PaneHead`); section titles with a
     large line icon (`SectionTitle`, icons in `components/Icon`); sub-menus
     are `SubNav` capsules; a filter with more than three choices is a
