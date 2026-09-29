@@ -102,6 +102,7 @@ export default function OnboardingPage() {
   const [missing, setMissing] = useState(false);
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const set = (patch: Partial<Answers>) => {
     setMissing(false);
@@ -125,6 +126,9 @@ export default function OnboardingPage() {
   }
 
   async function finish() {
+    // One request per tap: a second one in the same second fails at Supabase.
+    if (sending || sent) return;
+    setSending(true);
     save(a);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
@@ -133,6 +137,7 @@ export default function OnboardingPage() {
         emailRedirectTo: `${window.location.origin}/auth/callback?suite=${encodeURIComponent("/invitation/finaliser")}`,
       },
     });
+    setSending(false);
     if (!error) setSent(true);
   }
 
@@ -453,7 +458,7 @@ export default function OnboardingPage() {
                 />
               </Question>
 
-              <Cta onClick={finish} disabled={sent || !email.trim() || !a.healthConsent}>
+              <Cta onClick={finish} disabled={sending || sent || !email.trim() || !a.healthConsent}>
                 {t("finish")}
               </Cta>
               {sent && (
