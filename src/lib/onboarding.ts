@@ -102,6 +102,9 @@ export function clear() {
 }
 
 /** Shapes the answers into the arguments claim_invite expects. */
+/** "aucune", "Aucun.", "rien", "none", "-": the answer for no injury at all. */
+const NO_INJURY = /^(aucune?|rien|non|none|no|néant|-+)\.?$/i;
+
 export function toClaimArgs(a: Answers) {
   const num = (v: string) => {
     const n = Number(v.replace(",", "."));
@@ -120,7 +123,8 @@ export function toClaimArgs(a: Answers) {
     p_injuries: a.injuries
       .split("\n")
       .map((s) => s.trim())
-      .filter(Boolean),
+      // The form asks for "aucune" when there is nothing: that is not an injury.
+      .filter((s) => s && !NO_INJURY.test(s)),
     p_equipment: a.equipment,
     p_session_days: a.sessionDays,
     p_sleep_target: num(a.sleepTargetH),
