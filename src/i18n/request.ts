@@ -9,6 +9,9 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
+    // The coaches and their clients are in France; server and browser must
+    // agree on which day it is, or a date rendered at 23:30 hydrates wrong.
+    timeZone: "Europe/Paris",
     messages: (await import(`./messages/${locale}.json`)).default,
   };
 });
