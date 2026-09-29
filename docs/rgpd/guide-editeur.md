@@ -1,15 +1,15 @@
 # Ce qu'il reste à faire — pas à pas
 
-## 1. Choisir un statut (si Masse est payant)
-- Le plus simple : **micro-entreprise**, sur formalites.entreprises.gouv.fr
-  (gratuit, SIRET en 1 à 2 semaines). Activité : prestation de services
-  informatiques / logiciel en ligne.
-- Tant que Masse reste gratuit entre toi et Lucie, tu peux publier en ton nom.
-- Un expert-comptable ou la CCI confirme en un rendez-vous.
+## 1. Statut
+Masse est gratuit pour l'instant (décidé le 29 septembre 2026) : il est
+publié **en ton nom, comme particulier**, sans statut. Le jour où il devient
+payant, il faudra un statut — le plus simple : micro-entreprise, sur
+formalites.entreprises.gouv.fr — et les mentions légales changeront.
 
 ## 2. Remplir les `[À compléter]`
-Envoie-moi : nom (ou entreprise), statut + SIRET, adresse postale, e-mail de
-contact. Je les mets dans `/mentions-legales`, `/confidentialite`,
+Envoie-moi : prénom et nom, et un e-mail de contact. Ton adresse postale ne
+sera pas publiée : pour un particulier, il suffit de la donner à l'hébergeur
+(Vercel la connaît par ton compte). Je les mets dans `/mentions-legales`, `/confidentialite`,
 `/conditions` et dans les documents de ce dossier.
 
 ## 3. Accepter les contrats des prestataires (DPA)

@@ -1,6 +1,6 @@
 # Registre des activités de traitement (article 30 RGPD)
 
-Éditeur : [À compléter : nom, adresse, e-mail, SIRET]
+Éditeur : [À compléter : prénom et nom], particulier, à titre non professionnel et gratuit — contact : [À compléter : e-mail]
 Mis à jour le 29 septembre 2026.
 
 Masse agit comme **sous-traitant** des coachs pour les données de leurs clients

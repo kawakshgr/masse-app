@@ -10,16 +10,17 @@ export default function LegalNoticePage() {
       <section>
         <h2>Éditeur</h2>
         <p>
-          <ToComplete>nom et prénom, ou dénomination de l’entreprise</ToComplete>
+          Masse est édité à titre non professionnel, gratuitement, par un particulier :{" "}
+          <ToComplete>prénom et nom</ToComplete>.
           <br />
-          <ToComplete>statut (ex. entrepreneur individuel) et numéro SIRET</ToComplete>
-          <br />
-          <ToComplete>adresse postale</ToComplete>
-          <br />
-          <ToComplete>e-mail de contact</ToComplete>
+          Contact : <ToComplete>e-mail de contact</ToComplete>
         </p>
         <p className="mt-2">
-          Directeur de la publication : <ToComplete>nom</ToComplete>
+          Directeur de la publication : <ToComplete>prénom et nom</ToComplete>
+        </p>
+        <p className="mt-2 text-[13px] text-[var(--ink3)]">
+          Conformément à l’article 6-III-2 de la loi pour la confiance dans l’économie numérique, les
+          coordonnées postales de l’éditeur ont été communiquées à l’hébergeur.
         </p>
       </section>
       <section>
