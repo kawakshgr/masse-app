@@ -1,12 +1,20 @@
 # Masse — web app + native iOS
 
-Coaching software for strength coaches. **Two clients, one backend.**
+Coaching software for strength coaches. **One web app, one backend.**
+
+> **PWA only (decided 29 Sep 2026).** Clients use the web app installed on
+> the home screen, on iPhone and Android alike. The native iOS app in `ios/`
+> is **frozen**: no more changes, builds or installs. It no longer matches
+> the backend (its onboarding still sends the old `claim_invite`
+> arguments). Everything below about iOS is history, kept for reference.
+> Rest timers on the Lock Screen and Apple Health are given up: clients who
+> want a gym timer use Hevy or another app, and type sleep and steps.
 
 | Target | Who | Stack |
 |--------|-----|-------|
-| **Web app** | The coach (and any client on Android) | Next.js App Router on Vercel |
-| **Native iOS** | The client, primarily | SwiftUI, iOS 17+ |
-| **Backend** | Both | Supabase — Postgres + Auth, **EU region (Frankfurt)** |
+| **Web app** | The coach, and every client as a PWA | Next.js App Router on Vercel |
+| ~~Native iOS~~ | Frozen 29 Sep 2026 | SwiftUI |
+| **Backend** | The web app | Supabase — Postgres + Auth, **EU region (Frankfurt)** |
 
 Full design handoff: `README.md` (scope, data model, screens, tokens).
 Design reference: `Masse.dc.html` — switch the platform control to **Mac**/**Web** for
