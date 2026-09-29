@@ -49,8 +49,12 @@ export type QueueItem = {
 /** Three days without a single entry — no sleep, steps or set — is silence. */
 const SILENT_DAYS = 3;
 
-export async function loadQueue(supabase: SupabaseClient<Database>): Promise<QueueItem[]> {
-  const roster = await loadRoster(supabase);
+export async function loadQueue(
+  supabase: SupabaseClient<Database>,
+  // The coach layout has already loaded it; no need to read it twice.
+  roster?: Awaited<ReturnType<typeof loadRoster>>,
+): Promise<QueueItem[]> {
+  roster ??= await loadRoster(supabase);
   if (roster.entries.length === 0) return [];
 
   const ids = roster.entries.map((e) => e.id);

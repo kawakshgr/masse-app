@@ -161,14 +161,16 @@ export default async function ProgrammeEditorPage({
             {tProgress("done", { week: current.week_number })}
           </SectionTitle>
           <div className="mt-3 grid gap-2 sm:grid-cols-3">
-            {[
-              ["up", progres, regle === "reps" ? tProgress("upReps") : tProgress("upLoad")],
-              ["hold", stable, tProgress("hold")],
-              ["unknown", inconnu, tProgress("unknown")],
-            ].map(([key, value, label]) => (
+            {(
+              [
+                ["up", Number(progres ?? 0), regle === "reps" ? "upReps" : "upLoad"],
+                ["hold", Number(stable ?? 0), "hold"],
+                ["unknown", Number(inconnu ?? 0), "unknown"],
+              ] as const
+            ).map(([key, count, message]) => (
               <div key={key} className="glass2 rounded-r2 px-3 py-2.5">
-                <p className="tnum font-display text-[24px] font-extrabold leading-none">{value ?? 0}</p>
-                <p className="mt-1 text-[12px] leading-[1.4] text-[var(--ink2)]">{label}</p>
+                <p className="tnum font-display text-[24px] font-extrabold leading-none">{count}</p>
+                <p className="mt-1 text-[12px] leading-[1.4] text-[var(--ink2)]">{tProgress(message, { count })}</p>
               </div>
             ))}
           </div>

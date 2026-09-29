@@ -1466,10 +1466,10 @@
     "menuLoad": "Semaine suivante : +2,5 kg si réussi",
     "menuReps": "Semaine suivante : +1 répétition si réussi",
     "done": "Semaine {week} écrite d’après les séances",
-    "upLoad": "exercices montent de 2,5 kg — toutes les séries réussies",
-    "upReps": "exercices gagnent une répétition — toutes les séries réussies",
-    "hold": "exercices restent identiques — séries pas toutes réussies, ou sans charge cible",
-    "unknown": "exercices restent identiques — rien de saisi, ou pas de cible",
+    "upLoad": "{count, plural, one {exercice monte} other {exercices montent}} de 2,5 kg — toutes les séries réussies",
+    "upReps": "{count, plural, one {exercice gagne} other {exercices gagnent}} une répétition — toutes les séries réussies",
+    "hold": "{count, plural, one {exercice reste identique} other {exercices restent identiques}} — séries pas toutes réussies, ou sans charge cible",
+    "unknown": "{count, plural, one {exercice reste identique} other {exercices restent identiques}} — rien de saisi, ou pas de cible",
     "notPushed": "Cette semaine n’est pas encore envoyée : relis-la, ajuste si besoin, puis pousse-la à tes clients."
   },
   "logo": {

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { loadRoster } from "@/lib/roster";
+import { loadQueue } from "@/lib/queue";
 import { TabBar } from "@/components/TabBar";
 import { CommandPalette } from "@/components/CommandPalette";
 
@@ -41,9 +42,12 @@ export default async function CoachLayout({
   }
 
   const t = await getTranslations("shell");
-  const { entries, clientsNeedingYou, checkinsToReview } =
-    await loadRoster(supabase);
-
+  const roster = await loadRoster(supabase);
+  const { entries, checkinsToReview } = roster;
+  // Counted from the same list as À traiter, so the line under her name
+  // never says nobody needs her beside a pane that says otherwise.
+  const queue = await loadQueue(supabase, roster);
+  const clientsNeedingYou = new Set(queue.map((item) => item.clientId)).size;
 
   return (
     <div className="desk flex h-dvh flex-col">
