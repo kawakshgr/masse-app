@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { restLabel } from "@/lib/rest";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
@@ -77,6 +78,8 @@ export type WeekExercise = {
   target_sets: number | null;
   target_reps: number | null;
   target_weight_kg: number | null;
+  rest_min_s: number | null;
+  rest_max_s: number | null;
 };
 
 export type PushedWeek = {
@@ -98,7 +101,7 @@ export const currentWeek = cache(async (): Promise<PushedWeek | null> => {
   const { data } = await supabase
     .from("assignments")
     .select(
-      "start_date, programme_weeks(week_number, programmes(name), sessions(day_index, name, session_exercises(id, position, name, scheme, cue, target_sets, target_reps, target_weight_kg)))",
+      "start_date, programme_weeks(week_number, programmes(name), sessions(day_index, name, session_exercises(id, position, name, scheme, cue, target_sets, target_reps, target_weight_kg, rest_min_s, rest_max_s)))",
     )
     .gte("start_date", addDays(today, -7))
     .order("start_date", { ascending: false })
@@ -131,8 +134,12 @@ export async function todaySession() {
   };
 }
 
-/** "4 × 8 · 60 kg", assembled from the row with nothing invented. */
-export function targetLine(exercise: WeekExercise): string | null {
+/** "4 × 8 · 60 kg · Repos 2–3 min", assembled from the row with nothing
+ *  invented. `restWord` is the translated "Repos {time}". */
+export function targetLine(
+  exercise: WeekExercise,
+  restWord?: (time: string) => string,
+): string | null {
   const parts: string[] = [];
   if (exercise.target_sets && exercise.target_reps) {
     parts.push(`${exercise.target_sets} × ${exercise.target_reps}`);
@@ -140,6 +147,8 @@ export function targetLine(exercise: WeekExercise): string | null {
     parts.push(exercise.scheme);
   }
   if (exercise.target_weight_kg) parts.push(`${exercise.target_weight_kg} kg`);
+  const rest = restLabel(exercise.rest_min_s, exercise.rest_max_s);
+  if (rest && restWord) parts.push(restWord(rest));
   return parts.length ? parts.join(" · ") : null;
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { restLabel } from "@/lib/rest";
 import { MENU_ITEM } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
@@ -40,7 +41,10 @@ export function WeekExport({
 
       lines.push(`${dayName}${session.name ? ` — ${session.name}` : ""}`);
       for (const exercise of session.exercises) {
-        const parts = [exercise.name, exercise.scheme].filter(Boolean).join(" — ");
+        const rest = restLabel(exercise.rest_min_s, exercise.rest_max_s);
+        const parts = [exercise.name, exercise.scheme, rest && t("restTimeValue", { time: rest })]
+          .filter(Boolean)
+          .join(" — ");
         lines.push(`  ${parts}${exercise.cue ? ` (${exercise.cue})` : ""}`);
       }
       lines.push("");
@@ -113,7 +117,16 @@ export function WeekPrintout({
               <ul style={{ margin: "4pt 0 0 14pt", padding: 0 }}>
                 {session.exercises.map((exercise) => (
                   <li key={exercise.id} style={{ fontSize: "11pt", marginBottom: "2pt" }}>
-                    {[exercise.name, exercise.scheme].filter(Boolean).join(" — ")}
+                    {[
+                      exercise.name,
+                      exercise.scheme,
+                      restLabel(exercise.rest_min_s, exercise.rest_max_s) &&
+                        t("restTimeValue", {
+                          time: restLabel(exercise.rest_min_s, exercise.rest_max_s) ?? "",
+                        }),
+                    ]
+                      .filter(Boolean)
+                      .join(" — ")}
                     {exercise.cue ? ` (${exercise.cue})` : ""}
                   </li>
                 ))}

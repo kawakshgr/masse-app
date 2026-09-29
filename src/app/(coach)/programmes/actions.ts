@@ -66,7 +66,7 @@ export async function duplicateWeek(weekId: string, programmeId: string) {
 
   const { data: source } = await supabase
     .from("programme_weeks")
-    .select("week_number, sessions(day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue))")
+    .select("week_number, sessions(day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s))")
     .eq("id", weekId)
     .maybeSingle();
 
@@ -100,6 +100,8 @@ export async function duplicateWeek(weekId: string, programmeId: string) {
       target_reps: number | null;
       target_weight_kg: number | null;
       cue: string | null;
+      rest_min_s: number | null;
+      rest_max_s: number | null;
     }[];
   }[];
 
@@ -149,7 +151,7 @@ export async function progressWeek(weekId: string, programmeId: string, rule: Pr
   const { data: source } = await supabase
     .from("programme_weeks")
     .select(
-      "week_number, sessions(day_index, name, notes, session_exercises(id, position, name, scheme, target_sets, target_reps, target_weight_kg, cue))",
+      "week_number, sessions(day_index, name, notes, session_exercises(id, position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s))",
     )
     .eq("id", weekId)
     .maybeSingle();
@@ -164,6 +166,8 @@ export async function progressWeek(weekId: string, programmeId: string, rule: Pr
     target_reps: number | null;
     target_weight_kg: number | null;
     cue: string | null;
+    rest_min_s: number | null;
+    rest_max_s: number | null;
   };
   const sessions = (source.sessions ?? []) as unknown as {
     day_index: number;
@@ -309,7 +313,13 @@ export async function addExercise(sessionId: string, programmeId: string) {
 
 export async function updateExercise(
   exerciseId: string,
-  patch: { name?: string; scheme?: string | null; cue?: string | null },
+  patch: {
+    name?: string;
+    scheme?: string | null;
+    cue?: string | null;
+    rest_min_s?: number | null;
+    rest_max_s?: number | null;
+  },
   programmeId: string,
 ) {
   const supabase = await createClient();

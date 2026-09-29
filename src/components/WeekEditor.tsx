@@ -1,5 +1,6 @@
 "use client";
 
+import { REST_PRESETS, parseRestKey, restKey, restLabel } from "@/lib/rest";
 import { SectionTitle } from "@/components/Pane";
 import { useState, useTransition } from "react";
 import {
@@ -29,6 +30,8 @@ export type EditorExercise = {
   name: string;
   scheme: string | null;
   cue: string | null;
+  rest_min_s: number | null;
+  rest_max_s: number | null;
 };
 
 export type EditorSession = {
@@ -328,6 +331,28 @@ export function WeekEditor({
                                   }
                                   className="tnum w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink2)] placeholder:text-[var(--ink3)]"
                                 />
+                                {/* Rest, exact or a range — one dropdown. */}
+                                <select
+                                  aria-label={t("restTime")}
+                                  defaultValue={restKey(exercise.rest_min_s, exercise.rest_max_s)}
+                                  onChange={(e) =>
+                                    startTransition(() => {
+                                      void updateExercise(
+                                        exercise.id,
+                                        parseRestKey(e.target.value),
+                                        programmeId,
+                                      );
+                                    })
+                                  }
+                                  className="tnum my-0.5 h-7 w-full rounded-r1 border border-[var(--hair)] bg-transparent pl-1.5 text-[11.5px] font-semibold text-[var(--ink2)]"
+                                >
+                                  <option value="">{t("restNone")}</option>
+                                  {REST_PRESETS.map(([min, max]) => (
+                                    <option key={`${min}-${max}`} value={`${min}-${max}`}>
+                                      {t("restTimeValue", { time: restLabel(min, max) ?? "" })}
+                                    </option>
+                                  ))}
+                                </select>
                                 <input
                                   defaultValue={exercise.cue ?? ""}
                                   placeholder={t("cue")}

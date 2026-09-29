@@ -341,7 +341,8 @@
     "target": "Objectif",
     "signOut": "Se déconnecter",
     "todayIs": "aujourd’hui, c’est",
-    "todayKcal": "{kcal} kcal visées"
+    "todayKcal": "{kcal} kcal visées",
+    "restTime": "Repos {time}"
   },
   "editor": {
     "addWeek": "+ Semaine",
@@ -366,7 +367,10 @@
     "dropHere": "Déposer ici",
     "restDay": "Repos",
     "markRest": "Jour de repos",
-    "makeTraining": "Remettre une séance"
+    "makeTraining": "Remettre une séance",
+    "restTime": "Temps de repos",
+    "restNone": "Repos : non précisé",
+    "restTimeValue": "Repos {time}"
   },
   "goal": {
     "Get stronger": "Gagner en force",
@@ -490,7 +494,8 @@
     "finish": "Terminer la séance",
     "finished": "Séance terminée",
     "restNotifTitle": "Repos terminé",
-    "restNotifBody": "{exercise} · série {n}"
+    "restNotifBody": "{exercise} · série {n}",
+    "restTime": "Repos {time}"
   },
   "entry": {
     "title": "Saisie",
@@ -522,7 +527,8 @@
     "copied": "Copié",
     "print": "Imprimer / PDF",
     "week": "Semaine {n}",
-    "rest": "Repos"
+    "rest": "Repos",
+    "restTimeValue": "repos {time}"
   },
   "palette": {
     "title": "Commandes",

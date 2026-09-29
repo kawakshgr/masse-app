@@ -170,6 +170,9 @@ export type SessionExerciseRow = {
   target_reps: number | null;
   target_weight_kg: number | null;
   cue: string | null;
+  /** Rest between sets in seconds; min = max is exact, else a range. */
+  rest_min_s: number | null;
+  rest_max_s: number | null;
 };
 
 export type AssignmentRow = {

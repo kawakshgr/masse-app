@@ -80,7 +80,7 @@ export default async function TodayPage() {
             {session.name && <CardTitle>{session.name}</CardTitle>}
             {levers && <LeverLine levers={levers} kind="training" />}
             {session.session_exercises.map((exercise) => {
-              const target = targetLine(exercise);
+              const target = targetLine(exercise, (time) => t("restTime", { time }));
               return (
                 <div key={exercise.id} className="space-y-0.5">
                   <p className="text-[15px] font-semibold">{exercise.name}</p>

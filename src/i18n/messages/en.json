@@ -341,7 +341,8 @@
     "target": "Target",
     "signOut": "Sign out",
     "todayIs": "today is a",
-    "todayKcal": "{kcal} kcal to aim for"
+    "todayKcal": "{kcal} kcal to aim for",
+    "restTime": "Rest {time}"
   },
   "editor": {
     "addWeek": "+ Week",
@@ -366,7 +367,10 @@
     "dropHere": "Drop here",
     "restDay": "Rest",
     "markRest": "Mark as rest",
-    "makeTraining": "Make it a session"
+    "makeTraining": "Make it a session",
+    "restTime": "Rest time",
+    "restNone": "Rest: not set",
+    "restTimeValue": "Rest {time}"
   },
   "goal": {
     "Get stronger": "Get stronger",
@@ -490,7 +494,8 @@
     "finish": "Finish session",
     "finished": "Session finished",
     "restNotifTitle": "Rest over",
-    "restNotifBody": "{exercise} · set {n}"
+    "restNotifBody": "{exercise} · set {n}",
+    "restTime": "Rest {time}"
   },
   "entry": {
     "title": "Entry",
@@ -522,7 +527,8 @@
     "copied": "Copied",
     "print": "Print / PDF",
     "week": "Week {n}",
-    "rest": "Rest"
+    "rest": "Rest",
+    "restTimeValue": "rest {time}"
   },
   "palette": {
     "title": "Commands",

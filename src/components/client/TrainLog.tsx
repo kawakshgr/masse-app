@@ -1,5 +1,6 @@
 "use client";
 
+import { restLabel } from "@/lib/rest";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
@@ -175,6 +176,8 @@ function ExerciseCard({
       parts.push(`${exercise.target_sets} × ${exercise.target_reps}`);
     } else if (exercise.scheme) parts.push(exercise.scheme);
     if (exercise.target_weight_kg) parts.push(`${clean(Number(exercise.target_weight_kg))} kg`);
+    const rest = restLabel(exercise.rest_min_s, exercise.rest_max_s);
+    if (rest) parts.push(t("restTime", { time: rest }));
     return parts.length ? `${t("target")} · ${parts.join(" · ")}` : null;
   })();
 
