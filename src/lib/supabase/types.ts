@@ -58,6 +58,8 @@ export type CoachRow = {
   /** Days after a week's Monday its check-in is due (4–8); 6 is Sunday. */
   check_in_due_offset: number;
   phone: string | null;
+  /** Path in the public coach-logos bucket; see lib/logo.ts. */
+  logo_path: string | null;
 };
 
 export type ClientRow = {

@@ -70,6 +70,7 @@ export default async function InvoicePage({
 
       <InvoiceSheet
         profile={data.profile}
+        logo={data.logo}
         client={data.client}
         invoice={data.invoice}
         net={data.net}

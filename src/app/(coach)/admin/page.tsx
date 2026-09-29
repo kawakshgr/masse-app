@@ -8,6 +8,7 @@ import {
 } from "./actions";
 import { DUE_OFFSETS, DEFAULT_DUE_OFFSET } from "@/lib/checkIns";
 import { CoachBillingProfile } from "@/components/CoachBillingProfile";
+import { CoachLogo } from "@/components/CoachLogo";
 import { Icon } from "@/components/Icon";
 
 /** What an invoice cannot go out without; the section header counts them. */
@@ -78,6 +79,7 @@ export default async function AdminPage() {
   const tDue = await getTranslations("checkInDue");
   const tCompany = await getTranslations("company");
   const tAllow = await getTranslations("allowlist");
+  const tLogo = await getTranslations("logo");
   const locale = await getLocale();
   const supabase = await createClient();
 
@@ -88,7 +90,7 @@ export default async function AdminPage() {
 
   const [{ data: admin }, { data: coach }, { data: profile }] = await Promise.all([
     supabase.from("platform_admins").select("user_id").eq("user_id", me).maybeSingle(),
-    supabase.from("coaches").select("check_in_due_offset").eq("id", me).maybeSingle(),
+    supabase.from("coaches").select("check_in_due_offset, logo_path").eq("id", me).maybeSingle(),
     supabase.from("coach_billing_profiles").select("*").eq("coach_id", me).maybeSingle(),
   ]);
 
@@ -174,6 +176,14 @@ export default async function AdminPage() {
           }
         >
           <CoachBillingProfile profile={profile} />
+        </Section>
+
+        <Section
+          icon="photo"
+          title={tLogo("title")}
+          status={tLogo(coach?.logo_path ? "statusSet" : "statusNone")}
+        >
+          <CoachLogo coachId={me} path={coach?.logo_path ?? null} />
         </Section>
       </div>
 

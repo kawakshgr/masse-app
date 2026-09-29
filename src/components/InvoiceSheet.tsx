@@ -18,6 +18,7 @@ function Address({ lines }: { lines: (string | null)[] }) {
 
 export type InvoiceSheetProps = {
   profile: CoachBillingProfileRow;
+  logo?: string | null;
   client: { name: string; email: string | null; phone: string | null };
   invoice: {
     invoice_number: string | null;
@@ -38,6 +39,7 @@ export type InvoiceSheetProps = {
  */
 export async function InvoiceSheet({
   profile,
+  logo,
   client,
   invoice,
   net,
@@ -57,6 +59,10 @@ export async function InvoiceSheet({
     <article className="mx-auto max-w-[760px] rounded-r3 border border-[var(--edge)] bg-[var(--glass)] p-8 print:rounded-none print:border-0 print:p-0">
       <header className="flex flex-wrap items-start justify-between gap-6">
         <div className="min-w-0 text-[13px] leading-[1.5]">
+          {logo && (
+            // eslint-disable-next-line @next/next/no-img-element -- a public storage URL, printed as is
+            <img src={logo} alt="" className="mb-3 max-h-12 max-w-[160px] object-contain" />
+          )}
           <p className="font-display text-[20px] font-extrabold tracking-[-.03em]">
             {profile.legal_name}
           </p>

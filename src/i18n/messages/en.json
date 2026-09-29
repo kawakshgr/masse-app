@@ -342,7 +342,8 @@
     "signOut": "Sign out",
     "todayIs": "today is a",
     "todayKcal": "{kcal} kcal to aim for",
-    "restTime": "Rest {time}"
+    "restTime": "Rest {time}",
+    "coachLogo": "Your coach’s logo"
   },
   "editor": {
     "addWeek": "+ Week",
@@ -1462,5 +1463,19 @@
     "hold": "exercises stay the same — not every set hit, or no load target",
     "unknown": "exercises stay the same — nothing logged, or no target",
     "notPushed": "It isn’t sent yet: read it, adjust if needed, then push it to your clients."
+  },
+  "logo": {
+    "title": "Logo",
+    "alt": "Coach logo",
+    "none": "None",
+    "lede": "Printed on your invoices and PDFs, shown to your clients in their app. PNG or JPEG, 1 MB at most.",
+    "choose": "Choose a logo",
+    "replace": "Replace",
+    "remove": "Remove",
+    "badType": "Only PNG and JPEG are accepted.",
+    "tooBig": "The file is over 1 MB.",
+    "failed": "The upload failed — try again.",
+    "statusSet": "On your invoices and in your clients’ app",
+    "statusNone": "No logo yet"
   }
 }

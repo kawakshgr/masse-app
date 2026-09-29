@@ -342,7 +342,8 @@
     "signOut": "Se déconnecter",
     "todayIs": "aujourd’hui, c’est",
     "todayKcal": "{kcal} kcal visées",
-    "restTime": "Repos {time}"
+    "restTime": "Repos {time}",
+    "coachLogo": "Logo de ton coach"
   },
   "editor": {
     "addWeek": "+ Semaine",
@@ -1462,5 +1463,19 @@
     "hold": "exercices restent identiques — séries pas toutes réussies, ou sans charge cible",
     "unknown": "exercices restent identiques — rien de saisi, ou pas de cible",
     "notPushed": "Cette semaine n’est pas encore envoyée : relis-la, ajuste si besoin, puis pousse-la à tes clients."
+  },
+  "logo": {
+    "title": "Logo",
+    "alt": "Logo du coach",
+    "none": "Aucun",
+    "lede": "Imprimé sur tes factures et tes PDF, affiché à tes clients dans leur app. PNG ou JPEG, 1 Mo au plus.",
+    "choose": "Choisir un logo",
+    "replace": "Remplacer",
+    "remove": "Retirer",
+    "badType": "Seuls les PNG et JPEG sont acceptés.",
+    "tooBig": "Le fichier dépasse 1 Mo.",
+    "failed": "L’envoi a échoué — réessaie.",
+    "statusSet": "Sur tes factures et dans l’app de tes clients",
+    "statusNone": "Aucun logo pour l’instant"
   }
 }

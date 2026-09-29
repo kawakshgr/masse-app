@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { logoUrl } from "@/lib/logo";
 import { monthLabel } from "@/lib/billing";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
@@ -6,6 +7,8 @@ import type { CoachBillingProfileRow } from "@/lib/supabase/types";
 
 export type InvoiceData = {
   profile: CoachBillingProfileRow;
+  /** The coach's logo, public URL, or null — printed at the head. */
+  logo: string | null;
   client: { id: string; name: string; email: string | null; phone: string | null };
   invoice: {
     invoice_number: string | null;
@@ -38,7 +41,7 @@ export async function loadInvoice(
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [profileRes, clientRes, invoiceRes, arrangementRes] = await Promise.all([
+  const [profileRes, clientRes, invoiceRes, arrangementRes, coachRes] = await Promise.all([
     supabase
       .from("coach_billing_profiles")
       .select("*")
@@ -60,6 +63,7 @@ export async function loadInvoice(
       .select("amount_cents, type, pack_sessions")
       .eq("client_id", clientId)
       .maybeSingle(),
+    supabase.from("coaches").select("logo_path").eq("id", user?.id ?? "").maybeSingle(),
   ]);
 
   const client = clientRes.data;
@@ -80,6 +84,7 @@ export async function loadInvoice(
   const vat = Math.round((net * vatRate) / 100);
 
   return {
+    logo: logoUrl(coachRes.data?.logo_path),
     profile,
     client,
     invoice,

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { logoUrl } from "@/lib/logo";
 import { getLocale, getTranslations } from "next-intl/server";
 import { addDays, checkInState, clientSession, targetLine, todaySession } from "@/lib/clientData";
 import { Card, CardTitle, CtaLink, ScreenHeader } from "@/components/client/ui";
@@ -15,6 +16,14 @@ import { LeverLine } from "@/components/client/LeverLine";
 export default async function TodayPage() {
   const { supabase, client, today, monday } = await clientSession();
   const t = await getTranslations("today");
+  // Her coach's logo, when there is one: the app wears the coach's colours,
+  // not only Masse's.
+  const { data: coach } = await supabase
+    .from("coaches")
+    .select("logo_path")
+    .eq("id", client.coach_id)
+    .maybeSingle();
+  const logo = logoUrl(coach?.logo_path);
   const tLog = await getTranslations("log");
   const tSettings = await getTranslations("settings");
   const tBilan = await getTranslations("bilan");
@@ -54,6 +63,10 @@ export default async function TodayPage() {
 
   return (
     <>
+      {logo && (
+        // eslint-disable-next-line @next/next/no-img-element -- a public storage URL, sized by its box
+        <img src={logo} alt={t("coachLogo")} className="h-10 max-w-[160px] object-contain" />
+      )}
       <ScreenHeader
         kicker={t("title")}
         title={name ? `${t("title")}, ${name}` : t("title")}

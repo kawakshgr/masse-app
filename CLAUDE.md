@@ -111,6 +111,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   `first_name`, `pronoun`, `phone`, `check_in_due_offset` and nothing else —
   `coaches_self_update_guard`, so a suspended coach cannot lift her own
   suspension. Platform admins pass.
+- **A logo per coach** (29 Sep 2026) — uploaded in Admin → Logo straight to
+  the public `coach-logos` bucket (own folder only, PNG/JPEG, 1 MB), path on
+  `coaches.logo_path`, URL from `lib/logo.ts`. Printed on the invoice sheet
+  and its PDF, shown to the coach's clients on Today.
 
 ## Deliberately not in v1
 

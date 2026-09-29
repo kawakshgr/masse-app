@@ -130,3 +130,29 @@ export async function setCheckInDue(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/clients", "layout");
 }
+
+/**
+ * The logo was uploaded by the browser straight to her folder; this records
+ * it and removes the one it replaces. A null path removes the logo.
+ */
+export async function setCoachLogo(path: string | null) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+  // Only her own folder is hers to point at.
+  if (path !== null && !path.startsWith(`${user.id}/`)) return;
+
+  const { data: coach } = await supabase
+    .from("coaches")
+    .select("logo_path")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  await supabase.from("coaches").update({ logo_path: path }).eq("id", user.id);
+  if (coach?.logo_path && coach.logo_path !== path) {
+    await supabase.storage.from("coach-logos").remove([coach.logo_path]);
+  }
+  revalidatePath("/", "layout");
+}

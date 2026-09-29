@@ -2,6 +2,7 @@ import path from "node:path";
 import {
   Document,
   Font,
+  Image,
   Page,
   StyleSheet,
   Text,
@@ -177,6 +178,10 @@ function InvoiceDocument({ data, labels }: { data: InvoiceData; labels: Labels }
       <Page size="A4" style={s.page}>
         <View style={s.header}>
           <View style={s.issuer}>
+            {data.logo && (
+              // eslint-disable-next-line jsx-a11y/alt-text -- react-pdf's Image has no alt
+              <Image src={data.logo} style={{ height: 40, maxWidth: 150, objectFit: "contain", marginBottom: 8 }} />
+            )}
             <Text style={s.display}>{profile.legal_name}</Text>
             {line(profile.legal_form)}
             {address.map((l) => (
