@@ -60,9 +60,16 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
 
 - **Invite-code onboarding** — nine steps, ends with week 1 written. Carries auth.
   The coach may offer a video call on the invite (29 Sep 2026: unticked by
-  default, 10/20/30/60 min, `invite_codes.call_minutes`); only then does
-  step 5 ask for 2–3 slots, picked from the next seven days, kept on
-  `clients.call_slots_at` as instants.
+  default, 10/20/30/60 min, `invite_codes.call_minutes`). She sets weekly
+  windows and days off once in Mon compte (`coach_availability`,
+  `coach_unavailable_days`, Paris time) with her personal video link
+  (`coaches.call_link`; nothing is connected — no Zoom or Google API).
+  Step 5 then offers her real free slots (`invite_free_slots`: next week,
+  24 h ahead at least, minus calls booked) and `claim_invite` books the one
+  taken (`appointments`) in the same transaction; a slot taken meanwhile
+  lets the sign-up through without it. The coach sees calls in À traiter
+  and above the client's tabs (WhatsApp confirmation, cancel); the client
+  on Today. `/rendez-vous/[id]` serves the .ics to either side.
 - **Roster** (web) — client list with the reason each client needs the coach.
 - **À traiter** (web, 29 Sep 2026) — the pane the coach lands on beside her
   roster (`/clients`): every client who needs her, grouped by reason — late
@@ -114,8 +121,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   nothing else; the trigger `clients_self_update_guard` enforces the list.
 - **The coach's own details** — "Mon compte", behind her name in the top bar:
   first and last name, phone, and the address her invoices print (kept once,
-  on `coach_billing_profiles`). On her `coaches` row she may change `name`,
-  `first_name`, `pronoun`, `phone`, `check_in_due_offset` and nothing else —
+  on `coach_billing_profiles`), her video link and call availability. On her
+  `coaches` row she may change `name`, `first_name`, `pronoun`, `phone`,
+  `check_in_due_offset`, `logo_path`, `call_link` and nothing else —
   `coaches_self_update_guard`, so a suspended coach cannot lift her own
   suspension. Platform admins pass.
 - **A logo per coach** (29 Sep 2026) — uploaded in Admin → Logo straight to
