@@ -108,6 +108,18 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
       </>
     ),
     send: <path d="M21 3 3.5 10.5l7 3 3 7zM10.5 13.5 21 3" />,
+    calendar: (
+      <>
+        <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+        <path d="M3.5 10h17M8 3v4M16 3v4M12 13.5v4M10 15.5h4" />
+      </>
+    ),
+    video: (
+      <>
+        <rect x="3" y="6.5" width="12.5" height="11" rx="2.5" />
+        <path d="m15.5 10.5 5.5-3v9l-5.5-3" />
+      </>
+    ),
     whatsapp: (
       <>
         <path d="M4 20l1.2-3.6A8 8 0 1 1 8 19z" />

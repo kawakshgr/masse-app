@@ -8,6 +8,13 @@ import { QueuePanel } from "@/components/QueuePanel";
  */
 export default async function ClientsIndexPage() {
   const supabase = await createClient();
-  const items = await loadQueue(supabase);
-  return <QueuePanel items={items} />;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const [items, { data: coach }] = await Promise.all([
+    loadQueue(supabase),
+    // Her video link goes into the confirmation message of each booked call.
+    supabase.from("coaches").select("call_link").eq("id", user?.id ?? "").maybeSingle(),
+  ]);
+  return <QueuePanel items={items} callLink={coach?.call_link ?? null} />;
 }

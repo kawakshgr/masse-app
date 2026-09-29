@@ -10,7 +10,7 @@ export async function GET() {
   const { supabase, client, today } = await clientSession();
   const id = client.id;
 
-  const [profile, metrics, sets, checkIns, photos, cycle, meals, invoices, supplements] = await Promise.all([
+  const [profile, metrics, sets, checkIns, photos, cycle, meals, invoices, supplements, calls] = await Promise.all([
     supabase.from("clients").select("*").eq("id", id).maybeSingle(),
     supabase.from("daily_metrics").select("day, sleep_h, sleep_quality, steps").eq("client_id", id).order("day"),
     supabase.from("set_logs").select("session_exercise_id, set_index, reps, weight_kg, rpe, logged_at").eq("client_id", id).order("logged_at"),
@@ -20,6 +20,7 @@ export async function GET() {
     supabase.from("meals").select("day, name, quantity_g, kcal, protein_g, carbs_g, fat_g, logged_at").eq("client_id", id).order("day"),
     supabase.from("invoices").select("invoice_number, period_start, amount_cents, currency, status, issued_at, paid_at").eq("client_id", id),
     supabase.from("client_supplements").select("name, dose, unit, timing").eq("client_id", id),
+    supabase.from("appointments").select("starts_at, minutes, created_at, cancelled_at").eq("client_id", id).order("starts_at"),
   ]);
 
   const paths = (photos.data ?? []).map((p) => p.storage_path);
@@ -40,6 +41,7 @@ export async function GET() {
     meals: meals.data ?? [],
     supplements: supplements.data ?? [],
     invoices: invoices.data ?? [],
+    video_calls: calls.data ?? [],
   };
 
   return new Response(JSON.stringify(body, null, 2), {

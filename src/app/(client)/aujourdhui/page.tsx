@@ -2,7 +2,8 @@ import Link from "next/link";
 import { logoUrl } from "@/lib/logo";
 import { getLocale, getTranslations } from "next-intl/server";
 import { addDays, checkInState, clientSession, targetLine, todaySession } from "@/lib/clientData";
-import { Card, CardTitle, CtaLink, ScreenHeader } from "@/components/client/ui";
+import { Card, CardTitle, CtaLink, Kicker, ScreenHeader } from "@/components/client/ui";
+import { callLabel, callsShownFrom } from "@/lib/calls";
 import { EntryCard } from "@/components/client/EntryCard";
 import { CheckInCard } from "@/components/client/CheckInCard";
 import { InstallPrompt } from "@/components/client/InstallPrompt";
@@ -18,11 +19,19 @@ export default async function TodayPage() {
   const t = await getTranslations("today");
   // Her coach's logo, when there is one: the app wears the coach's colours,
   // not only Masse's.
-  const { data: coach } = await supabase
-    .from("coaches")
-    .select("logo_path")
-    .eq("id", client.coach_id)
-    .maybeSingle();
+  const [{ data: coach }, { data: call }] = await Promise.all([
+    supabase.from("coaches").select("name, first_name, logo_path, call_link").eq("id", client.coach_id).maybeSingle(),
+    // The video call booked at sign-up, while it is still to come.
+    supabase
+      .from("appointments")
+      .select("id, starts_at, minutes")
+      .is("cancelled_at", null)
+      .gte("starts_at", callsShownFrom())
+      .order("starts_at")
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  const tCalls = await getTranslations("calls");
   const logo = logoUrl(coach?.logo_path);
   const tLog = await getTranslations("log");
   const tSettings = await getTranslations("settings");
@@ -86,6 +95,35 @@ export default async function TodayPage() {
 
       {/* Only in a browser, never once installed. */}
       <InstallPrompt />
+
+      {call && (
+        <Card className="space-y-3">
+          <Kicker icon="video" accent>
+            {tCalls("kicker", { length: tCalls("length", { minutes: call.minutes }) })}
+          </Kicker>
+          <CardTitle>{tCalls("clientTitle", { coach: coach?.first_name ?? coach?.name ?? "" })}</CardTitle>
+          <p className="text-[15px] font-semibold first-letter:uppercase">{callLabel(call.starts_at, locale)}</p>
+          <p className="text-[13px] leading-[1.45] text-[var(--ink3)]">{tCalls("clientHint")}</p>
+          <div className="flex gap-2">
+            {coach?.call_link && (
+              <a
+                href={coach.call_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta flex h-11 flex-1 items-center justify-center rounded-rp text-[14px] font-semibold text-[var(--on-accent)]"
+              >
+                {tCalls("join")}
+              </a>
+            )}
+            <a
+              href={`/rendez-vous/${call.id}`}
+              className="flex h-11 flex-1 items-center justify-center rounded-rp bg-[var(--glass2)] text-[14px] font-semibold text-[var(--ink)]"
+            >
+              {tCalls("addToCalendar")}
+            </a>
+          </div>
+        </Card>
+      )}
 
       {session && session.session_exercises.length > 0 ? (
         <div className="space-y-3.5">

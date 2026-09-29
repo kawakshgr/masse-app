@@ -335,3 +335,18 @@ export async function setStepsTarget(formData: FormData) {
 
   revalidatePath(`/clients/${clientId}`);
 }
+
+/**
+ * Cancels a booked call. The row stays, stamped, so the slot frees up and the
+ * coach can still see it was booked; she tells the client on WhatsApp.
+ */
+export async function cancelAppointment(appointmentId: string, clientId: string) {
+  const supabase = await createClient();
+  await supabase
+    .from("appointments")
+    .update({ cancelled_at: new Date().toISOString() })
+    .eq("id", appointmentId)
+    .is("cancelled_at", null);
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/clients");
+}

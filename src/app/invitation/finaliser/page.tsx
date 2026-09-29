@@ -13,7 +13,7 @@ import { clear, load, toClaimArgs } from "@/lib/onboarding";
 export default function FinalisePage() {
   const t = useTranslations("onboarding");
   const router = useRouter();
-  const [failure, setFailure] = useState<"none" | "no-answers" | "refused">(
+  const [failure, setFailure] = useState<"none" | "no-answers" | "refused" | "slot-taken">(
     "none",
   );
   const ran = useRef(false);
@@ -33,7 +33,18 @@ export default function FinalisePage() {
       }
 
       const supabase = createClient();
-      const { error } = await supabase.rpc("claim_invite", toClaimArgs(answers));
+      let { error } = await supabase.rpc("claim_invite", toClaimArgs(answers));
+
+      // Her call slot was taken meanwhile. The sign-up is not held hostage to
+      // it: she joins without a call, and the coach sets one on WhatsApp.
+      if (error?.message?.includes("call slot no longer free")) {
+        ({ error } = await supabase.rpc("claim_invite", { ...toClaimArgs(answers), p_call_at: null }));
+        if (!error) {
+          clear();
+          setFailure("slot-taken");
+          return;
+        }
+      }
 
       if (error) {
         setFailure("refused");
@@ -51,6 +62,17 @@ export default function FinalisePage() {
       <div className="glass lift w-full max-w-[420px] rounded-r4 p-8 text-center">
         {failure === "none" ? (
           <p className="text-[14px] text-[var(--ink2)]">{t("finalising")}</p>
+        ) : failure === "slot-taken" ? (
+          <>
+            <p className="text-[14px] font-semibold">{t("slotTaken")}</p>
+            <p className="mt-2 text-[13px] leading-[1.5] text-[var(--ink2)]">{t("slotTakenBody")}</p>
+            <a
+              href="/aujourdhui"
+              className="mt-4 flex h-11 w-full items-center justify-center rounded-rp cta text-[14px] font-semibold text-[var(--on-accent)]"
+            >
+              {t("slotTakenGo")}
+            </a>
+          </>
         ) : (
           <>
             <p className="text-[14px] font-semibold text-[var(--a3)]">

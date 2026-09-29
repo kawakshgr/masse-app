@@ -11,6 +11,8 @@ import { CheckInNudge } from "@/components/CheckInNudge";
 import { markCheckInReviewed } from "@/app/(coach)/clients/actions";
 import { DayTypes } from "@/components/DayTypes";
 import { RecordPanel } from "@/components/RecordPanel";
+import { CallBanner } from "@/components/CallBanner";
+import { callsShownFrom } from "@/lib/calls";
 import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
@@ -119,6 +121,20 @@ export default async function ClientDetailPage({
         }`
     : null;
 
+  // Her booked video call, while it is still to come (or under way).
+  const [{ data: call }, { data: me }] = await Promise.all([
+    supabase
+      .from("appointments")
+      .select("id, starts_at, minutes")
+      .eq("client_id", id)
+      .is("cancelled_at", null)
+      .gte("starts_at", callsShownFrom())
+      .order("starts_at")
+      .limit(1)
+      .maybeSingle(),
+    supabase.from("coaches").select("call_link").eq("id", client.coach_id).maybeSingle(),
+  ]);
+
   return (
     <div className="space-y-4 p-5">
       <header className="flex items-center gap-4">
@@ -139,6 +155,16 @@ export default async function ClientDetailPage({
           </h2>
         </div>
       </header>
+
+      {call && (
+        <CallBanner
+          call={call}
+          clientId={id}
+          firstName={client.first_name ?? client.name.split(/\s+/)[0] ?? client.name}
+          phone={client.whatsapp ?? client.phone}
+          callLink={me?.call_link ?? null}
+        />
+      )}
 
       <ClientTabs
         clientId={id}

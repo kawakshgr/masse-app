@@ -2,7 +2,7 @@
 
 import { SECTION_TITLE, SectionTitle } from "@/components/Pane";
 import { useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import type { ClientRow } from "@/lib/supabase/types";
 import { GOALS, SESSIONS_PER_WEEK, TRAINING_AGES } from "@/lib/onboarding";
 import { removeClient, setClientArchived, updateClientRecord } from "@/app/(coach)/clients/actions";
@@ -126,7 +126,6 @@ export function RecordPanel({
   const tDays = useTranslations("days");
   const tRemove = useTranslations("remove");
   const tEquip = useTranslations("equipment");
-  const locale = useLocale();
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
@@ -427,24 +426,8 @@ export function RecordPanel({
             [t("obstacles"), client.obstacles],
             [t("readiness"), client.readiness ? `${client.readiness} / 10` : null],
             [t("weeklyTime"), client.weekly_time],
-            [
-              client.call_minutes ? t("callSlotsFor", { minutes: client.call_minutes }) : t("callSlots"),
-              // The slots she picked, in the coach's own time; older records
-              // kept what was typed.
-              client.call_slots_at.length > 0
-                ? client.call_slots_at
-                    .map((at) =>
-                      new Date(at).toLocaleString(locale, {
-                        weekday: "short",
-                        day: "numeric",
-                        month: "short",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }),
-                    )
-                    .join(" · ")
-                : client.call_slots,
-            ],
+            // Free-text slots from sign-ups before booking existed.
+            [t("callSlots"), client.call_slots],
             [
               t("consent"),
               client.health_consent_at

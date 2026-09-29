@@ -4,8 +4,10 @@ import { Icon } from "@/components/Icon";
 import { PaneEmpty, PaneHead, SectionTitle, Tile } from "@/components/Pane";
 import { QUEUE_ORDER, type QueueItem, type QueueKind } from "@/lib/queue";
 import { waLink } from "@/lib/whatsapp";
+import { callLabel } from "@/lib/calls";
 
 const ICON: Record<QueueKind, string> = {
+  call: "video",
   late: "checkIns",
   checkin: "note",
   unpaid: "billing",
@@ -41,8 +43,9 @@ function openHref(item: QueueItem): string {
  * her, grouped by why, each with the one action that answers it — a message
  * already written for WhatsApp, or the screen to go to.
  */
-export async function QueuePanel({ items }: { items: QueueItem[] }) {
+export async function QueuePanel({ items, callLink }: { items: QueueItem[]; callLink: string | null }) {
   const t = await getTranslations("queue");
+  const tCalls = await getTranslations("calls");
 
   if (items.length === 0) {
     return <PaneEmpty icon="checkIns" title={t("empty")} hint={t("emptyHint")} />;
@@ -74,9 +77,20 @@ export async function QueuePanel({ items }: { items: QueueItem[] }) {
                   amount: item.amount ?? "",
                   period: item.period ?? "",
                 };
-                const wa = NUDGED.includes(item.kind)
-                  ? waLink(item.phone, t(`wa.${item.kind}`, values))
-                  : null;
+                const when = item.call ? callLabel(item.call.startsAt) : "";
+                const wa = item.call
+                  ? waLink(
+                      item.phone,
+                      tCalls("waConfirm", {
+                        first: item.firstName,
+                        when,
+                        length: tCalls("length", { minutes: item.call.minutes }),
+                        link: callLink ? tCalls("waLink", { link: callLink }) : "",
+                      }),
+                    )
+                  : NUDGED.includes(item.kind)
+                    ? waLink(item.phone, t(`wa.${item.kind}`, values))
+                    : null;
                 const action =
                   item.kind === "checkin" ? t("read") : item.kind === "nextWeek" || item.kind === "noProgramme" ? t("write") : t("open");
 
@@ -93,7 +107,9 @@ export async function QueuePanel({ items }: { items: QueueItem[] }) {
                           item.kind === "late" || item.kind === "unpaid" ? "text-[var(--a3)]" : "text-[var(--ink2)]"
                         }`}
                       >
-                        {t(`line.${item.kind}`, values)}
+                        {item.call
+                          ? `${when} · ${tCalls("length", { minutes: item.call.minutes })}`
+                          : t(`line.${item.kind}`, values)}
                       </span>
                     </span>
                     {wa && (
@@ -106,6 +122,16 @@ export async function QueuePanel({ items }: { items: QueueItem[] }) {
                       >
                         <Icon name="whatsapp" size={16} />
                         <span className="hidden sm:inline">{t("whatsapp")}</span>
+                      </a>
+                    )}
+                    {item.call && (
+                      <a
+                        href={`/rendez-vous/${item.call.id}`}
+                        aria-label={`${tCalls("addToCalendar")} · ${item.name}`}
+                        title={tCalls("addToCalendar")}
+                        className="glass flex size-9 shrink-0 items-center justify-center rounded-rp text-[var(--ink)]"
+                      >
+                        <Icon name="calendar" size={16} />
                       </a>
                     )}
                     <Link

@@ -10,29 +10,6 @@ export const SESSIONS_PER_WEEK = ["1-2", "3-4", "5+", "irregular"] as const;
 
 export const EQUIPMENT = ["gym", "rack", "bands", "bodyweight"] as const;
 
-/** A slot for the first call: "2026-10-01" and "18:30", both in her time. */
-export type CallSlot = { date: string; time: string };
-
-/** Slots a client may propose, and how many the form asks for. */
-export const CALL_SLOTS_MAX = 3;
-export const CALL_SLOTS_MIN = 2;
-
-/** The next seven days after today, as "YYYY-MM-DD" in her own time zone. */
-export function callDays(today = new Date()): string[] {
-  return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i + 1);
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  });
-}
-
-/** Every half hour from 07:00 to 21:30. */
-export const CALL_TIMES = Array.from({ length: 30 }, (_, i) => {
-  const minutes = 7 * 60 + i * 30;
-  return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
-});
-
-const slotComplete = (slot: CallSlot) => slot.date !== "" && slot.time !== "";
-
 export type Answers = {
   code: string;
   coachName: string | null;
@@ -59,8 +36,8 @@ export type Answers = {
   weeklyTime: string;
   sessionDays: number[];
   equipment: string[];
-  /** Up to three slots for the call, as picked: a day and a time. */
-  callSlots: CallSlot[];
+  /** The call slot she took, as an instant (ISO); null for none. */
+  callAt: string | null;
   // Ton corps
   heightCm: string;
   weightKg: string;
@@ -90,7 +67,7 @@ export const EMPTY: Answers = {
   weeklyTime: "",
   sessionDays: [],
   equipment: [],
-  callSlots: [],
+  callAt: null,
   heightCm: "",
   weightKg: "",
   sleepTargetH: "",
@@ -108,8 +85,8 @@ export function load(): Answers | null {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const answers = { ...EMPTY, ...JSON.parse(raw) } as Answers;
-    // Answers saved before 29 Sep 2026 held the slots as free text.
-    if (!Array.isArray(answers.callSlots)) answers.callSlots = [];
+    // Slots come and go; one saved earlier is checked again at step 5.
+    if (typeof answers.callAt !== "string") answers.callAt = null;
     return answers;
   } catch {
     return null;
@@ -135,8 +112,7 @@ export function clear() {
 /** "aucune", "Aucun.", "rien", "none", "-": the answer for no injury at all. */
 const NO_INJURY = /^(aucune?|rien|non|none|no|néant|-+)\.?$/i;
 
-/** Shapes the answers into the arguments claim_invite expects. Runs in her
- *  browser, so a slot's day and time are read in her own time zone. */
+/** Shapes the answers into the arguments claim_invite expects. */
 export function toClaimArgs(a: Answers) {
   const num = (v: string) => {
     const n = Number(v.replace(",", "."));
@@ -173,9 +149,7 @@ export function toClaimArgs(a: Answers) {
     p_readiness: a.readiness,
     p_weekly_time: text(a.weeklyTime),
     p_call_slots: null,
-    p_call_slots_at: a.callMinutes
-      ? a.callSlots.filter(slotComplete).map((slot) => new Date(`${slot.date}T${slot.time}`).toISOString())
-      : null,
+    p_call_at: a.callMinutes ? a.callAt : null,
   };
 }
 
@@ -205,10 +179,8 @@ export function stepComplete(step: number, a: Answers): boolean {
         a.readiness !== null
       );
     case 5:
-      return (
-        a.weeklyTime.trim() !== "" &&
-        (a.callMinutes === null || a.callSlots.filter(slotComplete).length >= CALL_SLOTS_MIN)
-      );
+      // The call slot is optional: none may suit, and the coach follows up.
+      return a.weeklyTime.trim() !== "";
     case 8:
       return a.healthConsent;
     default:

@@ -328,11 +328,15 @@
     "frameTitle": "Your setup",
     "frameLede": "The time you have, and when we talk.",
     "weeklyTime": "How much time can you give to training each week?",
-    "callSlots": "Which slots would suit you for the {minutes, plural, =60 {1-hour} other {#-minute}} video call?",
-    "callDay": "Day {n}",
-    "callTime": "Time {n}",
+    "callSlots": "Pick a slot for the {minutes, plural, =60 {1-hour} other {#-minute}} video call with your coach",
+    "callDay": "Day",
+    "callTime": "Time",
+    "callLoading": "Looking for free slots…",
+    "callNone": "No free slot this week. Carry on: your coach will get back to you to set the call.",
+    "callSummary": "Video call",
+    "callNotChosen": "To set with your coach",
     "callTimePlaceholder": "Time",
-    "callSlotsHint": "Pick 2 or 3 slots over the next 7 days; your coach gets back to you to confirm.",
+    "callSlotsHint": "The slot is booked as soon as you create your account. None suits you? Leave it empty; your coach will get back to you.",
     "consentTitle": "Your health data",
     "consentLede": "Your injuries, cycle and sleep are health data. They are hosted in Europe, only your coach reads them, and you can withdraw your consent at any time in Settings.",
     "consentBox": "I agree that my coach uses this health data for my coaching.",
@@ -340,7 +344,10 @@
     "pick": "Choose…",
     "adultsOnly": "Masse is for adults only: you must be 18 or over.",
     "consentMore": "The full detail — what is kept, for how long, and your rights — is in the",
-    "privacyLink": "privacy policy."
+    "privacyLink": "privacy policy.",
+    "slotTaken": "Your account is created.",
+    "slotTakenBody": "The video call slot you picked was just taken by someone else. Your coach will get back to you on WhatsApp to set a new one.",
+    "slotTakenGo": "Continue"
   },
   "equipment": {
     "gym": "Gym",
@@ -1426,7 +1433,22 @@
     "country": "Country",
     "addressHint": "The one your invoices print: changing it here changes it there.",
     "companyTitle": "My company",
-    "companyHint": "SIRET, VAT, IBAN, invoice numbering — in Admin."
+    "companyHint": "SIRET, VAT, IBAN, invoice numbering — in Admin.",
+    "callTitle": "Video call",
+    "callLink": "Your video link (Zoom, Meet…)",
+    "callLinkHint": "Your personal link, the same every time: it is sent with every booked call.",
+    "availabilityTitle": "Video call availability",
+    "availabilityHint": "When your clients can book their call, every week (Paris time).",
+    "availabilityEmpty": "No window: invites with a call will offer no slot.",
+    "weekday": "Day",
+    "from": "From",
+    "to": "To",
+    "addWindow": "Add",
+    "windowInvalid": "The end must come after the start.",
+    "daysOffTitle": "Days off",
+    "dayOff": "Day off",
+    "addDayOff": "Block this day",
+    "remove": "Remove"
   },
   "queue": {
     "title": "To do",
@@ -1441,7 +1463,8 @@
       "missed": "Missed sessions",
       "nextWeek": "Next week to send",
       "noProgramme": "No programme sent",
-      "sleep": "Sleep under target"
+      "sleep": "Sleep under target",
+      "call": "Upcoming video calls"
     },
     "line": {
       "late": "Their check-in for the week isn’t filled in",
@@ -1451,7 +1474,8 @@
       "missed": "This week’s sessions not logged",
       "nextWeek": "Nothing planned from Monday",
       "noProgramme": "No first week yet",
-      "sleep": "Their average is under their target"
+      "sleep": "Their average is under their target",
+      "call": "{when}"
     },
     "wa": {
       "late": "Hi {first}! A quick reminder: your check-in for the week is waiting in Masse.",
@@ -1525,5 +1549,23 @@
     "deleteFailed": "The deletion failed. Try again, or write to your coach.",
     "legal": "How Masse handles your data:",
     "privacyLink": "privacy policy"
+  },
+  "calls": {
+    "icsTitle": "Video call · {name}",
+    "icsWhen": "{when} · {minutes, plural, =60 {1 h} other {# min}}",
+    "icsLink": "Link: {link}",
+    "kicker": "Video call · {length}",
+    "length": "{minutes, plural, =60 {1 h} other {# min}}",
+    "addToCalendar": "Add to calendar",
+    "join": "Join",
+    "cancel": "Cancel the call",
+    "noLink": "Add your video link in My account: it is joined to every call.",
+    "waConfirm": "Hi {first}! Confirming our video call {when} ({length}).{link}",
+    "waLink": " The link: {link}",
+    "waCancel": "Hi {first}, I have to cancel our video call {when}. Shall we set another one?",
+    "clientTitle": "Video call with {coach}",
+    "clientHint": "Add it to your calendar. Can't make it? Tell your coach on WhatsApp.",
+    "whatsapp": "WhatsApp",
+    "tellCancel": "Tell them it's cancelled"
   }
 }

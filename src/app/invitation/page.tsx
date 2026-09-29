@@ -1,20 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { OtpCodeEntry } from "@/components/OtpCodeEntry";
 import { Icon } from "@/components/Icon";
 import { Cta, Secondary, fieldClass } from "@/components/client/ui";
 import {
-  CALL_SLOTS_MAX,
-  CALL_TIMES,
   EMPTY,
   EQUIPMENT,
   GOALS,
   SESSIONS_PER_WEEK,
   TRAINING_AGES,
-  callDays,
   fullName,
   isAdult,
   save,
@@ -107,11 +104,42 @@ export default function OnboardingPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  // The coach's free call slots, read again each time step 5 opens: a slot
+  // taken by someone else meanwhile must not be offered.
+  const [freeSlots, setFreeSlots] = useState<string[] | null>(null);
+  const [callDay, setCallDay] = useState("");
 
   const set = (patch: Partial<Answers>) => {
     setMissing(false);
     setA((prev) => ({ ...prev, ...patch }));
   };
+
+  useEffect(() => {
+    if (step !== 5 || a.callMinutes === null) return;
+    let live = true;
+    createClient()
+      .rpc("invite_free_slots", { p_code: a.code })
+      .then(({ data }) => {
+        if (!live) return;
+        const slots = ((data ?? []) as string[]).map((at) => new Date(at).toISOString());
+        setFreeSlots(slots);
+        // A slot picked earlier and since taken is dropped, not kept silently.
+        setA((prev) => (prev.callAt && !slots.includes(prev.callAt) ? { ...prev, callAt: null } : prev));
+      });
+    return () => {
+      live = false;
+    };
+  }, [step, a.callMinutes, a.code]);
+
+  // "2026-10-01" in her own time zone, for grouping slots by day.
+  const dayOf = (iso: string) => {
+    const d = new Date(iso);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+  const slotDays = [...new Set((freeSlots ?? []).map(dayOf))];
+  const shownDay = callDay || (a.callAt ? dayOf(a.callAt) : "");
+  const callLabel = (iso: string) =>
+    new Date(iso).toLocaleString(locale, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
 
   async function checkCode() {
     setChecking(true);
@@ -374,57 +402,57 @@ export default function OnboardingPage() {
                   ))}
                 </div>
               </div>
-              {/* Asked only when the coach offered a call, and picked rather
-                  than typed, so the coach reads three real instants. */}
+              {/* Asked only when the coach offered a call: one of her real
+                  free slots, booked with the sign-up. None may suit. */}
               {a.callMinutes !== null && (
                 <div className="space-y-2">
                   <p className="text-[14px] font-semibold leading-[1.35]">
                     {t("callSlots", { minutes: a.callMinutes })}
-                    <span className="text-[var(--accent)]"> •</span>
                   </p>
-                  {Array.from({ length: CALL_SLOTS_MAX }, (_, i) => {
-                    const slot = a.callSlots[i] ?? { date: "", time: "" };
-                    const put = (patch: Partial<typeof slot>) => {
-                      const next = [...a.callSlots];
-                      while (next.length <= i) next.push({ date: "", time: "" });
-                      next[i] = { ...slot, ...patch };
-                      set({ callSlots: next });
-                    };
-                    return (
-                      <div key={i} className="grid grid-cols-[1fr_7.5rem] gap-2">
-                        <select
-                          aria-label={t("callDay", { n: i + 1 })}
-                          value={slot.date}
-                          onChange={(e) => put({ date: e.target.value })}
-                          className={fieldClass}
-                        >
-                          <option value="">{t("callDay", { n: i + 1 })}</option>
-                          {callDays().map((day) => (
-                            <option key={day} value={day}>
-                              {new Date(`${day}T12:00`).toLocaleDateString(locale, {
-                                weekday: "long",
-                                day: "numeric",
-                                month: "long",
-                              })}
+                  {freeSlots === null ? (
+                    <p className="text-[13px] text-[var(--ink3)]">{t("callLoading")}</p>
+                  ) : freeSlots.length === 0 ? (
+                    <p className="text-[13px] leading-[1.45] text-[var(--ink2)]">{t("callNone")}</p>
+                  ) : (
+                    <div className="grid grid-cols-[1fr_7.5rem] gap-2">
+                      <select
+                        aria-label={t("callDay")}
+                        value={shownDay}
+                        onChange={(e) => {
+                          setCallDay(e.target.value);
+                          set({ callAt: null });
+                        }}
+                        className={fieldClass}
+                      >
+                        <option value="">{t("callDay")}</option>
+                        {slotDays.map((day) => (
+                          <option key={day} value={day}>
+                            {new Date(`${day}T12:00`).toLocaleDateString(locale, {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                            })}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        aria-label={t("callTime")}
+                        value={a.callAt ?? ""}
+                        disabled={!shownDay}
+                        onChange={(e) => set({ callAt: e.target.value || null })}
+                        className={`${fieldClass} tnum disabled:opacity-50`}
+                      >
+                        <option value="">{t("callTimePlaceholder")}</option>
+                        {(freeSlots ?? [])
+                          .filter((at) => dayOf(at) === shownDay)
+                          .map((at) => (
+                            <option key={at} value={at}>
+                              {new Date(at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}
                             </option>
                           ))}
-                        </select>
-                        <select
-                          aria-label={t("callTime", { n: i + 1 })}
-                          value={slot.time}
-                          onChange={(e) => put({ time: e.target.value })}
-                          className={`${fieldClass} tnum`}
-                        >
-                          <option value="">{t("callTimePlaceholder")}</option>
-                          {CALL_TIMES.map((time) => (
-                            <option key={time} value={time}>
-                              {time}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    );
-                  })}
+                      </select>
+                    </div>
+                  )}
                   <span className="block text-[12px] leading-[1.45] text-[var(--ink3)]">{t("callSlotsHint")}</span>
                 </div>
               )}
@@ -495,6 +523,7 @@ export default function OnboardingPage() {
                   [t("goalMain"), a.goal && (a.goal === "Other" ? a.goalOther : tGoal(a.goal))],
                   [t("readiness"), a.readiness && `${a.readiness} / 10`],
                   [t("daysTitle"), a.sessionDays.slice().sort().map((d) => tDays(String(d)).slice(0, 3)).join(", ")],
+                  ...(a.callMinutes !== null ? [[t("callSummary"), a.callAt ? callLabel(a.callAt) : t("callNotChosen")]] : []),
                 ].map(([label, value]) => (
                   <div key={String(label)} className="flex min-h-11 items-center justify-between gap-4 py-2">
                     <dt className="min-w-0 text-[var(--ink2)]">{label}</dt>

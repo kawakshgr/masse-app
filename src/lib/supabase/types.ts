@@ -60,6 +60,31 @@ export type CoachRow = {
   phone: string | null;
   /** Path in the public coach-logos bucket; see lib/logo.ts. */
   logo_path: string | null;
+  /** Her personal video link (Zoom, Meet...), joined to every booked call. */
+  call_link: string | null;
+};
+
+/** A weekly window she takes calls in: Monday = 0, minutes from midnight (Paris). */
+export type CoachAvailabilityRow = {
+  id: string;
+  coach_id: string;
+  weekday: number;
+  start_min: number;
+  end_min: number;
+};
+
+/** A day she takes no calls, whatever her windows say. */
+export type CoachUnavailableDayRow = { coach_id: string; day: string };
+
+/** A call a client booked at sign-up; cancelled, never deleted. */
+export type AppointmentRow = {
+  id: string;
+  coach_id: string;
+  client_id: string;
+  starts_at: string;
+  minutes: CallMinutes;
+  created_at: string;
+  cancelled_at: string | null;
 };
 
 export type ClientRow = {
@@ -108,10 +133,6 @@ export type ClientRow = {
   readiness: number | null;
   weekly_time: string | null;
   call_slots: string | null;
-  /** The video call the coach offered (10, 20, 30, 60), null when none. */
-  call_minutes: CallMinutes | null;
-  /** Up to three instants the client proposed for it. */
-  call_slots_at: string[];
   health_consent_at: string | null;
   /** When the coaching ended; the retention job counts from it. */
   archived_at: string | null;
@@ -602,6 +623,9 @@ export type Database = {
       coaches: Table<CoachRow, "id" | "name">;
       clients: Table<ClientRow, "id" | "coach_id" | "name">;
       invite_codes: Table<InviteCodeRow, "coach_id" | "code">;
+      coach_availability: Table<CoachAvailabilityRow, "coach_id" | "weekday" | "start_min" | "end_min", "id">;
+      coach_unavailable_days: Table<CoachUnavailableDayRow, "coach_id" | "day">;
+      appointments: Table<AppointmentRow, "coach_id" | "client_id" | "starts_at" | "minutes", "id" | "created_at">;
       programmes: Table<ProgrammeRow, "coach_id" | "name">;
       programme_weeks: Table<ProgrammeWeekRow, "programme_id" | "week_number">;
       sessions: Table<SessionRow, "week_id" | "day_index">;
@@ -690,6 +714,8 @@ export type Database = {
         Args: { p_phase: CyclePhase };
         Returns: number;
       };
+      /** The coach's free call slots behind a valid code (ISO instants). */
+      invite_free_slots: { Args: { p_code: string }; Returns: string[] };
       /** Validates a code before the client has an account. */
       invite_preview: {
         Args: { p_code: string };
@@ -726,7 +752,7 @@ export type Database = {
           p_readiness: number | null;
           p_weekly_time: string | null;
           p_call_slots: string | null;
-          p_call_slots_at: string[] | null;
+          p_call_at: string | null;
         };
         Returns: string;
       };

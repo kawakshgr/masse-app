@@ -328,11 +328,15 @@
     "frameTitle": "Ton cadre",
     "frameLede": "Le temps que tu as, et quand on se parle.",
     "weeklyTime": "Combien de temps peux-tu consacrer à l’entraînement par semaine ?",
-    "callSlots": "Quels créneaux te conviendraient pour la visio de {minutes, plural, =60 {1 heure} other {# minutes}} ?",
-    "callDay": "Jour {n}",
-    "callTime": "Heure {n}",
+    "callSlots": "Choisis un créneau pour la visio de {minutes, plural, =60 {1 heure} other {# minutes}} avec ton coach",
+    "callDay": "Jour",
+    "callTime": "Heure",
+    "callLoading": "Recherche des créneaux libres…",
+    "callNone": "Aucun créneau libre cette semaine. Continue : ton coach te recontacte pour fixer la visio.",
+    "callSummary": "Visio",
+    "callNotChosen": "À fixer avec ton coach",
     "callTimePlaceholder": "Heure",
-    "callSlotsHint": "Choisis 2 ou 3 créneaux sur les 7 prochains jours ; ton coach revient vers toi pour confirmer.",
+    "callSlotsHint": "Le créneau est réservé dès que tu crées ton compte. Aucun ne te va ? Laisse vide, ton coach te recontacte.",
     "consentTitle": "Tes données de santé",
     "consentLede": "Tes blessures, ton cycle et ton sommeil sont des données de santé. Elles sont hébergées en Europe, seul ton coach les lit, et tu peux retirer ton accord à tout moment dans Réglages.",
     "consentBox": "J’accepte que mon coach utilise ces données de santé pour mon suivi.",
@@ -340,7 +344,10 @@
     "pick": "Choisir…",
     "adultsOnly": "Masse est réservé aux adultes : il faut avoir 18 ans ou plus.",
     "consentMore": "Tout le détail — ce qui est gardé, combien de temps, et tes droits — est dans la",
-    "privacyLink": "politique de confidentialité."
+    "privacyLink": "politique de confidentialité.",
+    "slotTaken": "Ton compte est créé.",
+    "slotTakenBody": "Le créneau de visio que tu avais choisi vient d’être pris par quelqu’un d’autre. Ton coach te recontacte sur WhatsApp pour en fixer un nouveau.",
+    "slotTakenGo": "Continuer"
   },
   "equipment": {
     "gym": "Salle",
@@ -1426,7 +1433,22 @@
     "country": "Pays",
     "addressHint": "La même que sur tes factures : la changer ici la change là-bas.",
     "companyTitle": "Mon entreprise",
-    "companyHint": "SIRET, TVA, IBAN, numérotation des factures — dans Admin."
+    "companyHint": "SIRET, TVA, IBAN, numérotation des factures — dans Admin.",
+    "callTitle": "Visio",
+    "callLink": "Ton lien visio (Zoom, Meet…)",
+    "callLinkHint": "Ton lien personnel, le même à chaque fois : il est envoyé avec chaque rendez-vous réservé.",
+    "availabilityTitle": "Disponibilités visio",
+    "availabilityHint": "Quand tes clients peuvent réserver leur visio, chaque semaine (heure de Paris).",
+    "availabilityEmpty": "Aucune plage : les invitations avec visio ne proposeront aucun créneau.",
+    "weekday": "Jour",
+    "from": "De",
+    "to": "À",
+    "addWindow": "Ajouter",
+    "windowInvalid": "La fin doit être après le début.",
+    "daysOffTitle": "Jours bloqués",
+    "dayOff": "Jour bloqué",
+    "addDayOff": "Bloquer ce jour",
+    "remove": "Retirer"
   },
   "queue": {
     "title": "À traiter",
@@ -1441,7 +1463,8 @@
       "missed": "Séances manquées",
       "nextWeek": "Semaine prochaine à envoyer",
       "noProgramme": "Aucun programme envoyé",
-      "sleep": "Sommeil sous l’objectif"
+      "sleep": "Sommeil sous l’objectif",
+      "call": "Visios à venir"
     },
     "line": {
       "late": "Son bilan de la semaine n’est pas rempli",
@@ -1451,7 +1474,8 @@
       "missed": "Séances de la semaine pas saisies",
       "nextWeek": "Rien de prévu à partir de lundi",
       "noProgramme": "Pas encore de première semaine",
-      "sleep": "Sa moyenne est sous son objectif"
+      "sleep": "Sa moyenne est sous son objectif",
+      "call": "{when}"
     },
     "wa": {
       "late": "Coucou {first} ! Petit rappel : ton bilan de la semaine t’attend dans Masse.",
@@ -1525,5 +1549,23 @@
     "deleteFailed": "La suppression a échoué. Réessaie, ou écris à ton coach.",
     "legal": "Comment Masse traite tes données :",
     "privacyLink": "politique de confidentialité"
+  },
+  "calls": {
+    "icsTitle": "Visio · {name}",
+    "icsWhen": "{when} · {minutes, plural, =60 {1 h} other {# min}}",
+    "icsLink": "Lien : {link}",
+    "kicker": "Visio · {length}",
+    "length": "{minutes, plural, =60 {1 h} other {# min}}",
+    "addToCalendar": "Ajouter au calendrier",
+    "join": "Rejoindre",
+    "cancel": "Annuler la visio",
+    "noLink": "Ajoute ton lien visio dans Mon compte : il sera joint à chaque rendez-vous.",
+    "waConfirm": "Bonjour {first} ! Je te confirme notre visio {when} ({length}).{link}",
+    "waLink": " Le lien : {link}",
+    "waCancel": "Bonjour {first}, je dois annuler notre visio {when}. On en fixe une autre ?",
+    "clientTitle": "Visio avec {coach}",
+    "clientHint": "Ajoute-la à ton agenda. Un empêchement ? Préviens ton coach sur WhatsApp.",
+    "whatsapp": "WhatsApp",
+    "tellCancel": "Prévenir de l’annulation"
   }
 }

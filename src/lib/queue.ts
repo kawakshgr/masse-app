@@ -10,6 +10,7 @@ import type { Database } from "@/lib/supabase/types";
  * here: silence, next week not sent, an invoice gone late.
  */
 export type QueueKind =
+  | "call"
   | "late"
   | "checkin"
   | "unpaid"
@@ -21,6 +22,8 @@ export type QueueKind =
 
 /** The order the list is read in: what costs her client most, first. */
 export const QUEUE_ORDER: QueueKind[] = [
+  // Booked calls first: they are the only reasons with a clock on them.
+  "call",
   "late",
   "checkin",
   "unpaid",
@@ -44,6 +47,8 @@ export type QueueItem = {
   period?: string;
   /** For "nextWeek": the programme to write it in. */
   programmeId?: string;
+  /** For "call": the booked call. */
+  call?: { id: string; startsAt: string; minutes: number };
 };
 
 /** Three days without a single entry — no sleep, steps or set — is silence. */
@@ -63,7 +68,7 @@ export async function loadQueue(
   const since = addDays(today, -SILENT_DAYS);
   const sinceInstant = new Date(Date.now() - SILENT_DAYS * 86_400_000).toISOString();
 
-  const [clientsRes, metricsRes, setsRes, assignmentsRes, invoicesRes] = await Promise.all([
+  const [clientsRes, metricsRes, setsRes, assignmentsRes, invoicesRes, callsRes] = await Promise.all([
     supabase.from("clients").select("id, whatsapp, phone, created_at").in("id", ids),
     supabase.from("daily_metrics").select("client_id").in("client_id", ids).gte("day", since),
     supabase.from("set_logs").select("client_id").in("client_id", ids).gte("logged_at", sinceInstant),
@@ -77,6 +82,15 @@ export async function loadQueue(
       .select("client_id, amount_cents, currency, period_start")
       .in("client_id", ids)
       .eq("status", "late"),
+    // Calls booked for the next seven days, and one running now.
+    supabase
+      .from("appointments")
+      .select("id, client_id, starts_at, minutes")
+      .in("client_id", ids)
+      .is("cancelled_at", null)
+      .gte("starts_at", new Date(Date.now() - 60 * 60_000).toISOString())
+      .lt("starts_at", new Date(Date.now() + 7 * 86_400_000).toISOString())
+      .order("starts_at"),
   ]);
 
   const contact = new Map(
@@ -119,6 +133,14 @@ export async function loadQueue(
       phone: contact.get(entry.id)?.phone ?? null,
     };
 
+    for (const call of (callsRes.data ?? []).filter((row) => row.client_id === entry.id)) {
+      items.push({
+        ...base,
+        kind: "call",
+        call: { id: call.id, startsAt: call.starts_at, minutes: call.minutes },
+      });
+    }
+
     const joined = contact.get(entry.id)?.since ?? "";
     const silent = joined !== "" && joined < sinceInstant && !heard.has(entry.id);
 
@@ -155,6 +177,8 @@ export async function loadQueue(
 
   return items.sort(
     (a, b) =>
-      QUEUE_ORDER.indexOf(a.kind) - QUEUE_ORDER.indexOf(b.kind) || a.name.localeCompare(b.name, "fr"),
+      QUEUE_ORDER.indexOf(a.kind) - QUEUE_ORDER.indexOf(b.kind) ||
+      // Calls in the order they happen; everything else by name.
+      (a.call && b.call ? a.call.startsAt.localeCompare(b.call.startsAt) : a.name.localeCompare(b.name, "fr")),
   );
 }
