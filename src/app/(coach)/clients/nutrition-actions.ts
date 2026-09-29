@@ -72,9 +72,9 @@ export async function saveNutritionTargets(formData: FormData) {
 export async function addPlanMeal(formData: FormData) {
   const supabase = await createClient();
   const clientId = String(formData.get("client_id") ?? "");
+  // The name is optional: the meal is known by its place in the day.
   const name = String(formData.get("name") ?? "").trim();
-  const at = String(formData.get("at_time") ?? "").trim();
-  if (!clientId || name === "" || at === "") return;
+  if (!clientId) return;
 
   const dayTypeId = dayTypeOf(formData);
   let counter = supabase
@@ -90,7 +90,6 @@ export async function addPlanMeal(formData: FormData) {
   await supabase.from("plan_meals").insert({
     client_id: clientId,
     day_type_id: dayTypeId,
-    at_time: at,
     name,
     position: count ?? 0,
   });
@@ -103,10 +102,40 @@ export async function updatePlanMeal(formData: FormData) {
   const id = String(formData.get("meal_id") ?? "");
   const clientId = String(formData.get("client_id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
-  const at = String(formData.get("at_time") ?? "").trim();
-  if (!id || name === "" || at === "") return;
+  if (!id) return;
 
-  await supabase.from("plan_meals").update({ name, at_time: at }).eq("id", id);
+  await supabase.from("plan_meals").update({ name }).eq("id", id);
+  revalidatePath(`/clients/${clientId}`);
+}
+
+/** One place up or down: the meal swaps with its neighbour of the same day. */
+export async function movePlanMeal(formData: FormData) {
+  const supabase = await createClient();
+  const id = String(formData.get("meal_id") ?? "");
+  const clientId = String(formData.get("client_id") ?? "");
+  const up = String(formData.get("direction") ?? "") === "up";
+  if (!id || !clientId) return;
+
+  const dayTypeId = dayTypeOf(formData);
+  let query = supabase
+    .from("plan_meals")
+    .select("id, position")
+    .eq("client_id", clientId)
+    .order("position");
+  query = dayTypeId === null ? query.is("day_type_id", null) : query.eq("day_type_id", dayTypeId);
+  const { data: rows } = await query;
+
+  const list = rows ?? [];
+  const index = list.findIndex((row) => row.id === id);
+  const other = list[up ? index - 1 : index + 1];
+  if (index < 0 || !other) return;
+
+  // Renumber the whole day so positions stay 0, 1, 2… whatever came before.
+  const order = list.map((row) => row.id);
+  [order[index], order[up ? index - 1 : index + 1]] = [order[up ? index - 1 : index + 1], order[index]];
+  await Promise.all(
+    order.map((mealId, position) => supabase.from("plan_meals").update({ position }).eq("id", mealId)),
+  );
   revalidatePath(`/clients/${clientId}`);
 }
 

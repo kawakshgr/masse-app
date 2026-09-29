@@ -911,10 +911,9 @@
     "fat": "Lipides",
     "share": "{pct} % de l’apport",
     "apply": "Appliquer",
-    "mealTimes": "Horaires de repas",
+    "mealTimes": "Repas de la journée",
     "fixedPlan": "Le plan fixe",
     "mealName": "Repas",
-    "mealTime": "Heure",
     "addMeal": "Ajouter un repas",
     "mealsCount": "{count, plural, =0 {aucun repas} =1 {1 repas par jour} other {# repas par jour}}",
     "noMeals": "Aucun repas défini. Ajoute-les pour donner une structure à sa journée.",
@@ -937,7 +936,11 @@
     "close": "Fermer",
     "foodAsks": "Aliments estimés par le client",
     "foodAsksNote": "Estimés par le client parce qu’ils ne sont pas dans ta base. Ajoute-les et chaque enregistrement futur utilisera tes chiffres au lieu d’une approximation.",
-    "addToLibrary": "Ajouter à la bibliothèque"
+    "addToLibrary": "Ajouter à la bibliothèque",
+    "mealN": "Repas {n}",
+    "mealNameOptional": "Nom (facultatif)",
+    "mealUp": "Monter ce repas",
+    "mealDown": "Descendre ce repas"
   },
   "nutWeek": {
     "title": "Cette semaine",
@@ -1183,7 +1186,8 @@
     "meals": "Tes repas",
     "supplements": "Tes compléments",
     "empty": "Ton coach n’a pas encore écrit de plan pour toi.",
-    "restDay": "Jour de repos"
+    "restDay": "Jour de repos",
+    "mealN": "Repas {n}"
   },
   "bilan": {
     "title": "Ton bilan",

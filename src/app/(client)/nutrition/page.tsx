@@ -8,7 +8,6 @@ import { MealsPanel } from "@/components/MealsPanel";
 
 type PlanMeal = {
   id: string;
-  at_time: string;
   name: string;
   day_type_id: string | null;
   plan_meal_items: { id: string; name: string; quantity_g: number | null; position: number }[];
@@ -35,9 +34,9 @@ export default async function NutritionPage() {
         .eq("client_id", client.id),
       supabase
         .from("plan_meals")
-        .select("id, at_time, name, day_type_id, plan_meal_items(id, name, quantity_g, position)")
+        .select("id, name, position, day_type_id, plan_meal_items(id, name, quantity_g, position)")
         .eq("client_id", client.id)
-        .order("at_time"),
+        .order("position"),
       supabase
         .from("client_supplements")
         .select("id, name, dose, unit, timing, day_type_id")
@@ -109,11 +108,14 @@ export default async function NutritionPage() {
       {meals.length > 0 && (
         <Card className="space-y-3.5">
           <Kicker icon="foods">{t("meals")}</Kicker>
-          {meals.map((meal) => (
+          {meals.map((meal, index) => (
             <div key={meal.id} className="space-y-1.5">
-              <p className="flex items-baseline justify-between gap-2">
-                <span className="text-[15px] font-semibold">{meal.name}</span>
-                <span className="tnum text-[13px] text-[var(--ink3)]">{meal.at_time.slice(0, 5)}</span>
+              {/* Numbered, not timed: when she eats is hers to choose. */}
+              <p className="flex items-baseline gap-2">
+                <span className="tnum text-[11px] font-bold uppercase tracking-[.12em] text-[var(--accent)]">
+                  {t("mealN", { n: index + 1 })}
+                </span>
+                {meal.name && <span className="text-[15px] font-semibold">{meal.name}</span>}
               </p>
               {[...meal.plan_meal_items]
                 .sort((a, b) => a.position - b.position)

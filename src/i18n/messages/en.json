@@ -911,10 +911,9 @@
     "fat": "Fat",
     "share": "{pct}% of intake",
     "apply": "Apply",
-    "mealTimes": "Meal times",
+    "mealTimes": "The day’s meals",
     "fixedPlan": "The fixed plan",
     "mealName": "Meal",
-    "mealTime": "Time",
     "addMeal": "Add a meal",
     "mealsCount": "{count, plural, =0 {no meals} =1 {1 meal a day} other {# meals a day}}",
     "noMeals": "No meals set. Add them to give her day a shape.",
@@ -937,7 +936,11 @@
     "close": "Close",
     "foodAsks": "Foods the client estimated",
     "foodAsksNote": "Estimated by the client because the food is not in your database. Add it and every future log uses your numbers instead of a guess.",
-    "addToLibrary": "Add to the library"
+    "addToLibrary": "Add to the library",
+    "mealN": "Meal {n}",
+    "mealNameOptional": "Name (optional)",
+    "mealUp": "Move this meal up",
+    "mealDown": "Move this meal down"
   },
   "nutWeek": {
     "title": "This week",
@@ -1183,7 +1186,8 @@
     "meals": "Your meals",
     "supplements": "Your supplements",
     "empty": "Your coach hasn't written a plan for you yet.",
-    "restDay": "Rest day"
+    "restDay": "Rest day",
+    "mealN": "Meal {n}"
   },
   "bilan": {
     "title": "Your check-in",

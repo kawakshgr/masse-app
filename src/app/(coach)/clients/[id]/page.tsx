@@ -823,10 +823,10 @@ async function NutritionTab({
       supabase
         .from("plan_meals")
         .select(
-          "id, at_time, name, position, day_type_id, plan_meal_items(id, name, quantity_g, kcal, protein_g, carbs_g, fat_g, position)",
+          "id, name, position, day_type_id, plan_meal_items(id, name, quantity_g, kcal, protein_g, carbs_g, fat_g, position)",
         )
         .eq("client_id", clientId)
-        .order("at_time"),
+        .order("position"),
       supabase
         .from("foods")
         .select("id, name, brand, category, serving_label, serving_g, kcal_100g")
@@ -908,7 +908,6 @@ async function NutritionTab({
     .filter((row) => (row.day_type_id ?? null) === dayTypeId)
     .map((row) => ({
     id: row.id,
-    atTime: row.at_time,
     name: row.name,
     items: [
       ...((row.plan_meal_items as unknown as {

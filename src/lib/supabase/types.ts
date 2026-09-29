@@ -523,7 +523,8 @@ export type PlanMealRow = {
   /** Null means the meal belongs to the client's default plan. */
   day_type_id: string | null;
   client_id: string;
-  at_time: string;
+  /** No longer set or shown (29 Sep 2026): meals are ordered by position. */
+  at_time: string | null;
   name: string;
   position: number;
 };
@@ -622,7 +623,7 @@ export type Database = {
         "client_id" | "name",
         "kcal"
       >;
-      plan_meals: Table<PlanMealRow, "client_id" | "at_time" | "name">;
+      plan_meals: Table<PlanMealRow, "client_id" | "name">;
       plan_meal_items: Table<PlanMealItemRow, "meal_id" | "name">;
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;

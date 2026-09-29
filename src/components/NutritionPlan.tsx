@@ -12,6 +12,7 @@ import {
   deletePlanMealItem,
   saveNutritionTargets,
   setNutritionMode,
+  movePlanMeal,
   updatePlanMeal,
 } from "@/app/(coach)/clients/nutrition-actions";
 import type { NutritionMode } from "@/lib/supabase/types";
@@ -28,7 +29,6 @@ export type PlanItem = {
 
 export type PlanMeal = {
   id: string;
-  atTime: string;
   name: string;
   items: PlanItem[];
 };
@@ -437,7 +437,7 @@ export function NutritionPlan({
             <p className="mt-2 text-[12px] text-[var(--ink2)]">{t("noMeals")}</p>
           ) : (
             <ul className="mt-2 space-y-2">
-              {meals.map((meal) => {
+              {meals.map((meal, index) => {
                 const mealKcal = meal.items.reduce(
                   (s, i) => s + Number(i.kcal ?? 0),
                   0,
@@ -449,16 +449,14 @@ export function NutritionPlan({
                       <input type="hidden" name="meal_id" value={meal.id} />
                       <input type="hidden" name="client_id" value={clientId} />
                       <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-                      <input
-                        type="time"
-                        name="at_time"
-                        defaultValue={meal.atTime.slice(0, 5)}
-                        aria-label={t("mealTime")}
-                        className={`tnum w-[88px] shrink-0 ${cell}`}
-                      />
+                      {/* Numbered, not timed: she chooses when she eats. */}
+                      <span className="tnum shrink-0 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[.1em]">
+                        {t("mealN", { n: index + 1 })}
+                      </span>
                       <input
                         name="name"
                         defaultValue={meal.name}
+                        placeholder={t("mealNameOptional")}
                         aria-label={t("mealName")}
                         className={`w-full min-w-0 flex-1 ${cell}`}
                       />
@@ -474,6 +472,27 @@ export function NutritionPlan({
                         {t("apply")}
                       </button>
                     </form>
+
+                    {meals.length > 1 && (
+                      <div className="mt-1 flex gap-1">
+                        {(["up", "down"] as const).map((direction) => (
+                          <form key={direction} action={movePlanMeal}>
+                            <input type="hidden" name="meal_id" value={meal.id} />
+                            <input type="hidden" name="client_id" value={clientId} />
+                            <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
+                            <input type="hidden" name="direction" value={direction} />
+                            <button
+                              type="submit"
+                              disabled={direction === "up" ? index === 0 : index === meals.length - 1}
+                              aria-label={t(direction === "up" ? "mealUp" : "mealDown")}
+                              className="glass2 h-7 w-9 rounded-r1 text-[13px] text-[var(--ink2)] disabled:opacity-30"
+                            >
+                              {direction === "up" ? "↑" : "↓"}
+                            </button>
+                          </form>
+                        ))}
+                      </div>
+                    )}
 
                     {/* Items only matter when she is being given exact meals. */}
                     {mode === "plan" && (
@@ -537,8 +556,10 @@ export function NutritionPlan({
           <form action={addPlanMeal} className="mt-2 flex items-center gap-2">
             <input type="hidden" name="client_id" value={clientId} />
             <input type="hidden" name="day_type_id" value={dayTypeId ?? ""} />
-            <input type="time" name="at_time" defaultValue="07:30" aria-label={t("mealTime")} className={`tnum w-[88px] shrink-0 ${cell}`} />
-            <input name="name" placeholder={t("mealName")} aria-label={t("mealName")} className={`w-full min-w-0 flex-1 ${cell}`} />
+            <span className="tnum shrink-0 rounded-rp border border-dashed border-[var(--edge)] px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[.1em] text-[var(--ink3)]">
+              {t("mealN", { n: meals.length + 1 })}
+            </span>
+            <input name="name" placeholder={t("mealNameOptional")} aria-label={t("mealName")} className={`w-full min-w-0 flex-1 ${cell}`} />
             <button
               type="submit"
               className="glass2 h-8 shrink-0 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]"
