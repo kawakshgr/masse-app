@@ -228,8 +228,8 @@
     "intake": "Questionnaire d’arrivée",
     "perWeek": "Séances par semaine",
     "programmeNow": "Programme actuel",
-    "obstacles": "Ce qui l’a freinée jusqu’ici",
-    "readiness": "Prête à changer",
+    "obstacles": "Ce qui a freiné jusqu’ici",
+    "readiness": "Motivation à changer",
     "weeklyTime": "Temps par semaine",
     "callSlots": "Créneaux pour l’appel",
     "consent": "Consentement santé",
@@ -1419,7 +1419,7 @@
     "title": "À traiter",
     "count": "{count, plural, =0 {Tout est à jour} =1 {1 point} other {# points}}",
     "empty": "Rien à traiter",
-    "emptyHint": "Aucune cliente n’attend quelque chose de toi aujourd’hui.",
+    "emptyHint": "Aucun client n’attend quelque chose de toi aujourd’hui.",
     "group": {
       "late": "Bilans en retard",
       "checkin": "Bilans à relire",
@@ -1437,7 +1437,7 @@
       "silent": "Rien saisi depuis 3 jours",
       "missed": "Séances de la semaine pas saisies",
       "nextWeek": "Rien de prévu à partir de lundi",
-      "noProgramme": "Elle attend sa première semaine",
+      "noProgramme": "Pas encore de première semaine",
       "sleep": "Sa moyenne est sous son objectif"
     },
     "wa": {
@@ -1461,6 +1461,6 @@
     "upReps": "exercices gagnent une répétition — toutes les séries réussies",
     "hold": "exercices restent identiques — séries pas toutes réussies, ou sans charge cible",
     "unknown": "exercices restent identiques — rien de saisi, ou pas de cible",
-    "notPushed": "Elle n’est pas encore envoyée : relis-la, ajuste si besoin, puis pousse-la à tes clientes."
+    "notPushed": "Cette semaine n’est pas encore envoyée : relis-la, ajuste si besoin, puis pousse-la à tes clients."
   }
 }
