@@ -107,6 +107,13 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
         <path d="M12 11v5.5M12 7.8h.01" />
       </>
     ),
+    send: <path d="M21 3 3.5 10.5l7 3 3 7zM10.5 13.5 21 3" />,
+    whatsapp: (
+      <>
+        <path d="M4 20l1.2-3.6A8 8 0 1 1 8 19z" />
+        <path d="M9 9.5c.3 2 2 3.8 4.2 4.3l1.3-1.2 2 .8-.4 1.6c-3.6.4-7.9-3.3-7.9-7.2l1.6-.4.8 2z" />
+      </>
+    ),
     home: <path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-5V21H5a1 1 0 0 1-1-1z" />,
     billing: (
       <>

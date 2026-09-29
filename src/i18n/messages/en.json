@@ -1404,5 +1404,43 @@
     "addressHint": "The one your invoices print: changing it here changes it there.",
     "companyTitle": "My company",
     "companyHint": "SIRET, VAT, IBAN, invoice numbering — in Admin."
+  },
+  "queue": {
+    "title": "To do",
+    "count": "{count, plural, =0 {All caught up} =1 {1 item} other {# items}}",
+    "empty": "Nothing to do",
+    "emptyHint": "No client is waiting on you today.",
+    "group": {
+      "late": "Late check-ins",
+      "checkin": "Check-ins to read",
+      "unpaid": "Late payments",
+      "silent": "Silent for 3 days",
+      "missed": "Missed sessions",
+      "nextWeek": "Next week to send",
+      "noProgramme": "No programme sent",
+      "sleep": "Sleep under target"
+    },
+    "line": {
+      "late": "Her check-in for the week isn’t filled in",
+      "checkin": "Check-in filed, to read",
+      "unpaid": "{amount} · {period}",
+      "silent": "Nothing logged for 3 days",
+      "missed": "This week’s sessions not logged",
+      "nextWeek": "Nothing planned from Monday",
+      "noProgramme": "Waiting for her first week",
+      "sleep": "Her average is under her target"
+    },
+    "wa": {
+      "late": "Hi {first}! A quick reminder: your check-in for the week is waiting in Masse.",
+      "unpaid": "Hi {first}, a quick reminder: the {period} invoice ({amount}) is still open. Thank you!",
+      "silent": "Hi {first}, all good? I haven’t seen anything in Masse for a few days.",
+      "missed": "Hi {first}, how are your sessions going this week?",
+      "sleep": "Hi {first}, I noticed your nights are a bit short lately. How are you feeling?"
+    },
+    "whatsapp": "WhatsApp",
+    "open": "Open",
+    "read": "Read",
+    "write": "Write",
+    "noNumber": "No number on her file"
   }
 }

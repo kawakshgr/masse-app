@@ -1404,5 +1404,43 @@
     "addressHint": "La même que sur tes factures : la changer ici la change là-bas.",
     "companyTitle": "Mon entreprise",
     "companyHint": "SIRET, TVA, IBAN, numérotation des factures — dans Admin."
+  },
+  "queue": {
+    "title": "À traiter",
+    "count": "{count, plural, =0 {Tout est à jour} =1 {1 point} other {# points}}",
+    "empty": "Rien à traiter",
+    "emptyHint": "Aucune cliente n’attend quelque chose de toi aujourd’hui.",
+    "group": {
+      "late": "Bilans en retard",
+      "checkin": "Bilans à relire",
+      "unpaid": "Paiements en retard",
+      "silent": "Sans nouvelles depuis 3 jours",
+      "missed": "Séances manquées",
+      "nextWeek": "Semaine prochaine à envoyer",
+      "noProgramme": "Aucun programme envoyé",
+      "sleep": "Sommeil sous l’objectif"
+    },
+    "line": {
+      "late": "Son bilan de la semaine n’est pas rempli",
+      "checkin": "Bilan rempli, à relire",
+      "unpaid": "{amount} · {period}",
+      "silent": "Rien saisi depuis 3 jours",
+      "missed": "Séances de la semaine pas saisies",
+      "nextWeek": "Rien de prévu à partir de lundi",
+      "noProgramme": "Elle attend sa première semaine",
+      "sleep": "Sa moyenne est sous son objectif"
+    },
+    "wa": {
+      "late": "Coucou {first} ! Petit rappel : ton bilan de la semaine t’attend dans Masse.",
+      "unpaid": "Bonjour {first}, petit rappel : la facture de {period} ({amount}) n’est pas encore réglée. Merci !",
+      "silent": "Coucou {first}, tout va bien ? Je n’ai rien vu passer dans Masse depuis quelques jours.",
+      "missed": "Coucou {first}, comment se passent tes séances cette semaine ?",
+      "sleep": "Coucou {first}, j’ai vu que tes nuits sont un peu courtes en ce moment. Comment tu te sens ?"
+    },
+    "whatsapp": "WhatsApp",
+    "open": "Ouvrir",
+    "read": "Relire",
+    "write": "Écrire",
+    "noNumber": "Pas de numéro dans sa fiche"
   }
 }

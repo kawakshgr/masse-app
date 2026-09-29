@@ -3,15 +3,7 @@
 import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { recordCheckInReminder } from "@/app/(coach)/clients/actions";
-
-/** "06 12 34 56 78" → "33612345678", the form wa.me wants. French by default. */
-function waNumber(raw: string | null): string | null {
-  if (!raw) return null;
-  let digits = raw.replace(/\D/g, "");
-  if (digits.startsWith("00")) digits = digits.slice(2);
-  else if (digits.length === 10 && digits.startsWith("0")) digits = `33${digits.slice(1)}`;
-  return digits.length >= 8 ? digits : null;
-}
+import { waNumber } from "@/lib/whatsapp";
 
 /**
  * The nudge. Always recorded — her app shows it on Today — and, when her file

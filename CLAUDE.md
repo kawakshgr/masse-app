@@ -59,6 +59,12 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
 
 - **Invite-code onboarding** — nine steps, ends with week 1 written. Carries auth.
 - **Roster** (web) — client list with the reason each client needs the coach.
+- **À traiter** (web, 29 Sep 2026) — the pane the coach lands on beside her
+  roster (`/clients`): every client who needs her, grouped by reason — late
+  and filed check-ins, late invoices, three days of silence, missed sessions,
+  next week not sent, no programme yet, short sleep — each with a WhatsApp
+  message already written (`lib/whatsapp.ts`) or the screen that answers it.
+  `lib/queue.ts` reuses the roster's attention rule; it adds, never re-derives.
 - **Programme editor** (web) — weeks, seven day columns, sessions, ordered exercises,
   drag between days, duplicate week, save as template, push to clients.
 - **Session logging** (both) — offline-first.
