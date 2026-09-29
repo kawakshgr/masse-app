@@ -1477,5 +1477,24 @@
     "failed": "The upload failed — try again.",
     "statusSet": "On your invoices and in your clients’ app",
     "statusNone": "No logo yet"
+  },
+  "export": {
+    "title": "Save as PDF",
+    "lede": "This week’s programme, your meal plan, or both — to keep outside the app or copy into your gym app.",
+    "what": "Content",
+    "both": "Programme and meal plan",
+    "programme": "Programme",
+    "plan": "Meal plan",
+    "download": "Download the PDF",
+    "week": "Week {n}",
+    "rest": "rest {time}",
+    "restDay": "Rest",
+    "supplements": "Supplements",
+    "emptyPlan": "No meal plan yet.",
+    "noWeek": "No week sent yet",
+    "everyDay": "Every day",
+    "phaseTraining": "Loads adjusted to today’s phase, as in the app.",
+    "phaseNutrition": "Targets adjusted to today’s phase, as in the app.",
+    "preparedBy": "Prepared by"
   }
 }

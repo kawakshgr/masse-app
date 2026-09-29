@@ -115,6 +115,11 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   the public `coach-logos` bucket (own folder only, PNG/JPEG, 1 MB), path on
   `coaches.logo_path`, URL from `lib/logo.ts`. Printed on the invoice sheet
   and its PDF, shown to the coach's clients on Today.
+- **Client PDF** (29 Sep 2026) — from Session and Nutrition, a dropdown
+  (programme / meal plan / both) and a download: `/export` renders
+  `lib/clientPdf.tsx` with the client's own session — this week at today's
+  phase, the plan per day type with numbered meals and supplements — under
+  the coach's logo. Fonts shared with the invoice through `lib/pdfFonts.ts`.
 
 ## Deliberately not in v1
 

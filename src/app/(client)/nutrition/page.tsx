@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { ExportCard } from "@/components/client/ExportCard";
 import { changesNutrition, clientSession, cycleLevers } from "@/lib/clientData";
 import { LeverLine } from "@/components/client/LeverLine";
 import { SUPPLEMENT_TIMINGS, type FoodRow, type MealRow } from "@/lib/supabase/types";
@@ -174,6 +175,8 @@ export default async function NutritionPage() {
         foods={(foodsRes.data ?? []) as Pick<FoodRow, "id" | "name" | "brand">[]}
         meals={(loggedRes.data ?? []) as MealRow[]}
       />
+
+      <ExportCard initial="plan" />
     </>
   );
 }

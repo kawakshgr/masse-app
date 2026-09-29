@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { ExportCard } from "@/components/client/ExportCard";
 import { addDays, clientSession, localDay, todaySession } from "@/lib/clientData";
 import { Card, CardTitle, ScreenHeader } from "@/components/client/ui";
 import { TrainLog } from "@/components/client/TrainLog";
@@ -41,6 +42,8 @@ export default async function SessionPage() {
       ) : (
         <TrainLog clientId={client.id} exercises={exercises} onServer={todays} />
       )}
+
+      <ExportCard initial="programme" />
     </>
   );
 }

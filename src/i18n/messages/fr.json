@@ -1477,5 +1477,24 @@
     "failed": "L’envoi a échoué — réessaie.",
     "statusSet": "Sur tes factures et dans l’app de tes clients",
     "statusNone": "Aucun logo pour l’instant"
+  },
+  "export": {
+    "title": "Enregistrer en PDF",
+    "lede": "Ton programme de la semaine, ton plan alimentaire, ou les deux — pour les garder hors de l’app ou les recopier dans ton appli de salle.",
+    "what": "Contenu",
+    "both": "Programme et plan alimentaire",
+    "programme": "Programme",
+    "plan": "Plan alimentaire",
+    "download": "Télécharger le PDF",
+    "week": "Semaine {n}",
+    "rest": "repos {time}",
+    "restDay": "Repos",
+    "supplements": "Compléments",
+    "emptyPlan": "Aucun plan alimentaire pour l’instant.",
+    "noWeek": "Aucune semaine envoyée pour l’instant",
+    "everyDay": "Tous les jours",
+    "phaseTraining": "Charges ajustées à ta phase du jour, comme dans l’app.",
+    "phaseNutrition": "Objectifs ajustés à ta phase du jour, comme dans l’app.",
+    "preparedBy": "Préparé par"
   }
 }
