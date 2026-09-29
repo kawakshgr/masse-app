@@ -38,7 +38,8 @@ The backend is the contract. Build it once, then the two clients in parallel.
    Built: `RestTimer` (two dates, a local notification at the end) drives
    `SessionActivityAttributes`, shared with the `MasseWidgets` extension through
    `ios/Shared`. The extension has no string catalog — the app sends it words
-   already localised. The web has the same rest bar, without the Lock Screen.
+   already localised. The web had the same rest bar until 29 Sep 2026; it is
+   gone — rest time is written on each exercise, the client runs a timer.
    From iOS 26.1 the rest also rides above the tab bar on every tab
    (`tabViewBottomAccessory`, `RestAccessory`); `RestTimer` is owned by
    `ClientTabs` for that reason. The tab bar uses the `Tab` API and shrinks
