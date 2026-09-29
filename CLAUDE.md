@@ -59,6 +59,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
 ## In v1
 
 - **Invite-code onboarding** — nine steps, ends with week 1 written. Carries auth.
+  The coach may offer a video call on the invite (29 Sep 2026: unticked by
+  default, 10/20/30/60 min, `invite_codes.call_minutes`); only then does
+  step 5 ask for 2–3 slots, picked from the next seven days, kept on
+  `clients.call_slots_at` as instants.
 - **Roster** (web) — client list with the reason each client needs the coach.
 - **À traiter** (web, 29 Sep 2026) — the pane the coach lands on beside her
   roster (`/clients`): every client who needs her, grouped by reason — late
