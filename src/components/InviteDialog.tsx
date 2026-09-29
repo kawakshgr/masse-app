@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import {
   createInvite,
   revokeInvite,
@@ -23,6 +23,9 @@ export function InviteDialog({
   label: string;
 }) {
   const t = useTranslations("invite");
+  const format = useFormatter();
+  // "13 octobre", not "2026-10-13".
+  const day = (iso: string) => format.dateTime(new Date(iso), { day: "numeric", month: "long" });
   const [open, setOpen] = useState(false);
   const [askCycle, setAskCycle] = useState(true);
   const [created, setCreated] = useState<CreatedInvite | null>(null);
@@ -134,7 +137,7 @@ export function InviteDialog({
                   {created.code}
                 </p>
                 <p className="tnum mt-1 text-[12px] text-[var(--ink3)]">
-                  {t("expires", { date: created.expiresAt.slice(0, 10) })}
+                  {t("expires", { date: day(created.expiresAt) })}
                 </p>
                 <p className="mt-2 text-[12px] leading-[1.5] text-[var(--ink2)]">
                   {t("shareHint")}
@@ -165,7 +168,7 @@ export function InviteDialog({
                         {invite.code}
                       </span>
                       <span className="tnum shrink-0 text-[11px] text-[var(--ink3)]">
-                        {invite.expires_at.slice(0, 10)}
+                        {day(invite.expires_at)}
                       </span>
                       <button
                         type="button"

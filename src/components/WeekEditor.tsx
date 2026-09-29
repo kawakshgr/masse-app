@@ -318,7 +318,7 @@ export function WeekEditor({
                                 />
                                 <input
                                   defaultValue={exercise.scheme ?? ""}
-                                  placeholder={t("scheme")}
+                                  placeholder={t("schemeHint")}
                                   aria-label={t("scheme")}
                                   onBlur={(e) =>
                                     startTransition(() => {

@@ -363,6 +363,7 @@
     "sessionName": "Session name",
     "addExercise": "+ Exercise",
     "exName": "Exercise",
+    "schemeHint": "Scheme · e.g. 4×8 @ 60 kg",
     "scheme": "Scheme",
     "cue": "Cue",
     "remove": "Remove",

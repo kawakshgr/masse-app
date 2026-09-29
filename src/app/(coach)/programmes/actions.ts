@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { formatScheme, parseScheme, schemeColumns } from "@/lib/scheme";
 import {
   fetchExerciseTemplates,
   splitTitle,
@@ -243,15 +244,17 @@ export async function progressWeek(weekId: string, programmeId: string, rule: Pr
 
     const rows = (session.session_exercises ?? []).map(({ id, ...e }) => {
       const up = outcome.get(id) === "up";
-      return {
-        ...e,
-        session_id: newSession.id,
-        target_weight_kg:
-          up && rule === "load" && e.target_weight_kg != null
-            ? Math.round((Number(e.target_weight_kg) + LOAD_STEP_KG) * 2) / 2
-            : e.target_weight_kg,
-        target_reps: up && rule === "reps" && e.target_reps != null ? e.target_reps + REPS_STEP : e.target_reps,
-      };
+      const target_weight_kg =
+        up && rule === "load" && e.target_weight_kg != null
+          ? Math.round((Number(e.target_weight_kg) + LOAD_STEP_KG) * 2) / 2
+          : e.target_weight_kg;
+      const target_reps = up && rule === "reps" && e.target_reps != null ? e.target_reps + REPS_STEP : e.target_reps;
+      // The coach reads the scheme text: it moves with the numbers.
+      const scheme =
+        up && parseScheme(e.scheme) && e.target_sets != null && target_reps != null
+          ? formatScheme({ sets: e.target_sets, reps: target_reps, weight: target_weight_kg == null ? null : Number(target_weight_kg) })
+          : e.scheme;
+      return { ...e, session_id: newSession.id, scheme, target_weight_kg, target_reps };
     });
     if (rows.length > 0) await supabase.from("session_exercises").insert(rows);
   }
@@ -323,7 +326,10 @@ export async function updateExercise(
   programmeId: string,
 ) {
   const supabase = await createClient();
-  await supabase.from("session_exercises").update(patch).eq("id", exerciseId);
+  // A scheme she types is read into targets — "4×8 @ 60 kg" — so logging,
+  // the cycle levers and next week's progression have numbers to work from.
+  const row = "scheme" in patch ? { ...patch, ...schemeColumns(patch.scheme) } : patch;
+  await supabase.from("session_exercises").update(row).eq("id", exerciseId);
 
   // A name she typed that the catalogue does not know becomes hers, so the
   // next week autocompletes it. No button needed to "create" one.
