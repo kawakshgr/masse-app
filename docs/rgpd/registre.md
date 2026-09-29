@@ -14,7 +14,7 @@ Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 | Sous-traitant | Masse — Kevin Cordeiro |
 | Finalité | Programmes d'entraînement, bilans, nutrition, suivi de progression |
 | Personnes concernées | Clients majeurs des coachs |
-| Données | Identité et contact ; questionnaire d'arrivée ; séances, séries, charges ; poids, mensurations, photos de bilan ; nutrition et compléments ; pas |
+| Données | Identité et contact ; questionnaire d'arrivée ; rendez-vous visio réservés (date, durée, annulation) ; séances, séries, charges ; poids, mensurations, photos de bilan ; nutrition et compléments ; pas |
 | Données sensibles (art. 9) | Blessures et contre-indications ; dates de cycle (jamais de symptômes) ; sommeil |
 | Base légale | Contrat (6.1.b) ; consentement explicite pour les données de santé (9.2.a) |
 | Destinataires | Le coach ; sous-traitants techniques (voir `sous-traitants.md`) |
@@ -36,7 +36,7 @@ Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 | Rubrique | Contenu |
 |---|---|
 | Finalité | Fournir le logiciel aux coachs |
-| Données | Nom, e-mail, téléphone, profil de facturation (SIRET, adresse, IBAN), logo |
+| Données | Nom, e-mail, téléphone, profil de facturation (SIRET, adresse, IBAN), logo, lien visio personnel, disponibilités pour les visios |
 | Base légale | Contrat (6.1.b) |
 | Conservation | Durée de l'abonnement, puis [À décider : durée] |
 
