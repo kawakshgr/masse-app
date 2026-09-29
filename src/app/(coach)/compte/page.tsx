@@ -155,7 +155,8 @@ export default async function AccountPage({
         </Card>
 
         <Card icon="video" title={t("callTitle")}>
-          <Field label={t("callLink")} name="call_link" value={coach?.call_link} wide type="url" />
+          {/* Text, not url: "zoom.us/j/…" typed without https:// is accepted and completed. */}
+          <Field label={t("callLink")} name="call_link" value={coach?.call_link} wide autoComplete="url" />
           <p className="text-[11.5px] leading-[1.45] text-[var(--ink3)] sm:col-span-2">{t("callLinkHint")}</p>
         </Card>
 

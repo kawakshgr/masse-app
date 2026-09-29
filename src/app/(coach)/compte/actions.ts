@@ -70,15 +70,14 @@ export async function addAvailability(formData: FormData) {
   const end = Number(formData.get("end"));
   if (!(weekday >= 0 && weekday <= 6) || !(end > start)) redirect("/compte?creneau=invalide#visio");
   await supabase.from("coach_availability").insert({ coach_id: id, weekday, start_min: start, end_min: end });
+  // Re-rendered in place, so the page stays on this section.
   revalidatePath("/compte");
-  redirect("/compte#visio");
 }
 
 export async function removeAvailability(formData: FormData) {
   const { supabase } = await coachId();
   await supabase.from("coach_availability").delete().eq("id", String(formData.get("id")));
   revalidatePath("/compte");
-  redirect("/compte#visio");
 }
 
 /** A day off: no call is offered on it, whatever the windows say. */
@@ -88,7 +87,6 @@ export async function addUnavailableDay(formData: FormData) {
   if (!id || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return;
   await supabase.from("coach_unavailable_days").upsert({ coach_id: id, day }, { onConflict: "coach_id,day" });
   revalidatePath("/compte");
-  redirect("/compte#visio");
 }
 
 export async function removeUnavailableDay(formData: FormData) {
@@ -96,5 +94,4 @@ export async function removeUnavailableDay(formData: FormData) {
   if (!id) return;
   await supabase.from("coach_unavailable_days").delete().eq("coach_id", id).eq("day", String(formData.get("day")));
   revalidatePath("/compte");
-  redirect("/compte#visio");
 }
