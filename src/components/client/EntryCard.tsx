@@ -2,9 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { saveDailyMetrics } from "@/app/(client)/actions";
-import { Card, Choice, Cta, Kicker, RoundButton, clean } from "./ui";
+import { Card, Choice, Cta, Kicker, RoundButton, shown } from "./ui";
 import { StepsChart } from "./StepsChart";
 
 /**
@@ -24,6 +24,7 @@ export function EntryCard({
   target: number | null;
 }) {
   const t = useTranslations("entry");
+  const locale = useLocale();
   const router = useRouter();
   const [sleepH, setSleepH] = useState(initial?.sleepH ?? 0);
   const [quality, setQuality] = useState<number | null>(initial?.sleepQuality ?? null);
@@ -61,7 +62,7 @@ export function EntryCard({
           −
         </RoundButton>
         <span className="tnum min-w-[52px] text-center font-display text-[26px] font-extrabold tracking-[-.03em]">
-          {clean(sleepH)}
+          {shown(sleepH, locale)}
         </span>
         <RoundButton label={`${t("sleep")} +`} onClick={() => adjust(0.5)}>
           +

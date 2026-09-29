@@ -2,7 +2,7 @@
 
 import { restLabel } from "@/lib/rest";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import {
   enqueue,
@@ -14,8 +14,7 @@ import {
   type QueuedSet,
 } from "@/lib/setQueue";
 import type { WeekExercise } from "@/lib/clientData";
-import { Card, Choice, Cta, RoundButton, clean } from "./ui";
-import { RestBar, newRest } from "./RestBar";
+import { Card, Choice, Cta, RoundButton, shown } from "./ui";
 
 type LoggedSet = Pick<
   QueuedSet,
@@ -40,7 +39,6 @@ export function TrainLog({
   const t = useTranslations("log");
   const held = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [server, setServer] = useState<LoggedSet[]>(onServer);
-  const [rest, setRest] = useState<{ startedAt: number; endsAt: number } | null>(null);
   const online = useSyncExternalStore(
     (onChange) => {
       window.addEventListener("online", onChange);
@@ -96,8 +94,6 @@ export function TrainLog({
       weight_kg: weight,
       rpe,
     });
-    // The set is in; the rest starts on its own.
-    setRest(newRest());
     await send();
   }
 
@@ -126,9 +122,9 @@ export function TrainLog({
         </p>
       )}
 
-      {rest && <RestBar rest={rest} onChange={setRest} />}
-
-      <div className={`space-y-3.5 ${rest ? "pb-24" : ""}`}>
+      {/* Rest time is written on each exercise; there is no timer here
+          (29 Sep 2026): clients run their own, in Hevy or on their phone. */}
+      <div className="space-y-3.5">
         {exercises.map((exercise) => (
           <ExerciseCard
             key={exercise.id}
@@ -162,6 +158,7 @@ function ExerciseCard({
 }) {
   const t = useTranslations("log");
   const tToday = useTranslations("today");
+  const locale = useLocale();
 
   // The next set starts where the last one ended; the first, at what the
   // coach asked for. Typing a number should be the exception.
@@ -175,7 +172,7 @@ function ExerciseCard({
     if (exercise.target_sets && exercise.target_reps) {
       parts.push(`${exercise.target_sets} × ${exercise.target_reps}`);
     } else if (exercise.scheme) parts.push(exercise.scheme);
-    if (exercise.target_weight_kg) parts.push(`${clean(Number(exercise.target_weight_kg))} kg`);
+    if (exercise.target_weight_kg) parts.push(`${shown(Number(exercise.target_weight_kg), locale)} kg`);
     const rest = restLabel(exercise.rest_min_s, exercise.rest_max_s);
     if (rest) parts.push(t("restTime", { time: rest }));
     return parts.length ? `${t("target")} · ${parts.join(" · ")}` : null;
@@ -212,7 +209,7 @@ function ExerciseCard({
               <span className="tnum flex-1 text-[15px] font-semibold">
                 {[
                   set.reps != null ? String(set.reps) : null,
-                  set.weight_kg != null ? `${clean(Number(set.weight_kg))} kg` : null,
+                  set.weight_kg != null ? `${shown(Number(set.weight_kg), locale)} kg` : null,
                   set.rpe != null ? `RPE ${set.rpe}` : null,
                 ]
                   .filter(Boolean)
@@ -247,7 +244,7 @@ function ExerciseCard({
           <Stepper
             label={t("weight")}
             value={weight}
-            format={clean}
+            format={(n) => shown(n, locale)}
             onChange={(n) => setWeight(Math.max(0, n))}
             step={2.5}
           />

@@ -198,6 +198,12 @@ export function clean(value: number): string {
   return Number.isInteger(value) ? String(value) : String(Number(value.toFixed(2)));
 }
 
+/** The same, as read on screen: "62,5" in French, "62.5" in English. Not
+ *  for input values, which the browser parses with a dot. */
+export function shown(value: number, locale = "fr"): string {
+  return value.toLocaleString(locale, { maximumFractionDigits: 2, useGrouping: false });
+}
+
 /** A pushed screen's top: a way back, and its title. */
 export function BackHeader({
   href,

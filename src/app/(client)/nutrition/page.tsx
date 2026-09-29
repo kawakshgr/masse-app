@@ -1,9 +1,9 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ExportCard } from "@/components/client/ExportCard";
 import { changesNutrition, clientSession, cycleLevers } from "@/lib/clientData";
 import { LeverLine } from "@/components/client/LeverLine";
 import { SUPPLEMENT_TIMINGS, type FoodRow, type MealRow } from "@/lib/supabase/types";
-import { Card, CardTitle, Kicker, ScreenHeader, clean } from "@/components/client/ui";
+import { Card, CardTitle, Kicker, ScreenHeader, shown } from "@/components/client/ui";
 import { MyWeek } from "@/components/MyWeek";
 import { MealsPanel } from "@/components/MealsPanel";
 
@@ -22,6 +22,7 @@ type PlanMeal = {
 export default async function NutritionPage() {
   const { supabase, client, weekday, today } = await clientSession();
   const t = await getTranslations("fuel");
+  const locale = await getLocale();
   const tNav = await getTranslations("clientNav");
   const tSupp = await getTranslations("supp");
 
@@ -98,9 +99,9 @@ export default async function NutritionPage() {
             <span className="text-[15px] text-[var(--ink3)]">kcal</span>
           </p>
           <div className="flex gap-2.5">
-            <Macro label={t("protein")} grams={target.protein_g} />
-            <Macro label={t("carbs")} grams={carbs} />
-            <Macro label={t("fat")} grams={target.fat_g} />
+            <Macro label={t("protein")} grams={target.protein_g} locale={locale} />
+            <Macro label={t("carbs")} grams={carbs} locale={locale} />
+            <Macro label={t("fat")} grams={target.fat_g} locale={locale} />
           </div>
           {phaseNutrition && <LeverLine levers={phaseNutrition} kind="nutrition" />}
         </Card>
@@ -124,7 +125,7 @@ export default async function NutritionPage() {
                   <p key={item.id} className="flex items-baseline justify-between gap-2 text-[13px]">
                     <span className="text-[var(--ink2)]">{item.name}</span>
                     {item.quantity_g !== null && (
-                      <span className="tnum text-[var(--ink3)]">{clean(Number(item.quantity_g))} g</span>
+                      <span className="tnum text-[var(--ink3)]">{shown(Number(item.quantity_g), locale)} g</span>
                     )}
                   </p>
                 ))}
@@ -146,7 +147,7 @@ export default async function NutritionPage() {
               </span>
               {row.dose !== null && (
                 <span className="tnum shrink-0 text-[15px] font-semibold text-[var(--ink2)]">
-                  {clean(Number(row.dose))}{" "}
+                  {shown(Number(row.dose), locale)}{" "}
                   {tSupp(`unit.${row.unit}`, { count: Math.round(Number(row.dose)) })}
                 </span>
               )}
@@ -181,12 +182,12 @@ export default async function NutritionPage() {
   );
 }
 
-function Macro({ label, grams }: { label: string; grams: number | null }) {
+function Macro({ label, grams, locale }: { label: string; grams: number | null; locale: string }) {
   return (
     <div className="flex-1 rounded-r1 bg-[var(--glass2)] px-3 py-2.5">
       <p className="text-[13px] text-[var(--ink2)]">{label}</p>
       <p className="tnum text-[15px] font-semibold">
-        {grams === null ? "—" : `${clean(Number(grams))} g`}
+        {grams === null ? "—" : `${shown(Number(grams), locale)} g`}
       </p>
     </div>
   );
