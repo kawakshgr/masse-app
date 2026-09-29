@@ -32,6 +32,7 @@ export function ExerciseLibrary({
   programmeId,
   days,
   hevyConfigured,
+  onFold,
 }: {
   catalogue: CatalogueEntry[];
   weekId: string;
@@ -40,6 +41,8 @@ export function ExerciseLibrary({
   days: { index: number; label: string }[];
   /** A Hevy key exists, so the import is worth offering. */
   hevyConfigured: boolean;
+  /** Folds the whole library to a rail. */
+  onFold?: () => void;
 }) {
   const t = useTranslations("library");
   const tMuscle = useTranslations("muscles");
@@ -54,6 +57,15 @@ export function ExerciseLibrary({
   const [query, setQuery] = useState("");
   const [group, setGroup] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<string | null>(null);
+  // Muscle groups start folded: a title and a count each, opened on a click.
+  const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
+  const toggleGroup = (title: string) =>
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(title)) next.delete(title);
+      else next.add(title);
+      return next;
+    });
   const [, startTransition] = useTransition();
 
   const groups = useMemo(
@@ -91,7 +103,20 @@ export function ExerciseLibrary({
   return (
     <div className="flex h-full min-w-0 flex-col">
       <div className="flex flex-col gap-3 border-b border-[var(--hair)] p-3 pt-4">
-        <PaneHead kicker={t("count", { count: shown.length })} title={t("title")} />
+        <div className="flex items-start justify-between gap-2">
+          <PaneHead kicker={t("count", { count: shown.length })} title={t("title")} />
+          {onFold && (
+            <button
+              type="button"
+              onClick={onFold}
+              aria-label={t("hidePanel")}
+              title={t("hidePanel")}
+              className="glass2 flex size-8 shrink-0 items-center justify-center rounded-rp text-[14px] text-[var(--ink2)] hover:text-[var(--ink)]"
+            >
+              ‹
+            </button>
+          )}
+        </div>
 
         <input
           type="search"
@@ -127,14 +152,28 @@ export function ExerciseLibrary({
             {t("noMatch", { query })}
           </p>
         ) : (
-          sections.map((section) => (
-            <div key={section.title ?? "flat"} className="mb-2">
+          sections.map((section) => {
+            const folded = section.title !== null && !openGroups.has(section.title);
+            return (
+            <div key={section.title ?? "flat"} className="mb-1">
               {section.title && (
-                <p className="px-2 pt-2 pb-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-                  {section.title === "—" ? section.title : muscle(section.title)}
-                </p>
+                <button
+                  type="button"
+                  onClick={() => toggleGroup(section.title!)}
+                  aria-expanded={!folded}
+                  className="flex h-9 w-full items-center gap-2 rounded-r2 px-2 text-left hover:bg-[var(--glass2)]"
+                >
+                  <span className="min-w-0 flex-1 truncate text-[11px] font-bold uppercase tracking-[.14em] text-[var(--ink2)]">
+                    {section.title === "—" ? section.title : muscle(section.title)}
+                  </span>
+                  <span className="tnum text-[11px] text-[var(--ink3)]">{section.rows.length}</span>
+                  <span aria-hidden className={`text-[12px] text-[var(--ink3)] transition-transform ${folded ? "" : "rotate-90"}`}>
+                    ›
+                  </span>
+                </button>
               )}
-              <ul className="flex flex-col gap-1">
+              {!folded && (
+              <ul className="flex flex-col gap-1 pb-1">
                 {section.rows.map((entry) => (
                   <li key={entry.id}>
                     <div
@@ -220,8 +259,10 @@ export function ExerciseLibrary({
                   </li>
                 ))}
               </ul>
+              )}
             </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

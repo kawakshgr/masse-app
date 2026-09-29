@@ -2,7 +2,8 @@
 
 import { REST_PRESETS, parseRestKey, restKey, restLabel } from "@/lib/rest";
 import { SectionTitle } from "@/components/Pane";
-import { useState, useTransition } from "react";
+import { useState, useSyncExternalStore, useTransition } from "react";
+import { Icon } from "@/components/Icon";
 import {
   ExerciseLibrary,
   type CatalogueEntry,
@@ -33,6 +34,32 @@ export type EditorExercise = {
   rest_min_s: number | null;
   rest_max_s: number | null;
 };
+
+const LIBRARY_KEY = "masse:library";
+const libraryListeners = new Set<() => void>();
+
+function subscribeLibrary(onChange: () => void) {
+  libraryListeners.add(onChange);
+  return () => libraryListeners.delete(onChange);
+}
+
+function readLibrary(): boolean {
+  try {
+    return window.localStorage.getItem(LIBRARY_KEY) !== "closed";
+  } catch {
+    // Storage blocked: the library simply stays open.
+    return true;
+  }
+}
+
+function toggleLibrary(open: boolean) {
+  try {
+    window.localStorage.setItem(LIBRARY_KEY, open ? "open" : "closed");
+  } catch {
+    // Not remembered; nothing to redraw from either.
+  }
+  libraryListeners.forEach((listener) => listener());
+}
 
 export type EditorSession = {
   kind: "training" | "rest";
@@ -65,6 +92,9 @@ export function WeekEditor({
   const tDays = useTranslations("days");
   const [pending, startTransition] = useTransition();
   const [dragging, setDragging] = useState<string | null>(null);
+  // The library folds to a rail to give the week the room; remembered.
+  const libraryOpen = useSyncExternalStore(subscribeLibrary, readLibrary, () => true);
+  const tLibrary = useTranslations("library");
   const [overDay, setOverDay] = useState<number | null>(null);
   const [selected, setSelected] = useState<string[]>(assignedClientIds);
   const [startDate, setStartDate] = useState(() =>
@@ -134,15 +164,33 @@ export function WeekEditor({
   return (
     <div className={pending ? "opacity-70 transition-opacity" : ""}>
       <div className="flex min-h-0 gap-3">
-        <aside className="glass hidden w-[268px] shrink-0 overflow-hidden rounded-r3 lg:block">
-          <ExerciseLibrary
-            catalogue={catalogue}
-            weekId={weekId}
-            programmeId={programmeId}
-            days={trainingDays}
-            hevyConfigured={hevyConfigured}
-          />
-        </aside>
+        {/* As tall as the screen and scrolled inside, so a long library
+            never stretches the page; folds to a rail on a click. */}
+        {libraryOpen ? (
+          <aside className="glass sticky top-0 hidden h-[calc(100dvh-7.5rem)] w-[268px] shrink-0 self-start overflow-hidden rounded-r3 lg:block">
+            <ExerciseLibrary
+              catalogue={catalogue}
+              weekId={weekId}
+              programmeId={programmeId}
+              days={trainingDays}
+              hevyConfigured={hevyConfigured}
+              onFold={() => toggleLibrary(false)}
+            />
+          </aside>
+        ) : (
+          <button
+            type="button"
+            onClick={() => toggleLibrary(true)}
+            aria-label={tLibrary("show")}
+            title={tLibrary("show")}
+            className="glass sticky top-0 hidden h-[calc(100dvh-7.5rem)] w-11 shrink-0 self-start flex-col items-center gap-3 rounded-r3 py-4 text-[var(--ink2)] hover:text-[var(--ink)] lg:flex"
+          >
+            <Icon name="programmes" size={22} />
+            <span className="text-[11px] font-bold uppercase tracking-[.14em] [writing-mode:vertical-rl]">
+              {tLibrary("show")}
+            </span>
+          </button>
+        )}
 
         <div className="min-w-0 flex-1">
           {/* Suggestions, never a restriction: any name she types is accepted, and
