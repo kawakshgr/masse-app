@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { OtpCodeEntry } from "@/components/OtpCodeEntry";
 import { Icon } from "@/components/Icon";
 import { Cta, Secondary, fieldClass } from "@/components/client/ui";
 import {
+  CALL_SLOTS_MAX,
+  CALL_TIMES,
   EMPTY,
   EQUIPMENT,
   GOALS,
   SESSIONS_PER_WEEK,
   TRAINING_AGES,
+  callDays,
   fullName,
   isAdult,
   save,
@@ -92,6 +95,7 @@ function Pill({
 export default function OnboardingPage() {
   const t = useTranslations("onboarding");
   const tDays = useTranslations("days");
+  const locale = useLocale();
   const tEquip = useTranslations("equipment");
   const tGoal = useTranslations("goal");
 
@@ -121,7 +125,7 @@ export default function OnboardingPage() {
       setCodeBad(true);
       return;
     }
-    set({ coachName: row.coach_name, askCycle: row.ask_cycle });
+    set({ coachName: row.coach_name, askCycle: row.ask_cycle, callMinutes: row.call_minutes ?? null });
     setStep(2);
   }
 
@@ -370,9 +374,60 @@ export default function OnboardingPage() {
                   ))}
                 </div>
               </div>
-              <Question label={t("callSlots")} hint={t("callSlotsHint")} required>
-                <textarea value={a.callSlots} onChange={(e) => set({ callSlots: e.target.value })} className={area} />
-              </Question>
+              {/* Asked only when the coach offered a call, and picked rather
+                  than typed, so the coach reads three real instants. */}
+              {a.callMinutes !== null && (
+                <div className="space-y-2">
+                  <p className="text-[14px] font-semibold leading-[1.35]">
+                    {t("callSlots", { minutes: a.callMinutes })}
+                    <span className="text-[var(--accent)]"> •</span>
+                  </p>
+                  {Array.from({ length: CALL_SLOTS_MAX }, (_, i) => {
+                    const slot = a.callSlots[i] ?? { date: "", time: "" };
+                    const put = (patch: Partial<typeof slot>) => {
+                      const next = [...a.callSlots];
+                      while (next.length <= i) next.push({ date: "", time: "" });
+                      next[i] = { ...slot, ...patch };
+                      set({ callSlots: next });
+                    };
+                    return (
+                      <div key={i} className="grid grid-cols-[1fr_7.5rem] gap-2">
+                        <select
+                          aria-label={t("callDay", { n: i + 1 })}
+                          value={slot.date}
+                          onChange={(e) => put({ date: e.target.value })}
+                          className={fieldClass}
+                        >
+                          <option value="">{t("callDay", { n: i + 1 })}</option>
+                          {callDays().map((day) => (
+                            <option key={day} value={day}>
+                              {new Date(`${day}T12:00`).toLocaleDateString(locale, {
+                                weekday: "long",
+                                day: "numeric",
+                                month: "long",
+                              })}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          aria-label={t("callTime", { n: i + 1 })}
+                          value={slot.time}
+                          onChange={(e) => put({ time: e.target.value })}
+                          className={`${fieldClass} tnum`}
+                        >
+                          <option value="">{t("callTimePlaceholder")}</option>
+                          {CALL_TIMES.map((time) => (
+                            <option key={time} value={time}>
+                              {time}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  })}
+                  <span className="block text-[12px] leading-[1.45] text-[var(--ink3)]">{t("callSlotsHint")}</span>
+                </div>
+              )}
             </>
           )}
 

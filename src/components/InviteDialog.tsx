@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useFormatter, useTranslations } from "next-intl";
+import { CALL_MINUTES, type CallMinutes } from "@/lib/supabase/types";
 import {
   createInvite,
   revokeInvite,
@@ -28,6 +29,9 @@ export function InviteDialog({
   const day = (iso: string) => format.dateTime(new Date(iso), { day: "numeric", month: "long" });
   const [open, setOpen] = useState(false);
   const [askCycle, setAskCycle] = useState(true);
+  // A video call is offered only when she ticks it (29 Sep 2026).
+  const [offerCall, setOfferCall] = useState(false);
+  const [callMinutes, setCallMinutes] = useState<CallMinutes>(20);
   const [created, setCreated] = useState<CreatedInvite | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [pendingTransition, startTransition] = useTransition();
@@ -58,7 +62,7 @@ export function InviteDialog({
 
   function onCreate() {
     startTransition(async () => {
-      const result = await createInvite(askCycle);
+      const result = await createInvite(askCycle, offerCall ? callMinutes : null);
       if (result) setCreated(result);
     });
   }
@@ -118,6 +122,35 @@ export function InviteDialog({
                     </span>
                   </span>
                 </label>
+
+                <div className="mt-3 flex flex-wrap items-start gap-x-3 gap-y-2">
+                  <label className="flex min-w-0 flex-1 items-start gap-2">
+                    <input
+                      type="checkbox"
+                      checked={offerCall}
+                      onChange={(e) => setOfferCall(e.target.checked)}
+                      className="mt-0.5 size-4 shrink-0 accent-[var(--a1)]"
+                    />
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold">{t("offerCall")}</span>
+                      <span className="block text-[12px] leading-snug text-[var(--ink3)]">{t("offerCallHint")}</span>
+                    </span>
+                  </label>
+                  {offerCall && (
+                    <select
+                      aria-label={t("callLength")}
+                      value={callMinutes}
+                      onChange={(e) => setCallMinutes(Number(e.target.value) as CallMinutes)}
+                      className="h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2.5 text-[13px] text-[var(--ink)]"
+                    >
+                      {CALL_MINUTES.map((m) => (
+                        <option key={m} value={m}>
+                          {t("callMinutes", { minutes: m })}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
 
                 <button
                   type="button"

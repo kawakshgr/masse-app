@@ -4,6 +4,7 @@ import { removeCheckInPhotos } from "@/lib/erase";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { CALL_MINUTES, type CallMinutes } from "@/lib/supabase/types";
 import type {
   ClientGoal,
   CyclePhase,
@@ -189,7 +190,10 @@ export type CreatedInvite = { code: string; expiresAt: string };
  * Returns the code rather than just writing it: a code the coach never sees is
  * a code she cannot send.
  */
-export async function createInvite(askCycle: boolean): Promise<CreatedInvite | null> {
+export async function createInvite(
+  askCycle: boolean,
+  callMinutes: CallMinutes | null = null,
+): Promise<CreatedInvite | null> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -207,7 +211,12 @@ export async function createInvite(askCycle: boolean): Promise<CreatedInvite | n
     const code = generateCode(coach?.name ?? "Masse");
     const { data, error } = await supabase
       .from("invite_codes")
-      .insert({ coach_id: user.id, code, ask_cycle: askCycle })
+      .insert({
+        coach_id: user.id,
+        code,
+        ask_cycle: askCycle,
+        call_minutes: callMinutes && CALL_MINUTES.includes(callMinutes) ? callMinutes : null,
+      })
       .select("code, expires_at")
       .single();
 

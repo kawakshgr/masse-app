@@ -108,6 +108,10 @@ export type ClientRow = {
   readiness: number | null;
   weekly_time: string | null;
   call_slots: string | null;
+  /** The video call the coach offered (10, 20, 30, 60), null when none. */
+  call_minutes: CallMinutes | null;
+  /** Up to three instants the client proposed for it. */
+  call_slots_at: string[];
   health_consent_at: string | null;
   /** When the coaching ended; the retention job counts from it. */
   archived_at: string | null;
@@ -138,7 +142,12 @@ export type InviteCodeRow = {
   expires_at: string;
   claimed_by: string | null;
   ask_cycle: boolean;
+  call_minutes: CallMinutes | null;
 };
+
+/** The lengths a coach can offer for the first video call. */
+export const CALL_MINUTES = [10, 20, 30, 60] as const;
+export type CallMinutes = (typeof CALL_MINUTES)[number];
 
 export type ProgrammeRow = {
   id: string;
@@ -688,6 +697,7 @@ export type Database = {
           valid: boolean;
           coach_name: string | null;
           ask_cycle: boolean;
+          call_minutes: CallMinutes | null;
         }[];
       };
       /** Turns nine steps of answers into the client's record. */
@@ -716,6 +726,7 @@ export type Database = {
           p_readiness: number | null;
           p_weekly_time: string | null;
           p_call_slots: string | null;
+          p_call_slots_at: string[] | null;
         };
         Returns: string;
       };
