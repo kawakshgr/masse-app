@@ -139,6 +139,7 @@ export async function todaySession() {
 export function targetLine(
   exercise: WeekExercise,
   restWord?: (time: string) => string,
+  locale = "fr",
 ): string | null {
   const parts: string[] = [];
   if (exercise.target_sets && exercise.target_reps) {
@@ -146,7 +147,11 @@ export function targetLine(
   } else if (exercise.scheme) {
     parts.push(exercise.scheme);
   }
-  if (exercise.target_weight_kg) parts.push(`${exercise.target_weight_kg} kg`);
+  if (exercise.target_weight_kg) {
+    // "22,5 kg" in French, never "22.50 kg".
+    const kg = Number(exercise.target_weight_kg).toLocaleString(locale, { maximumFractionDigits: 2, useGrouping: false });
+    parts.push(`${kg} kg`);
+  }
   const rest = restLabel(exercise.rest_min_s, exercise.rest_max_s);
   if (rest && restWord) parts.push(restWord(rest));
   return parts.length ? parts.join(" · ") : null;

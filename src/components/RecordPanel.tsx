@@ -125,6 +125,7 @@ export function RecordPanel({
   const tOnb = useTranslations("onboarding");
   const tDays = useTranslations("days");
   const tRemove = useTranslations("remove");
+  const tEquip = useTranslations("equipment");
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
@@ -381,7 +382,11 @@ export function RecordPanel({
             ],
             [t("sleepTarget"), sleepTargetLabel],
             [t("stepsTarget"), client.steps_target?.toLocaleString("fr-FR") ?? null],
-            [t("equipment"), client.equipment.join(", ")],
+            [
+              t("equipment"),
+              // Stored as keys ("gym"); anything the coach typed herself stays as typed.
+              client.equipment.map((key) => (tEquip.has(key) ? tEquip(key) : key)).join(", "),
+            ],
             [t("cycle"), client.cycle_tracking ? t("cycleOn") : null],
           ]}
         />

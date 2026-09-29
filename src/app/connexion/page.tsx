@@ -17,6 +17,7 @@ function SignInForm() {
   const [state, setState] = useState<State>("idle");
 
   const callbackFailed = params.get("erreur") === "callback";
+  const accountDeleted = params.get("compte") === "supprime";
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -54,6 +55,12 @@ function SignInForm() {
         <p className="mt-2 text-[14px] leading-[1.5] text-[var(--ink2)]">
           {t("lede")}
         </p>
+
+        {accountDeleted && (
+          <p role="status" className="mt-4 rounded-r2 border border-[var(--edge)] px-3 py-2 text-[13px] text-[var(--ink2)]">
+            {t("accountDeleted")}
+          </p>
+        )}
 
         {callbackFailed && (
           <p
