@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         <p>
           Masse est un logiciel de coaching. <strong>Ton coach</strong> est responsable des données de son
           suivi : c’est lui qui décide de ce qui est demandé et pourquoi. <strong>Masse</strong>, édité par{" "}
-          <ToComplete>nom de l’éditeur</ToComplete>, les héberge et les traite pour son compte, comme
+          Kevin Cordeiro, les héberge et les traite pour son compte, comme
           sous-traitant (article 28 du RGPD). Pour les comptes des coachs eux-mêmes, Masse est responsable
           du traitement.
         </p>

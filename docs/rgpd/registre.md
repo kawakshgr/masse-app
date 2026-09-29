@@ -1,6 +1,6 @@
 # Registre des activités de traitement (article 30 RGPD)
 
-Éditeur : [À compléter : prénom et nom], particulier, à titre non professionnel et gratuit — contact : [À compléter : e-mail]
+Éditeur : Kevin Cordeiro, particulier, à titre non professionnel et gratuit — contact : [À compléter : e-mail]
 Mis à jour le 29 septembre 2026.
 
 Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
@@ -11,7 +11,7 @@ Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 | Rubrique | Contenu |
 |---|---|
 | Responsable | Le coach (chaque coach utilisateur) |
-| Sous-traitant | Masse — [À compléter : éditeur] |
+| Sous-traitant | Masse — Kevin Cordeiro |
 | Finalité | Programmes d'entraînement, bilans, nutrition, suivi de progression |
 | Personnes concernées | Clients majeurs des coachs |
 | Données | Identité et contact ; questionnaire d'arrivée ; séances, séries, charges ; poids, mensurations, photos de bilan ; nutrition et compléments ; pas |

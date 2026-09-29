@@ -11,12 +11,12 @@ export default function LegalNoticePage() {
         <h2>Éditeur</h2>
         <p>
           Masse est édité à titre non professionnel, gratuitement, par un particulier :{" "}
-          <ToComplete>prénom et nom</ToComplete>.
+          Kevin Cordeiro.
           <br />
           Contact : <ToComplete>e-mail de contact</ToComplete>
         </p>
         <p className="mt-2">
-          Directeur de la publication : <ToComplete>prénom et nom</ToComplete>
+          Directeur de la publication : Kevin Cordeiro
         </p>
         <p className="mt-2 text-[13px] text-[var(--ink3)]">
           Conformément à l’article 6-III-2 de la loi pour la confiance dans l’économie numérique, les

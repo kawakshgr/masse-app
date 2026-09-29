@@ -1,7 +1,7 @@
 # Contrat de sous-traitance (article 28 RGPD) — modèle
 
 Entre **[Nom du coach]**, [statut, SIRET, adresse] (« le Responsable »),
-et **[À compléter : éditeur de Masse]** (« le Sous-traitant »).
+et **Kevin Cordeiro, particulier** (« le Sous-traitant »).
 
 ## 1. Objet
 Le Sous-traitant fournit le logiciel Masse et traite, pour le compte du
