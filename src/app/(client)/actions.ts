@@ -1,5 +1,6 @@
 "use server";
 
+import { removeCheckInPhotos } from "@/lib/erase";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -257,4 +258,36 @@ export async function signOut() {
   const { supabase } = await signedIn();
   await supabase.auth.signOut();
   redirect("/connexion");
+}
+
+/* ---------- their data (GDPR) ---------- */
+
+/**
+ * Erases the account for good: photos from storage first — SQL cannot —
+ * then everything else in one database call. Invoices stay, under the name
+ * they were issued to: the law keeps them ten years.
+ */
+export async function deleteMyAccount(confirmation: string) {
+  const { supabase, user } = await signedIn();
+  if (!user || confirmation.trim().toUpperCase() !== "SUPPRIMER") return { ok: false as const };
+
+  await removeCheckInPhotos(supabase, user.id);
+  const { error } = await supabase.rpc("delete_my_account");
+  if (error) return { ok: false as const };
+
+  await supabase.auth.signOut();
+  redirect("/connexion?compte=supprime");
+}
+
+/** Withdraws consent to health data; injuries, cycle dates and sleep go. */
+export async function withdrawHealthConsent() {
+  const { supabase } = await signedIn();
+  await supabase.rpc("withdraw_health_consent");
+  revalidatePath("/", "layout");
+}
+
+export async function giveHealthConsent() {
+  const { supabase } = await signedIn();
+  await supabase.rpc("give_health_consent");
+  revalidatePath("/", "layout");
 }

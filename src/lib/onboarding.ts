@@ -140,13 +140,22 @@ export function toClaimArgs(a: Answers) {
   };
 }
 
+/** 18 or over on the given birth date (decided 29 Sep 2026: adults only —
+ *  a minor's health data would need a parent's consent). */
+export function isAdult(birthDate: string, today = new Date()): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) return false;
+  const [y, m, d] = birthDate.split("-").map(Number);
+  const limit = new Date(Date.UTC(today.getUTCFullYear() - 18, today.getUTCMonth(), today.getUTCDate()));
+  return Date.UTC(y, m - 1, d) <= limit.getTime();
+}
+
 /** Whether a step's required answers are in — the same rule on both clients. */
 export function stepComplete(step: number, a: Answers): boolean {
   switch (step) {
     case 1:
       return a.code.trim() !== "";
     case 2:
-      return [a.firstName, a.lastName, a.birthDate, a.whatsapp].every((v) => v.trim() !== "");
+      return [a.firstName, a.lastName, a.birthDate, a.whatsapp].every((v) => v.trim() !== "") && isAdult(a.birthDate);
     case 3:
       return a.trainingAge !== "" && a.sessionsPerWeek !== "" && a.injuries.trim() !== "";
     case 4:

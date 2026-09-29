@@ -6,6 +6,8 @@ import { BackHeader, NavRow } from "@/components/client/ui";
 import {
   AppearanceChoice,
   ClearNotes,
+  DeleteAccount,
+  HealthConsent,
   LanguageChoice,
   SignOutButton,
 } from "@/components/client/SettingsControls";
@@ -16,8 +18,14 @@ import {
  * notifications section says so rather than disappearing.
  */
 export default async function SettingsPage() {
-  const { user } = await clientSession();
+  const { user, supabase, client } = await clientSession();
   const t = await getTranslations("settings");
+  const tData = await getTranslations("myData");
+  const { data: consent } = await supabase
+    .from("clients")
+    .select("health_consent_at")
+    .eq("id", client.id)
+    .maybeSingle();
   const tCommon = await getTranslations("common");
 
   return (
@@ -56,6 +64,17 @@ export default async function SettingsPage() {
         <p className="text-[13px] leading-[1.45] text-[var(--ink2)]">{t("privacyCoach")}</p>
         <p className="text-[13px] leading-[1.45] text-[var(--ink2)]">{t("privacyNotes")}</p>
         <ClearNotes />
+      </Section>
+
+      {/* GDPR: consent to health data, a copy of everything, and erasure. */}
+      <Section icon="note" title={tData("title")}>
+        <HealthConsent givenAt={consent?.health_consent_at ?? null} />
+        <NavRow href="/reglages/donnees" icon="note">{tData("download")}</NavRow>
+        <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">{tData("downloadHint")}</p>
+        <DeleteAccount />
+        <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">
+          {tData("legal")} <a className="text-[var(--accent)] underline" href="/confidentialite">{tData("privacyLink")}</a>
+        </p>
       </Section>
 
       <Section icon="info" title={t("about")}>

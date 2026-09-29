@@ -95,6 +95,7 @@ export async function loadQueue(supabase: SupabaseClient<Database>): Promise<Que
 
   const unpaid = new Map<string, { cents: number; currency: string; period: string }[]>();
   for (const row of invoicesRes.data ?? []) {
+    if (!row.client_id) continue;
     const list = unpaid.get(row.client_id) ?? [];
     list.push({ cents: row.amount_cents, currency: row.currency, period: row.period_start });
     unpaid.set(row.client_id, list);
@@ -103,6 +104,9 @@ export async function loadQueue(supabase: SupabaseClient<Database>): Promise<Que
   const items: QueueItem[] = [];
 
   for (const entry of roster.entries) {
+    // Coaching ended: nothing is owed to an archived client.
+    if (entry.archived) continue;
+
     const base = {
       clientId: entry.id,
       name: entry.name,

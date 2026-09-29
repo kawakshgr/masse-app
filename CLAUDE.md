@@ -120,6 +120,16 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   `lib/clientPdf.tsx` with the client's own session — this week at today's
   phase, the plan per day type with numbered meals and supplements — under
   the coach's logo. Fonts shared with the invoice through `lib/pdfFonts.ts`.
+- **GDPR** (29 Sep 2026, see `docs/rgpd/`) — consent to health data at
+  sign-up, withdrawn or given again in Réglages → Mes données; a client's
+  data export (`/reglages/donnees`); erasure by the client
+  (`delete_my_account`) or the coach (`erase_my_client`), photos removed from
+  storage first (`lib/erase.ts`) because SQL cannot; invoices survive
+  erasure with `billed_to` (kept 10 years). Archiving a client starts
+  retention — photos after 3 months, everything after 12 — run nightly by
+  `/api/retention` (Vercel Cron, needs `SUPABASE_SERVICE_ROLE_KEY` and
+  `CRON_SECRET`). Adults only (`claim_invite`). Functions run in `fra1`.
+  Public pages: `/confidentialite`, `/mentions-legales`, `/conditions`.
 
 ## Deliberately not in v1
 

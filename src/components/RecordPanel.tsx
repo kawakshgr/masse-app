@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { ClientRow } from "@/lib/supabase/types";
 import { GOALS, SESSIONS_PER_WEEK, TRAINING_AGES } from "@/lib/onboarding";
-import { removeClient, updateClientRecord } from "@/app/(coach)/clients/actions";
+import { removeClient, setClientArchived, updateClientRecord } from "@/app/(coach)/clients/actions";
 
 const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 const cell =
@@ -100,6 +100,13 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
  * the product today, brought inside it, and only she and this client can read
  * it. Every field is optional and every field is editable.
  */
+/** The day, `months` after an instant, as yyyy-mm-dd. */
+function shiftMonths(iso: string, months: number): string {
+  const d = new Date(iso);
+  d.setUTCMonth(d.getUTCMonth() + months);
+  return d.toISOString().slice(0, 10);
+}
+
 export function RecordPanel({
   client,
   fileNote,
@@ -302,6 +309,18 @@ export function RecordPanel({
           >
             {t("edit")}
           </button>
+          {/* The coaching ended: out of the roster, retention clock running. */}
+          <form action={setClientArchived}>
+            <input type="hidden" name="client_id" value={client.id} />
+            <input type="hidden" name="archive" value={client.status === "archived" ? "0" : "1"} />
+            <button
+              type="submit"
+              title={client.status === "archived" ? undefined : t("archiveHint")}
+              className="glass2 h-8 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
+            >
+              {client.status === "archived" ? t("unarchive") : t("archive")}
+            </button>
+          </form>
           <button
             type="button"
             onClick={() => setConfirming(true)}
@@ -311,6 +330,16 @@ export function RecordPanel({
           </button>
         </div>
       </div>
+
+      {client.status === "archived" && client.archived_at && (
+        <p className="glass2 rounded-r2 px-3.5 py-2.5 text-[12.5px] leading-[1.5] text-[var(--ink2)]">
+          {t("archived", {
+            date: dateFmt(client.archived_at.slice(0, 10)) ?? "",
+            photos: dateFmt(shiftMonths(client.archived_at, 3)) ?? "",
+            all: dateFmt(shiftMonths(client.archived_at, 12)) ?? "",
+          })}
+        </p>
+      )}
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(232px,1fr))] items-start gap-3">
         <Tight

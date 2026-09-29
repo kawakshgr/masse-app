@@ -51,7 +51,8 @@
     "newInvite": "Nouveau code d’invitation",
     "remove": "Retirer",
     "needsYou": "a besoin de toi",
-    "noBlock": "Aucun bloc en cours"
+    "noBlock": "Aucun bloc en cours",
+    "archived": "archivé"
   },
   "programmes": {
     "title": "Programmes",
@@ -233,7 +234,11 @@
     "weeklyTime": "Temps par semaine",
     "callSlots": "Créneaux pour l’appel",
     "consent": "Consentement santé",
-    "consentOn": "Donné le {date}"
+    "consentOn": "Donné le {date}",
+    "archive": "Archiver",
+    "unarchive": "Réactiver",
+    "archiveHint": "Le suivi est terminé : la fiche quitte le roster. Photos effacées après 3 mois, tout le reste après 12.",
+    "archived": "Archivé le {date} — photos effacées le {photos}, fiche effacée le {all}."
   },
   "onboarding": {
     "step": "Étape {n} sur 9",
@@ -323,7 +328,10 @@
     "consentLede": "Tes blessures, ton cycle et ton sommeil sont des données de santé. Elles sont hébergées en Europe, seul ton coach les lit, et tu peux retirer ton accord à tout moment dans Réglages.",
     "consentBox": "J’accepte que mon coach utilise ces données de santé pour mon suivi.",
     "required": "Réponds aux questions obligatoires pour continuer.",
-    "pick": "Choisir…"
+    "pick": "Choisir…",
+    "adultsOnly": "Masse est réservé aux adultes : il faut avoir 18 ans ou plus.",
+    "consentMore": "Tout le détail — ce qui est gardé, combien de temps, et tes droits — est dans la",
+    "privacyLink": "politique de confidentialité."
   },
   "equipment": {
     "gym": "Salle",
@@ -465,7 +473,7 @@
   "remove": {
     "action": "Retirer",
     "confirmTitle": "Retirer {name} ?",
-    "confirmBody": "Sa fiche, ses séances, ses bilans et ses données de cycle seront supprimés définitivement. C’est irréversible.",
+    "confirmBody": "Sa fiche, ses séances, ses bilans, ses photos, ses données de santé et son compte de connexion seront effacés définitivement. Ses factures restent : la loi impose de les garder 10 ans. C’est irréversible.",
     "confirmType": "Tape son prénom pour confirmer",
     "confirm": "Retirer définitivement",
     "cancel": "Annuler"
@@ -1496,5 +1504,22 @@
     "phaseTraining": "Charges ajustées à ta phase du jour, comme dans l’app.",
     "phaseNutrition": "Objectifs ajustés à ta phase du jour, comme dans l’app.",
     "preparedBy": "Préparé par"
+  },
+  "myData": {
+    "title": "Mes données",
+    "consentGiven": "Tu as accepté l’usage de tes données de santé (blessures, cycle, sommeil) le {date}.",
+    "consentNone": "Tu n’as pas donné ton accord pour tes données de santé : l’app ne te demande ni blessures, ni cycle, ni sommeil.",
+    "consentGive": "Donner mon accord",
+    "consentWithdraw": "Retirer mon accord",
+    "consentWithdrawConfirm": "Tes blessures, tes dates de cycle et ton sommeil seront effacés, et le suivi du cycle s’arrête. Le reste de ton suivi continue.",
+    "download": "Télécharger mes données",
+    "downloadHint": "Un fichier avec tout ce que Masse garde sur toi : ta fiche, tes séances, tes bilans, tes repas. Les liens vers tes photos restent valables 7 jours.",
+    "delete": "Supprimer mon compte",
+    "deleteBody": "Ton compte, ta fiche, tes séances, tes bilans, tes photos et tes données de santé seront effacés définitivement. Tes factures restent chez ton coach : la loi impose de les garder 10 ans.",
+    "deleteType": "Tape SUPPRIMER pour confirmer",
+    "deleteDo": "Supprimer définitivement",
+    "deleteFailed": "La suppression a échoué. Réessaie, ou écris à ton coach.",
+    "legal": "Comment Masse traite tes données :",
+    "privacyLink": "politique de confidentialité"
   }
 }

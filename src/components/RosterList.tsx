@@ -64,7 +64,7 @@ export function RosterList({
                         : `/clients/${entry.id}`
                     }
                     aria-current={active ? "page" : undefined}
-                    className={rowClass(active)}
+                    className={`${rowClass(active)} ${entry.archived ? "opacity-60" : ""}`}
                   >
                     <Tile accent>{entry.initials}</Tile>
 
@@ -86,6 +86,7 @@ export function RosterList({
                     </span>
 
                     {entry.attention && <Badge tone="alert">{tChip(entry.attention)}</Badge>}
+                    {entry.archived && <Badge>{t("archived")}</Badge>}
                   </Link>
                 </li>
               );

@@ -43,7 +43,7 @@ function SignInForm() {
   }
 
   return (
-    <main className="flex min-h-dvh items-center justify-center p-6">
+    <main className="relative flex min-h-dvh items-center justify-center p-6">
       <div className="glass lift w-full max-w-[420px] rounded-r4 p-8">
         <p className="text-[12px] font-extrabold uppercase tracking-[.16em] text-[var(--accent)]">
           {tApp("name")}
@@ -119,6 +119,12 @@ function SignInForm() {
           </p>
         )}
       </div>
+      {/* The legal pages, reachable before anyone signs in. */}
+      <nav className="absolute inset-x-0 bottom-5 flex justify-center gap-5 text-[12px] text-[var(--ink3)]">
+        <a href="/confidentialite" className="hover:text-[var(--ink)]">Confidentialité</a>
+        <a href="/mentions-legales" className="hover:text-[var(--ink)]">Mentions légales</a>
+        <a href="/conditions" className="hover:text-[var(--ink)]">Conditions</a>
+      </nav>
     </main>
   );
 }

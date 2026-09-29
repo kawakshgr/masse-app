@@ -51,7 +51,8 @@
     "newInvite": "New invite code",
     "remove": "Remove",
     "needsYou": "needs you",
-    "noBlock": "No block running"
+    "noBlock": "No block running",
+    "archived": "archived"
   },
   "programmes": {
     "title": "Programmes",
@@ -233,7 +234,11 @@
     "weeklyTime": "Time per week",
     "callSlots": "Call slots",
     "consent": "Health consent",
-    "consentOn": "Given on {date}"
+    "consentOn": "Given on {date}",
+    "archive": "Archive",
+    "unarchive": "Restore",
+    "archiveHint": "Coaching has ended: the record leaves the roster. Photos erased after 3 months, everything else after 12.",
+    "archived": "Archived on {date} — photos erased on {photos}, record erased on {all}."
   },
   "onboarding": {
     "step": "Step {n} of 9",
@@ -323,7 +328,10 @@
     "consentLede": "Your injuries, cycle and sleep are health data. They are hosted in Europe, only your coach reads them, and you can withdraw your consent at any time in Settings.",
     "consentBox": "I agree that my coach uses this health data for my coaching.",
     "required": "Answer the required questions to continue.",
-    "pick": "Choose…"
+    "pick": "Choose…",
+    "adultsOnly": "Masse is for adults only: you must be 18 or over.",
+    "consentMore": "The full detail — what is kept, for how long, and your rights — is in the",
+    "privacyLink": "privacy policy."
   },
   "equipment": {
     "gym": "Gym",
@@ -465,7 +473,7 @@
   "remove": {
     "action": "Remove",
     "confirmTitle": "Remove {name}?",
-    "confirmBody": "Their record, sessions, check-ins and cycle data are deleted permanently. This cannot be undone.",
+    "confirmBody": "Their record, sessions, check-ins, photos, health data and login are erased permanently. Their invoices stay: the law requires keeping them 10 years. This cannot be undone.",
     "confirmType": "Type their first name to confirm",
     "confirm": "Remove permanently",
     "cancel": "Cancel"
@@ -1496,5 +1504,22 @@
     "phaseTraining": "Loads adjusted to today’s phase, as in the app.",
     "phaseNutrition": "Targets adjusted to today’s phase, as in the app.",
     "preparedBy": "Prepared by"
+  },
+  "myData": {
+    "title": "My data",
+    "consentGiven": "You agreed to the use of your health data (injuries, cycle, sleep) on {date}.",
+    "consentNone": "You have not agreed to the use of your health data: the app asks for no injuries, cycle or sleep.",
+    "consentGive": "Give my consent",
+    "consentWithdraw": "Withdraw my consent",
+    "consentWithdrawConfirm": "Your injuries, cycle dates and sleep will be erased, and cycle tracking stops. The rest of your coaching goes on.",
+    "download": "Download my data",
+    "downloadHint": "One file with everything Masse keeps about you: your record, sessions, check-ins, meals. Links to your photos last 7 days.",
+    "delete": "Delete my account",
+    "deleteBody": "Your account, record, sessions, check-ins, photos and health data will be erased for good. Your invoices stay with your coach: the law requires keeping them 10 years.",
+    "deleteType": "Type SUPPRIMER to confirm",
+    "deleteDo": "Delete for good",
+    "deleteFailed": "The deletion failed. Try again, or write to your coach.",
+    "legal": "How Masse handles your data:",
+    "privacyLink": "privacy policy"
   }
 }

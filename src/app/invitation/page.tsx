@@ -13,6 +13,7 @@ import {
   SESSIONS_PER_WEEK,
   TRAINING_AGES,
   fullName,
+  isAdult,
   save,
   stepComplete,
   type Answers,
@@ -220,9 +221,14 @@ export default function OnboardingPage() {
               <Question label={t("lastName")} required>
                 <input autoComplete="family-name" value={a.lastName} onChange={(e) => set({ lastName: e.target.value })} className={fieldClass} />
               </Question>
-              <Question label={t("birthDate")} required>
-                <input type="date" autoComplete="bday" value={a.birthDate} onChange={(e) => set({ birthDate: e.target.value })} className={fieldClass} />
-              </Question>
+              <div>
+                <Question label={t("birthDate")} required>
+                  <input type="date" autoComplete="bday" value={a.birthDate} onChange={(e) => set({ birthDate: e.target.value })} className={fieldClass} />
+                </Question>
+                {a.birthDate !== "" && !isAdult(a.birthDate) && (
+                  <p className="mt-2 text-[12.5px] leading-[1.45] text-[var(--a3)]">{t("adultsOnly")}</p>
+                )}
+              </div>
               <Question label={t("whatsapp")} required>
                 <input type="tel" autoComplete="tel" value={a.whatsapp} onChange={(e) => set({ whatsapp: e.target.value })} className={fieldClass} />
               </Question>
@@ -396,6 +402,13 @@ export default function OnboardingPage() {
           )}
 
           {step === 8 && (
+            <>
+            <p className="text-[13px] leading-[1.5] text-[var(--ink2)]">
+              {t("consentMore")}{" "}
+              <a href="/confidentialite" target="_blank" className="text-[var(--accent)] underline">
+                {t("privacyLink")}
+              </a>
+            </p>
             <label className="glass2 flex cursor-pointer items-start gap-3 rounded-r3 p-4">
               <input
                 type="checkbox"
@@ -408,6 +421,7 @@ export default function OnboardingPage() {
                 <span className="text-[var(--accent)]"> •</span>
               </span>
             </label>
+            </>
           )}
 
           {step === 9 && (

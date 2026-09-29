@@ -1,5 +1,6 @@
 "use server";
 
+import { removeCheckInPhotos } from "@/lib/erase";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -137,10 +138,33 @@ export async function removeClient(formData: FormData) {
     redirect(`/clients/${clientId}?retrait=confirmation`);
   }
 
-  await supabase.from("clients").delete().eq("id", clientId);
+  // Erased for good: photos from storage first (SQL cannot), then the row,
+  // every table under it and the login. Invoices stay, under the name they
+  // were issued to — the law keeps them ten years.
+  await removeCheckInPhotos(supabase, clientId);
+  await supabase.rpc("erase_my_client", { p_client: clientId });
 
   revalidatePath("/clients");
   redirect("/clients");
+}
+
+/**
+ * The coaching has ended: the client leaves the roster and the queue, and
+ * the retention clock starts — photos erased after 3 months, everything
+ * after 12. Bringing them back stops it.
+ */
+export async function setClientArchived(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const archive = String(formData.get("archive") ?? "") === "1";
+  if (!clientId) return;
+
+  await supabase
+    .from("clients")
+    .update(archive ? { status: "archived", archived_at: new Date().toISOString() } : { status: "active", archived_at: null })
+    .eq("id", clientId);
+
+  revalidatePath("/clients", "layout");
 }
 
 /** 'CORDEIRO-4K2P' — readable aloud over WhatsApp, which is how it travels. */

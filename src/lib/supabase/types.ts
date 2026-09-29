@@ -29,7 +29,7 @@ export type ClientGoal =
   | "Other";
 export type DayKind = "training" | "rest";
 
-export type ClientStatus = "active" | "paused";
+export type ClientStatus = "active" | "paused" | "archived";
 export type CheckinFeel = "Strong" | "Steady" | "Heavy";
 export type CheckinPain = "None" | "Minor" | "Need to talk";
 export type CheckinAdherence = "All of it" | "Most" | "Struggled";
@@ -109,6 +109,8 @@ export type ClientRow = {
   weekly_time: string | null;
   call_slots: string | null;
   health_consent_at: string | null;
+  /** When the coaching ended; the retention job counts from it. */
+  archived_at: string | null;
   diet: string | null;
   emergency_contact: string | null;
 };
@@ -388,7 +390,10 @@ export type MealRow = {
 export type InvoiceRow = {
   id: string;
   coach_id: string;
-  client_id: string;
+  /** Null once the client is erased: the invoice is kept ten years. */
+  client_id: string | null;
+  /** The name it was issued to, kept when the client is gone. */
+  billed_to: string | null;
   period_start: string;
   period_end: string | null;
   amount_cents: number;
@@ -714,6 +719,12 @@ export type Database = {
         };
         Returns: string;
       };
+      delete_my_account: { Args: Record<string, never>; Returns: undefined };
+      erase_my_client: { Args: { p_client: string }; Returns: undefined };
+      withdraw_health_consent: { Args: Record<string, never>; Returns: undefined };
+      give_health_consent: { Args: Record<string, never>; Returns: undefined };
+      retention_due: { Args: Record<string, never>; Returns: { client_id: string; erase: boolean }[] };
+      retention_erase: { Args: { p_client: string }; Returns: undefined };
       /** Whether the signed-in address is allowed to hold a coach account. */
       may_become_coach: {
         Args: Record<string, never>;
