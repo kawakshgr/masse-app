@@ -67,6 +67,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   `lib/queue.ts` reuses the roster's attention rule; it adds, never re-derives.
 - **Programme editor** (web) — weeks, seven day columns, sessions, ordered exercises,
   drag between days, duplicate week, save as template, push to clients.
+  Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
+  exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
+  who logged it hit every prescribed set; otherwise, or with no logs or no
+  target, it stays. The new week is never pushed by this.
 - **Session logging** (both) — offline-first.
 - **Check-ins** — **filed by the client**, from either app, with measurements and
   three photos. The coach's side is read-only (decided 24 Sep 2026): she reads,

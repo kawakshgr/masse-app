@@ -1,11 +1,11 @@
 import { SubNav } from "@/components/SubNav";
-import { MENU_ITEM } from "@/components/Pane";
+import { MENU_ITEM, SectionTitle } from "@/components/Pane";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
 import { WeekExport, WeekPrintout } from "@/components/WeekExport";
-import { addWeek, deleteWeek, duplicateWeek, toggleTemplate } from "../actions";
+import { addWeek, deleteWeek, duplicateWeek, progressWeek, toggleTemplate } from "../actions";
 import { ProgrammeHeader } from "@/components/ProgrammeHeader";
 import { hevyConfigured } from "@/lib/hevy";
 
@@ -14,10 +14,17 @@ export default async function ProgrammeEditorPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ semaine?: string }>;
+  searchParams: Promise<{
+    semaine?: string;
+    progres?: string;
+    stable?: string;
+    inconnu?: string;
+    regle?: string;
+  }>;
 }) {
   const { id } = await params;
-  const { semaine } = await searchParams;
+  const { semaine, progres, stable, inconnu, regle } = await searchParams;
+  const tProgress = await getTranslations("progress");
   const supabase = await createClient();
 
   const { data: programme } = await supabase
@@ -120,6 +127,22 @@ export default async function ProgrammeEditorPage({
                 </form>
               )}
 
+              {/* The next week, from how this one went — by load or by reps. */}
+              {current &&
+                (["load", "reps"] as const).map((rule) => (
+                  <form
+                    key={rule}
+                    action={async () => {
+                      "use server";
+                      await progressWeek(current.id, programme.id, rule);
+                    }}
+                  >
+                    <button type="submit" className={MENU_ITEM}>
+                      {tProgress(rule === "load" ? "menuLoad" : "menuReps")}
+                    </button>
+                  </form>
+                ))}
+
               {current && (
                 <WeekExport
                   programmeName={programme.name}
@@ -131,6 +154,27 @@ export default async function ProgrammeEditorPage({
           }
         />
       </header>
+
+      {progres !== undefined && current && (
+        <section className="glass mb-4 rounded-r3 p-4 print:hidden">
+          <SectionTitle icon="chart">
+            {tProgress("done", { week: current.week_number })}
+          </SectionTitle>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            {[
+              ["up", progres, regle === "reps" ? tProgress("upReps") : tProgress("upLoad")],
+              ["hold", stable, tProgress("hold")],
+              ["unknown", inconnu, tProgress("unknown")],
+            ].map(([key, value, label]) => (
+              <div key={key} className="glass2 rounded-r2 px-3 py-2.5">
+                <p className="tnum font-display text-[24px] font-extrabold leading-none">{value ?? 0}</p>
+                <p className="mt-1 text-[12px] leading-[1.4] text-[var(--ink2)]">{label}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-[12.5px] leading-[1.5] text-[var(--ink3)]">{tProgress("notPushed")}</p>
+        </section>
+      )}
 
       <div className="mb-4 flex flex-wrap items-center gap-2 print:hidden">
         <SubNav

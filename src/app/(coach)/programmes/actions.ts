@@ -130,6 +130,135 @@ export async function duplicateWeek(weekId: string, programmeId: string) {
   revalidatePath(`/programmes/${programmeId}`);
 }
 
+/** How a week grows from the last: more load, or more reps. */
+export type Progression = "load" | "reps";
+
+const LOAD_STEP_KG = 2.5;
+const REPS_STEP = 1;
+
+/**
+ * The next week, written from how the last one went. Each exercise moves on
+ * only when every client who logged it hit every prescribed set — reps and
+ * load — and otherwise stays as it was; with no sets logged, or no target to
+ * judge against, it stays too and is counted as unknown. The new week is not
+ * pushed: delivery is never a side effect of saving.
+ */
+export async function progressWeek(weekId: string, programmeId: string, rule: Progression) {
+  const supabase = await createClient();
+
+  const { data: source } = await supabase
+    .from("programme_weeks")
+    .select(
+      "week_number, sessions(day_index, name, notes, session_exercises(id, position, name, scheme, target_sets, target_reps, target_weight_kg, cue))",
+    )
+    .eq("id", weekId)
+    .maybeSingle();
+  if (!source) return;
+
+  type Exercise = {
+    id: string;
+    position: number;
+    name: string;
+    scheme: string | null;
+    target_sets: number | null;
+    target_reps: number | null;
+    target_weight_kg: number | null;
+    cue: string | null;
+  };
+  const sessions = (source.sessions ?? []) as unknown as {
+    day_index: number;
+    name: string | null;
+    notes: string | null;
+    session_exercises: Exercise[];
+  }[];
+  const exerciseIds = sessions.flatMap((s) => (s.session_exercises ?? []).map((e) => e.id));
+
+  const { data: logs } = exerciseIds.length
+    ? await supabase
+        .from("set_logs")
+        .select("client_id, session_exercise_id, reps, weight_kg")
+        .in("session_exercise_id", exerciseIds)
+    : { data: [] as { client_id: string; session_exercise_id: string; reps: number | null; weight_kg: number | null }[] };
+
+  // Per exercise: the clients who logged it at all.
+  const byExercise = new Map<string, Set<string>>();
+  for (const log of logs ?? []) {
+    const clients = byExercise.get(log.session_exercise_id) ?? new Set<string>();
+    clients.add(log.client_id);
+    byExercise.set(log.session_exercise_id, clients);
+  }
+
+  const outcome = new Map<string, "up" | "hold" | "unknown">();
+  for (const session of sessions) {
+    for (const e of session.session_exercises ?? []) {
+      const clients = byExercise.get(e.id);
+      if (!clients || e.target_sets == null || e.target_reps == null) {
+        outcome.set(e.id, "unknown");
+        continue;
+      }
+      const target = e.target_weight_kg == null ? null : Number(e.target_weight_kg);
+      let everyone = true;
+      for (const clientId of clients) {
+        const hit = (logs ?? []).filter(
+          (l) =>
+            l.session_exercise_id === e.id &&
+            l.client_id === clientId &&
+            (l.reps ?? 0) >= (e.target_reps ?? 0) &&
+            (target == null || Number(l.weight_kg ?? 0) >= target),
+        ).length;
+        if (hit < (e.target_sets ?? 0)) everyone = false;
+      }
+      // More load needs a load to add to; without one, the week holds.
+      outcome.set(e.id, everyone && !(rule === "load" && target == null) ? "up" : "hold");
+    }
+  }
+
+  const { data: last } = await supabase
+    .from("programme_weeks")
+    .select("week_number")
+    .eq("programme_id", programmeId)
+    .order("week_number", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const number = (last?.week_number ?? 0) + 1;
+
+  const { data: created } = await supabase
+    .from("programme_weeks")
+    .insert({ programme_id: programmeId, week_number: number })
+    .select("id")
+    .single();
+  if (!created) return;
+
+  for (const session of sessions) {
+    const { data: newSession } = await supabase
+      .from("sessions")
+      .insert({ week_id: created.id, day_index: session.day_index, name: session.name, notes: session.notes })
+      .select("id")
+      .single();
+    if (!newSession) continue;
+
+    const rows = (session.session_exercises ?? []).map(({ id, ...e }) => {
+      const up = outcome.get(id) === "up";
+      return {
+        ...e,
+        session_id: newSession.id,
+        target_weight_kg:
+          up && rule === "load" && e.target_weight_kg != null
+            ? Math.round((Number(e.target_weight_kg) + LOAD_STEP_KG) * 2) / 2
+            : e.target_weight_kg,
+        target_reps: up && rule === "reps" && e.target_reps != null ? e.target_reps + REPS_STEP : e.target_reps,
+      };
+    });
+    if (rows.length > 0) await supabase.from("session_exercises").insert(rows);
+  }
+
+  const count = (kind: "up" | "hold" | "unknown") => [...outcome.values()].filter((v) => v === kind).length;
+  revalidatePath(`/programmes/${programmeId}`);
+  redirect(
+    `/programmes/${programmeId}?semaine=${number}&progres=${count("up")}&stable=${count("hold")}&inconnu=${count("unknown")}&regle=${rule}`,
+  );
+}
+
 export async function toggleTemplate(programmeId: string, isTemplate: boolean) {
   const supabase = await createClient();
   await supabase

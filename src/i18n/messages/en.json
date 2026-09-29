@@ -1442,5 +1442,15 @@
     "read": "Read",
     "write": "Write",
     "noNumber": "No number on her file"
+  },
+  "progress": {
+    "menuLoad": "Next week: +2.5 kg if hit",
+    "menuReps": "Next week: +1 rep if hit",
+    "done": "Week {week} written from the sessions",
+    "upLoad": "exercises go up 2.5 kg — every set hit",
+    "upReps": "exercises gain a rep — every set hit",
+    "hold": "exercises stay the same — not every set hit, or no load target",
+    "unknown": "exercises stay the same — nothing logged, or no target",
+    "notPushed": "It isn’t sent yet: read it, adjust if needed, then push it to your clients."
   }
 }
