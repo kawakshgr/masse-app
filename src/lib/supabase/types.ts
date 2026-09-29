@@ -18,11 +18,15 @@ export type Json =
 
 export type Pronoun = "she" | "he";
 export type InviteState = "sent" | "opened" | "joined" | "expired" | "revoked";
+/** The first four are no longer offered (29 Sep 2026) but stay in the type. */
 export type ClientGoal =
   | "Get stronger"
   | "Build muscle"
   | "Lean out"
-  | "Move better";
+  | "Move better"
+  | "Lose fat"
+  | "Recomposition"
+  | "Other";
 export type DayKind = "training" | "rest";
 
 export type ClientStatus = "active" | "paused";
@@ -95,6 +99,14 @@ export type ClientRow = {
   birth_date: string | null;
   occupation: string | null;
   training_age: string | null;
+  sessions_per_week: string | null;
+  current_programme: string | null;
+  goal_other: string | null;
+  obstacles: string | null;
+  readiness: number | null;
+  weekly_time: string | null;
+  call_slots: string | null;
+  health_consent_at: string | null;
   diet: string | null;
   emergency_contact: string | null;
 };
@@ -676,12 +688,23 @@ export type Database = {
           p_goal: ClientGoal | null;
           p_height_cm: number | null;
           p_weight_kg: number | null;
-          p_birth_year: number | null;
           p_injuries: string[];
           p_equipment: string[];
           p_session_days: number[];
           p_sleep_target: number | null;
           p_cycle_tracking: boolean;
+          p_health_consent: boolean;
+          p_birth_date: string | null;
+          p_whatsapp: string | null;
+          p_instagram: string | null;
+          p_training_age: string | null;
+          p_sessions_per_week: string | null;
+          p_current_programme: string | null;
+          p_goal_other: string | null;
+          p_obstacles: string | null;
+          p_readiness: number | null;
+          p_weekly_time: string | null;
+          p_call_slots: string | null;
         };
         Returns: string;
       };

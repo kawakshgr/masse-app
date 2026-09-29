@@ -1,10 +1,10 @@
 "use client";
 
-import { SectionTitle } from "@/components/Pane";
+import { SECTION_TITLE, SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { ClientRow } from "@/lib/supabase/types";
-import { GOALS } from "@/lib/onboarding";
+import { GOALS, SESSIONS_PER_WEEK, TRAINING_AGES } from "@/lib/onboarding";
 import { removeClient, updateClientRecord } from "@/app/(coach)/clients/actions";
 
 const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
@@ -19,7 +19,7 @@ function Tight({ title, rows }: { title: string; rows: Row[] }) {
   if (kept.length === 0) return null;
   return (
     <section className="glass flex min-w-0 flex-col gap-2.5 rounded-r3 p-4">
-      <span className={micro}>{title}</span>
+      <span className={SECTION_TITLE}>{title}</span>
       <div className="flex flex-col gap-2">
         {kept.map(([label, value]) => (
           <div key={label} className="flex items-baseline justify-between gap-3">
@@ -40,7 +40,7 @@ function Wide({ title, rows }: { title: string; rows: Row[] }) {
   if (kept.length === 0) return null;
   return (
     <section className="glass flex min-w-0 flex-col gap-3 rounded-r3 p-4">
-      <span className={micro}>{title}</span>
+      <span className={SECTION_TITLE}>{title}</span>
       <div className="flex flex-col gap-2.5">
         {kept.map(([label, value]) => (
           <div key={label} className="flex min-w-0 flex-col gap-0.5">
@@ -115,6 +115,7 @@ export function RecordPanel({
 }) {
   const t = useTranslations("record");
   const tGoal = useTranslations("goal");
+  const tOnb = useTranslations("onboarding");
   const tDays = useTranslations("days");
   const tRemove = useTranslations("remove");
   const [editing, setEditing] = useState(false);
@@ -188,13 +189,17 @@ export function RecordPanel({
           <Field label={t("birth")} name="birth_date" type="date" value={client.birth_date} />
           <Field label={t("height")} name="height_cm" value={client.height_cm} />
           <Field label={t("occupation")} name="occupation" value={client.occupation} wide />
-          <Field
-            label={t("trainingAge")}
-            name="training_age"
-            value={client.training_age}
-            placeholder={t("trainingAgePlaceholder")}
-            wide
-          />
+          <label className="block min-w-0 sm:col-span-2">
+            <span className="block text-[12px] text-[var(--ink2)]">{t("trainingAge")}</span>
+            <select name="training_age" defaultValue={client.training_age ?? ""} className={`mt-1 ${cell}`}>
+              <option value="">—</option>
+              {TRAINING_AGES.map((value) => (
+                <option key={value} value={value}>
+                  {tOnb(`trainingAgeOpt.${value}`)}
+                </option>
+              ))}
+            </select>
+          </label>
           <label className="block min-w-0 sm:col-span-2">
             <span className="block text-[12px] text-[var(--ink2)]">{t("goal")}</span>
             <select name="goal" defaultValue={client.goal ?? ""} className={`mt-1 ${cell}`}>
@@ -358,8 +363,42 @@ export function RecordPanel({
           title={t("training")}
           rows={[
             [t("occupation"), client.occupation],
-            [t("trainingAge"), client.training_age],
-            [t("goal"), client.goal ? tGoal(client.goal) : null],
+            [
+              t("trainingAge"),
+              client.training_age ? tOnb(`trainingAgeOpt.${client.training_age}`) : null,
+            ],
+            [
+              t("goal"),
+              client.goal === "Other" && client.goal_other
+                ? client.goal_other
+                : client.goal
+                  ? tGoal(client.goal)
+                  : null,
+            ],
+          ]}
+        />
+        {/* What she answered on arrival — the coach's intake form, kept here. */}
+        <Wide
+          title={t("intake")}
+          rows={[
+            [
+              t("perWeek"),
+              client.sessions_per_week &&
+              (SESSIONS_PER_WEEK as readonly string[]).includes(client.sessions_per_week)
+                ? tOnb(`perWeekOpt.${client.sessions_per_week}`)
+                : null,
+            ],
+            [t("programmeNow"), client.current_programme],
+            [t("obstacles"), client.obstacles],
+            [t("readiness"), client.readiness ? `${client.readiness} / 10` : null],
+            [t("weeklyTime"), client.weekly_time],
+            [t("callSlots"), client.call_slots],
+            [
+              t("consent"),
+              client.health_consent_at
+                ? t("consentOn", { date: dateFmt(client.health_consent_at.slice(0, 10)) ?? "" })
+                : null,
+            ],
           ]}
         />
         <Wide

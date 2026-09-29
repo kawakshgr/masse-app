@@ -224,7 +224,16 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "saved": "Enregistré",
-    "stepsTarget": "Objectif de pas"
+    "stepsTarget": "Objectif de pas",
+    "intake": "Questionnaire d’arrivée",
+    "perWeek": "Séances par semaine",
+    "programmeNow": "Programme actuel",
+    "obstacles": "Ce qui l’a freinée jusqu’ici",
+    "readiness": "Prête à changer",
+    "weeklyTime": "Temps par semaine",
+    "callSlots": "Créneaux pour l’appel",
+    "consent": "Consentement santé",
+    "consentOn": "Donné le {date}"
   },
   "onboarding": {
     "step": "Étape {n} sur 9",
@@ -267,7 +276,54 @@
     "noAnswersBody": "Le lien de connexion doit être ouvert sur le même appareil et le même navigateur que celui où tu as rempli les étapes. Reprends-les ici, ça va vite.",
     "restart": "Recommencer les étapes",
     "failedBody": "Ton code a peut-être déjà été utilisé, ou il a expiré. Demande-en un nouveau à ton coach.",
-    "nameLabel": "Nom"
+    "nameLabel": "Nom",
+    "stepOf": "Étape {n} sur {total}",
+    "codeIntro": "Réponds à ces quelques questions : ça prend 5 minutes, et c’est confidentiel. Ton coach s’en sert pour préparer ton suivi.",
+    "meTitle": "On fait connaissance",
+    "meLede": "Qui tu es, et comment te joindre.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "birthDate": "Date de naissance",
+    "whatsapp": "Numéro WhatsApp",
+    "instagram": "Compte Instagram",
+    "optional": "facultatif",
+    "whereTitle": "Où en es-tu ?",
+    "whereLede": "Ton point de départ, sans jugement.",
+    "trainingAge": "Depuis combien de temps t’entraînes-tu ?",
+    "trainingAgeOpt": {
+      "lt6m": "Moins de 6 mois",
+      "6to12m": "6 mois à 1 an",
+      "1to3y": "1 à 3 ans",
+      "gt3y": "Plus de 3 ans"
+    },
+    "perWeek": "Combien de séances fais-tu par semaine ?",
+    "perWeekOpt": {
+      "1-2": "1 à 2",
+      "3-4": "3 à 4",
+      "5+": "5 et plus",
+      "irregular": "Je suis irrégulier·ère"
+    },
+    "currentProgramme": "Suis-tu un programme précis ? Si oui, lequel ?",
+    "injuriesLabel": "Blessures, douleurs ou contre-indications médicales",
+    "injuriesHint": "Une par ligne. Écris « aucune » s’il n’y en a pas.",
+    "objectiveTitle": "Ton objectif",
+    "objectiveLede": "Ce que tu vises, et ce qui t’a freiné·e jusqu’ici.",
+    "goalMain": "Quel est ton objectif principal ?",
+    "goalOther": "Précise ton objectif",
+    "obstacles": "Qu’est-ce qui t’a empêché·e d’y arriver jusqu’ici ?",
+    "readiness": "De 1 à 10, à quel point es-tu prêt·e à changer tes habitudes ?",
+    "readinessLow": "Pas motivé·e, peur du changement",
+    "readinessHigh": "Très motivé·e, prêt·e à changer",
+    "frameTitle": "Ton cadre",
+    "frameLede": "Le temps que tu as, et quand on se parle.",
+    "weeklyTime": "Combien de temps peux-tu consacrer à l’entraînement par semaine ?",
+    "callSlots": "Quels créneaux te conviendraient pour l’appel de 20 minutes ?",
+    "callSlotsHint": "Donne 2 ou 3 créneaux sur les 7 prochains jours ; ton coach revient vers toi pour confirmer.",
+    "consentTitle": "Tes données de santé",
+    "consentLede": "Tes blessures, ton cycle et ton sommeil sont des données de santé. Elles sont hébergées en Europe, seul ton coach les lit, et tu peux retirer ton accord à tout moment dans Réglages.",
+    "consentBox": "J’accepte que mon coach utilise ces données de santé pour mon suivi.",
+    "required": "Réponds aux questions obligatoires pour continuer.",
+    "pick": "Choisir…"
   },
   "equipment": {
     "gym": "Salle",
@@ -314,9 +370,12 @@
   },
   "goal": {
     "Get stronger": "Gagner en force",
-    "Build muscle": "Prendre du muscle",
+    "Build muscle": "Prise de masse musculaire",
     "Lean out": "S’affiner",
-    "Move better": "Mieux bouger"
+    "Move better": "Mieux bouger",
+    "Lose fat": "Perte de gras",
+    "Recomposition": "Recomposition corporelle",
+    "Other": "Autre"
   },
   "feel": {
     "Strong": "En forme",
