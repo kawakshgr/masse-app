@@ -36,10 +36,10 @@ function SignInForm() {
       setState("sent");
       return;
     }
-    // An hourly cap is not a transient failure: "try again in a moment" would
-    // be wrong advice, so it gets its own message.
+    // Asked again too soon: one email per minute. It gets its own message,
+    // with the wait, rather than "it failed".
     const limited =
-      error.status === 429 || /rate limit/i.test(error.message ?? "");
+      error.status === 429 || /rate limit|security purposes/i.test(error.message ?? "");
     setState(limited ? "rate-limited" : "error");
   }
 

@@ -15,7 +15,7 @@
     "signOut": "Se déconnecter",
     "accountDeleted": "Ton compte et tes données ont été supprimés. Merci d’avoir utilisé Masse.",
     "callbackError": "Ce lien ne s’ouvre que dans le navigateur où tu l’as demandé, et une seule fois. Reviens sur la page restée ouverte et tape le code à 6 chiffres de l’e-mail, ou demande un nouvel e-mail ici.",
-    "rateLimited": "Trop de liens demandés. Supabase limite les envois à quelques-uns par heure tant qu’aucun SMTP n’est configuré. Attends une heure, ou branche un vrai service d’e-mail.",
+    "rateLimited": "Tu viens de demander un e-mail. Attends 60 secondes avant d’en redemander un.",
     "haveAccount": "J’ai déjà un compte",
     "signInTitle": "Te reconnecter",
     "signInLede": "L’adresse que tu as utilisée en t’inscrivant. On t’envoie un lien, pas de mot de passe.",

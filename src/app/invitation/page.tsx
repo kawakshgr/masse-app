@@ -92,6 +92,7 @@ function Pill({
 export default function OnboardingPage() {
   const t = useTranslations("onboarding");
   const tDays = useTranslations("days");
+  const tAuth = useTranslations("auth");
   const locale = useLocale();
   const tEquip = useTranslations("equipment");
   const tGoal = useTranslations("goal");
@@ -104,6 +105,8 @@ export default function OnboardingPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  // Why the email did not leave, said on screen: asked too soon, or a failure.
+  const [sendError, setSendError] = useState<"wait" | "failed" | null>(null);
   // The coach's free call slots, read again each time step 5 opens: a slot
   // taken by someone else meanwhile must not be offered.
   const [freeSlots, setFreeSlots] = useState<string[] | null>(null);
@@ -170,7 +173,12 @@ export default function OnboardingPage() {
       },
     });
     setSending(false);
-    if (!error) setSent(true);
+    if (!error) {
+      setSendError(null);
+      setSent(true);
+      return;
+    }
+    setSendError(error.status === 429 || /rate limit|security purposes/i.test(error.message ?? "") ? "wait" : "failed");
   }
 
   // Cycle tracking is offered only when the coach asked for it.
@@ -545,6 +553,11 @@ export default function OnboardingPage() {
               <Cta onClick={finish} disabled={sending || sent || !email.trim() || !a.healthConsent}>
                 {t("finish")}
               </Cta>
+              {sendError && (
+                <p role="alert" className="text-[14px] leading-[1.45] text-[var(--a3)]">
+                  {sendError === "wait" ? tAuth("rateLimited") : tAuth("error")}
+                </p>
+              )}
               {sent && (
                 <>
                   <p role="status" className="text-[14px] text-[var(--a1)]">
