@@ -1711,5 +1711,33 @@
     "signInHint": "Face ID, empreinte ou code de l’appareil. À activer une fois dans les réglages, après une première connexion par e-mail.",
     "signedIn": "Connecté. Ouverture de l’app…",
     "signInFailed": "Pas de clé d’accès reconnue ici. Connecte-toi avec le code par e-mail, puis active-la dans les réglages."
+  },
+  "summary": {
+    "title": "Résumé à envoyer · S{n}",
+    "lede": "Quelques lignes écrites à partir des chiffres de la semaine. Ajoute ton retour, puis envoie-le à {first} sur WhatsApp : Masse n’envoie rien.",
+    "prepare": "Préparer le résumé",
+    "preparing": "Lecture de la semaine…",
+    "again": "Réécrire",
+    "send": "Ouvrir WhatsApp",
+    "copy": "Copier",
+    "copied": "Copié",
+    "noPhone": "Pas de numéro dans la fiche de {first} : copie le texte et colle-le où vous vous parlez.",
+    "greeting": "Salut {first}, voici ton bilan de la semaine du {date} :",
+    "greetingPlain": "Voici ton bilan de la semaine du {date} :",
+    "weight": "Poids : {value} kg",
+    "vsPrevious": "{delta} depuis le dernier bilan",
+    "sinceStart": "{delta} depuis le premier bilan",
+    "stable": "stable",
+    "measure": "{label} : {value} cm",
+    "waist": "Tour de taille",
+    "chest": "Poitrine",
+    "hips": "Hanches",
+    "thigh": "Cuisse",
+    "sessions": "Séances : {done} sur {planned} notées",
+    "sleep": "Sommeil : {hours} en moyenne sur {nights, plural, =1 {1 nuit} other {# nuits}}",
+    "steps": "Pas : {avg} par jour en moyenne",
+    "stepsTarget": "(objectif {target})",
+    "nothing": "Pas de chiffres cette semaine.",
+    "closing": "Mon retour :"
   }
 }

@@ -9,6 +9,8 @@ import type {
   ClientGoal,
   CyclePhase,
 } from "@/lib/supabase/types";
+import { addDays } from "@/lib/clientData";
+import type { WeekFigures } from "@/lib/checkInSummary";
 
 function num(value: FormDataEntryValue | null): number | null {
   const raw = String(value ?? "").replace(",", ".").trim();
@@ -31,6 +33,80 @@ export async function recordCheckInReminder(clientId: string, weekStart: string)
   );
 
   revalidatePath(`/clients/${clientId}`);
+}
+
+/**
+ * What the week of a check-in held beyond the check-in itself — sessions
+ * logged, sleep, steps — for the summary the coach sends on WhatsApp. Read
+ * when she asks for it, for that one week; RLS shows only her own clients.
+ */
+export async function checkInWeekFigures(clientId: string, weekStart: string): Promise<WeekFigures> {
+  const figures: WeekFigures = {
+    sessionsDone: 0,
+    sessionsPlanned: 0,
+    sleepAvgH: null,
+    sleepNights: 0,
+    stepsAvg: null,
+    stepsTarget: null,
+  };
+  if (!clientId || !/^\d{4}-\d{2}-\d{2}$/.test(weekStart)) return figures;
+
+  const supabase = await createClient();
+  const sunday = addDays(weekStart, 6);
+  const [metrics, assignments, client] = await Promise.all([
+    supabase
+      .from("daily_metrics")
+      .select("sleep_h, steps")
+      .eq("client_id", clientId)
+      .gte("day", weekStart)
+      .lte("day", sunday),
+    // The week the client was in: the latest one started by that Sunday.
+    supabase
+      .from("assignments")
+      .select("start_date, programme_weeks(sessions(id, session_exercises(id)))")
+      .eq("client_id", clientId)
+      .not("pushed_at", "is", null)
+      .lte("start_date", sunday)
+      .gt("start_date", addDays(weekStart, -7))
+      .order("start_date", { ascending: false })
+      .limit(1),
+    supabase.from("clients").select("steps_target").eq("id", clientId).maybeSingle(),
+  ]);
+
+  const nights = (metrics.data ?? []).filter((row) => row.sleep_h != null).map((row) => Number(row.sleep_h));
+  if (nights.length > 0) {
+    figures.sleepAvgH = nights.reduce((a, b) => a + b, 0) / nights.length;
+    figures.sleepNights = nights.length;
+  }
+  const steps = (metrics.data ?? []).filter((row) => row.steps != null).map((row) => Number(row.steps));
+  if (steps.length > 0) figures.stepsAvg = Math.round(steps.reduce((a, b) => a + b, 0) / steps.length);
+  figures.stepsTarget = client.data?.steps_target ?? null;
+
+  const assignment = (assignments.data ?? [])[0];
+  const week = assignment?.programme_weeks as unknown as {
+    sessions: { id: string; session_exercises: { id: string }[] }[];
+  } | null;
+  const sessions = (week?.sessions ?? []).filter((session) => session.session_exercises.length > 0);
+  figures.sessionsPlanned = sessions.length;
+
+  const exerciseIds = sessions.flatMap((session) => session.session_exercises.map((e) => e.id));
+  if (assignment && exerciseIds.length > 0) {
+    // A session counts once any of its exercises carries a set, whichever
+    // day of that week it was done — the rule the client's own week follows.
+    const { data: logs } = await supabase
+      .from("set_logs")
+      .select("session_exercise_id")
+      .eq("client_id", clientId)
+      .in("session_exercise_id", exerciseIds)
+      .gte("logged_at", `${assignment.start_date}T00:00:00Z`)
+      .lt("logged_at", `${addDays(assignment.start_date, 8)}T00:00:00Z`);
+    const logged = new Set((logs ?? []).map((row) => row.session_exercise_id));
+    figures.sessionsDone = sessions.filter((session) =>
+      session.session_exercises.some((e) => logged.has(e.id)),
+    ).length;
+  }
+
+  return figures;
 }
 
 export async function markCheckInReviewed(formData: FormData) {

@@ -1711,5 +1711,33 @@
     "signInHint": "Face ID, fingerprint or device code. Turn it on once in settings, after a first sign-in by e-mail.",
     "signedIn": "Signed in. Opening the app…",
     "signInFailed": "No passkey recognised here. Sign in with the e-mail code, then turn one on in settings."
+  },
+  "summary": {
+    "title": "Summary to send · W{n}",
+    "lede": "A few lines written from the week’s figures. Add your feedback, then send it to {first} on WhatsApp: Masse sends nothing.",
+    "prepare": "Prepare the summary",
+    "preparing": "Reading the week…",
+    "again": "Rewrite",
+    "send": "Open WhatsApp",
+    "copy": "Copy",
+    "copied": "Copied",
+    "noPhone": "No number on {first}’s file: copy the text and paste it where you talk.",
+    "greeting": "Hi {first}, here is your check-in for the week of {date}:",
+    "greetingPlain": "Here is your check-in for the week of {date}:",
+    "weight": "Weight: {value} kg",
+    "vsPrevious": "{delta} since the last check-in",
+    "sinceStart": "{delta} since the first check-in",
+    "stable": "no change",
+    "measure": "{label}: {value} cm",
+    "waist": "Waist",
+    "chest": "Chest",
+    "hips": "Hips",
+    "thigh": "Thigh",
+    "sessions": "Sessions: {done} of {planned} logged",
+    "sleep": "Sleep: {hours} on average over {nights, plural, =1 {1 night} other {# nights}}",
+    "steps": "Steps: {avg} a day on average",
+    "stepsTarget": "(target {target})",
+    "nothing": "No figures this week.",
+    "closing": "My feedback:"
   }
 }

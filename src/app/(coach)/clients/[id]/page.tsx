@@ -875,7 +875,12 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
         )}
       </section>
 
-      <CheckInReview firstName={firstName} weeks={weeks} />
+      <CheckInReview
+        clientId={clientId}
+        firstName={firstName}
+        phone={client?.whatsapp || client?.phone || null}
+        weeks={weeks}
+      />
     </div>
   );
 }

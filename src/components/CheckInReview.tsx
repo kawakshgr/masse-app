@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { intl } from "@/lib/locale";
 import { BarChart } from "@/components/BarChart";
+import { CheckInSummary } from "@/components/CheckInSummary";
 import type { PhotoPose } from "@/lib/supabase/types";
 
 const POSES: PhotoPose[] = ["front", "side", "back"];
@@ -120,10 +121,15 @@ function PhotoSlot({
 }
 
 export function CheckInReview({
+  clientId,
   firstName,
+  phone,
   weeks,
 }: {
+  clientId: string;
   firstName: string;
+  /** Her WhatsApp number, for the summary to send. */
+  phone: string | null;
   weeks: ReviewWeek[];
 }) {
   const locale = intl(useLocale());
@@ -354,6 +360,18 @@ export function CheckInReview({
           </section>
         </div>
       </div>
+
+      {/* The week on screen, in a few lines to send. A new week, a new text. */}
+      <CheckInSummary
+        key={selected.id}
+        clientId={clientId}
+        firstName={firstName}
+        phone={phone}
+        weekNumber={selected.number}
+        week={selected}
+        previous={previous}
+        baseline={baseline}
+      />
 
       {zoom && (
         <div
