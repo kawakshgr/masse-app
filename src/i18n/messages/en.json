@@ -596,7 +596,8 @@
     "health": "Import from Health",
     "healthAgain": "Refresh from Health",
     "healthNone": "Health has nothing for today.",
-    "healthNote": "Sleep and steps come from Health. Quality stays yours, and your cycle is never read."
+    "healthNote": "Sleep and steps come from Health. Quality stays yours, and your cycle is never read.",
+    "cycleDays": "{count} days"
   },
   "exportW": {
     "title": "Export",

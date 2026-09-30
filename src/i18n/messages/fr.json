@@ -596,7 +596,8 @@
     "health": "Importer depuis Santé",
     "healthAgain": "Actualiser depuis Santé",
     "healthNone": "Santé n’a rien pour aujourd’hui.",
-    "healthNote": "Le sommeil et les pas viennent de Santé. La qualité reste à toi, et ton cycle n’est jamais lu."
+    "healthNote": "Le sommeil et les pas viennent de Santé. La qualité reste à toi, et ton cycle n’est jamais lu.",
+    "cycleDays": "{count} j"
   },
   "exportW": {
     "title": "Exporter",

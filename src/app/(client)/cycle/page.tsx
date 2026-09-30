@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { clientSession } from "@/lib/clientData";
 import { Card, Kicker, ScreenHeader } from "@/components/client/ui";
 import { PhaseBar, type PhaseSpan } from "@/components/client/PhaseBar";
@@ -18,6 +19,7 @@ export default async function CyclePage() {
   const t = await getTranslations("entry");
   const tNav = await getTranslations("clientNav");
   const tPhase = await getTranslations("phase");
+  const locale = intl(await getLocale());
   const tChart = await getTranslations("cycleChart");
 
   const [entriesRes, stateRes] = await Promise.all([
@@ -77,8 +79,14 @@ export default async function CyclePage() {
           <ul>
             {entries.map((entry) => (
               <li key={entry.id} className="flex items-center gap-2">
-                <span className="tnum flex-1 text-[15px] font-semibold">{entry.period_start_date}</span>
-                <span className="tnum text-[13px] text-[var(--ink3)]">{entry.cycle_length_days} j</span>
+                <span className="tnum flex-1 text-[15px] font-semibold">
+                  {new Date(`${entry.period_start_date}T12:00:00Z`).toLocaleDateString(locale, {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
+                <span className="tnum text-[13px] text-[var(--ink3)]">{t("cycleDays", { count: entry.cycle_length_days ?? 0 })}</span>
                 <RemoveCycleEntry id={entry.id} />
               </li>
             ))}
