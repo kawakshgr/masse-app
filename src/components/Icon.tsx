@@ -108,6 +108,12 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
       </>
     ),
     send: <path d="M21 3 3.5 10.5l7 3 3 7zM10.5 13.5 21 3" />,
+    pain: (
+      <>
+        <path d="M12 3.5 2.8 19.5h18.4z" />
+        <path d="M12 9.5v4.5M12 16.8v.2" />
+      </>
+    ),
     calendar: (
       <>
         <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />

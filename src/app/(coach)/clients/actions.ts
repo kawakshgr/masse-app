@@ -350,3 +350,14 @@ export async function cancelAppointment(appointmentId: string, clientId: string)
   revalidatePath(`/clients/${clientId}`);
   revalidatePath("/clients");
 }
+
+/** The coach has read a pain report; it leaves À traiter. */
+export async function markPainSeen(formData: FormData) {
+  const supabase = await createClient();
+  await supabase
+    .from("pain_reports")
+    .update({ seen_at: new Date().toISOString() })
+    .eq("id", String(formData.get("id") ?? ""))
+    .is("seen_at", null);
+  revalidatePath("/clients");
+}

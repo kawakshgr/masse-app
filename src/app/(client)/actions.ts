@@ -10,6 +10,7 @@ import type {
   CheckinAdherence,
   CheckinFeel,
   CheckinPain,
+  PainLevel,
 } from "@/lib/supabase/types";
 
 function num(value: FormDataEntryValue | null): number | null {
@@ -114,6 +115,30 @@ export async function submitCheckIn(input: {
   );
 
   revalidatePath("/aujourdhui");
+  return { ok: !error };
+}
+
+/* ---------- pain ---------- */
+
+/**
+ * Pain on an exercise, sent to the coach at once. Health data: RLS refuses it
+ * without the client's consent, and withdrawing consent erases it.
+ */
+export async function reportPain(input: {
+  sessionExerciseId: string;
+  exerciseName: string;
+  level: PainLevel;
+  note: string;
+}): Promise<{ ok: boolean }> {
+  const { supabase, user } = await signedIn();
+  if (!user || !["mild", "sharp", "stopped"].includes(input.level)) return { ok: false };
+  const { error } = await supabase.from("pain_reports").insert({
+    client_id: user.id,
+    session_exercise_id: input.sessionExerciseId,
+    exercise_name: input.exerciseName.slice(0, 200),
+    level: input.level,
+    note: input.note.trim().slice(0, 500) || null,
+  });
   return { ok: !error };
 }
 

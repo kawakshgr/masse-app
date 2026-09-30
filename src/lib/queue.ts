@@ -1,7 +1,7 @@
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import { loadRoster } from "@/lib/roster";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/types";
+import type { Database, PainLevel } from "@/lib/supabase/types";
 
 /**
  * The coach's "À traiter": who needs her today, and why, in one list she
@@ -10,6 +10,7 @@ import type { Database } from "@/lib/supabase/types";
  * here: silence, next week not sent, an invoice gone late.
  */
 export type QueueKind =
+  | "pain"
   | "call"
   | "late"
   | "checkin"
@@ -22,7 +23,8 @@ export type QueueKind =
 
 /** The order the list is read in: what costs her client most, first. */
 export const QUEUE_ORDER: QueueKind[] = [
-  // Booked calls first: they are the only reasons with a clock on them.
+  // Pain first: a client may be hurt. Then booked calls, which have a clock.
+  "pain",
   "call",
   "late",
   "checkin",
@@ -49,6 +51,8 @@ export type QueueItem = {
   programmeId?: string;
   /** For "call": the booked call. */
   call?: { id: string; startsAt: string; minutes: number };
+  /** For "pain": what she flagged, on which exercise. */
+  pain?: { id: string; exercise: string; level: PainLevel; note: string | null; at: string };
 };
 
 /** Three days without a single entry — no sleep, steps or set — is silence. */
@@ -68,7 +72,7 @@ export async function loadQueue(
   const since = addDays(today, -SILENT_DAYS);
   const sinceInstant = new Date(Date.now() - SILENT_DAYS * 86_400_000).toISOString();
 
-  const [clientsRes, metricsRes, setsRes, assignmentsRes, invoicesRes, callsRes] = await Promise.all([
+  const [clientsRes, metricsRes, setsRes, assignmentsRes, invoicesRes, callsRes, painRes] = await Promise.all([
     supabase.from("clients").select("id, whatsapp, phone, created_at").in("id", ids),
     supabase.from("daily_metrics").select("client_id").in("client_id", ids).gte("day", since),
     supabase.from("set_logs").select("client_id").in("client_id", ids).gte("logged_at", sinceInstant),
@@ -91,6 +95,13 @@ export async function loadQueue(
       .gte("starts_at", new Date(Date.now() - 60 * 60_000).toISOString())
       .lt("starts_at", new Date(Date.now() + 7 * 86_400_000).toISOString())
       .order("starts_at"),
+    // Pain not yet seen by the coach, however old: it stays until she has.
+    supabase
+      .from("pain_reports")
+      .select("id, client_id, exercise_name, level, note, created_at")
+      .in("client_id", ids)
+      .is("seen_at", null)
+      .order("created_at", { ascending: false }),
   ]);
 
   const contact = new Map(
@@ -132,6 +143,20 @@ export async function loadQueue(
       initials: entry.initials,
       phone: contact.get(entry.id)?.phone ?? null,
     };
+
+    for (const report of (painRes.data ?? []).filter((row) => row.client_id === entry.id)) {
+      items.push({
+        ...base,
+        kind: "pain",
+        pain: {
+          id: report.id,
+          exercise: report.exercise_name,
+          level: report.level,
+          note: report.note,
+          at: report.created_at,
+        },
+      });
+    }
 
     for (const call of (callsRes.data ?? []).filter((row) => row.client_id === entry.id)) {
       items.push({

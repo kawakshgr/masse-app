@@ -85,7 +85,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
   who logged it hit every prescribed set; otherwise, or with no logs or no
   target, it stays. The new week is never pushed by this.
-- **Session logging** (both) — offline-first.
+- **Session logging** (both) — offline-first. A client may flag pain on an
+  exercise (30 Sep 2026: mild / sharp / had to stop, optional note,
+  `pain_reports`); it heads À traiter until the coach marks it seen. Health
+  data: accepted only under consent, erased when consent is withdrawn.
 - **Check-ins** — **filed by the client**, from either app, with measurements and
   three photos. The coach's side is read-only (decided 24 Sep 2026): she reads,
   marks as read, and nudges (`check_in_reminders`, plus a prefilled WhatsApp
@@ -136,7 +139,8 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   phase, the plan per day type with numbered meals and supplements — under
   the coach's logo. Fonts shared with the invoice through `lib/pdfFonts.ts`.
 - **GDPR** (29 Sep 2026, see `docs/rgpd/`) — consent to health data at
-  sign-up, withdrawn or given again in Réglages → Mes données; a client's
+  sign-up, withdrawn or given again in Réglages → Mes données (cycle
+  tracking that was on resumes with it, `cycle_tracking_paused`); a client's
   data export (`/reglages/donnees`); erasure by the client
   (`delete_my_account`) or the coach (`erase_my_client`), photos removed from
   storage first (`lib/erase.ts`) because SQL cannot; invoices survive

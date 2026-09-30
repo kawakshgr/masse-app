@@ -76,6 +76,21 @@ export type CoachAvailabilityRow = {
 /** A day she takes no calls, whatever her windows say. */
 export type CoachUnavailableDayRow = { coach_id: string; day: string };
 
+/** How much it hurt: a twinge, a sharp pain, or enough to stop. */
+export type PainLevel = "mild" | "sharp" | "stopped";
+
+/** Pain a client flagged on an exercise mid-session; health data (Art. 9). */
+export type PainReportRow = {
+  id: string;
+  client_id: string;
+  session_exercise_id: string | null;
+  exercise_name: string;
+  level: PainLevel;
+  note: string | null;
+  created_at: string;
+  seen_at: string | null;
+};
+
 /** A call a client booked at sign-up; cancelled, never deleted. */
 export type AppointmentRow = {
   id: string;
@@ -106,6 +121,8 @@ export type ClientRow = {
   /** Daily step target. Null means the coach has not set one. */
   steps_target: number | null;
   cycle_tracking: boolean;
+  /** Tracking was on when consent was withdrawn; it resumes with consent. */
+  cycle_tracking_paused: boolean;
   cycle_mode: CycleMode;
   nutrition_mode: NutritionMode;
   /** Used only when cycle_mode is 'manual'. */
@@ -625,6 +642,7 @@ export type Database = {
       invite_codes: Table<InviteCodeRow, "coach_id" | "code">;
       coach_availability: Table<CoachAvailabilityRow, "coach_id" | "weekday" | "start_min" | "end_min", "id">;
       coach_unavailable_days: Table<CoachUnavailableDayRow, "coach_id" | "day">;
+      pain_reports: Table<PainReportRow, "client_id" | "exercise_name" | "level", "id" | "created_at">;
       appointments: Table<AppointmentRow, "coach_id" | "client_id" | "starts_at" | "minutes", "id" | "created_at">;
       programmes: Table<ProgrammeRow, "coach_id" | "name">;
       programme_weeks: Table<ProgrammeWeekRow, "programme_id" | "week_number">;

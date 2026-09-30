@@ -40,7 +40,12 @@ export default async function SessionPage() {
           <CardTitle>{t("noSession")}</CardTitle>
         </Card>
       ) : (
-        <TrainLog clientId={client.id} exercises={exercises} onServer={todays} />
+        <TrainLog
+          clientId={client.id}
+          exercises={exercises}
+          onServer={todays}
+          canReportPain={client.health_consent_at !== null}
+        />
       )}
 
       <ExportCard initial="programme" />

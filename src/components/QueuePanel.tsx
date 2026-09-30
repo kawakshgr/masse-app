@@ -5,8 +5,10 @@ import { PaneEmpty, PaneHead, SectionTitle, Tile } from "@/components/Pane";
 import { QUEUE_ORDER, type QueueItem, type QueueKind } from "@/lib/queue";
 import { waLink } from "@/lib/whatsapp";
 import { callLabel } from "@/lib/calls";
+import { markPainSeen } from "@/app/(coach)/clients/actions";
 
 const ICON: Record<QueueKind, string> = {
+  pain: "pain",
   call: "video",
   late: "checkIns",
   checkin: "note",
@@ -46,6 +48,7 @@ function openHref(item: QueueItem): string {
 export async function QueuePanel({ items, callLink }: { items: QueueItem[]; callLink: string | null }) {
   const t = await getTranslations("queue");
   const tCalls = await getTranslations("calls");
+  const tPain = await getTranslations("pain");
 
   if (items.length === 0) {
     return <PaneEmpty icon="checkIns" title={t("empty")} hint={t("emptyHint")} />;
@@ -78,7 +81,10 @@ export async function QueuePanel({ items, callLink }: { items: QueueItem[]; call
                   period: item.period ?? "",
                 };
                 const when = item.call ? callLabel(item.call.startsAt) : "";
-                const wa = item.call
+                const painLevel = item.pain ? tPain(`level.${item.pain.level}`) : "";
+                const wa = item.pain
+                  ? waLink(item.phone, tPain("wa", { first: item.firstName, exercise: item.pain.exercise }))
+                  : item.call
                   ? waLink(
                       item.phone,
                       tCalls("waConfirm", {
@@ -104,12 +110,14 @@ export async function QueuePanel({ items, callLink }: { items: QueueItem[]; call
                       <span className="block truncate text-[13.5px] font-semibold">{item.name}</span>
                       <span
                         className={`block truncate text-[11.5px] ${
-                          item.kind === "late" || item.kind === "unpaid" ? "text-[var(--a3)]" : "text-[var(--ink2)]"
+                          item.kind === "late" || item.kind === "unpaid" || item.kind === "pain" ? "text-[var(--a3)]" : "text-[var(--ink2)]"
                         }`}
                       >
-                        {item.call
-                          ? `${when} · ${tCalls("length", { minutes: item.call.minutes })}`
-                          : t(`line.${item.kind}`, values)}
+                        {item.pain
+                          ? [item.pain.exercise, painLevel, item.pain.note].filter(Boolean).join(" · ")
+                          : item.call
+                            ? `${when} · ${tCalls("length", { minutes: item.call.minutes })}`
+                            : t(`line.${item.kind}`, values)}
                       </span>
                     </span>
                     {wa && (
@@ -134,12 +142,24 @@ export async function QueuePanel({ items, callLink }: { items: QueueItem[]; call
                         <Icon name="calendar" size={16} />
                       </a>
                     )}
+                    {item.pain ? (
+                      <form action={markPainSeen}>
+                        <input type="hidden" name="id" value={item.pain.id} />
+                        <button
+                          type="submit"
+                          className="glass flex h-9 shrink-0 items-center rounded-rp px-3.5 text-[11px] font-bold uppercase tracking-[.08em] text-[var(--ink)]"
+                        >
+                          {tPain("seen")}
+                        </button>
+                      </form>
+                    ) : (
                     <Link
                       href={openHref(item)}
                       className="glass flex h-9 shrink-0 items-center rounded-rp px-3.5 text-[11px] font-bold uppercase tracking-[.08em] text-[var(--ink)]"
                     >
                       {action}
                     </Link>
+                    )}
                   </li>
                 );
               })}

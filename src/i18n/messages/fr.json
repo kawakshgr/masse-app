@@ -415,7 +415,21 @@
   "pain": {
     "None": "Aucune",
     "Minor": "Légère",
-    "Need to talk": "Il faut en parler"
+    "Need to talk": "Il faut en parler",
+    "report": "Signaler une douleur",
+    "question": "Ça fait mal comment ?",
+    "level": {
+      "mild": "Légère gêne",
+      "sharp": "Douleur vive",
+      "stopped": "J’ai dû arrêter"
+    },
+    "notePlaceholder": "Où, et quand ? (facultatif)",
+    "send": "Prévenir mon coach",
+    "cancel": "Annuler",
+    "sent": "Ton coach est prévenu. N’insiste pas sur cet exercice en attendant sa réponse.",
+    "failed": "L’envoi a échoué. Réessaie, ou écris à ton coach sur WhatsApp.",
+    "wa": "Coucou {first}, j’ai vu que tu as eu mal sur le {exercise}. Tu peux m’en dire plus : où exactement, et depuis quand ?",
+    "seen": "Vu"
   },
   "adherence": {
     "All of it": "Tout fait",
@@ -1464,7 +1478,8 @@
       "nextWeek": "Semaine prochaine à envoyer",
       "noProgramme": "Aucun programme envoyé",
       "sleep": "Sommeil sous l’objectif",
-      "call": "Visios à venir"
+      "call": "Visios à venir",
+      "pain": "Douleurs signalées"
     },
     "line": {
       "late": "Son bilan de la semaine n’est pas rempli",
@@ -1475,7 +1490,8 @@
       "nextWeek": "Rien de prévu à partir de lundi",
       "noProgramme": "Pas encore de première semaine",
       "sleep": "Sa moyenne est sous son objectif",
-      "call": "{when}"
+      "call": "{when}",
+      "pain": ""
     },
     "wa": {
       "late": "Coucou {first} ! Petit rappel : ton bilan de la semaine t’attend dans Masse.",

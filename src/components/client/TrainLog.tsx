@@ -14,7 +14,9 @@ import {
   type QueuedSet,
 } from "@/lib/setQueue";
 import type { WeekExercise } from "@/lib/clientData";
-import { Card, Choice, Cta, RoundButton, shown } from "./ui";
+import { Card, Choice, Cta, RoundButton, Secondary, shown } from "./ui";
+import { reportPain } from "@/app/(client)/actions";
+import type { PainLevel } from "@/lib/supabase/types";
 
 type LoggedSet = Pick<
   QueuedSet,
@@ -30,9 +32,12 @@ export function TrainLog({
   clientId,
   exercises,
   onServer,
+  canReportPain,
 }: {
   clientId: string;
   exercises: WeekExercise[];
+  /** Pain is health data: offered only while consent to it stands. */
+  canReportPain: boolean;
   /** What the server already holds for today: both halves are shown. */
   onServer: LoggedSet[];
 }) {
@@ -134,6 +139,7 @@ export function TrainLog({
             onToggle={() => setOpen(open === exercise.id ? null : exercise.id)}
             onLog={(reps, weight, rpe) => log(exercise, reps, weight, rpe)}
             onUndo={() => undo(exercise.id)}
+            canReportPain={canReportPain}
           />
         ))}
       </div>
@@ -148,6 +154,7 @@ function ExerciseCard({
   onToggle,
   onLog,
   onUndo,
+  canReportPain,
 }: {
   exercise: WeekExercise;
   logged: LoggedSet[];
@@ -155,6 +162,7 @@ function ExerciseCard({
   onToggle: () => void;
   onLog: (reps: number | null, weight: number | null, rpe: number | null) => Promise<void>;
   onUndo: () => Promise<void>;
+  canReportPain: boolean;
 }) {
   const t = useTranslations("log");
   const tToday = useTranslations("today");
@@ -270,9 +278,77 @@ function ExerciseCard({
               </RoundButton>
             )}
           </div>
+
+          {canReportPain && <PainReport exercise={exercise} />}
         </div>
       )}
     </Card>
+  );
+}
+
+const PAIN_LEVELS: PainLevel[] = ["mild", "sharp", "stopped"];
+
+/** "It hurts": the coach hears it at once, on the exercise it happened on. */
+function PainReport({ exercise }: { exercise: WeekExercise }) {
+  const t = useTranslations("pain");
+  const [open, setOpen] = useState(false);
+  const [level, setLevel] = useState<PainLevel | null>(null);
+  const [note, setNote] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
+
+  if (state === "sent") {
+    return <p className="text-[13px] leading-[1.45] text-[var(--a1)]">{t("sent")}</p>;
+  }
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="text-[13px] font-semibold text-[var(--a3)] underline-offset-4 hover:underline"
+      >
+        {t("report")}
+      </button>
+    );
+  }
+  return (
+    <div className="space-y-2.5 rounded-r2 border border-[var(--a3)] p-3">
+      <p className="text-[13px] font-semibold">{t("question")}</p>
+      <div className="flex gap-1.5">
+        {PAIN_LEVELS.map((value) => (
+          <Choice key={value} selected={level === value} onClick={() => setLevel(value)}>
+            {t(`level.${value}`)}
+          </Choice>
+        ))}
+      </div>
+      <textarea
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        maxLength={500}
+        placeholder={t("notePlaceholder")}
+        aria-label={t("notePlaceholder")}
+        className="min-h-[64px] w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 py-2 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+      />
+      <div className="flex gap-2">
+        <Cta
+          disabled={!level || state === "sending"}
+          onClick={async () => {
+            if (!level) return;
+            setState("sending");
+            const { ok } = await reportPain({
+              sessionExerciseId: exercise.id,
+              exerciseName: exercise.name,
+              level,
+              note,
+            });
+            setState(ok ? "sent" : "failed");
+          }}
+        >
+          {t("send")}
+        </Cta>
+        <Secondary onClick={() => setOpen(false)}>{t("cancel")}</Secondary>
+      </div>
+      {state === "failed" && <p className="text-[12.5px] text-[var(--a3)]">{t("failed")}</p>}
+    </div>
   );
 }
 

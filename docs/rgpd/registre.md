@@ -15,7 +15,7 @@ Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 | Finalité | Programmes d'entraînement, bilans, nutrition, suivi de progression |
 | Personnes concernées | Clients majeurs des coachs |
 | Données | Identité et contact ; questionnaire d'arrivée ; rendez-vous visio réservés (date, durée, annulation) ; séances, séries, charges ; poids, mensurations, photos de bilan ; nutrition et compléments ; pas |
-| Données sensibles (art. 9) | Blessures et contre-indications ; dates de cycle (jamais de symptômes) ; sommeil |
+| Données sensibles (art. 9) | Blessures et contre-indications ; douleurs signalées pendant une séance ; dates de cycle (jamais de symptômes) ; sommeil |
 | Base légale | Contrat (6.1.b) ; consentement explicite pour les données de santé (9.2.a) |
 | Destinataires | Le coach ; sous-traitants techniques (voir `sous-traitants.md`) |
 | Transferts hors UE | Vercel Inc. (USA) : DPF + clauses contractuelles types ; exécution en Europe |

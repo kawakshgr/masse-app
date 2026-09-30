@@ -415,7 +415,21 @@
   "pain": {
     "None": "None",
     "Minor": "Minor",
-    "Need to talk": "Need to talk"
+    "Need to talk": "Need to talk",
+    "report": "Report pain",
+    "question": "How does it hurt?",
+    "level": {
+      "mild": "Slight discomfort",
+      "sharp": "Sharp pain",
+      "stopped": "Had to stop"
+    },
+    "notePlaceholder": "Where, and when? (optional)",
+    "send": "Tell my coach",
+    "cancel": "Cancel",
+    "sent": "Your coach knows. Go easy on this exercise until you hear back.",
+    "failed": "Sending failed. Try again, or message your coach on WhatsApp.",
+    "wa": "Hi {first}, I saw you felt pain on the {exercise}. Can you tell me more: where exactly, and since when?",
+    "seen": "Seen"
   },
   "adherence": {
     "All of it": "All of it",
@@ -1464,7 +1478,8 @@
       "nextWeek": "Next week to send",
       "noProgramme": "No programme sent",
       "sleep": "Sleep under target",
-      "call": "Upcoming video calls"
+      "call": "Upcoming video calls",
+      "pain": "Pain reported"
     },
     "line": {
       "late": "Their check-in for the week isn’t filled in",
@@ -1475,7 +1490,8 @@
       "nextWeek": "Nothing planned from Monday",
       "noProgramme": "No first week yet",
       "sleep": "Their average is under their target",
-      "call": "{when}"
+      "call": "{when}",
+      "pain": ""
     },
     "wa": {
       "late": "Hi {first}! A quick reminder: your check-in for the week is waiting in Masse.",
