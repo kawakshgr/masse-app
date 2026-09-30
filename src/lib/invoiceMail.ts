@@ -18,6 +18,22 @@ function sender(raw: string): { name?: string; email: string } {
   return match ? { name: match[1] || undefined, email: match[2] } : { email: raw.trim() };
 }
 
+/** Why the provider said no, as far as its answer tells. */
+export const MAIL_FAILURES = ["ip", "cle", "expediteur", "compte", "autre"] as const;
+export type MailFailure = (typeof MAIL_FAILURES)[number];
+
+/**
+ * Brevo's refusal, sorted into the few causes someone can act on. Its own
+ * words stay in the server log; the screen names the cause.
+ */
+export function mailFailure(reason: string): MailFailure {
+  if (/unrecogni[sz]ed IP|authori[sz]ed_ips/i.test(reason)) return "ip";
+  if (/not yet activated|permission_denied/i.test(reason)) return "compte";
+  if (/sender/i.test(reason)) return "expediteur";
+  if (/key not found|api[- ]?key|unauthorized|not-configured/i.test(reason)) return "cle";
+  return "autre";
+}
+
 export async function sendInvoiceMail({
   to,
   replyTo,

@@ -7,7 +7,7 @@ import { getTranslations } from "next-intl/server";
 import { euros, statusFor, type MonthState } from "@/lib/billing";
 import { invoiceFileName, invoiceLabels, loadInvoice } from "@/lib/invoice";
 import { renderInvoicePdf } from "@/lib/invoicePdf";
-import { sendInvoiceMail } from "@/lib/invoiceMail";
+import { mailFailure, sendInvoiceMail } from "@/lib/invoiceMail";
 import type { BillingType } from "@/lib/supabase/types";
 
 /** Euros in, integer cents stored. Money never goes through a float. */
@@ -256,7 +256,9 @@ export async function emailInvoice(formData: FormData) {
   });
 
   if (!sent.ok) {
-    redirect(`/facturation?ligne=${clientId}&probleme=envoi`);
+    // The provider's words for whoever reads the log; the cause for the screen.
+    console.error("[invoice mail]", sent.reason);
+    redirect(`/facturation?ligne=${clientId}&probleme=envoi&motif=${mailFailure(sent.reason)}`);
   }
 
   const supabase = await createClient();

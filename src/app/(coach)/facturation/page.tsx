@@ -1,4 +1,5 @@
 import { SubNav } from "@/components/SubNav";
+import { MAIL_FAILURES } from "@/lib/invoiceMail";
 import { Icon } from "@/components/Icon";
 import { getLocale, getTranslations } from "next-intl/server";
 import { intl } from "@/lib/locale";
@@ -37,7 +38,7 @@ function initialsOf(name: string): string {
 export default async function BillingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ filtre?: string; ligne?: string; probleme?: string }>;
+  searchParams: Promise<{ filtre?: string; ligne?: string; probleme?: string; motif?: string; fait?: string }>;
 }) {
   const t = await getTranslations("billing");
   const locale = intl(await getLocale());
@@ -288,10 +289,15 @@ export default async function BillingPage({
           <BillingInspector
             companyReady={companyReady}
             problem={
-              params.probleme === "entreprise" || params.probleme === "echec"
+              params.probleme === "entreprise" ||
+              params.probleme === "echec" ||
+              params.probleme === "envoi" ||
+              params.probleme === "adresse"
                 ? params.probleme
                 : null
             }
+            sendFailure={MAIL_FAILURES.find((cause) => cause === params.motif) ?? null}
+            sent={params.fait === "envoye"}
             client={
               {
                 ...selected,

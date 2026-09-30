@@ -1123,7 +1123,13 @@
     "doneArchive": "Facture archivée.",
     "doneSent": "Facture envoyée.",
     "noAddress": "Ce client n’a pas d’adresse e-mail dans sa fiche.",
-    "sendFailed": "L’envoi a échoué. Le PDF reste téléchargeable."
+    "sendFailed": "L’envoi a échoué. Le PDF reste téléchargeable.",
+    "sendWhy": {
+      "ip": "Motif : Brevo bloque les adresses qu’il ne connaît pas. À régler par l’éditeur de Masse, dans Brevo (Sécurité → IP autorisées).",
+      "cle": "Motif : Brevo refuse la clé de Masse. À régler par l’éditeur de Masse.",
+      "expediteur": "Motif : l’adresse d’expédition n’est pas validée chez Brevo. À régler par l’éditeur de Masse.",
+      "compte": "Motif : l’envoi n’est pas encore activé sur le compte Brevo. À régler par l’éditeur de Masse."
+    }
   },
   "hevy": {
     "import": "Importer depuis Hevy",

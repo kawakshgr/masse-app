@@ -4,6 +4,7 @@ import { SectionTitle } from "@/components/Pane";
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import type { MailFailure } from "@/lib/invoiceMail";
 import { saveArrangement, setMonthStatus, issueInvoice } from "@/app/(coach)/facturation/actions";
 import { dayLabel, euros, type MonthState } from "@/lib/billing";
 import type { BillingType } from "@/lib/supabase/types";
@@ -71,13 +72,19 @@ export function BillingInspector({
   periodLabel,
   companyReady,
   problem,
+  sendFailure = null,
+  sent = false,
 }: {
   client: BillingClient;
   period: string;
   periodLabel: string;
   /** Her company is on file, so an invoice can carry its mandatory mentions. */
   companyReady: boolean;
-  problem?: "entreprise" | "echec" | null;
+  problem?: "entreprise" | "echec" | "envoi" | "adresse" | null;
+  /** Why the e-mail provider refused, when it did. */
+  sendFailure?: MailFailure | null;
+  /** The invoice has just gone out by e-mail. */
+  sent?: boolean;
 }) {
   const t = useTranslations("billing");
   const tInvoice = useTranslations("invoice");
@@ -427,6 +434,23 @@ export function BillingInspector({
         {problem === "echec" && (
           <p className="text-[12px] leading-[1.45] text-[var(--a3)]">
             {tInvoice("failed")}
+          </p>
+        )}
+        {/* An e-mail that did not leave says so, and why when that is known. */}
+        {problem === "envoi" && (
+          <p role="alert" className="text-[12px] leading-[1.45] text-[var(--a3)]">
+            {tInvoice("sendFailed")}
+            {sendFailure && sendFailure !== "autre" && ` ${tInvoice(`sendWhy.${sendFailure}`)}`}
+          </p>
+        )}
+        {problem === "adresse" && (
+          <p role="alert" className="text-[12px] leading-[1.45] text-[var(--a3)]">
+            {tInvoice("noAddress")}
+          </p>
+        )}
+        {sent && (
+          <p role="status" className="text-[12px] leading-[1.45] text-[var(--accent-soft)]">
+            {tInvoice("doneSent")}
           </p>
         )}
       </section>
