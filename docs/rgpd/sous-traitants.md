@@ -2,7 +2,7 @@
 
 | Prestataire | Rôle | Localisation des données | Contrat à accepter |
 |---|---|---|---|
-| Supabase Inc. | Base de données, stockage des photos et PDF, authentification | UE — Francfort (projet `qxlhccvkavvabcekpcrw`) | DPA Supabase : Dashboard → Organization → Legal Documents |
+| Supabase Inc. | Base de données, stockage des photos et PDF, authentification | UE — Francfort (projet `qxlhccvkavvabcekpcrw`) | DPA intégré aux conditions d'utilisation de Supabase, s'applique d'office — rien à signer (vérifié le 30 sept. 2026) |
 | Vercel Inc. | Hébergement de l'application web, tâches planifiées | Fonctions en Europe (`fra1`) ; société américaine | DPA Vercel : vercel.com/legal/dpa (intégré aux conditions ; à confirmer dans Team Settings) |
 | Brevo (Sendinblue SAS) | E-mails de connexion (SMTP) et factures (API) | France / UE | DPA Brevo : compte → Paramètres → Sécurité / Conformité |
 
