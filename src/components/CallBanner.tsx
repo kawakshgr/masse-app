@@ -38,11 +38,12 @@ export async function CallBanner({
       <span className="glass2 flex size-11 shrink-0 items-center justify-center rounded-r2 text-[var(--accent)]">
         <Icon name="video" size={24} />
       </span>
-      <span className="min-w-0 flex-1">
+      {/* Wide enough to read: the buttons wrap under it on a narrow pane. */}
+      <span className="min-w-[220px] flex-1">
         <span className="block text-[11px] font-bold uppercase tracking-[.14em] text-[var(--accent)]">
           {t("kicker", { length })}
         </span>
-        <span className="block truncate text-[14px] font-semibold first-letter:uppercase">{when}</span>
+        <span className="block text-[14px] font-semibold first-letter:uppercase">{when}</span>
         {!callLink && <span className="block text-[11.5px] text-[var(--ink3)]">{t("noLink")}</span>}
       </span>
       {confirm && (

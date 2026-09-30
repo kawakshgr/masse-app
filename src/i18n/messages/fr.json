@@ -1622,7 +1622,8 @@
     "startBlock": "Point de départ",
     "frameBlock": "Cadre",
     "profileBlock": "Profil et contact",
-    "noInjury": "Aucune déclarée"
+    "noInjury": "Aucune déclarée",
+    "age": "Âge"
   },
   "pending": {
     "kicker": "Demande envoyée",

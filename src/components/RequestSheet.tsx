@@ -73,7 +73,7 @@ export async function RequestSheet({ client, callOver }: { client: ClientRow; ca
       icon: "account",
       title: t("profileBlock"),
       rows: [
-        [tRecord("birth"), age !== null ? `${age} ${tRecord("years")}` : null],
+        [t("age"), age !== null ? `${age} ${tRecord("years")}` : null],
         [tRecord("height"), client.height_cm ? `${Number(client.height_cm)} cm` : null],
         [tRecord("startWeight"), client.start_weight_kg ? `${Number(client.start_weight_kg)} kg` : null],
         [tRecord("email"), client.email],
@@ -90,7 +90,8 @@ export async function RequestSheet({ client, callOver }: { client: ClientRow; ca
           <span className="glass2 flex size-11 shrink-0 items-center justify-center rounded-r2 text-[var(--accent)]">
             <Icon name="account" size={24} />
           </span>
-          <span className="min-w-0 flex-1">
+          {/* Wide enough to read: the buttons wrap under it on a narrow pane. */}
+          <span className="min-w-[220px] flex-1">
             <span className="block text-[11px] font-bold uppercase tracking-[.14em] text-[var(--accent)]">
               {t("kicker", { date: day(client.created_at) })}
             </span>
