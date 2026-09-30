@@ -22,7 +22,6 @@ const WORDS = {
     terms: "Conditions d’utilisation",
     back: "Retour à Masse",
     other: "English version",
-    toComplete: "À compléter",
     binding: null as string | null,
   },
   en: {
@@ -32,7 +31,6 @@ const WORDS = {
     terms: "Terms of use",
     back: "Back to Masse",
     other: "Version française",
-    toComplete: "To complete",
     binding:
       "This English version is provided for convenience. If it differs from the French version, the French version prevails.",
   },
@@ -95,14 +93,13 @@ export function LegalPage({
   );
 }
 
-/** Where the publisher's identity goes once it exists. Shown, never hidden:
- *  a legal page with a gap should say so, not paper over it. */
-export function ToComplete({ children, lang = "fr" }: { children: React.ReactNode; lang?: LegalLang }) {
+/** Where a reader writes to the publisher. One address, in one place. */
+export const CONTACT_EMAIL = "contact@masseapp.online";
+
+export function ContactEmail() {
   return (
-    <span className="rounded-r1 bg-[color-mix(in_oklab,var(--a3)_18%,transparent)] px-1.5 py-0.5 font-semibold text-[var(--a3)]">
-      [{WORDS[lang].toComplete}
-      {lang === "fr" ? " : " : ": "}
-      {children}]
-    </span>
+    <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold text-[var(--accent)]">
+      {CONTACT_EMAIL}
+    </a>
   );
 }

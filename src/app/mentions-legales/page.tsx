@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LegalPage, ToComplete, legalLang } from "@/components/legal/LegalPage";
+import { ContactEmail, LegalPage, legalLang } from "@/components/legal/LegalPage";
 
 type Props = { searchParams: Promise<{ lang?: string }> };
 
@@ -20,7 +20,7 @@ export default async function LegalNoticePage({ searchParams }: Props) {
             Masse is published free of charge, on a non-professional basis, by a private individual:{" "}
             Kevin Cordeiro.
             <br />
-            Contact: <ToComplete lang="en">contact e-mail</ToComplete>
+            Contact: <ContactEmail />
           </p>
           <p className="mt-2">Publication director: Kevin Cordeiro</p>
           <p className="mt-2 text-[13px] text-[var(--ink3)]">
@@ -56,14 +56,14 @@ export default async function LegalNoticePage({ searchParams }: Props) {
   }
 
   return (
-    <LegalPage lang="fr" path="/mentions-legales" kicker="Masse" title="Mentions légales" updated="29 septembre 2026">
+    <LegalPage lang="fr" path="/mentions-legales" kicker="Masse" title="Mentions légales" updated="30 septembre 2026">
       <section>
         <h2>Éditeur</h2>
         <p>
           Masse est édité à titre non professionnel, gratuitement, par un particulier :{" "}
           Kevin Cordeiro.
           <br />
-          Contact : <ToComplete>e-mail de contact</ToComplete>
+          Contact : <ContactEmail />
         </p>
         <p className="mt-2">
           Directeur de la publication : Kevin Cordeiro

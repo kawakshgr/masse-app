@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LegalPage, ToComplete, legalLang } from "@/components/legal/LegalPage";
+import { ContactEmail, LegalPage, legalLang } from "@/components/legal/LegalPage";
 
 type Props = { searchParams: Promise<{ lang?: string }> };
 
@@ -84,7 +84,7 @@ export default async function PrivacyPage({ searchParams }: Props) {
             or ask to restrict a processing, and withdraw your consent for your health data. Almost all of
             it can be done on your own, in the app: <strong>Settings → My data</strong> (download, withdraw
             consent, delete the account) and <strong>Settings → My details</strong>. For anything else,
-            write to your coach or to <ToComplete lang="en">contact e-mail</ToComplete>.
+            write to your coach or to <ContactEmail />.
           </p>
           <p className="mt-2">
             If you believe your rights are not respected, you can lodge a complaint with the French data
@@ -189,7 +189,7 @@ export default async function PrivacyPage({ searchParams }: Props) {
           (portabilité), t’opposer à un traitement ou en demander la limitation, et retirer ton accord pour
           tes données de santé. Presque tout se fait seul, dans l’app : <strong>Réglages → Mes données</strong>{" "}
           (télécharger, retirer l’accord, supprimer le compte) et <strong>Réglages → Mes infos</strong>. Pour le
-          reste, écris à ton coach ou à <ToComplete>e-mail de contact</ToComplete>.
+          reste, écris à ton coach ou à <ContactEmail />.
         </p>
         <p className="mt-2">
           Si tu estimes que tes droits ne sont pas respectés, tu peux saisir la CNIL (cnil.fr).

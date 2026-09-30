@@ -12,7 +12,7 @@ export function mailerConfigured(): boolean {
 
 export type MailResult = { ok: true } | { ok: false; reason: string };
 
-/** "Masse <factures@masseapp.fr>" → Brevo's { name, email }. */
+/** "Masse <factures@masseapp.online>" → Brevo's { name, email }. */
 function sender(raw: string): { name?: string; email: string } {
   const match = raw.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
   return match ? { name: match[1] || undefined, email: match[2] } : { email: raw.trim() };

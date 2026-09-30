@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LegalPage, ToComplete, legalLang } from "@/components/legal/LegalPage";
+import { ContactEmail, LegalPage, legalLang } from "@/components/legal/LegalPage";
 
 type Props = { searchParams: Promise<{ lang?: string }> };
 
@@ -63,7 +63,7 @@ export default async function TermsPage({ searchParams }: Props) {
         <section>
           <h2>7. Governing law</h2>
           <p>
-            These terms are governed by French law. Contact: <ToComplete lang="en">contact e-mail</ToComplete>.
+            These terms are governed by French law. Contact: <ContactEmail />.
           </p>
         </section>
       </LegalPage>
@@ -71,7 +71,7 @@ export default async function TermsPage({ searchParams }: Props) {
   }
 
   return (
-    <LegalPage lang="fr" path="/conditions" kicker="Masse" title="Conditions d’utilisation" updated="29 septembre 2026">
+    <LegalPage lang="fr" path="/conditions" kicker="Masse" title="Conditions d’utilisation" updated="30 septembre 2026">
       <section>
         <h2>1. Objet</h2>
         <p>
@@ -123,7 +123,7 @@ export default async function TermsPage({ searchParams }: Props) {
       <section>
         <h2>7. Droit applicable</h2>
         <p>
-          Ces conditions sont régies par le droit français. Contact : <ToComplete>e-mail de contact</ToComplete>.
+          Ces conditions sont régies par le droit français. Contact : <ContactEmail />.
         </p>
       </section>
     </LegalPage>

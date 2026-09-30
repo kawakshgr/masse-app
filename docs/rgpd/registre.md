@@ -1,7 +1,7 @@
 # Registre des activités de traitement (article 30 RGPD)
 
-Éditeur : Kevin Cordeiro, particulier, à titre non professionnel et gratuit — contact : [À compléter : e-mail]
-Mis à jour le 29 septembre 2026.
+Éditeur : Kevin Cordeiro, particulier, à titre non professionnel et gratuit — contact : contact@masseapp.online
+Mis à jour le 30 septembre 2026.
 
 Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 (article 30.2), et comme **responsable** pour les comptes des coachs (30.1).
