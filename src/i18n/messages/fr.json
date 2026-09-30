@@ -244,7 +244,8 @@
     "archive": "Archiver",
     "unarchive": "Réactiver",
     "archiveHint": "Le suivi est terminé : la fiche quitte le roster. Photos effacées après 3 mois, tout le reste après 12.",
-    "archived": "Archivé le {date} — photos effacées le {photos}, fiche effacée le {all}."
+    "archived": "Archivé le {date} — photos effacées le {photos}, fiche effacée le {all}.",
+    "actions": "Actions"
   },
   "onboarding": {
     "step": "Étape {n} sur 9",

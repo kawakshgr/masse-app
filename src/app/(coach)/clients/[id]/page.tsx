@@ -279,7 +279,9 @@ function OverviewTab({
 
   return (
     <>
-      <div className="flex flex-wrap gap-3">
+      {/* Two by two until there is room for four abreast, so a label is
+          never cut to "ADHÉR…". */}
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard
           label={t("adherence")}
           kind="adherence"

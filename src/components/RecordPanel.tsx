@@ -1,6 +1,7 @@
 "use client";
 
-import { SECTION_TITLE, SectionTitle } from "@/components/Pane";
+import { MENU_DANGER, MENU_ITEM, SECTION_TITLE, SectionTitle } from "@/components/Pane";
+import { ActionMenu } from "@/components/ActionMenu";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { ClientRow } from "@/lib/supabase/types";
@@ -302,33 +303,32 @@ export function RecordPanel({
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3">
         <SectionTitle icon="note">{t("title")}</SectionTitle>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="glass2 h-8 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
+            className="glass2 h-10 rounded-rp px-4 text-[11.5px] font-bold uppercase tracking-[.1em] text-[var(--ink)]"
           >
             {t("edit")}
           </button>
-          {/* The coaching ended: out of the roster, retention clock running. */}
-          <form action={setClientArchived}>
-            <input type="hidden" name="client_id" value={client.id} />
-            <input type="hidden" name="archive" value={client.status === "archived" ? "0" : "1"} />
-            <button
-              type="submit"
-              title={client.status === "archived" ? undefined : t("archiveHint")}
-              className="glass2 h-8 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink2)]"
-            >
-              {client.status === "archived" ? t("unarchive") : t("archive")}
+          {/* Secondary actions, in the menu like every other page's. */}
+          <ActionMenu label={t("actions")}>
+            {/* The coaching ended: out of the roster, retention clock running. */}
+            <form action={setClientArchived}>
+              <input type="hidden" name="client_id" value={client.id} />
+              <input type="hidden" name="archive" value={client.status === "archived" ? "0" : "1"} />
+              <button
+                type="submit"
+                title={client.status === "archived" ? undefined : t("archiveHint")}
+                className={MENU_ITEM}
+              >
+                {client.status === "archived" ? t("unarchive") : t("archive")}
+              </button>
+            </form>
+            <button type="button" onClick={() => setConfirming(true)} className={MENU_DANGER}>
+              {tRemove("action")}
             </button>
-          </form>
-          <button
-            type="button"
-            onClick={() => setConfirming(true)}
-            className="h-8 rounded-r2 border border-[var(--edge)] px-3 text-[12px] text-[var(--ink3)] hover:border-[var(--a3)] hover:text-[var(--a3)]"
-          >
-            {tRemove("action")}
-          </button>
+          </ActionMenu>
         </div>
       </div>
 

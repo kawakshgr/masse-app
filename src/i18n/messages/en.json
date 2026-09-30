@@ -244,7 +244,8 @@
     "archive": "Archive",
     "unarchive": "Restore",
     "archiveHint": "Coaching has ended: the record leaves the roster. Photos erased after 3 months, everything else after 12.",
-    "archived": "Archived on {date} — photos erased on {photos}, record erased on {all}."
+    "archived": "Archived on {date} — photos erased on {photos}, record erased on {all}.",
+    "actions": "Actions"
   },
   "onboarding": {
     "step": "Step {n} of 9",
