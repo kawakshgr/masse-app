@@ -166,7 +166,7 @@
     "expires": "Expires {date}",
     "lede": "We generate a code. Send it on WhatsApp; they sign themselves up and their record appears here.",
     "offerCall": "Offer a video call",
-    "offerCallHint": "Sign-up asks them for 2 or 3 slots. Without this, the question is not asked.",
+    "offerCallHint": "Sign-up offers your free slots; they book one. Without this, the question is not asked.",
     "callLength": "Call length",
     "callMinutes": "{minutes, plural, =60 {1 h} other {# min}}",
     "askCycle": "Offer cycle tracking",

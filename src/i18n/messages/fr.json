@@ -166,7 +166,7 @@
     "expires": "Expire le {date}",
     "lede": "On génère un code. Tu le lui envoies par WhatsApp ; l’inscription se fait seule et la fiche apparaît ici.",
     "offerCall": "Proposer une visio",
-    "offerCallHint": "L’inscription lui demande 2 ou 3 créneaux. Sans ça, la question n’est pas posée.",
+    "offerCallHint": "L’inscription lui propose tes créneaux libres ; il en réserve un. Sans ça, la question n’est pas posée.",
     "callLength": "Durée de la visio",
     "callMinutes": "{minutes, plural, =60 {1 h} other {# min}}",
     "askCycle": "Lui proposer le suivi de cycle",
