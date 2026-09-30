@@ -171,7 +171,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   retention — photos after 3 months, everything after 12 — run nightly by
   `/api/retention` (Vercel Cron, needs `SUPABASE_SERVICE_ROLE_KEY` and
   `CRON_SECRET`). Adults only (`claim_invite`). Functions run in `fra1`.
-  Public pages: `/confidentialite`, `/mentions-legales`, `/conditions`.
+  Public pages: `/confidentialite`, `/mentions-legales`, `/conditions` — in
+  French and in English (30 Sep 2026: `?lang=`, else the app's language);
+  the French version binds. Change one language, change the other.
 
 ## Deliberately not in v1
 

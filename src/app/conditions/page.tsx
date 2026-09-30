@@ -1,12 +1,77 @@
 import type { Metadata } from "next";
-import { LegalPage, ToComplete } from "@/components/legal/LegalPage";
+import { LegalPage, ToComplete, legalLang } from "@/components/legal/LegalPage";
 
-export const metadata: Metadata = { title: "Conditions d’utilisation — Masse" };
+type Props = { searchParams: Promise<{ lang?: string }> };
 
-/** Draft, 29 Sep 2026 — to be reviewed by a lawyer before clients join. */
-export default function TermsPage() {
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  return { title: (await legalLang(searchParams)) === "en" ? "Terms of use — Masse" : "Conditions d’utilisation — Masse" };
+}
+
+/** Draft, 29 Sep 2026 — to be reviewed by a lawyer before clients join. English added 30 Sep 2026. */
+export default async function TermsPage({ searchParams }: Props) {
+  const lang = await legalLang(searchParams);
+
+  if (lang === "en") {
+    return (
+      <LegalPage lang="en" path="/conditions" kicker="Masse" title="Terms of use" updated="30 September 2026">
+        <section>
+          <h2>1. Purpose</h2>
+          <p>
+            Masse is software that lets a coach follow their clients: training programmes, check-ins,
+            nutrition, invoicing. These terms govern its use by coaches and by their clients.
+          </p>
+        </section>
+        <section>
+          <h2>2. Access</h2>
+          <p>
+            A client joins Masse at their coach’s invitation, with a single-use code. Access is reserved for
+            people aged <strong>18 and over</strong>. You sign in with a link or a code sent by e-mail: keep
+            access to your mailbox to yourself.
+          </p>
+        </section>
+        <section>
+          <h2>3. Coaching is not medical advice</h2>
+          <p>
+            The programmes, meal plans and advice are your coach’s, under their responsibility. Masse is
+            neither a health professional nor a medical device. If you are injured, in pain or unsure about
+            your health, see a doctor before training.
+          </p>
+        </section>
+        <section>
+          <h2>4. Your content</h2>
+          <p>
+            Your photos, measurements and entries remain yours. You allow your coach and Masse to keep and
+            display them for the sole purpose of your coaching, as described in the{" "}
+            <a href="/confidentialite?lang=en" className="text-[var(--accent)] underline">privacy policy</a>.
+          </p>
+        </section>
+        <section>
+          <h2>5. Availability</h2>
+          <p>
+            Masse is provided as is; the publisher does their best to keep it available and secure, without
+            being able to guarantee uninterrupted service. Sets you log offline stay on your phone until the
+            connection returns.
+          </p>
+        </section>
+        <section>
+          <h2>6. End of coaching and deletion</h2>
+          <p>
+            You can delete your account at any time from Settings → My data. Your coach can archive or
+            remove your file. Retention periods are described in the privacy policy.
+          </p>
+        </section>
+        <section>
+          <h2>7. Governing law</h2>
+          <p>
+            These terms are governed by French law. Contact: <ToComplete lang="en">contact e-mail</ToComplete>.
+          </p>
+        </section>
+      </LegalPage>
+    );
+  }
+
   return (
-    <LegalPage kicker="Masse" title="Conditions d’utilisation" updated="29 septembre 2026">
+    <LegalPage lang="fr" path="/conditions" kicker="Masse" title="Conditions d’utilisation" updated="29 septembre 2026">
       <section>
         <h2>1. Objet</h2>
         <p>
