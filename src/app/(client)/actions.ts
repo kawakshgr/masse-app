@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isLocale, LOCALE_COOKIE } from "@/i18n/config";
+import { clientSession } from "@/lib/clientData";
+import { plannedDays } from "@/lib/dayMoves";
 import type {
   CheckinAdherence,
   CheckinFeel,
@@ -140,6 +142,53 @@ export async function reportPain(input: {
     note: input.note.trim().slice(0, 500) || null,
   });
   return { ok: !error };
+}
+
+/* ---------- the week, rearranged ---------- */
+
+/**
+ * Two weekdays trade places, for this week: the session and the day type —
+ * so the food — go together, because both are read through the same plan
+ * (lib/dayMoves.ts). Nothing of the coach's is rewritten.
+ */
+export async function moveDay(a: number, b: number): Promise<{ ok: boolean }> {
+  const inWeek = (n: number) => Number.isInteger(n) && n >= 0 && n <= 6;
+  if (!inWeek(a) || !inWeek(b) || a === b) return { ok: false };
+  const { supabase, client, monday } = await clientSession();
+
+  const { data } = await supabase
+    .from("client_day_moves")
+    .select("day_index, planned_day")
+    .eq("client_id", client.id)
+    .eq("week_start", monday);
+  const plan = plannedDays(data);
+
+  const { error } = await supabase.from("client_day_moves").upsert(
+    [
+      { client_id: client.id, week_start: monday, day_index: a, planned_day: plan[b] },
+      { client_id: client.id, week_start: monday, day_index: b, planned_day: plan[a] },
+    ],
+    { onConflict: "client_id,week_start,day_index" },
+  );
+  // Weeks that are over say nothing any more: nothing is kept of them.
+  await supabase.from("client_day_moves").delete().eq("client_id", client.id).lt("week_start", monday);
+
+  revalidatePath("/", "layout");
+  return { ok: !error };
+}
+
+/** From another day's session: "I am doing this one today". */
+export async function swapWithToday(formData: FormData) {
+  const { weekday } = await clientSession();
+  await moveDay(weekday, Number(formData.get("day")));
+  redirect("/seance");
+}
+
+/** The week as the coach planned it again. */
+export async function resetWeek() {
+  const { supabase, client, monday } = await clientSession();
+  await supabase.from("client_day_moves").delete().eq("client_id", client.id).eq("week_start", monday);
+  revalidatePath("/", "layout");
 }
 
 /* ---------- cycle ---------- */

@@ -3,32 +3,37 @@
 import { SectionTitle } from "@/components/Pane";
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { swapWeekDays } from "@/app/(coach)/clients/nutrition-actions";
+import { moveDay, resetWeek } from "@/app/(client)/actions";
 
 /**
- * Her own week, and the one thing she needs to do to it: move a day.
+ * The client's own week, and the one thing to do to it: move a day.
  *
- * Life moves a rest day — a late meeting, a bad night, a gym that shuts. A rest
- * day she cannot move is a rest day she trains through, so this is hers to
- * change, and her nutrition follows because it hangs off the day type rather
- * than the weekday.
+ * Life moves a rest day — a late meeting, a bad night, a gym that shuts. A
+ * day that cannot move is a rest day trained through, so two days can trade
+ * places, for this week. The session and the day type go together
+ * (lib/dayMoves.ts): nutrition hangs off the day type, so the food follows.
  */
 export function MyWeek({
-  clientId,
+  today,
+  moved,
   week,
-  types,
+  hasTypes,
 }: {
-  clientId: string;
-  /** day_index → day type name, or null when it is the default. */
-  week: (string | null)[];
-  types: { id: string; name: string; isRest: boolean }[];
+  today: number;
+  /** Whether anything was moved this week. */
+  moved: boolean;
+  /** Per weekday, as arranged: the day type, the session, and whether it moved. */
+  week: { type: string | null; session: string | null; moved: boolean }[];
+  hasTypes: boolean;
 }) {
   const t = useTranslations("myWeek");
   const tDays = useTranslations("days");
   const [picked, setPicked] = useState<number | null>(null);
   const [pending, startTransition] = useTransition();
 
-  if (types.length === 0) return null;
+  // Without day types the food is the same every day: the week is moved
+  // from Séance, where the sessions are.
+  if (!hasTypes) return null;
 
   function choose(day: number) {
     if (picked === null) {
@@ -39,13 +44,10 @@ export function MyWeek({
       setPicked(null);
       return;
     }
-    const body = new FormData();
-    body.set("client_id", clientId);
-    body.set("day_a", String(picked));
-    body.set("day_b", String(day));
+    const other = picked;
     setPicked(null);
-    startTransition(() => {
-      void swapWeekDays(body);
+    startTransition(async () => {
+      await moveDay(other, day);
     });
   }
 
@@ -57,8 +59,7 @@ export function MyWeek({
       </p>
 
       <ul className={`mt-3 flex flex-col gap-1.5 ${pending ? "opacity-60" : ""}`}>
-        {[0, 1, 2, 3, 4, 5, 6].map((day) => {
-          const label = week[day];
+        {week.map((row, day) => {
           const chosen = picked === day;
           return (
             <li key={day}>
@@ -71,16 +72,24 @@ export function MyWeek({
                     ? "sel border-[var(--accent-soft)]"
                     : "border-[var(--edge)] bg-[var(--glass2)]"
                 }`}
-                style={{ minHeight: 52 }}
+                style={{ height: 56 }}
               >
                 <span className="w-20 shrink-0 text-[13px] text-[var(--ink2)]">
                   {tDays(String(day))}
+                  {day === today && (
+                    <span className="block text-[10.5px] font-bold uppercase tracking-[.1em] text-[var(--accent)]">
+                      {t("today")}
+                    </span>
+                  )}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-[14px] font-semibold">
-                  {label ?? t("default")}
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[14px] font-semibold">{row.type ?? t("default")}</span>
+                  <span className="block truncate text-[12px] text-[var(--ink3)]">
+                    {row.session ?? t("rest")}
+                  </span>
                 </span>
-                <span aria-hidden className="shrink-0 text-[13px] text-[var(--ink3)]">
-                  {chosen ? "↕" : ""}
+                <span aria-hidden className="w-3 shrink-0 text-[13px] text-[var(--ink3)]">
+                  {chosen || row.moved ? "↕" : ""}
                 </span>
               </button>
             </li>
@@ -88,9 +97,16 @@ export function MyWeek({
         })}
       </ul>
 
-      <p className="mt-2.5 text-[12.5px] leading-[1.45] text-[var(--ink3)]">
-        {t("note")}
-      </p>
+      {moved && (
+        <form action={resetWeek} className="mt-2.5 flex items-center justify-between gap-3">
+          <p className="text-[13px] text-[var(--ink2)]">{t("moved")}</p>
+          <button type="submit" className="min-h-11 shrink-0 text-[13px] font-semibold text-[var(--accent)]">
+            {t("reset")}
+          </button>
+        </form>
+      )}
+
+      <p className="mt-2.5 text-[12.5px] leading-[1.45] text-[var(--ink3)]">{t("note")}</p>
     </section>
   );
 }

@@ -9,6 +9,7 @@ import {
   currentWeek,
   cycleLevers,
   targetLine,
+  weekPlan,
 } from "@/lib/clientData";
 import { renderClientPdf, type ClientPdfDayType } from "@/lib/clientPdf";
 import { logoUrl } from "@/lib/logo";
@@ -37,10 +38,12 @@ export async function GET(request: NextRequest) {
   const locale = intl(await getLocale());
   const num = (v: number) => figure(v, locale);
 
-  const [{ data: coach }, week, levers] = await Promise.all([
+  const [{ data: coach }, week, levers, moves] = await Promise.all([
     supabase.from("coaches").select("name, logo_path").eq("id", client.coach_id).maybeSingle(),
     withProgramme ? currentWeek() : Promise.resolve(null),
     cycleLevers(),
+    // The week as the client arranged it, not as it was planned.
+    weekPlan(),
   ]);
 
   let programme = null;
@@ -50,7 +53,7 @@ export async function GET(request: NextRequest) {
           title: [week.programmes?.name, t("week", { n: week.week_number })].filter(Boolean).join(" · "),
           note: changesTraining(levers) ? t("phaseTraining") : null,
           days: [0, 1, 2, 3, 4, 5, 6].map((day) => {
-            const session = week.sessions.find((s) => s.day_index === day);
+            const session = week.sessions.find((s) => s.day_index === moves[day]);
             return {
               day: tDays(String(day)),
               name: session?.name ?? null,

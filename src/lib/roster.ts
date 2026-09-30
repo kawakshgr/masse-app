@@ -1,5 +1,6 @@
 import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
+import { plannedDays, weekdayFor, type DayMove } from "@/lib/dayMoves";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
@@ -81,7 +82,7 @@ export async function loadRoster(
   const thisMonday = addDays(todayLocal, -weekday);
   const lastMonday = addDays(thisMonday, -7);
 
-  const [checkins, metrics, assignments, lastWeek] = await Promise.all([
+  const [checkins, metrics, assignments, lastWeek, moves] = await Promise.all([
     // Waiting on the coach.
     supabase
       .from("check_ins")
@@ -116,7 +117,18 @@ export async function loadRoster(
       )
       .in("client_id", ids)
       .in("week_start_date", [lastMonday, thisMonday]),
+    // Days the clients moved this week: a session done later is not missed.
+    supabase
+      .from("client_day_moves")
+      .select("client_id, day_index, planned_day")
+      .in("client_id", ids)
+      .eq("week_start", thisMonday),
   ]);
+
+  const movesOf = new Map<string, DayMove[]>();
+  for (const move of moves.data ?? []) {
+    movesOf.set(move.client_id, [...(movesOf.get(move.client_id) ?? []), move]);
+  }
 
   // The week asked of every client today, by this coach's due day.
   const asked = checkInWindow(thisMonday, weekday, dueOffset);
@@ -169,9 +181,11 @@ export async function loadRoster(
     );
 
     const due = expectedExercises.get(row.client_id) ?? [];
+    // In the running week a session is owed on the day the client put it.
+    const plan = plannedDays(elapsed < 7 ? movesOf.get(row.client_id) : null);
     for (const session of week.sessions ?? []) {
       // A day still in progress is reported, never judged.
-      if (session.day_index >= elapsed) continue;
+      if (weekdayFor(plan, session.day_index) >= elapsed) continue;
       for (const exercise of session.session_exercises ?? []) due.push(exercise.id);
     }
     expectedExercises.set(row.client_id, due);

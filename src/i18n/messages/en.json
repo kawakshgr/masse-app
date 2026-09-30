@@ -160,7 +160,8 @@
     "logged": "logged",
     "inProgress": "in progress",
     "scheduled": "scheduled",
-    "rest": "Rest"
+    "rest": "Rest",
+    "weekMoved": "{first} swapped days this week: sessions and food are where they were put."
   },
   "invite": {
     "title": "Invite a client",
@@ -562,13 +563,15 @@
     "backToToday": "‹ Back to today",
     "noSessionThatDay": "No session planned that day.",
     "myWeek": "My week",
-    "myWeekHint": "Could not do a session on its day? Open it here and log it when you do it.",
+    "myWeekHint": "Doing a session on another day? Open it and swap it with today: your food follows.",
     "weekRest": "Rest",
     "weekToday": "today",
     "weekTodo": "to do",
     "weekDone": "done",
     "weekPartial": "{done}/{total} exercises",
-    "lastMixed": "{count} sets, heaviest {best}"
+    "lastMixed": "{count} sets, heaviest {best}",
+    "swapWithToday": "Swap with today",
+    "swapHint": "{day} and today trade places for this week: the session and the food follow."
   },
   "entry": {
     "title": "Entry",
@@ -1144,7 +1147,7 @@
     "default": "Default",
     "noTarget": "—",
     "week": "their ordinary week",
-    "weekNote": "Change a day here and what is eaten that day changes. {first} can move their off days from their phone: the plan follows the type, not the weekday.",
+    "weekNote": "Change a day here and what is eaten that day changes. {first} can swap two days from their phone, for the running week: the session and the food follow, the ordinary week stays as it is.",
     "editing": "Editing: {name}",
     "delete": "Delete this type",
     "confirmDelete": "Delete",
@@ -1156,7 +1159,11 @@
     "lede": "Tap one day, then another, to swap them.",
     "pickSecond": "{day} selected. Tap the day to swap it with.",
     "default": "Normal day",
-    "note": "Your food follows the kind of day, not the weekday: move one and the right plan moves with you. Your coach sees it."
+    "note": "Swap two days and the session and the food move with you. This week only; your coach sees it.",
+    "today": "today",
+    "rest": "Rest",
+    "moved": "Week rearranged.",
+    "reset": "Put it back as planned"
   },
   "supp": {
     "title": "Supplements",
@@ -1265,7 +1272,8 @@
     "supplements": "Your supplements",
     "empty": "Your coach hasn't written a plan for you yet.",
     "restDay": "Rest day",
-    "mealN": "Meal {n}"
+    "mealN": "Meal {n}",
+    "movedFrom": "{day} moved to today this week"
   },
   "bilan": {
     "title": "Your check-in",

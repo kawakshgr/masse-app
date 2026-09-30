@@ -3,6 +3,7 @@ import { restLabel } from "@/lib/rest";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { plannedDays } from "@/lib/dayMoves";
 
 /**
  * What every client screen needs first: who she is, and what day it is for her.
@@ -117,6 +118,21 @@ export const currentWeek = cache(async (): Promise<PushedWeek | null> => {
 });
 
 /**
+ * This week as the client arranged it: weekday → the planned day done on it.
+ * Session and nutrition both read through it, so a day that moves takes its
+ * food with it. Itself on every day when nothing moved.
+ */
+export const weekPlan = cache(async (): Promise<number[]> => {
+  const { supabase, client, monday } = await clientSession();
+  const { data } = await supabase
+    .from("client_day_moves")
+    .select("day_index, planned_day")
+    .eq("client_id", client.id)
+    .eq("week_start", monday);
+  return plannedDays(data);
+});
+
+/**
  * When nothing is current yet: the day her first pushed week starts, and the
  * programme it belongs to. A programme sent ahead is announced, not hidden.
  */
@@ -139,13 +155,15 @@ export async function upcomingWeek(): Promise<{ startDate: string; programme: st
  * loads and sets she is shown are already adjusted, and `levers` says why.
  */
 export async function todaySession(dayIndex?: number) {
-  const [{ weekday }, week, levers] = await Promise.all([
+  const [{ weekday }, week, levers, plan] = await Promise.all([
     clientSession(),
     currentWeek(),
     cycleLevers(),
+    weekPlan(),
   ]);
-  // Another day of the week when she asks for it: sessions get moved.
-  const wanted = dayIndex ?? weekday;
+  // Another weekday when it is asked for; and either way the day as the
+  // client arranged the week, not as it was planned.
+  const wanted = plan[dayIndex ?? weekday];
   const session = week?.sessions?.find((s) => s.day_index === wanted) ?? null;
   return {
     week,

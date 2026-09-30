@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { ExportCard } from "@/components/client/ExportCard";
-import { changesNutrition, clientSession, cycleLevers } from "@/lib/clientData";
+import { changesNutrition, clientSession, currentWeek, cycleLevers, weekPlan } from "@/lib/clientData";
+import { isMoved } from "@/lib/dayMoves";
 import { LeverLine } from "@/components/client/LeverLine";
 import { SUPPLEMENT_TIMINGS, type FoodRow, type MealRow } from "@/lib/supabase/types";
 import { Card, CardTitle, Kicker, ScreenHeader, shown } from "@/components/client/ui";
@@ -15,9 +16,9 @@ type PlanMeal = {
 };
 
 /**
- * Nutrition — NutritionView.swift: what the coach wrote for her to eat today,
- * read only. Nutrition hangs off the day type, not the weekday, so when she
- * moves a rest day the plan follows it.
+ * Nutrition — what the coach wrote to eat today, read only. Nutrition hangs
+ * off the day type, not the weekday: when two days trade places this week
+ * (lib/dayMoves.ts) the session and the plan move together.
  */
 export default async function NutritionPage() {
   const { supabase, client, weekday, today } = await clientSession();
@@ -25,6 +26,9 @@ export default async function NutritionPage() {
   const locale = await getLocale();
   const tNav = await getTranslations("clientNav");
   const tSupp = await getTranslations("supp");
+  const tDays = await getTranslations("days");
+  const tLog = await getTranslations("log");
+  const [plan, pushed] = await Promise.all([weekPlan(), currentWeek()]);
 
   const [typesRes, weekRes, targetsRes, mealsRes, suppRes, foodsRes, loggedRes] =
     await Promise.all([
@@ -50,7 +54,9 @@ export default async function NutritionPage() {
 
   const types = typesRes.data ?? [];
   const weekRows = weekRes.data ?? [];
-  const todayTypeId = weekRows.find((row) => row.day_index === weekday)?.day_type_id ?? null;
+  // The day as arranged this week: a moved session brings its food along.
+  const typeOn = (day: number) => weekRows.find((row) => row.day_index === plan[day])?.day_type_id ?? null;
+  const todayTypeId = typeOn(weekday);
   const todayType = types.find((type) => type.id === todayTypeId) ?? null;
 
   // Rows for a null type are the default: what applies when the day has none.
@@ -86,7 +92,14 @@ export default async function NutritionPage() {
       <ScreenHeader
         kicker={tNav("fuel")}
         title={todayType?.name ?? tNav("fuel")}
-        sub={todayType?.is_rest ? t("restDay") : null}
+        sub={
+          [
+            todayType?.is_rest ? t("restDay") : null,
+            plan[weekday] !== weekday ? t("movedFrom", { day: tDays(String(plan[weekday])) }) : null,
+          ]
+            .filter(Boolean)
+            .join(" · ") || null
+        }
       />
 
       {target && (
@@ -163,12 +176,17 @@ export default async function NutritionPage() {
       )}
 
       <MyWeek
-        clientId={client.id}
+        today={weekday}
+        moved={isMoved(plan)}
         week={[0, 1, 2, 3, 4, 5, 6].map((day) => {
-          const id = weekRows.find((row) => row.day_index === day)?.day_type_id;
-          return types.find((type) => type.id === id)?.name ?? null;
+          const session = pushed?.sessions.find((s) => s.day_index === plan[day]);
+          return {
+            type: types.find((type) => type.id === typeOn(day))?.name ?? null,
+            session: session && session.session_exercises.length > 0 ? (session.name ?? tLog("title")) : null,
+            moved: plan[day] !== day,
+          };
         })}
-        types={types.map((type) => ({ id: type.id, name: type.name, isRest: type.is_rest }))}
+        hasTypes={types.length > 0}
       />
 
       <MealsPanel

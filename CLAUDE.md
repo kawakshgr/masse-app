@@ -108,7 +108,15 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   or another day's (`?jour=`, 30 Sep 2026: sessions get moved), lists the
   week ("Ma semaine") with what is logged, and shows under each movement
   the client's last sets on it (`lib/lastTime.ts`). Sets shown are the
-  week's, whichever day they were done. A client may flag pain on an
+  week's, whichever day they were done. Two weekdays can trade places
+  for the running week (30 Sep 2026, `client_day_moves`, `lib/dayMoves.ts`):
+  "Échanger avec aujourd'hui" on another day's session, or two taps in the
+  Nutrition tab's week. The session and the day type — so the food — move
+  together, because every reader (Today, Séance, Nutrition, the PDF, and
+  the coach's roster, week and history) takes both from the same planned
+  day: read a weekday through `weekPlan()` / `plannedDays`, never straight
+  from `day_index`. Nothing of the coach's is rewritten; the client only
+  reads `client_week_days` now. Monday, the week is as planned again. A client may flag pain on an
   exercise (30 Sep 2026: mild / sharp / had to stop, optional note,
   `pain_reports`); it heads À traiter until the coach marks it seen. Health
   data: accepted only under consent, erased when consent is withdrawn.

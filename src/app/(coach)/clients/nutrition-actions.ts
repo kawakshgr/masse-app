@@ -299,39 +299,6 @@ export async function setWeekDay(formData: FormData) {
   revalidatePath("/aujourdhui");
 }
 
-/**
- * Two days trade places. This is how a rest day moves, and why nutrition is
- * attached to the type rather than the weekday: nothing else has to change.
- */
-export async function swapWeekDays(formData: FormData) {
-  const supabase = await createClient();
-  const clientId = String(formData.get("client_id") ?? "");
-  const a = Number(formData.get("day_a"));
-  const b = Number(formData.get("day_b"));
-  if (!clientId || !Number.isInteger(a) || !Number.isInteger(b) || a === b) return;
-
-  const { data: rows } = await supabase
-    .from("client_week_days")
-    .select("day_index, day_type_id")
-    .eq("client_id", clientId)
-    .in("day_index", [a, b]);
-
-  const typeOf = (day: number) =>
-    rows?.find((row) => row.day_index === day)?.day_type_id ?? null;
-
-  await supabase.from("client_week_days").upsert(
-    [
-      { client_id: clientId, day_index: a, day_type_id: typeOf(b) },
-      { client_id: clientId, day_index: b, day_type_id: typeOf(a) },
-    ],
-    { onConflict: "client_id,day_index" },
-  );
-
-  revalidatePath(`/clients/${clientId}`);
-  revalidatePath("/aujourdhui");
-  revalidatePath("/nutrition");
-}
-
 function unitOf(
   value: FormDataEntryValue | null,
   fallback: SupplementUnit,

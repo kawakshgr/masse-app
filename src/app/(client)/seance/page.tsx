@@ -1,16 +1,20 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ExportCard } from "@/components/client/ExportCard";
-import { clientSession, currentWeek, localDay, todaySession } from "@/lib/clientData";
+import { clientSession, currentWeek, localDay, todaySession, weekPlan } from "@/lib/clientData";
+import { isMoved } from "@/lib/dayMoves";
+import { resetWeek, swapWithToday } from "../actions";
 import { Card, CardTitle, Kicker, ScreenHeader } from "@/components/client/ui";
 import { TrainLog } from "@/components/client/TrainLog";
 import { LeverLine } from "@/components/client/LeverLine";
 import { lastTimeLines, type PastSet } from "@/lib/lastTime";
 
 /**
- * Séance — today's session, being done; or another day's, when she asks:
- * sessions get moved, and a session missed on Monday is done on Tuesday.
- * Under it, her week: what is planned each day and what is already logged.
+ * Séance — today's session, being done; or another day's, when it is asked
+ * for: sessions get moved, and a session missed on Monday is done on Tuesday.
+ * Another day can trade places with today — the day type, so the food,
+ * goes with it (lib/dayMoves.ts). Under it, the week as it now stands: what
+ * is planned each day and what is already logged.
  */
 export default async function SessionPage({
   searchParams,
@@ -21,8 +25,9 @@ export default async function SessionPage({
   const { supabase, client, zone, weekday } = await clientSession();
   const asked = jour !== undefined && /^[0-6]$/.test(jour) ? Number(jour) : undefined;
   const day = asked ?? weekday;
-  const [{ session, levers }, week] = await Promise.all([todaySession(day), currentWeek()]);
+  const [{ session, levers }, week, plan] = await Promise.all([todaySession(day), currentWeek(), weekPlan()]);
   const t = await getTranslations("log");
+  const tWeek = await getTranslations("myWeek");
   const tDays = await getTranslations("days");
   const locale = (await getLocale()) === "en" ? "en-GB" : "fr-FR";
 
@@ -81,12 +86,27 @@ export default async function SessionPage({
     <>
       <ScreenHeader
         kicker={otherDay ? t("dayKicker", { day: tDays(String(day)) }) : t("title")}
-        title={session?.name ?? t("title")}
+        title={session?.name ?? (otherDay && exercises.length === 0 ? t("weekRest") : t("title"))}
       />
       {otherDay && (
-        <Link href="/seance" className="-mt-2 block text-[13px] font-semibold text-[var(--accent)]">
-          {t("backToToday")}
-        </Link>
+        // Doing it today instead: the two days trade places, food included.
+        <Card className="space-y-3">
+          <p className="text-[14px] leading-[1.45] text-[var(--ink2)]">
+            {t("swapHint", { day: tDays(String(day)) })}
+          </p>
+          <form action={swapWithToday}>
+            <input type="hidden" name="day" value={day} />
+            <button
+              type="submit"
+              className="cta flex h-[52px] w-full items-center justify-center rounded-rp text-[15px] font-semibold text-[var(--on-accent)]"
+            >
+              {t("swapWithToday")}
+            </button>
+          </form>
+          <Link href="/seance" className="block text-[13px] font-semibold text-[var(--accent)]">
+            {t("backToToday")}
+          </Link>
+        </Card>
       )}
       {levers && exercises.length > 0 && <LeverLine levers={levers} kind="training" />}
 
@@ -106,13 +126,13 @@ export default async function SessionPage({
         />
       )}
 
-      {/* Her week, and the way to another day's session. */}
+      {/* The week as it stands, and the way to another day's session. */}
       {week && (
         <Card className="space-y-3">
           <Kicker icon="calendar">{t("myWeek")}</Kicker>
           <ul className="flex flex-col gap-1.5">
             {[0, 1, 2, 3, 4, 5, 6].map((index) => {
-              const planned = week.sessions.find((s) => s.day_index === index);
+              const planned = week.sessions.find((s) => s.day_index === plan[index]);
               const has = planned && planned.session_exercises.length > 0;
               const done = has
                 ? planned.session_exercises.filter((e) => logs.some((l) => l.session_exercise_id === e.id)).length
@@ -132,6 +152,11 @@ export default async function SessionPage({
                   <span className={`min-w-0 flex-1 truncate text-[14px] ${has ? "font-semibold" : "text-[var(--ink3)]"}`}>
                     {has ? (planned.name ?? t("title")) : t("weekRest")}
                   </span>
+                  {plan[index] !== index && (
+                    <span aria-hidden className="shrink-0 text-[13px] text-[var(--ink3)]">
+                      ↕
+                    </span>
+                  )}
                   {index === weekday && (
                     <span className="shrink-0 text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent)]">
                       {t("weekToday")}
@@ -150,18 +175,23 @@ export default async function SessionPage({
                 index === day ? "sel border" : "bg-[var(--glass2)]"
               }`;
               return (
+                // A rest day opens too: it can trade places with today.
                 <li key={index}>
-                  {has ? (
-                    <Link href={index === weekday ? "/seance" : `/seance?jour=${index}`} className={rowClass}>
-                      {row}
-                    </Link>
-                  ) : (
-                    <div className={rowClass}>{row}</div>
-                  )}
+                  <Link href={index === weekday ? "/seance" : `/seance?jour=${index}`} className={rowClass}>
+                    {row}
+                  </Link>
                 </li>
               );
             })}
           </ul>
+          {isMoved(plan) && (
+            <form action={resetWeek} className="flex items-center justify-between gap-3">
+              <p className="text-[13px] text-[var(--ink2)]">{tWeek("moved")}</p>
+              <button type="submit" className="min-h-11 shrink-0 text-[13px] font-semibold text-[var(--accent)]">
+                {tWeek("reset")}
+              </button>
+            </form>
+          )}
           <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">{t("myWeekHint")}</p>
         </Card>
       )}

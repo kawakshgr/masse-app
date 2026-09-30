@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
+import { plannedDays, weekdayFor } from "@/lib/dayMoves";
 
 export type Range = "12w" | "6m" | "1y";
 
@@ -63,7 +64,10 @@ export async function loadHistory(
   from.setUTCDate(from.getUTCDate() - RANGE_WEEKS[range] * 7);
   const fromIso = from.toISOString().slice(0, 10);
 
-  const [clientRes, assignmentsRes, logsRes, checkInsRes] = await Promise.all([
+  const monday = new Date(today);
+  monday.setUTCDate(monday.getUTCDate() - ((monday.getUTCDay() + 6) % 7));
+
+  const [clientRes, assignmentsRes, logsRes, checkInsRes, movesRes] = await Promise.all([
     supabase.from("clients").select("created_at").eq("id", clientId).maybeSingle(),
     supabase
       .from("assignments")
@@ -87,6 +91,12 @@ export async function loadHistory(
       .gte("week_start_date", fromIso)
       .not("bodyweight_kg", "is", null)
       .order("week_start_date"),
+    // Days moved this week: a session put later is not yet prescribed.
+    supabase
+      .from("client_day_moves")
+      .select("day_index, planned_day")
+      .eq("client_id", clientId)
+      .eq("week_start", monday.toISOString().slice(0, 10)),
   ]);
 
   const createdAt = clientRes.data?.created_at ?? today.toISOString();
@@ -127,8 +137,9 @@ export async function loadHistory(
     const key = assignment.start_date;
     const bar = byWeek.get(key) ?? { week: key, prescribed: 0, logged: 0 };
 
+    const plan = plannedDays(elapsed < 7 ? movesRes.data : null);
     for (const session of week.sessions ?? []) {
-      if (session.day_index >= elapsed) continue;
+      if (weekdayFor(plan, session.day_index) >= elapsed) continue;
       bar.prescribed += 1;
       if ((session.session_exercises ?? []).some((e) => loggedExerciseIds.has(e.id))) {
         bar.logged += 1;

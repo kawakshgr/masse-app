@@ -450,6 +450,11 @@ function OverviewTab({
             ))}
           </ul>
         )}
+        {detail.blockLabel != null && detail.weekMoved && (
+          <p className="mt-2 text-[12px] leading-[1.45] text-[var(--ink3)]">
+            {t("weekMoved", { first: detail.client.first_name ?? detail.client.name })}
+          </p>
+        )}
       </section>
     </>
   );

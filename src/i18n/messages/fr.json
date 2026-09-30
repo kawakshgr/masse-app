@@ -160,7 +160,8 @@
     "logged": "faite",
     "inProgress": "en cours",
     "scheduled": "prévue",
-    "rest": "Repos"
+    "rest": "Repos",
+    "weekMoved": "{first} a échangé des jours cette semaine : les séances et l’alimentation sont là où elles ont été placées."
   },
   "invite": {
     "title": "Inviter un client",
@@ -562,13 +563,15 @@
     "backToToday": "‹ Revenir à aujourd’hui",
     "noSessionThatDay": "Pas de séance prévue ce jour-là.",
     "myWeek": "Ma semaine",
-    "myWeekHint": "Tu n’as pas pu faire une séance le bon jour ? Ouvre-la ici et note-la quand tu la fais.",
+    "myWeekHint": "Tu fais une séance un autre jour ? Ouvre-la et échange-la avec aujourd’hui : ton alimentation suit.",
     "weekRest": "Repos",
     "weekToday": "aujourd’hui",
     "weekTodo": "à faire",
     "weekDone": "faite",
     "weekPartial": "{done}/{total} exercices",
-    "lastMixed": "{count} séries, la plus lourde {best}"
+    "lastMixed": "{count} séries, la plus lourde {best}",
+    "swapWithToday": "Échanger avec aujourd’hui",
+    "swapHint": "{day} et aujourd’hui échangent leur place pour cette semaine : la séance et l’alimentation suivent."
   },
   "entry": {
     "title": "Saisie",
@@ -1144,7 +1147,7 @@
     "default": "Par défaut",
     "noTarget": "—",
     "week": "sa semaine type",
-    "weekNote": "Change un jour ici et c’est son alimentation de ce jour qui change. {first} peut décaler ses jours off depuis son téléphone : le plan suit le type, pas le jour de la semaine.",
+    "weekNote": "Change un jour ici et c’est son alimentation de ce jour qui change. {first} peut échanger deux jours depuis son téléphone, pour la semaine en cours : la séance et l’alimentation suivent, la semaine type ne bouge pas.",
     "editing": "Tu modifies : {name}",
     "delete": "Supprimer ce type",
     "confirmDelete": "Supprimer",
@@ -1156,7 +1159,11 @@
     "lede": "Touche un jour, puis un autre, pour les échanger.",
     "pickSecond": "{day} sélectionné. Touche le jour avec lequel l’échanger.",
     "default": "Jour normal",
-    "note": "Ton alimentation suit le type de jour, pas le jour de la semaine : en décalant, tu emportes le bon plan avec toi. Ton coach le voit."
+    "note": "En échangeant deux jours, tu emportes la séance et l’alimentation avec toi. Pour cette semaine seulement ; ton coach le voit.",
+    "today": "auj.",
+    "rest": "Repos",
+    "moved": "Semaine réarrangée.",
+    "reset": "Remettre comme prévu"
   },
   "supp": {
     "title": "Compléments",
@@ -1265,7 +1272,8 @@
     "supplements": "Tes compléments",
     "empty": "Ton coach n’a pas encore écrit de plan pour toi.",
     "restDay": "Jour de repos",
-    "mealN": "Repas {n}"
+    "mealN": "Repas {n}",
+    "movedFrom": "{day} passe à aujourd’hui cette semaine"
   },
   "bilan": {
     "title": "Ton bilan",

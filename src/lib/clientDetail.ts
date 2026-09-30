@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ClientRow, CyclePhase, Database } from "@/lib/supabase/types";
+import { isMoved, plannedDays, weekdayFor } from "@/lib/dayMoves";
 
 export type DayStatus = "logged" | "in-progress" | "scheduled" | "rest";
 
@@ -21,6 +22,8 @@ export type ClientDetail = {
   };
   steps: { latest: number | null; avg: number | null };
   week: { dayIndex: number; sessionName: string | null; status: DayStatus }[];
+  /** The client moved days this week: `week` shows them where they were put. */
+  weekMoved: boolean;
 };
 
 function isoDate(d: Date): string {
@@ -73,7 +76,7 @@ export async function loadClientDetail(
   const fourWeeksAgo = new Date(weekStart);
   fourWeeksAgo.setUTCDate(fourWeeksAgo.getUTCDate() - 21);
 
-  const [assignmentsRes, metricsRes, cycleRes] = await Promise.all([
+  const [assignmentsRes, metricsRes, cycleRes, movesRes] = await Promise.all([
     supabase
       .from("assignments")
       .select(
@@ -94,7 +97,15 @@ export async function loadClientDetail(
     // Phase and coefficients are computed server-side, once. The raw dates
     // never reach the coach.
     supabase.rpc("client_cycle_state", { p_client: clientId }),
+    // Days the client moved this week (lib/dayMoves.ts).
+    supabase
+      .from("client_day_moves")
+      .select("day_index, planned_day")
+      .eq("client_id", clientId)
+      .eq("week_start", isoDate(weekStart)),
   ]);
+
+  const plan = plannedDays(movesRes.data);
 
   const assignments = assignmentsRes.data ?? [];
 
@@ -125,11 +136,13 @@ export async function loadClientDetail(
 
     for (const session of week.sessions ?? []) {
       const ids = (session.session_exercises ?? []).map((e) => e.id);
+      // The running week is read as the client arranged it.
+      const dayIndex = isCurrentWeek ? weekdayFor(plan, session.day_index) : session.day_index;
       // A day still in progress is not yet owed.
-      if (session.day_index < elapsed) expectedAll.push(...ids);
+      if (dayIndex < elapsed) expectedAll.push(...ids);
       if (isCurrentWeek) {
         thisWeekDays.push({
-          dayIndex: session.day_index,
+          dayIndex,
           sessionName: session.name,
           exercises: ids,
         });
@@ -222,5 +235,6 @@ export async function loadClientDetail(
     sleep,
     steps,
     week,
+    weekMoved: isMoved(plan),
   };
 }

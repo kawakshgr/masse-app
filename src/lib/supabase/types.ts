@@ -566,6 +566,16 @@ export type ClientWeekDayRow = {
   day_type_id: string | null;
 };
 
+/** One weekday of a week the client rearranged: see lib/dayMoves.ts. */
+export type ClientDayMoveRow = {
+  client_id: string;
+  /** The Monday of that week. */
+  week_start: string;
+  day_index: number;
+  /** The planned day — session and day type — done on it. */
+  planned_day: number;
+};
+
 export type NutritionTargetRow = {
   client_id: string;
   /** Null is the client's default, used on any day with no type of its own. */
@@ -679,6 +689,10 @@ export type Database = {
       nutrition_targets: Table<NutritionTargetRow, "client_id">;
       day_types: Table<DayTypeRow, "client_id" | "name">;
       client_week_days: Table<ClientWeekDayRow, "client_id" | "day_index">;
+      client_day_moves: Table<
+        ClientDayMoveRow,
+        "client_id" | "week_start" | "day_index" | "planned_day"
+      >;
       supplements: Table<SupplementRow, "name">;
       supplement_hidden: Table<SupplementHiddenRow, "coach_id" | "supplement_id">;
       client_supplements: Table<
