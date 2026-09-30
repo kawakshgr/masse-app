@@ -114,6 +114,24 @@ export const currentWeek = cache(async (): Promise<PushedWeek | null> => {
 });
 
 /**
+ * When nothing is current yet: the day her first pushed week starts, and the
+ * programme it belongs to. A programme sent ahead is announced, not hidden.
+ */
+export async function upcomingWeek(): Promise<{ startDate: string; programme: string | null } | null> {
+  const { supabase, today } = await clientSession();
+  const { data } = await supabase
+    .from("assignments")
+    .select("start_date, programme_weeks(programmes(name))")
+    .gt("start_date", today)
+    .order("start_date")
+    .limit(1);
+  const row = (data ?? [])[0];
+  if (!row) return null;
+  const week = row.programme_weeks as unknown as { programmes: { name: string } | null } | null;
+  return { startDate: row.start_date, programme: week?.programmes?.name ?? null };
+}
+
+/**
  * Today's session, exercises in the coach's order and at today's phase: the
  * loads and sets she is shown are already adjusted, and `levers` says why.
  */

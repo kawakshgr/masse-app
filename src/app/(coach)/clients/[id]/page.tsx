@@ -12,6 +12,7 @@ import { markCheckInReviewed } from "@/app/(coach)/clients/actions";
 import { DayTypes } from "@/components/DayTypes";
 import { RecordPanel } from "@/components/RecordPanel";
 import { CallBanner } from "@/components/CallBanner";
+import { PainHistory } from "@/components/PainHistory";
 import { callsShownFrom } from "@/lib/calls";
 import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
@@ -182,6 +183,8 @@ export default async function ClientDetailPage({
           tDays={tDays}
         />
       )}
+
+      {tab === "overview" && <PainHistory clientId={id} />}
 
       {tab === "history" && (
         <HistoryTab

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { logoUrl } from "@/lib/logo";
 import { getLocale, getTranslations } from "next-intl/server";
-import { addDays, checkInState, clientSession, targetLine, todaySession } from "@/lib/clientData";
+import { addDays, checkInState, clientSession, targetLine, todaySession, upcomingWeek } from "@/lib/clientData";
 import { Card, CardTitle, CtaLink, Kicker, ScreenHeader } from "@/components/client/ui";
 import { callLabel, callsShownFrom } from "@/lib/calls";
 import { EntryCard } from "@/components/client/EntryCard";
@@ -56,6 +56,9 @@ export default async function TodayPage() {
       .lte("day", addDays(monday, 6)),
     checkInState(),
   ]);
+
+  // Nothing current: is a programme on its way?
+  const upcoming = week ? null : await upcomingWeek();
 
   const metrics = metricsRes.data ?? [];
   const todayRow = metrics.find((row) => row.day === today) ?? null;
@@ -149,6 +152,14 @@ export default async function TodayPage() {
       ) : week ? (
         <Card>
           <CardTitle>{t("rest")}</CardTitle>
+        </Card>
+      ) : upcoming ? (
+        <Card className="space-y-2">
+          <Kicker icon="programmes" accent>
+            {upcoming.programme ?? t("programme")}
+          </Kicker>
+          <CardTitle>{t("startsOn", { day: weekdayDay(upcoming.startDate) })}</CardTitle>
+          <p className="text-[15px] leading-[1.45] text-[var(--ink2)]">{t("startsHint")}</p>
         </Card>
       ) : (
         <Card className="space-y-2">

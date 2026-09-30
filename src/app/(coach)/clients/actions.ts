@@ -359,5 +359,6 @@ export async function markPainSeen(formData: FormData) {
     .update({ seen_at: new Date().toISOString() })
     .eq("id", String(formData.get("id") ?? ""))
     .is("seen_at", null);
-  revalidatePath("/clients");
+  // À traiter and the client's own page both show it.
+  revalidatePath("/clients", "layout");
 }

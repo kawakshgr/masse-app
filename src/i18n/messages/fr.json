@@ -368,7 +368,10 @@
     "todayIs": "aujourd’hui, c’est",
     "todayKcal": "{kcal} kcal visées",
     "restTime": "Repos {time}",
-    "coachLogo": "Logo de ton coach"
+    "coachLogo": "Logo de ton coach",
+    "programme": "Ton programme",
+    "startsOn": "Ça commence {day}",
+    "startsHint": "Ton coach a envoyé ton programme. Ta première séance apparaîtra ici ce jour-là."
   },
   "editor": {
     "addWeek": "+ Semaine",
@@ -437,7 +440,9 @@
     "sent": "Ton coach est prévenu. N’insiste pas sur cet exercice en attendant sa réponse.",
     "failed": "L’envoi a échoué. Réessaie, ou écris à ton coach sur WhatsApp.",
     "wa": "Coucou {first}, j’ai vu que tu as eu mal sur le {exercise}. Tu peux m’en dire plus : où exactement, et depuis quand ?",
-    "seen": "Vu"
+    "seen": "Vu",
+    "history": "Douleurs signalées",
+    "markSeen": "Marquer vu"
   },
   "adherence": {
     "All of it": "Tout fait",

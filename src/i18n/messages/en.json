@@ -368,7 +368,10 @@
     "todayIs": "today is a",
     "todayKcal": "{kcal} kcal to aim for",
     "restTime": "Rest {time}",
-    "coachLogo": "Your coach’s logo"
+    "coachLogo": "Your coach’s logo",
+    "programme": "Your programme",
+    "startsOn": "It starts {day}",
+    "startsHint": "Your coach has sent your programme. Your first session will show here on that day."
   },
   "editor": {
     "addWeek": "+ Week",
@@ -437,7 +440,9 @@
     "sent": "Your coach knows. Go easy on this exercise until you hear back.",
     "failed": "Sending failed. Try again, or message your coach on WhatsApp.",
     "wa": "Hi {first}, I saw you felt pain on the {exercise}. Can you tell me more: where exactly, and since when?",
-    "seen": "Seen"
+    "seen": "Seen",
+    "history": "Pain reported",
+    "markSeen": "Mark seen"
   },
   "adherence": {
     "All of it": "All of it",
