@@ -1232,6 +1232,9 @@ async function NutritionTab({
   );
 }
 
+const metricsGrid =
+  "grid grid-cols-[minmax(0,1.4fr)_minmax(0,.8fr)_minmax(0,1fr)_minmax(0,.9fr)] items-center gap-3";
+
 async function StepsTab({
   clientId,
   tSteps,
@@ -1242,8 +1245,18 @@ async function StepsTab({
   const locale = intl(await getLocale());
   const supabase = await createClient();
   const tDays = await getTranslations("days");
+  const tEntry = await getTranslations("entry");
   const since = new Date();
   since.setUTCDate(since.getUTCDate() - 27);
+  // "mar. 29 sept." — the rows carry 2026-09-29.
+  const dayLabel = (iso: string) =>
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString(locale, {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+  // Typed by the client on Today: 1 rough, 2 okay, 3 good.
+  const QUALITY_DOT = ["", "var(--a3)", "var(--a2)", "var(--accent-soft)"];
 
   const [{ data: metrics }, { data: clientRow }] = await Promise.all([
     supabase
@@ -1311,7 +1324,7 @@ async function StepsTab({
               : (formatHours(slept.reduce((a, b) => a + b, 0) / slept.length) ??
                 "—")
           }
-          sub={null}
+          sub={tSteps("avgSleepSub", { count: slept.length })}
           wash="wash-3"
         />
         <MetricCard
@@ -1324,30 +1337,51 @@ async function StepsTab({
                   stepped.reduce((a, b) => a + b, 0) / stepped.length,
                 ).toLocaleString(locale)
           }
-          sub={null}
+          sub={tSteps("avgStepsSub", { count: stepped.length })}
           wash="wash-1"
         />
       </div>
 
-      <ul className="mt-3">
+      <div className="mt-4 max-w-[560px]" role="table">
+        <div
+          role="row"
+          className={`${metricsGrid} border-b border-[var(--hair)] pb-2 text-[10.5px] font-semibold uppercase tracking-[.08em] text-[var(--ink3)]`}
+        >
+          <span role="columnheader">{tSteps("day")}</span>
+          <span role="columnheader">{tSteps("sleep")}</span>
+          <span role="columnheader">{tSteps("quality")}</span>
+          <span role="columnheader" className="text-right">{tSteps("steps")}</span>
+        </div>
         {rows.map((row) => (
-          <li
+          <div
             key={row.day}
-            className="tnum flex items-center gap-3 border-b border-[var(--hair)] py-2 text-[12px] last:border-0"
+            role="row"
+            className={`${metricsGrid} tnum border-b border-[var(--hair)] py-2 text-[12.5px] last:border-0`}
           >
-            <span className="w-24 shrink-0 text-[var(--ink3)]">{row.day}</span>
-            <span className="w-20 shrink-0">
-              {formatHours(Number(row.sleep_h)) ?? "—"}
+            <span role="cell" className="truncate text-[var(--ink2)]">
+              {dayLabel(row.day)}
             </span>
-            <span className="w-16 shrink-0 text-[var(--ink3)]">
-              {row.sleep_quality ?? "—"}
+            <span role="cell">{formatHours(Number(row.sleep_h)) ?? "—"}</span>
+            <span role="cell" className="flex items-center gap-1.5 text-[var(--ink2)]">
+              {row.sleep_quality == null ? (
+                "—"
+              ) : (
+                <>
+                  <span
+                    aria-hidden
+                    className="size-[7px] shrink-0 rounded-full"
+                    style={{ background: QUALITY_DOT[row.sleep_quality] }}
+                  />
+                  {tEntry(`q${row.sleep_quality}` as "q1")}
+                </>
+              )}
             </span>
-            <span className="min-w-0 flex-1">
+            <span role="cell" className="text-right">
               {row.steps == null ? "—" : row.steps.toLocaleString(locale)}
             </span>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
       </section>
       )}
     </div>

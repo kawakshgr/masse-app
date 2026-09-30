@@ -820,6 +820,8 @@
     "steps": "Steps",
     "avgSleep": "Average sleep",
     "avgSteps": "Average steps",
+    "avgSleepSub": "{count, plural, =0 {Nothing entered} =1 {1 night entered} other {# nights entered}} in 28 days",
+    "avgStepsSub": "{count, plural, =0 {Nothing entered} =1 {1 day entered} other {# days entered}} in 28 days",
     "targetTitle": "Daily step target",
     "hit": "{count} of {total} days hit",
     "hitOne": "1 of {total} days hit",

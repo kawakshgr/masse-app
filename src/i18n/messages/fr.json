@@ -820,6 +820,8 @@
     "steps": "Pas",
     "avgSleep": "Sommeil moyen",
     "avgSteps": "Pas moyens",
+    "avgSleepSub": "{count, plural, =0 {Rien saisi} =1 {1 nuit saisie} other {# nuits saisies}} sur 28 jours",
+    "avgStepsSub": "{count, plural, =0 {Rien saisi} =1 {1 jour saisi} other {# jours saisis}} sur 28 jours",
     "targetTitle": "Objectif de pas quotidien",
     "hit": "{count} jours sur {total} atteints",
     "hitOne": "1 jour sur {total} atteint",
