@@ -51,7 +51,9 @@ export default async function CoachLayout({
   const clientsNeedingYou = new Set(queue.map((item) => item.clientId)).size;
 
   return (
-    <div className="desk flex h-dvh flex-col">
+    // On a phone the installed app draws under the status bar: the top inset
+    // is kept clear, and the tab bar moves to the bottom, under the thumb.
+    <div className="desk flex h-dvh flex-col max-md:pt-[env(safe-area-inset-top)]">
       <div className="no-print contents">
         <TabBar
           name={coach.first_name ?? coach.name}

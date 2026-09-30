@@ -45,13 +45,16 @@ export function TabBar({
     // relative z-40: the capsule's blur makes it a stacking context of its
     // own, so without a z-index its menu would sit under any later panel
     // that has one (billing's cards did).
-    <div className="relative z-40 shrink-0 px-3 pt-3">
+    // On a phone it is the last row instead, above the home indicator — the
+    // client's bar sits there too — and the top of the screen is left to the
+    // status bar.
+    <div className="relative z-40 shrink-0 px-3 pt-3 max-md:order-last max-md:pt-2 max-md:pb-[calc(env(safe-area-inset-bottom)+8px)]">
       {/* One floating capsule: who she is on the left, where she can go in the
           centre — icons, the current one opened out with its name — and her
           own switches on the right. The side columns share the free width
           equally, so the centre stays centred whatever the name's length. */}
-      <header className="glass lift flex h-[60px] items-center gap-3 rounded-rp px-2.5">
-        <div className="flex min-w-0 flex-1 basis-0 items-center gap-2.5">
+      <header className="glass lift flex h-[60px] items-center gap-3 rounded-rp px-2.5 max-md:h-[62px] max-md:gap-1">
+        <div className="flex min-w-0 flex-1 basis-0 items-center gap-2.5 max-md:hidden">
           <span
             aria-hidden
             className="cta flex size-10 shrink-0 items-center justify-center rounded-full font-display text-[15px] font-extrabold text-[var(--onA)]"
@@ -66,7 +69,7 @@ export function TabBar({
           </span>
         </div>
 
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-1 max-md:flex-1 max-md:justify-between">
           {items.map((item) => {
             const active = pathname.startsWith(item.href);
 
@@ -105,7 +108,7 @@ export function TabBar({
           })}
         </nav>
 
-        <div className="flex min-w-0 flex-1 basis-0 items-center justify-end gap-2">
+        <div className="flex min-w-0 flex-1 basis-0 items-center justify-end gap-2 max-md:flex-none">
           <AccountMenu name={name} initials={initials} />
         </div>
       </header>
@@ -181,7 +184,8 @@ function AccountMenu({ name, initials }: { name: string; initials: string }) {
       {open && (
         <div
           role="menu"
-          className="chrome lift absolute right-0 top-[calc(100%+8px)] z-50 w-[240px] rounded-r3 p-1.5"
+          // Below the bar on a desk, above it on a phone, where the bar is at the bottom.
+          className="chrome lift absolute right-0 top-[calc(100%+8px)] z-50 w-[240px] rounded-r3 p-1.5 max-md:top-auto max-md:bottom-[calc(100%+10px)]"
         >
           <Link
             href="/compte"
