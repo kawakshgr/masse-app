@@ -372,7 +372,10 @@
     "programme": "Ton programme",
     "startsOn": "Ça commence {day}",
     "startsHint": "Ton coach a envoyé ton programme. Ta première séance apparaîtra ici ce jour-là.",
-    "setsPlanned": "{count, plural, =1 {1 prévue} other {# prévues}}"
+    "setsPlanned": "{count, plural, =1 {1 prévue} other {# prévues}}",
+    "beyondPlan": "{count, plural, =1 {Au-delà de la série prévue} other {Au-delà des # prévues}}",
+    "extraSet": "en plus",
+    "extraCount": "+{count} en plus"
   },
   "editor": {
     "addWeek": "+ Semaine",

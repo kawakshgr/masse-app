@@ -1,7 +1,7 @@
 "use client";
 
 import { restLabel } from "@/lib/rest";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -167,6 +167,9 @@ function ExerciseCard({
   const t = useTranslations("log");
   const tToday = useTranslations("today");
   const locale = useLocale();
+  // Sets planned by the coach, and how many she logged past them.
+  const planned = exercise.target_sets ?? 0;
+  const extra = planned > 0 ? Math.max(0, logged.length - planned) : 0;
 
   // The next set starts where the last one ended; the first, at what the
   // coach asked for. Typing a number should be the exception.
@@ -201,10 +204,16 @@ function ExerciseCard({
             {tToday("sets", { count: logged.length })}
             {/* What was planned, beside what is done — stated, never judged:
                 going past the plan is the client's call. */}
-            {exercise.target_sets != null && (
+            {exercise.target_sets != null && extra === 0 && (
               <span className="font-normal text-[var(--ink3)]">
                 {" · "}
                 {tToday("setsPlanned", { count: exercise.target_sets })}
+              </span>
+            )}
+            {/* Past the plan: said with a count, in the accent, not in red. */}
+            {extra > 0 && (
+              <span className="ml-1.5 rounded-rp border border-[var(--accent)] px-1.5 py-px text-[11.5px] text-[var(--accent)]">
+                {tToday("extraCount", { count: extra })}
               </span>
             )}
           </span>
@@ -214,10 +223,22 @@ function ExerciseCard({
 
       {logged.length > 0 && (
         <ul className="space-y-1.5">
-          {logged.map((set) => (
+          {logged.map((set, index) => (
+            <Fragment key={set.id}>
+            {/* Where the plan ends, when she went past it. */}
+            {extra > 0 && index === planned && (
+              <li className="flex items-center gap-2 pt-1 text-[11px] font-bold uppercase tracking-[.12em] text-[var(--accent)]">
+                <span className="h-px flex-1 bg-[var(--accent)] opacity-40" />
+                {tToday("beyondPlan", { count: planned })}
+                <span className="h-px flex-1 bg-[var(--accent)] opacity-40" />
+              </li>
+            )}
             <li
-              key={set.id}
-              className="flex items-center gap-2.5 rounded-r1 bg-[var(--glass2)] px-3 py-[9px]"
+              className={`flex items-center gap-2.5 rounded-r1 px-3 py-[9px] ${
+                extra > 0 && index >= planned
+                  ? "border border-dashed border-[var(--accent)] bg-transparent"
+                  : "bg-[var(--glass2)]"
+              }`}
             >
               <span className="tnum w-[18px] text-[13px] font-bold text-[var(--ink3)]">
                 {set.set_index + 1}
@@ -231,6 +252,11 @@ function ExerciseCard({
                   .filter(Boolean)
                   .join(" · ") || "—"}
               </span>
+              {extra > 0 && index >= planned && (
+                <span className="shrink-0 text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent)]">
+                  {tToday("extraSet")}
+                </span>
+              )}
               {/* Held, not failed. The dot is the whole message. */}
               {set.synced_at === null && (
                 <span
@@ -240,6 +266,7 @@ function ExerciseCard({
                 />
               )}
             </li>
+            </Fragment>
           ))}
         </ul>
       )}
