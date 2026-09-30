@@ -119,8 +119,8 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   check-in already opens a prefilled WhatsApp message. There is no inbox tab
   on either side (removed 26 Sep 2026); do not add one back.
 - **Settings** (both) — behind the gear on Today: her details, her payments,
-  appearance, language, privacy, release notes. Reminders are local
-  notifications on iOS only; the web says so instead of hiding the section.
+  appearance, language, privacy, her data, release notes. No notifications
+  section on the web (removed 30 Sep 2026): reminders were the iPhone app's.
 - **Her own billing, read only** — the client reads her arrangement, her
   non-draft invoices and their archived PDFs. She never writes a money row.
 - **Her own details** — a client may update `first_name`, `name`, `phone`,

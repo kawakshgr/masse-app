@@ -13,9 +13,9 @@ import {
 } from "@/components/client/SettingsControls";
 
 /**
- * Settings — SettingsView.swift, section for section. Apple Health is the one
- * the web cannot have, and reminders need the phone to schedule them; the
- * notifications section says so rather than disappearing.
+ * Settings, behind the gear on Today. No notifications section: reminders
+ * belonged to the iPhone app, frozen since 29 Sep 2026, and a dropped feature
+ * leaves the screen rather than apologising on it.
  */
 export default async function SettingsPage() {
   const { user, supabase, client } = await clientSession();
@@ -45,10 +45,6 @@ export default async function SettingsPage() {
 
       <Section icon="billing" title={t("billing")}>
         <NavRow href="/reglages/facturation" icon="billing">{t("billingOpen")}</NavRow>
-      </Section>
-
-      <Section icon="bell" title={t("notifications")}>
-        <p className="text-[13px] leading-[1.45] text-[var(--ink2)]">{t("webReminders")}</p>
       </Section>
 
       <Section icon="appearance" title={t("appearance")}>
