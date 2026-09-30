@@ -62,6 +62,7 @@ export default function PrivacyPage() {
         <ul>
           <li>Pendant toute la durée de ton suivi.</li>
           <li>Quand ton coach archive ton suivi : <strong>photos effacées après 3 mois</strong>, <strong>tout le reste après 12 mois</strong>, automatiquement.</li>
+          <li>Si ton inscription est une demande que ton coach doit valider : <strong>tout est effacé immédiatement</strong> si ton coach la refuse ou si tu la retires.</li>
           <li>Si tu supprimes ton compte : tout est effacé immédiatement.</li>
           <li><strong>Exception : les factures</strong> sont conservées 10 ans par ton coach, comme la loi l’impose (Code de commerce, article L123-22).</li>
         </ul>
