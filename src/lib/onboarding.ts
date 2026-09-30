@@ -101,8 +101,29 @@ export function save(answers: Answers) {
   }
 }
 
+/** The step she had reached, so a resumed form does not skip the optional ones. */
+const STEP_KEY = `${STORAGE_KEY}:step`;
+
+export function saveStep(step: number) {
+  try {
+    window.localStorage.setItem(STEP_KEY, String(step));
+  } catch {
+    // Resuming falls back to the first unanswered question.
+  }
+}
+
+export function loadStep(): number {
+  try {
+    const n = Number(window.localStorage.getItem(STEP_KEY));
+    return Number.isInteger(n) && n >= 2 ? n : 2;
+  } catch {
+    return 2;
+  }
+}
+
 export function clear() {
   try {
+    window.localStorage.removeItem(STEP_KEY);
     window.localStorage.removeItem(STORAGE_KEY);
   } catch {
     // Nothing to do.

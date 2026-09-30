@@ -14,7 +14,10 @@ import {
   TRAINING_AGES,
   fullName,
   isAdult,
+  load,
+  loadStep,
   save,
+  saveStep,
   stepComplete,
   type Answers,
 } from "@/lib/onboarding";
@@ -149,6 +152,43 @@ export default function OnboardingPage() {
   const callLabel = (iso: string) =>
     new Date(iso).toLocaleString(locale, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
 
+  // Answers saved in this browser: a form closed halfway resumes where it
+  // stopped, if its code still stands. Steps 8 and 9 (consent, summary) are
+  // never skipped to — she confirms those with the page in front of her.
+  const [resumed, setResumed] = useState(false);
+  useEffect(() => {
+    const saved = load();
+    if (!saved?.code) return;
+    let live = true;
+    createClient()
+      .rpc("invite_preview", { p_code: saved.code })
+      .then(({ data }) => {
+        const row = Array.isArray(data) ? data[0] : null;
+        if (!live || !row?.valid) return;
+        const answers = {
+          ...saved,
+          coachName: row.coach_name,
+          askCycle: row.ask_cycle,
+          callMinutes: row.call_minutes ?? null,
+          healthConsent: false,
+        };
+        // Back to the step she had reached, or to the first required
+        // answer still missing before it.
+        const order = [2, 3, 4, 5, 6, ...(answers.askCycle ? [7] : []), 8];
+        const reached = Math.min(loadStep(), 8);
+        const next =
+          order.find((n) => n < reached && !stepComplete(n, answers)) ??
+          order.find((n) => n >= reached) ??
+          8;
+        setA(answers);
+        setStep(next);
+        setResumed(next > 2 || saved.firstName !== "");
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
+
   async function checkCode() {
     setChecking(true);
     setCodeBad(false);
@@ -198,7 +238,10 @@ export default function OnboardingPage() {
     setMissing(false);
     save(a);
     const next = steps[steps.indexOf(step) + delta];
-    if (next) setStep(next);
+    if (next) {
+      saveStep(next);
+      setStep(next);
+    }
   }
 
   const titles: Record<number, [string, string]> = {
@@ -245,6 +288,10 @@ export default function OnboardingPage() {
         )}
 
         <div className="mt-6 space-y-5">
+          {resumed && step > 1 && (
+            <p className="text-[13px] leading-[1.45] text-[var(--a1)]">{t("resumed")}</p>
+          )}
+
           {step === 1 && (
             <>
               <Question label={t("codeTitle")} required>
