@@ -101,6 +101,12 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
         <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" />
       </>
     ),
+    key: (
+      <>
+        <circle cx="8" cy="15.5" r="4.5" />
+        <path d="M11.2 12.3 20 3.5M16.5 7l3 3M13.5 10l2.5 2.5" />
+      </>
+    ),
     info: (
       <>
         <circle cx="12" cy="12" r="8.5" />

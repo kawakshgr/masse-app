@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { OtpCodeEntry } from "@/components/OtpCodeEntry";
+import { PasskeySignIn } from "@/components/PasskeySignIn";
 
 type State = "idle" | "sending" | "sent" | "error" | "rate-limited";
 
@@ -114,6 +115,14 @@ function SignInForm() {
               }}
             />
           </>
+        )}
+        {/* The quicker way back, once a passkey was turned on in settings. */}
+        {state !== "sent" && (
+          <PasskeySignIn
+            onSignedIn={() => {
+              window.location.href = params.get("suite") ?? "/";
+            }}
+          />
         )}
         {state === "rate-limited" && (
           <p role="alert" className="mt-4 text-[14px] leading-[1.5] text-[var(--a3)]">

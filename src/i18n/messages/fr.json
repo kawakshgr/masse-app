@@ -1684,5 +1684,24 @@
     "cancelConfirm": "Oui, tout effacer",
     "keep": "Garder ma demande",
     "cancelFailed": "Ça n’a pas marché. Réessaie, ou écris à ton coach."
+  },
+  "passkeys": {
+    "title": "Clé d’accès",
+    "lede": "Reviens dans Masse avec Face ID, ton empreinte ou le code de ton appareil, sans attendre un e-mail.",
+    "add": "Activer sur cet appareil",
+    "asking": "Ton appareil te le demande…",
+    "added": "C’est activé. La prochaine fois, choisis « Me connecter avec ma clé d’accès ».",
+    "exists": "Cet appareil a déjà une clé d’accès pour ce compte.",
+    "addFailed": "L’activation n’a pas abouti. Réessaie ; le code par e-mail marche toujours.",
+    "unnamed": "Clé d’accès",
+    "addedOn": "Activée le {date}",
+    "remove": "Retirer cette clé d’accès",
+    "removeConfirm": "Retirer",
+    "note": "Une clé par appareil ou par trousseau. Le code par e-mail reste toujours possible ; Masse ne reçoit ni ton visage ni ton empreinte.",
+    "elsewhere": "Les clés d’accès s’activent sur {domain}.",
+    "signIn": "Me connecter avec ma clé d’accès",
+    "signInHint": "Face ID, empreinte ou code de l’appareil. À activer une fois dans les réglages, après une première connexion par e-mail.",
+    "signedIn": "Connecté. Ouverture de l’app…",
+    "signInFailed": "Pas de clé d’accès reconnue ici. Connecte-toi avec le code par e-mail, puis active-la dans les réglages."
   }
 }

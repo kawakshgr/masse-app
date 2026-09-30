@@ -1684,5 +1684,24 @@
     "cancelConfirm": "Yes, erase everything",
     "keep": "Keep my request",
     "cancelFailed": "That did not work. Try again, or message your coach."
+  },
+  "passkeys": {
+    "title": "Passkey",
+    "lede": "Come back to Masse with Face ID, your fingerprint or your device’s code, without waiting for an e-mail.",
+    "add": "Turn on for this device",
+    "asking": "Your device is asking…",
+    "added": "It is on. Next time, choose “Sign in with my passkey”.",
+    "exists": "This device already has a passkey for this account.",
+    "addFailed": "That did not go through. Try again; the e-mail code always works.",
+    "unnamed": "Passkey",
+    "addedOn": "Turned on {date}",
+    "remove": "Remove this passkey",
+    "removeConfirm": "Remove",
+    "note": "One passkey per device or keychain. The e-mail code always remains; Masse receives neither your face nor your fingerprint.",
+    "elsewhere": "Passkeys are turned on at {domain}.",
+    "signIn": "Sign in with my passkey",
+    "signInHint": "Face ID, fingerprint or device code. Turn it on once in settings, after a first sign-in by e-mail.",
+    "signedIn": "Signed in. Opening the app…",
+    "signInFailed": "No passkey recognised here. Sign in with the e-mail code, then turn one on in settings."
   }
 }

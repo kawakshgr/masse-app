@@ -3,6 +3,7 @@ import { Icon } from "@/components/Icon";
 import { clientSession } from "@/lib/clientData";
 import releases from "@/lib/releases.json";
 import { BackHeader, NavRow } from "@/components/client/ui";
+import { PasskeySettings } from "@/components/PasskeySettings";
 import {
   AppearanceChoice,
   ClearNotes,
@@ -27,6 +28,7 @@ export default async function SettingsPage() {
     .eq("id", client.id)
     .maybeSingle();
   const tCommon = await getTranslations("common");
+  const tKeys = await getTranslations("passkeys");
 
   return (
     <>
@@ -41,6 +43,10 @@ export default async function SettingsPage() {
         )}
         <NavRow href="/reglages/infos" icon="account">{t("editProfile")}</NavRow>
         <SignOutButton />
+      </Section>
+
+      <Section icon="key" title={tKeys("title")}>
+        <PasskeySettings />
       </Section>
 
       <Section icon="billing" title={t("billing")}>

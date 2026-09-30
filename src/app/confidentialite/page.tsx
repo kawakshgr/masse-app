@@ -97,7 +97,8 @@ export default async function PrivacyPage({ searchParams }: Props) {
           <p>
             Data hosted in Europe, encrypted connections, photos in a private space only you and your coach
             can reach, access limited by the database itself. Every reading of client data by a platform
-            administrator is logged, with a reason.
+            administrator is logged, with a reason. If you turn on a passkey (Face ID, fingerprint), Masse
+            keeps only its public key: your face or fingerprint never leaves your device.
           </p>
         </section>
 
@@ -201,7 +202,9 @@ export default async function PrivacyPage({ searchParams }: Props) {
         <p>
           Données hébergées en Europe, connexions chiffrées, photos dans un espace privé accessible
           seulement à toi et à ton coach, accès limités par la base de données elle-même. Chaque lecture
-          de données client par un administrateur de la plateforme est tracée, avec un motif.
+          de données client par un administrateur de la plateforme est tracée, avec un motif. Si tu actives
+          une clé d’accès (Face ID, empreinte), Masse n’en garde que la clé publique : ton visage ou ton
+          empreinte ne quittent jamais ton appareil.
         </p>
       </section>
 

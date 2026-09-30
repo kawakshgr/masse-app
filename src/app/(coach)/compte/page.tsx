@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import { Icon } from "@/components/Icon";
+import { PasskeySettings } from "@/components/PasskeySettings";
 import {
   addAvailability,
   addUnavailableDay,
@@ -70,6 +71,7 @@ export default async function AccountPage({
   searchParams: Promise<{ enregistre?: string; erreur?: string; creneau?: string }>;
 }) {
   const t = await getTranslations("account");
+  const tKeys = await getTranslations("passkeys");
   const locale = intl(await getLocale());
   const tDays = await getTranslations("days");
   const { enregistre, erreur, creneau } = await searchParams;
@@ -276,6 +278,19 @@ export default async function AccountPage({
             {t("addDayOff")}
           </button>
         </form>
+      </section>
+
+      {/* Face ID or a fingerprint instead of the e-mail code, on this device. */}
+      <section className="glass rounded-r3 p-4">
+        <div className="flex items-center gap-3">
+          <span className="glass2 flex size-11 shrink-0 items-center justify-center rounded-r2 text-[var(--accent)]">
+            <Icon name="key" size={24} />
+          </span>
+          <h2 className="text-[12px] font-bold uppercase tracking-[.14em]">{tKeys("title")}</h2>
+        </div>
+        <div className="mt-4 max-w-[460px]">
+          <PasskeySettings />
+        </div>
       </section>
       </div>
     </div>

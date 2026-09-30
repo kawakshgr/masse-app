@@ -44,7 +44,7 @@ Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 
 | Rubrique | Contenu |
 |---|---|
-| Finalité | Authentification par lien ou code e-mail ; sécurité |
-| Données | E-mail, journaux de connexion (Supabase Auth) |
+| Finalité | Authentification par lien ou code e-mail, ou par clé d'accès (passkey) ; sécurité |
+| Données | E-mail, journaux de connexion, clé publique des clés d'accès activées — jamais de donnée biométrique (Supabase Auth) |
 | Base légale | Intérêt légitime (6.1.f) — sécurité du service |
 | Conservation | Selon Supabase : [À vérifier dans les réglages du projet] |

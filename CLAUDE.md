@@ -148,6 +148,14 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
 - **Settings** (both) — behind the gear on Today: her details, her payments,
   appearance, language, privacy, her data, release notes. No notifications
   section on the web (removed 30 Sep 2026): reminders were the iPhone app's.
+- **Passkeys** (30 Sep 2026) — Face ID, a fingerprint or the device code as
+  a quicker way back in, for clients and coaches alike. The e-mail code
+  stays the first sign-in and the fallback. Turned on from Réglages → Clé
+  d'accès or Mon compte (`PasskeySettings`), used from `/connexion`
+  (`PasskeySignIn`). Supabase Auth's native passkeys, experimental: the
+  browser client opts in (`lib/supabase/client.ts`). Bound to the domain
+  masseapp.online (the Relying Party ID — never change it, every passkey
+  would die); nothing is offered on any other address (`lib/passkeys.ts`).
 - **Her own billing, read only** — the client reads her arrangement, her
   non-draft invoices and their archived PDFs. She never writes a money row.
 - **Her own details** — a client may update `first_name`, `name`, `phone`,
