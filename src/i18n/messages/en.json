@@ -887,7 +887,12 @@
     "cancel": "Cancel",
     "askRemovePhoto": "Delete this photo? It does not come back.",
     "byClient": "Filed by {first}",
-    "noPhoto": "No photo"
+    "noPhoto": "No photo",
+    "pose": "Pose",
+    "allPoses": "All poses",
+    "compareWith": "Compare with",
+    "versus": "Against W{n}",
+    "between": "Between W{a} and W{b}: {delta}"
   },
   "hist": {
     "longView": "The long view",

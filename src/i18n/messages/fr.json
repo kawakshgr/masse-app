@@ -887,7 +887,12 @@
     "cancel": "Annuler",
     "askRemovePhoto": "Supprimer cette photo ? Elle ne revient pas.",
     "byClient": "Rempli par {first}",
-    "noPhoto": "Pas de photo"
+    "noPhoto": "Pas de photo",
+    "pose": "Pose",
+    "allPoses": "Toutes les poses",
+    "compareWith": "Comparer avec",
+    "versus": "Face à S{n}",
+    "between": "Entre S{a} et S{b} : {delta}"
   },
   "hist": {
     "longView": "La vue longue",

@@ -8,6 +8,16 @@ import type { PhotoPose } from "@/lib/supabase/types";
 
 const POSES: PhotoPose[] = ["front", "side", "back"];
 
+const pickClass =
+  "tnum h-9 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] pl-3.5 text-[11.5px] font-bold uppercase tracking-[.1em] text-[var(--ink)]";
+
+/** −3,2 kg / +0,5 kg / 0 kg. */
+function signedKg(value: number): string {
+  const rounded = Math.round(value * 10) / 10;
+  const text = Math.abs(rounded).toLocaleString("fr-FR", { maximumFractionDigits: 1 });
+  return `${rounded > 0 ? "+" : rounded < 0 ? "−" : ""}${text} kg`;
+}
+
 export type ReviewWeek = {
   id: string;
   weekStart: string;
@@ -123,11 +133,17 @@ export function CheckInReview({
   // weeks arrive oldest first, so the baseline is the first and the default
   // selection is the last.
   const [selectedId, setSelectedId] = useState(weeks.at(-1)?.id ?? null);
-  const [pose, setPose] = useState<PhotoPose>("front");
+  // One pose, or all three stacked; and which week the photos are set against.
+  const [pose, setPose] = useState<PhotoPose | "all">("front");
+  const [compareId, setCompareId] = useState<string | null>(weeks[0]?.id ?? null);
   const [zoom, setZoom] = useState<string | null>(null);
 
   const baseline = weeks[0] ?? null;
   const selected = weeks.find((w) => w.id === selectedId) ?? weeks.at(-1) ?? null;
+  // Week 1 unless she picks another; never the week already on the left.
+  const against =
+    weeks.find((w) => w.id === compareId && w.id !== selected?.id) ??
+    (baseline && baseline.id !== selected?.id ? baseline : (weeks.at(-2) ?? baseline));
   const previous = useMemo(() => {
     if (!selected) return null;
     const index = weeks.findIndex((w) => w.id === selected.id);
@@ -191,40 +207,77 @@ export function CheckInReview({
         <section className="glass min-w-[280px] flex-1 rounded-r3 p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <SectionTitle icon="photo">{t("photos")}</SectionTitle>
-            <div className="glass2 flex gap-0.5 rounded-rp p-1">
-              {POSES.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  aria-pressed={p === pose}
-                  onClick={() => setPose(p)}
-                  className={`h-7 rounded-rp border px-3 text-[10.5px] font-bold uppercase tracking-[.1em] ${
-                    p === pose ? "sel text-[var(--ink)]" : "border-transparent text-[var(--ink2)]"
-                  }`}
+            <div className="flex flex-wrap gap-2">
+              {/* Four choices: a dropdown, not a row of chips. */}
+              <select
+                aria-label={t("pose")}
+                value={pose}
+                onChange={(e) => setPose(e.target.value as PhotoPose | "all")}
+                className={pickClass}
+                style={{ boxShadow: "var(--spec)" }}
+              >
+                {POSES.map((p) => (
+                  <option key={p} value={p}>
+                    {t(`poses.${p}`)}
+                  </option>
+                ))}
+                <option value="all">{t("allPoses")}</option>
+              </select>
+              {weeks.length > 1 && against && (
+                <select
+                  aria-label={t("compareWith")}
+                  value={against.id}
+                  onChange={(e) => setCompareId(e.target.value)}
+                  className={pickClass}
+                  style={{ boxShadow: "var(--spec)" }}
                 >
-                  {t(`poses.${p}`)}
-                </button>
-              ))}
+                  {weeks
+                    .filter((w) => w.id !== selected.id)
+                    .map((w) => (
+                      <option key={w.id} value={w.id}>
+                        {t("versus", { n: w.number })}
+                      </option>
+                    ))}
+                </select>
+              )}
             </div>
           </div>
 
-          {/* Both sides move together: the comparison is the point. */}
-          <div className="mt-3 flex gap-3">
-            <PhotoSlot
-              url={selected.photos[pose]?.url ?? null}
-              caption={`${t(`poses.${pose}`)} · ${t("thisWeek")}`}
-              weight={kg(selected.bodyweight)}
-              emptyLabel={t("noPhoto")}
-              onOpen={() => setZoom(selected.photos[pose]?.url ?? null)}
-            />
-            <PhotoSlot
-              url={baseline.photos[pose]?.url ?? null}
-              caption={`${t(`poses.${pose}`)} · ${t("baseline")}`}
-              weight={kg(baseline.bodyweight)}
-              emptyLabel={t("noPhoto")}
-              onOpen={() => setZoom(baseline.photos[pose]?.url ?? null)}
-            />
+          {/* Both sides move together: the comparison is the point. The
+              later week on the left, the one it is measured against on the right. */}
+          <div className="mt-3 space-y-4">
+            {(pose === "all" ? POSES : [pose]).map((p) => (
+              <div key={p} className="flex gap-3">
+                <PhotoSlot
+                  url={selected.photos[p]?.url ?? null}
+                  caption={`${t(`poses.${p}`)} · ${t("week", { n: selected.number })}`}
+                  weight={kg(selected.bodyweight)}
+                  emptyLabel={t("noPhoto")}
+                  onOpen={() => setZoom(selected.photos[p]?.url ?? null)}
+                />
+                {against && against.id !== selected.id && (
+                  <PhotoSlot
+                    url={against.photos[p]?.url ?? null}
+                    caption={`${t(`poses.${p}`)} · ${t("week", { n: against.number })}`}
+                    weight={kg(against.bodyweight)}
+                    emptyLabel={t("noPhoto")}
+                    onOpen={() => setZoom(against.photos[p]?.url ?? null)}
+                  />
+                )}
+              </div>
+            ))}
           </div>
+
+          {/* The weight between the two weeks on screen, from the same rows. */}
+          {against && against.id !== selected.id && selected.bodyweight != null && against.bodyweight != null && (
+            <p className="tnum mt-3 text-[13px] font-semibold">
+              {t("between", {
+                a: selected.number,
+                b: against.number,
+                delta: signedKg(selected.bodyweight - against.bodyweight),
+              })}
+            </p>
+          )}
 
           <p className="mt-3 text-[12px] leading-[1.5] text-[var(--ink3)]">
             {t("discipline")}
