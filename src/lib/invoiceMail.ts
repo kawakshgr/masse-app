@@ -19,7 +19,7 @@ function sender(raw: string): { name?: string; email: string } {
 }
 
 /** Why the provider said no, as far as its answer tells. */
-export const MAIL_FAILURES = ["ip", "cle", "expediteur", "compte", "autre"] as const;
+export const MAIL_FAILURES = ["ip", "cle", "cle-smtp", "cle-forme", "expediteur", "compte", "autre"] as const;
 export type MailFailure = (typeof MAIL_FAILURES)[number];
 
 /**
@@ -27,6 +27,8 @@ export type MailFailure = (typeof MAIL_FAILURES)[number];
  * words stay in the server log; the screen names the cause.
  */
 export function mailFailure(reason: string): MailFailure {
+  if (reason === "smtp-key") return "cle-smtp";
+  if (reason === "malformed-key") return "cle-forme";
   if (/unrecogni[sz]ed IP|authori[sz]ed_ips/i.test(reason)) return "ip";
   if (/not yet activated|permission_denied/i.test(reason)) return "compte";
   if (/sender/i.test(reason)) return "expediteur";
@@ -52,10 +54,23 @@ export async function sendInvoiceMail({
 }): Promise<MailResult> {
   if (!mailerConfigured()) return { ok: false, reason: "not-configured" };
 
+  // Brevo hands out two kinds of key and only one opens its API. Their
+  // prefixes are public markers, so the mix-up can be named without a call —
+  // and without ever writing the key itself anywhere.
+  const key = process.env.BREVO_API_KEY!.trim();
+  if (key.startsWith("xsmtpsib-")) return { ok: false, reason: "smtp-key" };
+  if (!/^xkeysib-[A-Za-z0-9-]{60,}$/.test(key)) {
+    console.error("[invoice mail] BREVO_API_KEY has an unexpected shape", {
+      length: key.length,
+      startsWithApiPrefix: key.startsWith("xkeysib-"),
+    });
+    return { ok: false, reason: "malformed-key" };
+  }
+
   const response = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
-      "api-key": process.env.BREVO_API_KEY!,
+      "api-key": key,
       "content-type": "application/json",
       accept: "application/json",
     },

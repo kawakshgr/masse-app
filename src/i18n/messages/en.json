@@ -1128,7 +1128,9 @@
       "ip": "Cause: Brevo blocks addresses it does not know. For Masse’s publisher to fix, in Brevo (Security → Authorised IPs).",
       "cle": "Cause: Brevo refuses Masse’s key. For Masse’s publisher to fix.",
       "expediteur": "Cause: the sending address is not validated at Brevo. For Masse’s publisher to fix.",
-      "compte": "Cause: sending is not yet activated on the Brevo account. For Masse’s publisher to fix."
+      "compte": "Cause: sending is not yet activated on the Brevo account. For Masse’s publisher to fix.",
+      "cle-smtp": "Cause: the stored key is Brevo’s SMTP key; its API key is needed (it starts with “xkeysib-”). For Masse’s publisher to fix.",
+      "cle-forme": "Cause: the stored key does not look like a complete Brevo API key (it starts with “xkeysib-” and is about 90 characters long). For Masse’s publisher to fix."
     }
   },
   "hevy": {

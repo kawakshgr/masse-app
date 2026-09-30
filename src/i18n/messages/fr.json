@@ -1128,7 +1128,9 @@
       "ip": "Motif : Brevo bloque les adresses qu’il ne connaît pas. À régler par l’éditeur de Masse, dans Brevo (Sécurité → IP autorisées).",
       "cle": "Motif : Brevo refuse la clé de Masse. À régler par l’éditeur de Masse.",
       "expediteur": "Motif : l’adresse d’expédition n’est pas validée chez Brevo. À régler par l’éditeur de Masse.",
-      "compte": "Motif : l’envoi n’est pas encore activé sur le compte Brevo. À régler par l’éditeur de Masse."
+      "compte": "Motif : l’envoi n’est pas encore activé sur le compte Brevo. À régler par l’éditeur de Masse.",
+      "cle-smtp": "Motif : la clé enregistrée est la clé SMTP de Brevo ; il faut sa clé API (elle commence par « xkeysib- »). À régler par l’éditeur de Masse.",
+      "cle-forme": "Motif : la clé enregistrée n’a pas la forme d’une clé API Brevo complète (elle commence par « xkeysib- » et fait environ 90 caractères). À régler par l’éditeur de Masse."
     }
   },
   "hevy": {
