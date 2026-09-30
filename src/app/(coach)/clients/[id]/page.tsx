@@ -23,7 +23,7 @@ import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
 import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
-import { BarChart } from "@/components/BarChart";
+import { BarChart, barDate } from "@/components/BarChart";
 import { StepTarget } from "@/components/StepTarget";
 import { StrengthPanel } from "@/components/StrengthPanel";
 import { CyclePanel, type PhaseLevers } from "@/components/CyclePanel";
@@ -544,7 +544,9 @@ async function HistoryTab({
                 ariaLabel={t("perWeek")}
                 bars={view.weeks.map((w) => ({
                   value: w.prescribed,
-                  label: `${w.week} · ${w.logged}/${w.prescribed}`,
+                  label: `${shortDate(w.week, locale)} · ${w.logged}/${w.prescribed}`,
+                  figure: `${w.logged}/${w.prescribed}`,
+                  caption: barDate(w.week, locale),
                   // Red marks a week where something prescribed went unlogged.
                   alert: w.logged < w.prescribed,
                 }))}
@@ -1119,6 +1121,9 @@ async function NutritionTab({
                 bars={days.map((d) => ({
                   value: d.kcal === 0 ? null : d.kcal,
                   label: `${tDays(String(d.dayIndex))} · ${Math.round(d.kcal)} kcal`,
+                  figure:
+                    d.kcal === 0 ? undefined : Math.round(d.kcal).toLocaleString(locale),
+                  caption: dayName(d.dayIndex),
                   tone: d.isFuture
                     ? "future"
                     : d.isToday

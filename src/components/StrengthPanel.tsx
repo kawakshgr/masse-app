@@ -4,7 +4,7 @@ import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { intl } from "@/lib/locale";
-import { BarChart } from "@/components/BarChart";
+import { BarChart, barDate } from "@/components/BarChart";
 import type { StrengthPoint } from "@/lib/history";
 
 /** Per-exercise progression. The exercise is picked here, so this is client. */
@@ -79,6 +79,8 @@ export function StrengthPanel({
           bars={points.map((p, i) => ({
             value: p.best1rm,
             label: `${day(p.week)} · ${p.best1rm.toLocaleString(locale)} kg`,
+            figure: p.best1rm.toLocaleString(locale),
+            caption: barDate(p.week, locale),
             current: i === points.length - 1,
           }))}
         />

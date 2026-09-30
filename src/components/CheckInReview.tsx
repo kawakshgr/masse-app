@@ -4,7 +4,7 @@ import { SectionTitle } from "@/components/Pane";
 import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { intl } from "@/lib/locale";
-import { BarChart } from "@/components/BarChart";
+import { BarChart, barDate } from "@/components/BarChart";
 import { CheckInSummary } from "@/components/CheckInSummary";
 import type { PhotoPose } from "@/lib/supabase/types";
 
@@ -162,10 +162,12 @@ export function CheckInReview({
     () =>
       weeks.slice(-8).map((w) => ({
         value: w.bodyweight,
-        label: `${w.weekStart} · ${w.bodyweight ?? "—"} kg`,
+        label: `${barDate(w.weekStart, locale)} · ${w.bodyweight?.toLocaleString(locale) ?? "—"} kg`,
+        figure: w.bodyweight?.toLocaleString(locale),
+        caption: barDate(w.weekStart, locale),
         current: w.id === selected?.id,
       })),
-    [weeks, selected],
+    [weeks, selected, locale],
   );
 
   if (!selected || !baseline) {
