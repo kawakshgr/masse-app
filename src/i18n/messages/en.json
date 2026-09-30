@@ -53,7 +53,9 @@
     "remove": "Remove",
     "needsYou": "needs you",
     "noBlock": "No block running",
-    "archived": "archived"
+    "archived": "archived",
+    "pending": "request",
+    "pendingLine": "Request to review"
   },
   "programmes": {
     "title": "Programmes",
@@ -179,7 +181,9 @@
     "opened": "Opened",
     "sent": "Sent",
     "close": "Close",
-    "link": "Direct link"
+    "link": "Direct link",
+    "needsApproval": "Approve before opening coaching",
+    "needsApprovalHint": "The sign-up arrives as a request: you read the sheet, then accept or refuse."
   },
   "prose": {
     "sleep": "{under, plural, =0 {No nights} =1 {1 night} other {# nights}} under {target}, averaging {avg}.",
@@ -1487,7 +1491,8 @@
       "noProgramme": "No programme sent",
       "sleep": "Sleep under target",
       "call": "Upcoming video calls",
-      "pain": "Pain reported"
+      "pain": "Pain reported",
+      "request": "New requests"
     },
     "line": {
       "late": "Their check-in for the week isn’t filled in",
@@ -1499,7 +1504,8 @@
       "noProgramme": "No first week yet",
       "sleep": "Their average is under their target",
       "call": "{when}",
-      "pain": ""
+      "pain": "",
+      "request": ""
     },
     "wa": {
       "late": "Hi {first}! A quick reminder: your check-in for the week is waiting in Masse.",
@@ -1512,7 +1518,11 @@
     "open": "Open",
     "read": "Read",
     "write": "Write",
-    "noNumber": "No number on their file"
+    "noNumber": "No number on their file",
+    "decide": "Decide",
+    "requestCallOver": "Call over · decision due",
+    "requestCall": "Video call {when}",
+    "requestNoCall": "Sign-up complete · decision due"
   },
   "progress": {
     "menuLoad": "Next week: +2.5 kg if hit",
@@ -1591,5 +1601,42 @@
     "clientHint": "Add it to your calendar. Can't make it? Tell your coach on WhatsApp.",
     "whatsapp": "WhatsApp",
     "tellCancel": "Tell them it's cancelled"
+  },
+  "request": {
+    "title": "Request to review",
+    "kicker": "Request received on {date}",
+    "decide": "It is your call whether to open coaching for {first}.",
+    "decideAfterCall": "The video call is over: you can decide.",
+    "hint": "Accepting opens the app to the client and lets you send a programme. Refusing erases their account and answers at once.",
+    "accept": "Accept",
+    "refuse": "Refuse",
+    "refuseTitle": "Refuse {first}'s request?",
+    "refuseBody": "Their account and all their answers are erased immediately. This is final: tell them on WhatsApp first, the message is already written.",
+    "tellFirst": "Tell them on WhatsApp",
+    "refuseConfirm": "Refuse and erase",
+    "cancel": "Cancel",
+    "waDecline": "Hi {first}, thank you for your request and the time you put into it. After thinking it over, I won't be able to coach you for now. I wish you all the best!",
+    "accepted": "Coaching opened for {first}. You can send them a programme.",
+    "waWelcome": "Hi {first}! It's a yes from me, welcome. Your Masse app is open: I'm preparing your programme and will get back to you very soon.",
+    "goalBlock": "Goal and motivation",
+    "startBlock": "Starting point",
+    "frameBlock": "Frame",
+    "profileBlock": "Profile and contact",
+    "noInjury": "None declared"
+  },
+  "pending": {
+    "kicker": "Request sent",
+    "title": "Thank you, {first}",
+    "sentKicker": "Waiting",
+    "with": "Your request is with {coach}",
+    "body": "Your coach is reading your answers and will get back to you on WhatsApp. Your app opens as soon as it is approved.",
+    "bodyCall": "Your coach is reading your answers, and you will go over them on the video call. Your app opens as soon as it is approved.",
+    "changeKicker": "Changed your mind",
+    "changeBody": "You can withdraw your request at any time, as long as it is not approved.",
+    "cancel": "Withdraw my request",
+    "cancelBody": "Your request, your account and your answers will be erased at once. The booked video call will be cancelled.",
+    "cancelConfirm": "Yes, erase everything",
+    "keep": "Keep my request",
+    "cancelFailed": "That did not work. Try again, or message your coach."
   }
 }

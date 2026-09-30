@@ -193,6 +193,7 @@ export type CreatedInvite = { code: string; expiresAt: string };
 export async function createInvite(
   askCycle: boolean,
   callMinutes: CallMinutes | null = null,
+  needsApproval = false,
 ): Promise<CreatedInvite | null> {
   const supabase = await createClient();
   const {
@@ -216,6 +217,7 @@ export async function createInvite(
         code,
         ask_cycle: askCycle,
         call_minutes: callMinutes && CALL_MINUTES.includes(callMinutes) ? callMinutes : null,
+        needs_approval: needsApproval,
       })
       .select("code, expires_at")
       .single();
@@ -361,4 +363,32 @@ export async function markPainSeen(formData: FormData) {
     .is("seen_at", null);
   // À traiter and the client's own page both show it.
   revalidatePath("/clients", "layout");
+}
+
+
+/** The coach takes the request: the client becomes active and the app opens. */
+export async function acceptClient(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  if (!clientId) return;
+  await supabase.from("clients").update({ status: "active" }).eq("id", clientId).eq("status", "pending");
+  revalidatePath("/clients", "layout");
+  redirect(`/clients/${clientId}?bienvenue=1`);
+}
+
+/**
+ * The coach declines the request. There is no coaching, so nothing is kept:
+ * the account and its answers are erased at once. Only a pending client can
+ * be refused this way — an active one is archived or removed from the file.
+ */
+export async function refuseClient(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const { data: client } = await supabase.from("clients").select("status").eq("id", clientId).maybeSingle();
+  if (!client || client.status !== "pending") redirect("/clients");
+
+  await removeCheckInPhotos(supabase, clientId);
+  await supabase.rpc("erase_my_client", { p_client: clientId });
+  revalidatePath("/clients", "layout");
+  redirect("/clients");
 }

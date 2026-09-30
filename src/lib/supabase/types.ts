@@ -29,7 +29,8 @@ export type ClientGoal =
   | "Other";
 export type DayKind = "training" | "rest";
 
-export type ClientStatus = "active" | "paused" | "archived";
+/** "pending": signed up through an invite that asks for the coach's approval. */
+export type ClientStatus = "pending" | "active" | "paused" | "archived";
 export type CheckinFeel = "Strong" | "Steady" | "Heavy";
 export type CheckinPain = "None" | "Minor" | "Need to talk";
 export type CheckinAdherence = "All of it" | "Most" | "Struggled";
@@ -181,6 +182,8 @@ export type InviteCodeRow = {
   claimed_by: string | null;
   ask_cycle: boolean;
   call_minutes: CallMinutes | null;
+  /** The sign-up is a request the coach accepts or refuses. */
+  needs_approval: boolean;
 };
 
 /** The lengths a coach can offer for the first video call. */

@@ -70,6 +70,15 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   lets the sign-up through without it. The coach sees calls in À traiter
   and above the client's tabs (WhatsApp confirmation, cancel); the client
   on Today. `/rendez-vous/[id]` serves the .ics to either side.
+  An invite may also ask for approval (30 Sep 2026, "Valider avant d'ouvrir
+  le suivi", ticked with the video call unless she changes it,
+  `invite_codes.needs_approval`): the client then arrives `pending`. The
+  coach reads the answers on one sheet (`RequestSheet`, in place of the
+  tabs; "Nouvelles demandes" in À traiter, flagged once the call is over)
+  and accepts — status `active`, the app opens — or refuses, which erases
+  the account at once (`erase_my_client`). Until then the client's whole
+  app is one waiting screen (`PendingScreen`) with the call and "Annuler
+  ma demande", which erases it too. A client cannot lift `pending` alone.
 - **Roster** (web) — client list with the reason each client needs the coach.
 - **À traiter** (web, 29 Sep 2026) — the pane the coach lands on beside her
   roster (`/clients`): every client who needs her, grouped by reason — late

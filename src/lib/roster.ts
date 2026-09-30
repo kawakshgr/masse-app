@@ -17,6 +17,8 @@ export type RosterEntry = {
   checkinsWaiting: number;
   /** Coaching ended; listed apart, never in need of anything. */
   archived: boolean;
+  /** Signed up, waiting for the coach to accept or refuse. */
+  pending: boolean;
 };
 
 export type RosterSummary = {
@@ -50,7 +52,7 @@ export async function loadRoster(
   const { data: clients } = await supabase
     .from("clients")
     .select("id, name, first_name, sleep_target_h, status")
-    .in("status", ["active", "archived"])
+    .in("status", ["pending", "active", "archived"])
     .order("name");
 
   if (!clients || clients.length === 0) {
@@ -214,25 +216,31 @@ export async function loadRoster(
           : null;
 
     const archived = client.status === "archived";
+    // A request is not coached yet: no check-in is late, no session missed.
+    const pending = client.status === "pending";
     return {
       id: client.id,
       name: client.name,
       firstName: client.first_name,
       initials: initialsOf(client.name),
-      attention: archived ? null : attention,
+      attention: archived || pending ? null : attention,
       archived,
+      pending,
       blockLabel: blockLabel.get(client.id) ?? null,
       checkinsWaiting: waiting,
     };
   });
 
   // Archived clients close the list, after everyone still being coached.
-  entries.sort((a, b) => Number(a.archived) - Number(b.archived));
+  // Requests open the list: they are waiting on her.
+  entries.sort(
+    (a, b) => Number(b.pending) - Number(a.pending) || Number(a.archived) - Number(b.archived),
+  );
 
   return {
     entries,
     clientsNeedingYou: entries.filter((e) => e.attention !== null).length,
-    checkinsToReview: entries.reduce((sum, e) => sum + (e.archived ? 0 : e.checkinsWaiting), 0),
+    checkinsToReview: entries.reduce((sum, e) => sum + (e.archived || e.pending ? 0 : e.checkinsWaiting), 0),
   };
 }
 

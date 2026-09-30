@@ -187,3 +187,10 @@ export function stepComplete(step: number, a: Answers): boolean {
       return true;
   }
 }
+
+/** Full years since a birth date ("YYYY-MM-DD"), today. */
+export function ageFrom(birthDate: string, today = new Date()): number {
+  const [y, m, d] = birthDate.split("-").map(Number);
+  const before = today.getUTCMonth() + 1 < m || (today.getUTCMonth() + 1 === m && today.getUTCDate() < d);
+  return today.getUTCFullYear() - y - (before ? 1 : 0);
+}

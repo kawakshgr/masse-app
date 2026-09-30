@@ -13,7 +13,10 @@ import { DayTypes } from "@/components/DayTypes";
 import { RecordPanel } from "@/components/RecordPanel";
 import { CallBanner } from "@/components/CallBanner";
 import { PainHistory } from "@/components/PainHistory";
-import { callsShownFrom } from "@/lib/calls";
+import { RequestSheet } from "@/components/RequestSheet";
+import { Icon } from "@/components/Icon";
+import { waLink } from "@/lib/whatsapp";
+import { callEnded, callsShownFrom } from "@/lib/calls";
 import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
@@ -63,10 +66,10 @@ export default async function ClientDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ onglet?: string; portee?: string; jour?: string }>;
+  searchParams: Promise<{ onglet?: string; portee?: string; jour?: string; bienvenue?: string }>;
 }) {
   const { id } = await params;
-  const { onglet, portee, jour } = await searchParams;
+  const { onglet, portee, jour, bienvenue } = await searchParams;
   const supabase = await createClient();
   const detail = await loadClientDetail(supabase, id);
   if (!detail) notFound();
@@ -77,6 +80,7 @@ export default async function ClientDetailPage({
   const tGoal = await getTranslations("goal");
   const tPhase = await getTranslations("phase");
   const tSteps = await getTranslations("stepsTab");
+  const tRequest = await getTranslations("request");
 
   const { client, sleep } = detail;
 
@@ -136,36 +140,83 @@ export default async function ClientDetailPage({
     supabase.from("coaches").select("call_link").eq("id", client.coach_id).maybeSingle(),
   ]);
 
+  const firstName = client.first_name ?? client.name.split(/\s+/)[0] ?? client.name;
+  const header = (
+    <header className="flex items-center gap-4">
+      <span
+        aria-hidden
+        className="cta flex size-14 shrink-0 items-center justify-center rounded-r3 text-[18px] font-extrabold text-[var(--onA)]"
+      >
+        {initialsOf(client.name)}
+      </span>
+      <div className="min-w-0 flex-1">
+        {(client.status === "pending" || meta.length > 0) && (
+          <p className="truncate text-[11px] font-bold uppercase tracking-[.14em] text-[var(--accent)]">
+            {client.status === "pending" ? tRequest("title") : meta.join(" · ")}
+          </p>
+        )}
+        <h2 className="mt-1 truncate font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
+          {client.name}
+        </h2>
+      </div>
+    </header>
+  );
+  const callBanner = call && (
+    <CallBanner
+      call={call}
+      clientId={id}
+      firstName={firstName}
+      phone={client.whatsapp ?? client.phone}
+      callLink={me?.call_link ?? null}
+    />
+  );
+
+  // A request: her answers and the decision, in place of tabs that hold
+  // nothing yet. The call counts as over once its length has run.
+  if (client.status === "pending") {
+    const { data: lastCall } = await supabase
+      .from("appointments")
+      .select("starts_at, minutes")
+      .eq("client_id", id)
+      .is("cancelled_at", null)
+      .order("starts_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    return (
+      <div className="space-y-4 p-5">
+        {header}
+        {callBanner}
+        <RequestSheet client={client} callOver={lastCall ? callEnded(lastCall.starts_at, lastCall.minutes) : false} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4 p-5">
-      <header className="flex items-center gap-4">
-        <span
-          aria-hidden
-          className="cta flex size-14 shrink-0 items-center justify-center rounded-r3 text-[18px] font-extrabold text-[var(--onA)]"
-        >
-          {initialsOf(client.name)}
-        </span>
-        <div className="min-w-0 flex-1">
-          {meta.length > 0 && (
-            <p className="truncate text-[11px] font-bold uppercase tracking-[.14em] text-[var(--accent)]">
-              {meta.join(" · ")}
-            </p>
-          )}
-          <h2 className="mt-1 truncate font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
-            {client.name}
-          </h2>
-        </div>
-      </header>
+      {header}
 
-      {call && (
-        <CallBanner
-          call={call}
-          clientId={id}
-          firstName={client.first_name ?? client.name.split(/\s+/)[0] ?? client.name}
-          phone={client.whatsapp ?? client.phone}
-          callLink={me?.call_link ?? null}
-        />
+      {/* Just accepted: the welcome, already written. */}
+      {bienvenue && (
+        <section className="glass flex flex-wrap items-center gap-3 rounded-r3 p-3">
+          <span className="glass2 flex size-11 shrink-0 items-center justify-center rounded-r2 text-[var(--a1)]">
+            <Icon name="clients" size={24} />
+          </span>
+          <span className="min-w-0 flex-1 text-[14px] font-semibold">{tRequest("accepted", { first: firstName })}</span>
+          {waLink(client.whatsapp ?? client.phone, tRequest("waWelcome", { first: firstName })) && (
+            <a
+              href={waLink(client.whatsapp ?? client.phone, tRequest("waWelcome", { first: firstName })) ?? "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cta flex h-10 shrink-0 items-center gap-1.5 rounded-rp px-4 text-[11px] font-bold uppercase tracking-[.08em] text-[var(--onA)]"
+            >
+              <Icon name="whatsapp" size={16} />
+              WhatsApp
+            </a>
+          )}
+        </section>
       )}
+
+      {callBanner}
 
       <ClientTabs
         clientId={id}

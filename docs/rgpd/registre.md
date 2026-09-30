@@ -19,7 +19,7 @@ Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 | Base légale | Contrat (6.1.b) ; consentement explicite pour les données de santé (9.2.a) |
 | Destinataires | Le coach ; sous-traitants techniques (voir `sous-traitants.md`) |
 | Transferts hors UE | Vercel Inc. (USA) : DPF + clauses contractuelles types ; exécution en Europe |
-| Conservation | Suivi actif ; archivé : photos 3 mois, reste 12 mois ; suppression immédiate à la demande |
+| Conservation | Suivi actif ; archivé : photos 3 mois, reste 12 mois ; suppression immédiate à la demande ; demande d'inscription refusée par le coach ou retirée par le client : effacement immédiat |
 | Sécurité | Hébergement UE, RLS par ligne, TLS, stockage privé des photos, journal d'accès admin |
 
 ## 2. Facturation (pour le compte du coach)

@@ -32,6 +32,10 @@ export function InviteDialog({
   // A video call is offered only when she ticks it (29 Sep 2026).
   const [offerCall, setOfferCall] = useState(false);
   const [callMinutes, setCallMinutes] = useState<CallMinutes>(20);
+  // "Valider avant d'ouvrir": the sign-up is a request she accepts or refuses.
+  // It follows the video call until she sets it herself.
+  const [approval, setApproval] = useState<boolean | null>(null);
+  const needsApproval = approval ?? offerCall;
   const [created, setCreated] = useState<CreatedInvite | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [pendingTransition, startTransition] = useTransition();
@@ -62,7 +66,7 @@ export function InviteDialog({
 
   function onCreate() {
     startTransition(async () => {
-      const result = await createInvite(askCycle, offerCall ? callMinutes : null);
+      const result = await createInvite(askCycle, offerCall ? callMinutes : null, needsApproval);
       if (result) setCreated(result);
     });
   }
@@ -151,6 +155,19 @@ export function InviteDialog({
                     </select>
                   )}
                 </div>
+
+                <label className="mt-3 flex items-start gap-2">
+                  <input
+                    type="checkbox"
+                    checked={needsApproval}
+                    onChange={(e) => setApproval(e.target.checked)}
+                    className="mt-0.5 size-4 shrink-0 accent-[var(--a1)]"
+                  />
+                  <span className="min-w-0">
+                    <span className="block text-[13px] font-semibold">{t("needsApproval")}</span>
+                    <span className="block text-[12px] leading-snug text-[var(--ink3)]">{t("needsApprovalHint")}</span>
+                  </span>
+                </label>
 
                 <button
                   type="button"

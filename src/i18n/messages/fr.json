@@ -53,7 +53,9 @@
     "remove": "Retirer",
     "needsYou": "a besoin de toi",
     "noBlock": "Aucun bloc en cours",
-    "archived": "archivé"
+    "archived": "archivé",
+    "pending": "demande",
+    "pendingLine": "Demande à valider"
   },
   "programmes": {
     "title": "Programmes",
@@ -179,7 +181,9 @@
     "opened": "Ouvert",
     "sent": "Envoyé",
     "close": "Fermer",
-    "link": "Lien direct"
+    "link": "Lien direct",
+    "needsApproval": "Valider avant d’ouvrir le suivi",
+    "needsApprovalHint": "L’inscription arrive comme une demande : tu lis la fiche, puis tu acceptes ou tu refuses."
   },
   "prose": {
     "sleep": "{under, plural, =0 {Aucune nuit} =1 {1 nuit} other {# nuits}} sous {target}, moyenne {avg}.",
@@ -1487,7 +1491,8 @@
       "noProgramme": "Aucun programme envoyé",
       "sleep": "Sommeil sous l’objectif",
       "call": "Visios à venir",
-      "pain": "Douleurs signalées"
+      "pain": "Douleurs signalées",
+      "request": "Nouvelles demandes"
     },
     "line": {
       "late": "Son bilan de la semaine n’est pas rempli",
@@ -1499,7 +1504,8 @@
       "noProgramme": "Pas encore de première semaine",
       "sleep": "Sa moyenne est sous son objectif",
       "call": "{when}",
-      "pain": ""
+      "pain": "",
+      "request": ""
     },
     "wa": {
       "late": "Coucou {first} ! Petit rappel : ton bilan de la semaine t’attend dans Masse.",
@@ -1512,7 +1518,11 @@
     "open": "Ouvrir",
     "read": "Relire",
     "write": "Écrire",
-    "noNumber": "Pas de numéro dans sa fiche"
+    "noNumber": "Pas de numéro dans sa fiche",
+    "decide": "Décider",
+    "requestCallOver": "Visio passée · à décider",
+    "requestCall": "Visio {when}",
+    "requestNoCall": "Inscription terminée · à décider"
   },
   "progress": {
     "menuLoad": "Semaine suivante : +2,5 kg si réussi",
@@ -1591,5 +1601,42 @@
     "clientHint": "Ajoute-la à ton agenda. Un empêchement ? Préviens ton coach sur WhatsApp.",
     "whatsapp": "WhatsApp",
     "tellCancel": "Prévenir de l’annulation"
+  },
+  "request": {
+    "title": "Demande à valider",
+    "kicker": "Demande reçue le {date}",
+    "decide": "À toi de décider si tu ouvres le suivi de {first}.",
+    "decideAfterCall": "La visio est passée : tu peux décider.",
+    "hint": "Accepter ouvre l’app au client et te permet de lui envoyer un programme. Refuser efface tout de suite son compte et ses réponses.",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "refuseTitle": "Refuser la demande de {first} ?",
+    "refuseBody": "Son compte et toutes ses réponses sont effacés immédiatement. C’est définitif : préviens d’abord sur WhatsApp, le message est déjà écrit.",
+    "tellFirst": "Prévenir sur WhatsApp",
+    "refuseConfirm": "Refuser et effacer",
+    "cancel": "Annuler",
+    "waDecline": "Bonjour {first}, merci pour ta demande et pour le temps que tu y as mis. Après réflexion, je ne vais pas pouvoir t’accompagner pour le moment. Je te souhaite le meilleur pour la suite !",
+    "accepted": "Suivi ouvert pour {first}. Tu peux lui envoyer un programme.",
+    "waWelcome": "Bonjour {first} ! C’est validé de mon côté, bienvenue. Ton app Masse est ouverte : je te prépare ton programme et je reviens vers toi très vite.",
+    "goalBlock": "Objectif et motivation",
+    "startBlock": "Point de départ",
+    "frameBlock": "Cadre",
+    "profileBlock": "Profil et contact",
+    "noInjury": "Aucune déclarée"
+  },
+  "pending": {
+    "kicker": "Demande envoyée",
+    "title": "Merci, {first}",
+    "sentKicker": "En attente",
+    "with": "Ta demande est chez {coach}",
+    "body": "Ton coach lit tes réponses et revient vers toi sur WhatsApp. Ton app s’ouvrira dès que c’est validé.",
+    "bodyCall": "Ton coach lit tes réponses, et vous faites le point pendant la visio. Ton app s’ouvrira dès que c’est validé.",
+    "changeKicker": "Changement d’avis",
+    "changeBody": "Tu peux retirer ta demande à tout moment, tant qu’elle n’est pas validée.",
+    "cancel": "Annuler ma demande",
+    "cancelBody": "Ta demande, ton compte et tes réponses seront effacés tout de suite. La visio réservée sera annulée.",
+    "cancelConfirm": "Oui, tout effacer",
+    "keep": "Garder ma demande",
+    "cancelFailed": "Ça n’a pas marché. Réessaie, ou écris à ton coach."
   }
 }

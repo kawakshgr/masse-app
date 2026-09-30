@@ -9,6 +9,7 @@ import { markPainSeen } from "@/app/(coach)/clients/actions";
 
 const ICON: Record<QueueKind, string> = {
   pain: "pain",
+  request: "account",
   call: "video",
   late: "checkIns",
   checkin: "note",
@@ -98,7 +99,7 @@ export async function QueuePanel({ items, callLink }: { items: QueueItem[]; call
                     ? waLink(item.phone, t(`wa.${item.kind}`, values))
                     : null;
                 const action =
-                  item.kind === "checkin" ? t("read") : item.kind === "nextWeek" || item.kind === "noProgramme" ? t("write") : t("open");
+                  item.kind === "request" ? t("decide") : item.kind === "checkin" ? t("read") : item.kind === "nextWeek" || item.kind === "noProgramme" ? t("write") : t("open");
 
                 return (
                   <li
@@ -110,10 +111,17 @@ export async function QueuePanel({ items, callLink }: { items: QueueItem[]; call
                       <span className="block truncate text-[13.5px] font-semibold">{item.name}</span>
                       <span
                         className={`block truncate text-[11.5px] ${
-                          item.kind === "late" || item.kind === "unpaid" || item.kind === "pain" ? "text-[var(--a3)]" : "text-[var(--ink2)]"
+                          item.kind === "late" || item.kind === "unpaid" || item.kind === "pain" || item.request?.callOver
+                            ? "text-[var(--a3)]" : "text-[var(--ink2)]"
                         }`}
                       >
-                        {item.pain
+                        {item.request
+                          ? item.request.callAt
+                            ? item.request.callOver
+                              ? t("requestCallOver")
+                              : t("requestCall", { when: callLabel(item.request.callAt) })
+                            : t("requestNoCall")
+                          : item.pain
                           ? [item.pain.exercise, painLevel, item.pain.note].filter(Boolean).join(" · ")
                           : item.call
                             ? `${when} · ${tCalls("length", { minutes: item.call.minutes })}`

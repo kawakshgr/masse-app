@@ -74,3 +74,8 @@ export function callIcs(call: {
 export function callsShownFrom(): string {
   return new Date(Date.now() - 60 * 60_000).toISOString();
 }
+
+/** Whether a call's time has fully run. */
+export function callEnded(startsAt: string, minutes: number): boolean {
+  return new Date(startsAt).getTime() + minutes * 60_000 < Date.now();
+}

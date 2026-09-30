@@ -11,6 +11,7 @@ import type { Database, PainLevel } from "@/lib/supabase/types";
  */
 export type QueueKind =
   | "pain"
+  | "request"
   | "call"
   | "late"
   | "checkin"
@@ -25,6 +26,8 @@ export type QueueKind =
 export const QUEUE_ORDER: QueueKind[] = [
   // Pain first: a client may be hurt. Then booked calls, which have a clock.
   "pain",
+  // A sign-up waiting for her yes or no.
+  "request",
   "call",
   "late",
   "checkin",
@@ -51,6 +54,8 @@ export type QueueItem = {
   programmeId?: string;
   /** For "call": the booked call. */
   call?: { id: string; startsAt: string; minutes: number };
+  /** For "request": the call booked with the sign-up, if any, and whether it is over. */
+  request?: { callAt: string | null; callOver: boolean };
   /** For "pain": what she flagged, on which exercise. */
   pain?: { id: string; exercise: string; level: PainLevel; note: string | null; at: string };
 };
@@ -72,7 +77,7 @@ export async function loadQueue(
   const since = addDays(today, -SILENT_DAYS);
   const sinceInstant = new Date(Date.now() - SILENT_DAYS * 86_400_000).toISOString();
 
-  const [clientsRes, metricsRes, setsRes, assignmentsRes, invoicesRes, callsRes, painRes] = await Promise.all([
+  const [clientsRes, metricsRes, setsRes, assignmentsRes, invoicesRes, callsRes, painRes, requestCallsRes] = await Promise.all([
     supabase.from("clients").select("id, whatsapp, phone, created_at").in("id", ids),
     supabase.from("daily_metrics").select("client_id").in("client_id", ids).gte("day", since),
     supabase.from("set_logs").select("client_id").in("client_id", ids).gte("logged_at", sinceInstant),
@@ -102,6 +107,14 @@ export async function loadQueue(
       .in("client_id", ids)
       .is("seen_at", null)
       .order("created_at", { ascending: false }),
+    // The call each pending sign-up booked, past ones included: once it is
+    // over, the request says the decision is due.
+    supabase
+      .from("appointments")
+      .select("client_id, starts_at, minutes")
+      .in("client_id", roster.entries.filter((e) => e.pending).map((e) => e.id))
+      .is("cancelled_at", null)
+      .order("starts_at", { ascending: false }),
   ]);
 
   const contact = new Map(
@@ -164,6 +177,20 @@ export async function loadQueue(
         kind: "call",
         call: { id: call.id, startsAt: call.starts_at, minutes: call.minutes },
       });
+    }
+
+    // A request: nothing is owed yet but her decision.
+    if (entry.pending) {
+      const call = (requestCallsRes.data ?? []).find((row) => row.client_id === entry.id) ?? null;
+      items.push({
+        ...base,
+        kind: "request",
+        request: {
+          callAt: call?.starts_at ?? null,
+          callOver: call ? new Date(call.starts_at).getTime() + call.minutes * 60_000 < Date.now() : false,
+        },
+      });
+      continue;
     }
 
     const joined = contact.get(entry.id)?.since ?? "";

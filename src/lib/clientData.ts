@@ -20,7 +20,7 @@ export const clientSession = cache(async () => {
 
   const { data: client } = await supabase
     .from("clients")
-    .select("id, coach_id, name, first_name, cycle_tracking, steps_target, timezone, health_consent_at")
+    .select("id, coach_id, name, first_name, cycle_tracking, steps_target, timezone, health_consent_at, status")
     .eq("id", user.id)
     .maybeSingle();
 

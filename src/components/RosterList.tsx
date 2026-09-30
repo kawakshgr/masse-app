@@ -50,7 +50,9 @@ export function RosterList({
           <ul className="flex flex-col gap-1 p-2">
             {shown.map((entry) => {
               const active = params?.id === entry.id;
-              const secondLine = entry.attention
+              const secondLine = entry.pending
+                ? t("pendingLine")
+                : entry.attention
                 ? tAttention(entry.attention)
                 : (entry.blockLabel ?? t("noBlock"));
 
@@ -87,6 +89,7 @@ export function RosterList({
 
                     {entry.attention && <Badge tone="alert">{tChip(entry.attention)}</Badge>}
                     {entry.archived && <Badge>{t("archived")}</Badge>}
+                    {entry.pending && <Badge>{t("pending")}</Badge>}
                   </Link>
                 </li>
               );

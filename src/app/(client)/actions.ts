@@ -304,6 +304,23 @@ export async function deleteMyAccount(confirmation: string) {
   redirect("/connexion?compte=supprime");
 }
 
+/**
+ * A pending client changes their mind before the coach has answered: the
+ * request and the account go at once. Only while pending — an accepted
+ * client deletes the account from settings, with the typed confirmation.
+ */
+export async function cancelMyRequest() {
+  const { supabase, user } = await signedIn();
+  if (!user) return { ok: false as const };
+  const { data: client } = await supabase.from("clients").select("status").eq("id", user.id).maybeSingle();
+  if (client?.status !== "pending") return { ok: false as const };
+
+  const { error } = await supabase.rpc("delete_my_account");
+  if (error) return { ok: false as const };
+  await supabase.auth.signOut();
+  redirect("/connexion?compte=supprime");
+}
+
 /** Withdraws consent to health data; injuries, cycle dates and sleep go. */
 export async function withdrawHealthConsent() {
   const { supabase } = await signedIn();
