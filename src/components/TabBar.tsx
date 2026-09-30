@@ -77,13 +77,14 @@ export function TabBar({
                   href={item.href}
                   title={item.chord}
                   aria-current="page"
-                  className="sel flex h-10 items-center gap-2 rounded-rp border pl-1 pr-4 text-[var(--ink)]"
+                  className="sel flex h-10 items-center gap-2 rounded-rp border pl-1 pr-1 text-[var(--ink)] sm:pr-4"
                   style={{ boxShadow: "var(--spec)" }}
                 >
                   <span className="cta flex size-8 items-center justify-center rounded-full text-[var(--onA)]">
                     <Icon name={item.key} size={17} />
                   </span>
-                  <span className="text-[11.5px] font-bold uppercase tracking-[.12em]">
+                  {/* On a phone the five tabs are icons; the label needs the room. */}
+                  <span className="hidden text-[11.5px] font-bold uppercase tracking-[.12em] sm:inline">
                     {t(item.key)}
                   </span>
                 </Link>

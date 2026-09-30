@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { usePathname } from "next/navigation";
 
 type WidthStore = {
   subscribe: (onChange: () => void) => () => void;
@@ -66,7 +67,10 @@ export function SplitPane({
   max = 520,
   list,
   detail,
+  listLabel,
 }: {
+  /** What the list is called, for the button that opens it on a phone. */
+  listLabel: string;
   storageKey: string;
   initial?: number;
   min?: number;
@@ -80,6 +84,13 @@ export function SplitPane({
   );
 
   const width = useSyncExternalStore(store.subscribe, store.get, store.getServer);
+
+  // On a phone there is room for one pane: the detail, with the list laid
+  // over it on demand. It is open for the page it was opened on, so picking
+  // a row — a navigation — closes it without an effect.
+  const pathname = usePathname();
+  const [openOn, setOpenOn] = useState<string | null>(null);
+  const listOpen = openOn === pathname;
 
   const paneRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -125,14 +136,26 @@ export function SplitPane({
   }, [min, max, store]);
 
   return (
-    <div className="flex min-h-0 w-full min-w-0 flex-1">
+    <div className="relative flex min-h-0 w-full min-w-0 flex-1">
       <div
         ref={paneRef}
         style={{ width }}
-        className="min-w-0 shrink-0 overflow-y-auto"
+        className={`min-w-0 shrink-0 overflow-y-auto max-md:!w-full ${
+          listOpen ? "max-md:absolute max-md:inset-0 max-md:z-30 max-md:bg-[var(--deep)]" : "max-md:hidden"
+        }`}
       >
         {list}
       </div>
+      {listOpen && (
+        <button
+          type="button"
+          onClick={() => setOpenOn(null)}
+          aria-label={listLabel}
+          className="glass absolute right-3 top-3 z-40 flex size-10 items-center justify-center rounded-rp text-[18px] md:hidden"
+        >
+          ×
+        </button>
+      )}
 
       <div
         role="separator"
@@ -157,10 +180,22 @@ export function SplitPane({
             nudge(step);
           }
         }}
-        className="w-2 shrink-0 cursor-col-resize touch-none bg-[var(--hair)] transition-colors hover:bg-[var(--glass2)]"
+        className="w-2 shrink-0 cursor-col-resize touch-none bg-[var(--hair)] transition-colors hover:bg-[var(--glass2)] max-md:hidden"
       />
 
-      <div className="min-w-0 flex-1 overflow-y-auto">{detail}</div>
+      <div className="min-w-0 flex-1 overflow-y-auto">
+        <div className="sticky top-0 z-20 px-3 pt-3 md:hidden">
+          <button
+            type="button"
+            onClick={() => setOpenOn(pathname)}
+            className="glass lift flex h-10 items-center gap-2 rounded-rp px-4 text-[11.5px] font-bold uppercase tracking-[.12em]"
+          >
+            <span aria-hidden className="text-[15px] leading-none">☰</span>
+            {listLabel}
+          </button>
+        </div>
+        {detail}
+      </div>
     </div>
   );
 }

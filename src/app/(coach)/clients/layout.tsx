@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { loadRoster } from "@/lib/roster";
 import { SplitPane } from "@/components/SplitPane";
@@ -9,6 +10,7 @@ export default async function ClientsLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
+  const t = await getTranslations("roster");
   const { entries } = await loadRoster(supabase);
 
   // The coach needs the codes themselves, not a count she cannot send.
@@ -22,6 +24,7 @@ export default async function ClientsLayout({
   return (
     <SplitPane
       storageKey="masse:pane:clients"
+      listLabel={t("title")}
       list={
         <RosterList entries={entries} pendingInvites={pendingInvites ?? []} />
       }

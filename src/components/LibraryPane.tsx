@@ -81,6 +81,7 @@ export function LibraryPane({
   return (
     <SplitPane
       storageKey="masse:foods:width"
+      listLabel={title}
       initial={300}
       min={240}
       max={460}
