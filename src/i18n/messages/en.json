@@ -415,7 +415,9 @@
     "scopeWeek": "This week",
     "scopeProgramme": "The whole programme ({count} weeks)",
     "pushProgramme": "{count, plural, =0 {Send the programme} =1 {Send the programme to 1 client} other {Send the programme to # clients}}",
-    "scopeProgrammeHint": "Week 1 starts on the chosen date, each later week 7 days on. Each client sees a week only from its date."
+    "scopeProgrammeHint": "Week 1 starts on the chosen date, each later week 7 days on. Each client sees a week only from its date.",
+    "weekOf": "Week of",
+    "today": "today"
   },
   "goal": {
     "Get stronger": "Get stronger",
@@ -1474,7 +1476,10 @@
     "daysOffTitle": "Days off",
     "dayOff": "Day off",
     "addDayOff": "Block this day",
-    "remove": "Remove"
+    "remove": "Remove",
+    "weekOf": "Week of",
+    "today": "today",
+    "pickDay": "Pick a day"
   },
   "queue": {
     "title": "To do",

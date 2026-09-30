@@ -415,7 +415,9 @@
     "scopeWeek": "Cette semaine",
     "scopeProgramme": "Tout le programme ({count} semaines)",
     "pushProgramme": "{count, plural, =0 {Envoyer le programme} =1 {Envoyer le programme à 1 client} other {Envoyer le programme à # clients}}",
-    "scopeProgrammeHint": "La semaine 1 commence à la date choisie, chaque semaine suivante 7 jours plus tard. Chaque client ne voit une semaine qu’à partir de sa date."
+    "scopeProgrammeHint": "La semaine 1 commence à la date choisie, chaque semaine suivante 7 jours plus tard. Chaque client ne voit une semaine qu’à partir de sa date.",
+    "weekOf": "Semaine du",
+    "today": "aujourd’hui"
   },
   "goal": {
     "Get stronger": "Gagner en force",
@@ -1474,7 +1476,10 @@
     "daysOffTitle": "Jours bloqués",
     "dayOff": "Jour bloqué",
     "addDayOff": "Bloquer ce jour",
-    "remove": "Retirer"
+    "remove": "Retirer",
+    "weekOf": "Semaine du",
+    "today": "aujourd’hui",
+    "pickDay": "Choisir un jour"
   },
   "queue": {
     "title": "À traiter",

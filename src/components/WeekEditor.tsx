@@ -4,6 +4,7 @@ import { REST_PRESETS, parseRestKey, restKey, restLabel } from "@/lib/rest";
 import { SectionTitle } from "@/components/Pane";
 import { useState, useSyncExternalStore, useTransition } from "react";
 import { Icon } from "@/components/Icon";
+import { DaySelect } from "@/components/DaySelect";
 import {
   ExerciseLibrary,
   type CatalogueEntry,
@@ -101,9 +102,12 @@ export function WeekEditor({
   const tLibrary = useTranslations("library");
   const [overDay, setOverDay] = useState<number | null>(null);
   const [selected, setSelected] = useState<string[]>(assignedClientIds);
-  const [startDate, setStartDate] = useState(() =>
-    new Date().toISOString().slice(0, 10),
-  );
+  // Today in the coach's own day (not UTC's), read once.
+  const [today] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  });
+  const [startDate, setStartDate] = useState(today);
   // This week only, or every week of the programme, a week apart.
   const [scope, setScope] = useState<"week" | "programme">("week");
 
@@ -576,11 +580,18 @@ export function WeekEditor({
                 <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("startDate")}
                 </span>
-                <input
-                  type="date"
+                {/* A dropdown, not the browser's date field: its calendar
+                    opened under the field and out of the window. From this
+                    week's Monday, so a week already begun can be pushed. */}
+                <DaySelect
+                  today={today}
+                  weeks={9}
+                  fromMonday
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="tnum mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+                  onChange={setStartDate}
+                  label={t("weekOf")}
+                  todayLabel={t("today")}
+                  className="mt-1 block h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
                 />
               </label>
               <button

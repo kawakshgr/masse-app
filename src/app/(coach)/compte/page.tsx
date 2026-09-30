@@ -10,6 +10,7 @@ import {
   saveAccount,
 } from "./actions";
 import { HALF_HOURS, hm } from "@/lib/calls";
+import { DaySelect } from "@/components/DaySelect";
 
 const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 const cell =
@@ -257,7 +258,17 @@ export default async function AccountPage({
           ))}
         </ul>
         <form action={addUnavailableDay} className="mt-2 flex flex-wrap items-center gap-2">
-          <input type="date" name="day" min={today} required aria-label={t("dayOff")} className={`${select} tnum`} />
+          {/* A dropdown rather than the browser's date field, whose calendar
+              spilled out of the window at the bottom of this page. */}
+          <DaySelect
+            name="day"
+            today={today}
+            weeks={13}
+            label={t("weekOf")}
+            todayLabel={t("today")}
+            placeholder={t("pickDay")}
+            className={select}
+          />
           <button type="submit" className="glass h-10 rounded-rp px-4 text-[11.5px] font-bold uppercase tracking-[.08em]">
             {t("addDayOff")}
           </button>
