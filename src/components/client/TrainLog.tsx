@@ -199,6 +199,14 @@ function ExerciseCard({
             }`}
           >
             {tToday("sets", { count: logged.length })}
+            {/* What was planned, beside what is done — stated, never judged:
+                going past the plan is the client's call. */}
+            {exercise.target_sets != null && (
+              <span className="font-normal text-[var(--ink3)]">
+                {" · "}
+                {tToday("setsPlanned", { count: exercise.target_sets })}
+              </span>
+            )}
           </span>
         </span>
         {target && <span className="tnum block text-[13px] text-[var(--ink2)]">{target}</span>}

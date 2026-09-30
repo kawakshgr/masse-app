@@ -371,7 +371,8 @@
     "coachLogo": "Logo de ton coach",
     "programme": "Ton programme",
     "startsOn": "Ça commence {day}",
-    "startsHint": "Ton coach a envoyé ton programme. Ta première séance apparaîtra ici ce jour-là."
+    "startsHint": "Ton coach a envoyé ton programme. Ta première séance apparaîtra ici ce jour-là.",
+    "setsPlanned": "{count, plural, =1 {1 prévue} other {# prévues}}"
   },
   "editor": {
     "addWeek": "+ Semaine",

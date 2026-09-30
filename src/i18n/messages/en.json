@@ -371,7 +371,8 @@
     "coachLogo": "Your coach’s logo",
     "programme": "Your programme",
     "startsOn": "It starts {day}",
-    "startsHint": "Your coach has sent your programme. Your first session will show here on that day."
+    "startsHint": "Your coach has sent your programme. Your first session will show here on that day.",
+    "setsPlanned": "{count} planned"
   },
   "editor": {
     "addWeek": "+ Week",
