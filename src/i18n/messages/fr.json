@@ -552,7 +552,19 @@
     "finished": "Séance terminée",
     "restNotifTitle": "Repos terminé",
     "restNotifBody": "{exercise} · série {n}",
-    "restTime": "Repos {time}"
+    "restTime": "Repos {time}",
+    "lastTime": "La dernière fois ({day}) · {sets}",
+    "dayKicker": "Séance de {day}",
+    "backToToday": "‹ Revenir à aujourd’hui",
+    "noSessionThatDay": "Pas de séance prévue ce jour-là.",
+    "myWeek": "Ma semaine",
+    "myWeekHint": "Tu n’as pas pu faire une séance le bon jour ? Ouvre-la ici et note-la quand tu la fais.",
+    "weekRest": "Repos",
+    "weekToday": "aujourd’hui",
+    "weekTodo": "à faire",
+    "weekDone": "faite",
+    "weekPartial": "{done}/{total} exercices",
+    "lastMixed": "{count} séries, la plus lourde {best}"
   },
   "entry": {
     "title": "Saisie",

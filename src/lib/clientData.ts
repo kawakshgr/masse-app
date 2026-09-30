@@ -83,6 +83,8 @@ export type WeekExercise = {
 };
 
 export type PushedWeek = {
+  /** The day this week started for her: its logs count from then. */
+  startDate: string;
   week_number: number;
   programmes: { name: string } | null;
   sessions: {
@@ -109,8 +111,9 @@ export const currentWeek = cache(async (): Promise<PushedWeek | null> => {
     .order("start_date", { ascending: false })
     .limit(1);
 
-  const week = (data ?? [])[0]?.programme_weeks as unknown as PushedWeek | undefined;
-  return week ?? null;
+  const row = (data ?? [])[0];
+  const week = row?.programme_weeks as unknown as Omit<PushedWeek, "startDate"> | undefined;
+  return row && week ? { ...week, startDate: row.start_date } : null;
 });
 
 /**
@@ -135,13 +138,15 @@ export async function upcomingWeek(): Promise<{ startDate: string; programme: st
  * Today's session, exercises in the coach's order and at today's phase: the
  * loads and sets she is shown are already adjusted, and `levers` says why.
  */
-export async function todaySession() {
+export async function todaySession(dayIndex?: number) {
   const [{ weekday }, week, levers] = await Promise.all([
     clientSession(),
     currentWeek(),
     cycleLevers(),
   ]);
-  const session = week?.sessions?.find((s) => s.day_index === weekday) ?? null;
+  // Another day of the week when she asks for it: sessions get moved.
+  const wanted = dayIndex ?? weekday;
+  const session = week?.sessions?.find((s) => s.day_index === wanted) ?? null;
   return {
     week,
     levers: changesTraining(levers) ? levers : null,

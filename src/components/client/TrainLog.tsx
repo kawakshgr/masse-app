@@ -33,9 +33,12 @@ export function TrainLog({
   exercises,
   onServer,
   canReportPain,
+  last,
 }: {
   clientId: string;
   exercises: WeekExercise[];
+  /** Per exercise id: "La dernière fois (23 sept.) · 3 × 8 · 60 kg", when she has done it before. */
+  last: Record<string, string>;
   /** Pain is health data: offered only while consent to it stands. */
   canReportPain: boolean;
   /** What the server already holds for today: both halves are shown. */
@@ -140,6 +143,7 @@ export function TrainLog({
             onLog={(reps, weight, rpe) => log(exercise, reps, weight, rpe)}
             onUndo={() => undo(exercise.id)}
             canReportPain={canReportPain}
+            lastTime={last[exercise.id] ?? null}
           />
         ))}
       </div>
@@ -155,8 +159,10 @@ function ExerciseCard({
   onLog,
   onUndo,
   canReportPain,
+  lastTime,
 }: {
   exercise: WeekExercise;
+  lastTime: string | null;
   logged: LoggedSet[];
   expanded: boolean;
   onToggle: () => void;
@@ -219,6 +225,8 @@ function ExerciseCard({
           </span>
         </span>
         {target && <span className="tnum block text-[13px] text-[var(--ink2)]">{target}</span>}
+        {/* The figure to beat, from her own last sets on this movement. */}
+        {lastTime && <span className="tnum block text-[13px] text-[var(--ink3)]">{lastTime}</span>}
       </button>
 
       {logged.length > 0 && (

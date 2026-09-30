@@ -552,7 +552,19 @@
     "finished": "Session finished",
     "restNotifTitle": "Rest over",
     "restNotifBody": "{exercise} · set {n}",
-    "restTime": "Rest {time}"
+    "restTime": "Rest {time}",
+    "lastTime": "Last time ({day}) · {sets}",
+    "dayKicker": "{day}'s session",
+    "backToToday": "‹ Back to today",
+    "noSessionThatDay": "No session planned that day.",
+    "myWeek": "My week",
+    "myWeekHint": "Could not do a session on its day? Open it here and log it when you do it.",
+    "weekRest": "Rest",
+    "weekToday": "today",
+    "weekTodo": "to do",
+    "weekDone": "done",
+    "weekPartial": "{done}/{total} exercises",
+    "lastMixed": "{count} sets, heaviest {best}"
   },
   "entry": {
     "title": "Entry",
