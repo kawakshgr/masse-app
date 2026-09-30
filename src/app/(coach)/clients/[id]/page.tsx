@@ -13,6 +13,7 @@ import { markCheckInReviewed } from "@/app/(coach)/clients/actions";
 import { DayTypes } from "@/components/DayTypes";
 import { RecordPanel } from "@/components/RecordPanel";
 import { CallBanner } from "@/components/CallBanner";
+import { CallOfferBanner, CallOfferMenu } from "@/components/CallOffer";
 import { PainHistory } from "@/components/PainHistory";
 import { RequestSheet } from "@/components/RequestSheet";
 import { Icon } from "@/components/Icon";
@@ -160,9 +161,11 @@ export default async function ClientDetailPage({
           {client.name}
         </h2>
       </div>
+      {/* No call booked, none offered: the way to offer one. */}
+      {client.status === "active" && !call && !client.call_offer_minutes && <CallOfferMenu clientId={id} />}
     </header>
   );
-  const callBanner = call && (
+  const callBanner = call ? (
     <CallBanner
       call={call}
       clientId={id}
@@ -170,7 +173,14 @@ export default async function ClientDetailPage({
       phone={client.whatsapp ?? client.phone}
       callLink={me?.call_link ?? null}
     />
-  );
+  ) : client.call_offer_minutes ? (
+    <CallOfferBanner
+      clientId={id}
+      minutes={client.call_offer_minutes}
+      firstName={firstName}
+      phone={client.whatsapp ?? client.phone}
+    />
+  ) : null;
 
   // A request: her answers and the decision, in place of tabs that hold
   // nothing yet. The call counts as over once its length has run.

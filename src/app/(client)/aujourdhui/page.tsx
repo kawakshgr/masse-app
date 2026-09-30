@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { addDays, checkInState, clientSession, targetLine, todaySession, upcomingWeek } from "@/lib/clientData";
 import { Card, CardTitle, CtaLink, Kicker, ScreenHeader } from "@/components/client/ui";
 import { callLabel, callsShownFrom } from "@/lib/calls";
+import { CallPicker } from "@/components/client/CallPicker";
 import { EntryCard } from "@/components/client/EntryCard";
 import { CheckInCard } from "@/components/client/CheckInCard";
 import { InstallPrompt } from "@/components/client/InstallPrompt";
@@ -98,6 +99,18 @@ export default async function TodayPage() {
 
       {/* Only in a browser, never once installed. */}
       <InstallPrompt />
+
+      {/* A call the coach offered, not booked yet: the client takes a slot. */}
+      {!call && client.call_offer_minutes && (
+        <Card className="space-y-3">
+          <Kicker icon="video" accent>
+            {tCalls("kicker", { length: tCalls("length", { minutes: client.call_offer_minutes }) })}
+          </Kicker>
+          <CardTitle>{tCalls("offerTitle", { coach: coach?.first_name ?? coach?.name ?? "" })}</CardTitle>
+          <p className="text-[14px] leading-[1.45] text-[var(--ink2)]">{tCalls("offerBody")}</p>
+          <CallPicker />
+        </Card>
+      )}
 
       {call && (
         <Card className="space-y-3">

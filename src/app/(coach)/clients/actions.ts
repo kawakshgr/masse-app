@@ -392,3 +392,19 @@ export async function refuseClient(formData: FormData) {
   revalidatePath("/clients", "layout");
   redirect("/clients");
 }
+
+/**
+ * A video call offered to a client already coached: its length goes on the
+ * client's row, and the client picks a free slot in the app. Offering again
+ * replaces the length; a null length withdraws the offer.
+ */
+export async function offerCall(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const raw = formData.get("minutes");
+  const minutes = raw === null || raw === "" ? null : (Number(raw) as CallMinutes);
+  if (!clientId || (minutes !== null && !CALL_MINUTES.includes(minutes))) return;
+
+  await supabase.from("clients").update({ call_offer_minutes: minutes }).eq("id", clientId);
+  revalidatePath(`/clients/${clientId}`);
+}

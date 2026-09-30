@@ -124,6 +124,8 @@ export type ClientRow = {
   cycle_tracking: boolean;
   /** Tracking was on when consent was withdrawn; it resumes with consent. */
   cycle_tracking_paused: boolean;
+  /** A video call the coach has offered and the client has not booked yet. */
+  call_offer_minutes: CallMinutes | null;
   cycle_mode: CycleMode;
   nutrition_mode: NutritionMode;
   /** Used only when cycle_mode is 'manual'. */
@@ -735,6 +737,10 @@ export type Database = {
         Args: { p_phase: CyclePhase };
         Returns: number;
       };
+      /** The free slots for the call offered to the signed-in client. */
+      my_call_slots: { Args: Record<string, never>; Returns: string[] };
+      /** Books one of them; returns the appointment's id. */
+      book_call: { Args: { p_at: string }; Returns: string };
       /** The coach's free call slots behind a valid code (ISO instants). */
       invite_free_slots: { Args: { p_code: string }; Returns: string[] };
       /** Validates a code before the client has an account. */

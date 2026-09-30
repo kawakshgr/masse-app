@@ -21,7 +21,9 @@ Design reference: `Masse.dc.html` — switch the platform control to **Mac**/**W
 the coach, **iPhone** for the client. `Onboarding.dc.html` is the nine-step flow.
 
 French UI first (`next-intl` on web, `String(localized:)` + `fr.lproj` on iOS);
-English second. The French copy in the `FR_*` dictionaries is reviewed — lift it
+English second. Dates and figures follow the language through `lib/locale.ts`
+(`intl(locale)`: fr-FR or en-GB) — never a hard-coded "fr-FR", except on
+invoices, which stay French. The French copy in the `FR_*` dictionaries is reviewed — lift it
 verbatim, but **do not copy the prototype's DOM-translation mechanism**; it is a
 prototyping trick.
 
@@ -70,6 +72,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   lets the sign-up through without it. The coach sees calls in À traiter
   and above the client's tabs (WhatsApp confirmation, cancel); the client
   on Today. `/rendez-vous/[id]` serves the .ics to either side.
+  A call can also be offered to a client already coached (30 Sep 2026):
+  the coach sets a length from the client's header
+  (`clients.call_offer_minutes`), the client picks a slot on Today
+  (`my_call_slots`, `book_call`), and the offer is spent.
   An invite may also ask for approval (30 Sep 2026, "Valider avant d'ouvrir
   le suivi", ticked with the video call unless she changes it,
   `invite_codes.needs_approval`): the client then arrives `pending`. The
@@ -98,7 +104,11 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
   who logged it hit every prescribed set; otherwise, or with no logs or no
   target, it stays. The new week is never pushed by this.
-- **Session logging** (both) — offline-first. A client may flag pain on an
+- **Session logging** (both) — offline-first. Séance opens today's session
+  or another day's (`?jour=`, 30 Sep 2026: sessions get moved), lists the
+  week ("Ma semaine") with what is logged, and shows under each movement
+  the client's last sets on it (`lib/lastTime.ts`). Sets shown are the
+  week's, whichever day they were done. A client may flag pain on an
   exercise (30 Sep 2026: mild / sharp / had to stop, optional note,
   `pain_reports`); it heads À traiter until the coach marks it seen. Health
   data: accepted only under consent, erased when consent is withdrawn.
