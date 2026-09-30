@@ -161,7 +161,8 @@
     "inProgress": "en cours",
     "scheduled": "prévue",
     "rest": "Repos",
-    "weekMoved": "{first} a échangé des jours cette semaine : les séances et l’alimentation sont là où elles ont été placées."
+    "weekMoved": "{first} a échangé des jours cette semaine : les séances et l’alimentation sont là où elles ont été placées.",
+    "weekShort": "sem. {n}"
   },
   "invite": {
     "title": "Inviter un client",
@@ -748,7 +749,8 @@
     "nothingAutomatic": "rien n’est automatique",
     "nothingAutomaticBody": "Masse ne débite aucune carte. L’app garde ce que vous avez convenu, te dit ce qui reste ouvert et écrit la facture — c’est toi qui demandes.",
     "noClients": "Ajoute un client avant de facturer.",
-    "dueDayPassed": "échéance passée le {day}"
+    "dueDayPassed": "échéance passée le {day}",
+    "packOf": "forfait de {count} séances"
   },
   "programme": {
     "rename": "Renommer",
@@ -957,7 +959,8 @@
     "noStrength": "Pas encore de séries chargées pour estimer une progression.",
     "records": "Records",
     "noRecords": "Aucun record sur la période.",
-    "reps": "×"
+    "reps": "×",
+    "weeksShort": "{count} sem."
   },
   "cyc": {
     "on": "Le suivi de cycle est actif",

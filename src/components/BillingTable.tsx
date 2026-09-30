@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { markAllPaid, setMonthStatus } from "@/app/(coach)/facturation/actions";
 import { euros, nextLabel } from "@/lib/billing";
 import type { BillingClient } from "@/components/BillingInspector";
@@ -33,6 +34,11 @@ export async function BillingTable({
   nextMonth: string;
 }) {
   const t = await getTranslations("billing");
+  const locale = intl(await getLocale());
+  const next = (row: BillingClient) =>
+    nextLabel(row.type, row.dayOfMonth, row.packSessions, nextMonth, locale, (count) =>
+      t("packOf", { count }),
+    );
   const shown = rows;
   const selected = selectedId;
 
@@ -101,21 +107,16 @@ export async function BillingTable({
               <span className="truncate font-semibold">{row.name}</span>
               <span className="truncate text-[11.5px] text-[var(--ink3)] @2xl:hidden">
                 {t(row.type)} ·{" "}
-                {nextLabel(
-                  row.type,
-                  row.dayOfMonth,
-                  row.packSessions,
-                  nextMonth,
-                )}
+                {next(row)}
               </span>
             </Link>
 
-            <span className="tnum font-semibold">{euros(row.amountCents)}</span>
+            <span className="tnum font-semibold">{euros(row.amountCents, locale)}</span>
             <span className="hidden truncate text-[var(--ink2)] @2xl:block">
               {t(row.type)}
             </span>
             <span className="hidden truncate text-[var(--ink2)] @2xl:block">
-              {nextLabel(row.type, row.dayOfMonth, row.packSessions, nextMonth)}
+              {next(row)}
             </span>
             <span
               className="truncate rounded-rp border border-[var(--edge)] px-2 py-1 text-center text-[12px] font-bold"

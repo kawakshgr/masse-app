@@ -3,7 +3,8 @@
 import { SectionTitle } from "@/components/Pane";
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import type { MailFailure } from "@/lib/invoiceMail";
 import { saveArrangement, setMonthStatus, issueInvoice } from "@/app/(coach)/facturation/actions";
 import { dayLabel, euros, type MonthState } from "@/lib/billing";
@@ -89,6 +90,7 @@ export function BillingInspector({
   const t = useTranslations("billing");
   const tInvoice = useTranslations("invoice");
   const tCompany = useTranslations("company");
+  const locale = intl(useLocale());
   const [, startTransition] = useTransition();
 
   const [amount, setAmount] = useState(client.amountCents);
@@ -148,7 +150,7 @@ export function BillingInspector({
     ? `mailto:${client.email}?subject=${encodeURIComponent(
         t("reminderSubject", { month: periodLabel }),
       )}&body=${encodeURIComponent(
-        t("reminderBody", { amount: euros(amount), month: periodLabel }),
+        t("reminderBody", { amount: euros(amount, locale), month: periodLabel }),
       )}`
     : null;
 
@@ -181,7 +183,7 @@ export function BillingInspector({
               −1
             </button>
             <span className="tnum min-w-0 flex-1 text-center font-display text-[22px] font-extrabold tracking-[-.03em]">
-              {euros(amount)}
+              {euros(amount, locale)}
             </span>
             <button type="button" onClick={() => nudgeAmount(1)} className={`${step} w-[30px]`}>
               +1
@@ -192,7 +194,7 @@ export function BillingInspector({
           </div>
           <p className="text-[12px] leading-[1.45] text-[var(--ink3)]">
             {type === "monthly"
-              ? t("amountNoteMonthly", { day: dayLabel(day) })
+              ? t("amountNoteMonthly", { day: dayLabel(day, locale) })
               : t("amountNotePack")}
           </p>
         </div>
@@ -245,7 +247,7 @@ export function BillingInspector({
                 +
               </button>
               <span className="min-w-[88px] flex-1 text-[12px] leading-[1.4] text-[var(--ink2)]">
-                {t("billedOn", { day: dayLabel(day) })}
+                {t("billedOn", { day: dayLabel(day, locale) })}
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -264,7 +266,7 @@ export function BillingInspector({
                       : "bg-[var(--glass2)] text-[var(--ink2)]"
                   }`}
                 >
-                  {dayLabel(value)}
+                  {dayLabel(value, locale)}
                 </button>
               ))}
             </div>
@@ -300,7 +302,7 @@ export function BillingInspector({
                 +
               </button>
               <span className="min-w-[88px] flex-1 text-[12px] leading-[1.4] text-[var(--ink2)]">
-                {t("packEach", { price: euros(perSession) })}
+                {t("packEach", { price: euros(perSession, locale) })}
               </span>
             </div>
             <p className="text-[12px] leading-[1.45] text-[var(--ink3)]">{t("packNote")}</p>
@@ -351,7 +353,7 @@ export function BillingInspector({
               {paid
                 ? (client.paidWhen ?? t("received"))
                 : client.overdue
-                  ? t("dueDayPassed", { day: dayLabel(day) })
+                  ? t("dueDayPassed", { day: dayLabel(day, locale) })
                   : t("notReceived")}
             </span>
           </button>

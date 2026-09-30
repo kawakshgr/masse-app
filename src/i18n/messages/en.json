@@ -161,7 +161,8 @@
     "inProgress": "in progress",
     "scheduled": "scheduled",
     "rest": "Rest",
-    "weekMoved": "{first} swapped days this week: sessions and food are where they were put."
+    "weekMoved": "{first} swapped days this week: sessions and food are where they were put.",
+    "weekShort": "wk {n}"
   },
   "invite": {
     "title": "Invite a client",
@@ -748,7 +749,8 @@
     "nothingAutomatic": "nothing is automatic",
     "nothingAutomaticBody": "Masse never charges a card. It tracks what you agreed, tells you what is open, and writes the invoice — you stay the one who asks.",
     "noClients": "Add a client before you invoice.",
-    "dueDayPassed": "due day passed on the {day}"
+    "dueDayPassed": "due day passed on the {day}",
+    "packOf": "pack of {count} sessions"
   },
   "programme": {
     "rename": "Rename",
@@ -957,7 +959,8 @@
     "noStrength": "No loaded sets yet to estimate progress from.",
     "records": "Records",
     "noRecords": "No records in range.",
-    "reps": "×"
+    "reps": "×",
+    "weeksShort": "{count} wk"
   },
   "cyc": {
     "on": "Cycle tracking is on",

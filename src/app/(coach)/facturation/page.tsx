@@ -131,7 +131,7 @@ export default async function BillingPage({
       history: months.map((m) => {
         const row = invoiceAt.get(`${client.id}:${m}`);
         return {
-          label: shortMonth(m),
+          label: shortMonth(m, locale),
           state: (row == null
             ? "none"
             : monthState(row.status as InvoiceStatus)) as MonthState | "none",
@@ -161,20 +161,20 @@ export default async function BillingPage({
 
   const selected =
     shown.find((r) => r.id === params.ligne) ?? shown[0] ?? rows[0] ?? null;
-  const periodLabel = monthLabel(period);
+  const periodLabel = monthLabel(period, locale);
 
   const totals = [
     {
       icon: "billing",
       label: t("recurring"),
-      value: euros(recurring),
+      value: euros(recurring, locale),
       sub: t("monthlyClients", { count: monthly.length }),
       tone: "",
     },
     {
       icon: "chart",
       label: t("collected"),
-      value: euros(collected),
+      value: euros(collected, locale),
       sub: t("settled", {
         settled: rows.length - open.length,
         total: rows.length,
@@ -184,7 +184,7 @@ export default async function BillingPage({
     {
       icon: "checkIns",
       label: t("stillOpen"),
-      value: euros(owed),
+      value: euros(owed, locale),
       sub:
         open.length === 0
           ? t("nothingOutstanding")
@@ -223,11 +223,11 @@ export default async function BillingPage({
           </h2>
           <p className="mt-1 text-[13px] text-[var(--ink2)]">
             {open.length === 0
-              ? t("subSettled", { recurring: euros(recurring) })
+              ? t("subSettled", { recurring: euros(recurring, locale) })
               : t("subOpen", {
-                  recurring: euros(recurring),
+                  recurring: euros(recurring, locale),
                   count: open.length,
-                  owed: euros(owed),
+                  owed: euros(owed, locale),
                 })}
           </p>
         </div>

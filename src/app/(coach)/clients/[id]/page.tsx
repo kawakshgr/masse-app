@@ -77,6 +77,7 @@ export default async function ClientDetailPage({
   if (!detail) notFound();
 
   const t = await getTranslations("detail");
+  const locale = intl(await getLocale());
   const tProse = await getTranslations("prose");
   const tDays = await getTranslations("days");
   const tGoal = await getTranslations("goal");
@@ -102,7 +103,7 @@ export default async function ClientDetailPage({
   const meta = [
     client.goal && tGoal(client.goal),
     detail.blockLabel && detail.weekNumber
-      ? `${detail.blockLabel} · sem. ${detail.weekNumber}`
+      ? `${detail.blockLabel} · ${t("weekShort", { n: detail.weekNumber })}`
       : detail.blockLabel,
     detail.phase && tPhase(detail.phase),
   ].filter(Boolean);
@@ -120,10 +121,10 @@ export default async function ClientDetailPage({
     .maybeSingle();
   const billingLine = arrangement
     ? arrangement.type === "monthly"
-      ? `${euros(arrangement.amount_cents)} · ${tBilling("billedOn", {
-          day: dayLabel(arrangement.day_of_month),
+      ? `${euros(arrangement.amount_cents, locale)} · ${tBilling("billedOn", {
+          day: dayLabel(arrangement.day_of_month, locale),
         })}`
-      : `${euros(arrangement.amount_cents)} · ${tBilling("pack")} · ${
+      : `${euros(arrangement.amount_cents, locale)} · ${tBilling("pack")} · ${
           arrangement.pack_sessions
         }`
     : null;
@@ -243,7 +244,7 @@ export default async function ClientDetailPage({
           t={t}
           tProse={tProse}
           tDays={tDays}
-          locale={intl(await getLocale())}
+          locale={locale}
         />
       )}
 
@@ -495,7 +496,7 @@ async function HistoryTab({
       <div className="flex flex-wrap gap-3">
         <MetricCard
           label={t("withYou")}
-          value={`${view.weeksWithCoach} sem.`}
+          value={t("weeksShort", { count: view.weeksWithCoach })}
           sub={t("withYouSub", { date: shortDate(view.since, locale) })}
           wash="wash-1"
         />
@@ -588,7 +589,7 @@ async function HistoryTab({
                       {record.exercise}
                     </span>
                     <span className="tnum block text-[11px] text-[var(--ink2)]">
-                      {record.on}
+                      {shortDate(record.on, locale)}
                     </span>
                   </span>
                   <span className="tnum shrink-0 text-right text-[13px] font-semibold">

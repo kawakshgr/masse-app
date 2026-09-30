@@ -2,7 +2,8 @@
 
 import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import { BarChart } from "@/components/BarChart";
 import type { StrengthPoint } from "@/lib/history";
 
@@ -13,6 +14,10 @@ export function StrengthPanel({
   strengthByExercise: Record<string, StrengthPoint[]>;
 }) {
   const t = useTranslations("hist");
+  const locale = intl(useLocale());
+  // "28 sept." rather than the raw 2026-09-28 the rows carry.
+  const day = (iso: string) =>
+    new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "short" });
   const names = Object.keys(strengthByExercise).sort();
   const [selected, setSelected] = useState(names[0] ?? null);
 
@@ -64,7 +69,7 @@ export function StrengthPanel({
           </span>
         )}
         <span className="ml-auto text-[11px] text-[var(--ink3)]">
-          {t("estimated", { from: points[0]?.week ?? "—" })}
+          {t("estimated", { from: points[0] ? day(points[0].week) : "—" })}
         </span>
       </div>
 
@@ -73,7 +78,7 @@ export function StrengthPanel({
           ariaLabel={`${selected} — ${t("strength")}`}
           bars={points.map((p, i) => ({
             value: p.best1rm,
-            label: `${p.week} · ${p.best1rm} kg`,
+            label: `${day(p.week)} · ${p.best1rm.toLocaleString(locale)} kg`,
             current: i === points.length - 1,
           }))}
         />

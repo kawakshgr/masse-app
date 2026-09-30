@@ -31,8 +31,16 @@ export function euros(cents: number, locale = "fr-FR"): string {
   });
 }
 
-/** French takes an ordinal on the first of the month and nothing after it. */
-export function dayLabel(day: number): string {
+/**
+ * A day of the month as it is said: French takes an ordinal on the first and
+ * nothing after it ("le 1er", "le 17"); English on every day ("the 17th").
+ */
+export function dayLabel(day: number, locale = "fr-FR"): string {
+  if (locale.startsWith("en")) {
+    const tens = day % 100;
+    const suffix = tens >= 11 && tens <= 13 ? "th" : (["th", "st", "nd", "rd"][day % 10] ?? "th");
+    return `${day}${suffix}`;
+  }
   return day === 1 ? "1er" : String(day);
 }
 
@@ -86,11 +94,14 @@ export function nextLabel(
   packSessions: number,
   nextMonth: string,
   locale = "fr-FR",
+  /** "forfait de 10 séances", in the reader's language. */
+  packLabel: (sessions: number) => string = (sessions) => `forfait de ${sessions} séances`,
 ): string {
-  if (type === "pack") return `forfait de ${packSessions} séances`;
+  if (type === "pack") return packLabel(packSessions);
   const month = new Date(`${nextMonth}T00:00:00Z`).toLocaleDateString(locale, {
     month: "short",
     timeZone: "UTC",
   });
-  return `${dayLabel(dayOfMonth)} ${month}`;
+  // "1er oct." in French; "17 Oct" in English, which drops the ordinal there.
+  return `${locale.startsWith("en") ? dayOfMonth : dayLabel(dayOfMonth, locale)} ${month}`;
 }
