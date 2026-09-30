@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import { SectionTitle } from "@/components/Pane";
 import { markPainSeen } from "@/app/(coach)/clients/actions";
@@ -19,8 +20,9 @@ export async function PainHistory({ clientId }: { clientId: string }) {
   if (!reports?.length) return null;
 
   const t = await getTranslations("pain");
+  const locale = intl(await getLocale());
   const day = (iso: string) =>
-    new Date(iso).toLocaleDateString("fr-FR", { timeZone: "Europe/Paris", day: "numeric", month: "short" });
+    new Date(iso).toLocaleDateString(locale, { timeZone: "Europe/Paris", day: "numeric", month: "short" });
 
   return (
     <section className="glass rounded-r3 p-4">

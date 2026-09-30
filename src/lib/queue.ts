@@ -67,6 +67,8 @@ export async function loadQueue(
   supabase: SupabaseClient<Database>,
   // The coach layout has already loaded it; no need to read it twice.
   roster?: Awaited<ReturnType<typeof loadRoster>>,
+  /** The locale amounts and months are written in: the coach's language. */
+  locale = "fr-FR",
 ): Promise<QueueItem[]> {
   roster ??= await loadRoster(supabase);
   if (roster.entries.length === 0) return [];
@@ -206,12 +208,12 @@ export async function loadQueue(
       items.push({
         ...base,
         kind: "unpaid",
-        amount: (invoice.cents / 100).toLocaleString("fr-FR", {
+        amount: (invoice.cents / 100).toLocaleString(locale, {
           style: "currency",
           currency: invoice.currency || "EUR",
           maximumFractionDigits: 0,
         }),
-        period: new Date(`${invoice.period}T12:00:00Z`).toLocaleDateString("fr-FR", {
+        period: new Date(`${invoice.period}T12:00:00Z`).toLocaleDateString(locale, {
           month: "long",
           year: "numeric",
         }),

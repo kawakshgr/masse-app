@@ -10,7 +10,8 @@ import {
   type CatalogueEntry,
 } from "@/components/ExerciseLibrary";
 import { dragEffect, readDrag, writeDrag } from "@/lib/exerciseDrag";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import {
   addExercise,
   addExerciseToDay,
@@ -100,6 +101,7 @@ export function WeekEditor({
   // The library folds to a rail to give the week the room; remembered.
   const libraryOpen = useSyncExternalStore(subscribeLibrary, readLibrary, () => true);
   const tLibrary = useTranslations("library");
+  const locale = intl(useLocale());
   const [overDay, setOverDay] = useState<number | null>(null);
   const [selected, setSelected] = useState<string[]>(assignedClientIds);
   // Today in the coach's own day (not UTC's), read once.
@@ -591,6 +593,7 @@ export function WeekEditor({
                   onChange={setStartDate}
                   label={t("weekOf")}
                   todayLabel={t("today")}
+                  locale={locale}
                   className="mt-1 block h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
                 />
               </label>

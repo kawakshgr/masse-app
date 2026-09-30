@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import {
   LibraryEmpty,
@@ -49,6 +50,7 @@ export default async function SupplementsPage({
   searchParams: Promise<{ q?: string; cat?: string; complement?: string; nouveau?: string }>;
 }) {
   const t = await getTranslations("supp");
+  const locale = intl(await getLocale());
   const params = await searchParams;
   const query = (params.q ?? "").trim();
   const cat = (SUPPLEMENT_CATEGORIES as string[]).includes(params.cat ?? "")
@@ -122,7 +124,7 @@ export default async function SupplementsPage({
                 on={selected === entry.id}
                 muted={!entry.usable}
                 name={entry.name}
-                line={[doseLabel(entry, unitName), t(`cat.${entry.category}`)]
+                line={[doseLabel(entry, unitName, locale), t(`cat.${entry.category}`)]
                   .filter(Boolean)
                   .join(" · ")}
                 trailing={

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
+import { intl } from "@/lib/locale";
 import { OtpCodeEntry } from "@/components/OtpCodeEntry";
 import { Icon } from "@/components/Icon";
 import { Cta, Secondary, fieldClass } from "@/components/client/ui";
@@ -586,7 +587,7 @@ export default function OnboardingPage() {
                 {[
                   ["Coach", a.coachName],
                   [t("meTitle"), fullName(a)],
-                  [t("birthDate"), a.birthDate && new Date(`${a.birthDate}T12:00:00`).toLocaleDateString("fr-FR")],
+                  [t("birthDate"), a.birthDate && new Date(`${a.birthDate}T12:00:00`).toLocaleDateString(intl(locale))],
                   [t("trainingAge"), a.trainingAge && t(`trainingAgeOpt.${a.trainingAge}`)],
                   [t("goalMain"), a.goal && (a.goal === "Other" ? a.goalOther : tGoal(a.goal))],
                   [t("readiness"), a.readiness && `${a.readiness} / 10`],

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import { loadRoster } from "@/lib/roster";
 import { loadQueue } from "@/lib/queue";
@@ -46,7 +47,7 @@ export default async function CoachLayout({
   const { entries, checkinsToReview } = roster;
   // Counted from the same list as À traiter, so the line under her name
   // never says nobody needs her beside a pane that says otherwise.
-  const queue = await loadQueue(supabase, roster);
+  const queue = await loadQueue(supabase, roster, intl(await getLocale()));
   const clientsNeedingYou = new Set(queue.map((item) => item.clientId)).size;
 
   return (

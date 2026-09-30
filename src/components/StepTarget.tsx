@@ -2,7 +2,8 @@
 
 import { SectionTitle } from "@/components/Pane";
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import { setStepsTarget } from "@/app/(coach)/clients/actions";
 
 export type StepDay = {
@@ -30,6 +31,7 @@ export function StepTarget({
   days: StepDay[];
   target: number | null;
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("stepsTab");
   const [pending, startTransition] = useTransition();
   const [value, setValue] = useState(target ?? 8000);
@@ -69,7 +71,7 @@ export function StepTarget({
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Step label="−" onClick={() => save(Math.max(500, value - 500))} />
         <span className="tnum min-w-[110px] text-center font-display text-[28px] font-extrabold leading-none tracking-[-.03em]">
-          {value.toLocaleString("fr-FR")}
+          {value.toLocaleString(locale)}
         </span>
         <Step label="+" onClick={() => save(Math.min(100000, value + 500))} />
 

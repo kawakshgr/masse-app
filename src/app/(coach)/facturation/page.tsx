@@ -1,6 +1,7 @@
 import { SubNav } from "@/components/SubNav";
 import { Icon } from "@/components/Icon";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import {
   BillingInspector,
@@ -39,6 +40,7 @@ export default async function BillingPage({
   searchParams: Promise<{ filtre?: string; ligne?: string; probleme?: string }>;
 }) {
   const t = await getTranslations("billing");
+  const locale = intl(await getLocale());
   const params = await searchParams;
   const filter: Filter = FILTERS.includes(params.filtre as Filter)
     ? (params.filtre as Filter)
@@ -104,7 +106,7 @@ export default async function BillingPage({
       name: client.name,
       email: client.email,
       since: t("clientSince", {
-        date: new Date(client.created_at).toLocaleDateString("fr-FR", {
+        date: new Date(client.created_at).toLocaleDateString(locale, {
           month: "long",
           year: "numeric",
         }),
@@ -116,7 +118,7 @@ export default async function BillingPage({
       state,
       paidWhen: current?.paid_at
         ? t("receivedOn", {
-            date: new Date(current.paid_at).toLocaleDateString("fr-FR", {
+            date: new Date(current.paid_at).toLocaleDateString(locale, {
               day: "numeric",
               month: "short",
             }),

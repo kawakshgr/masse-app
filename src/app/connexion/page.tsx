@@ -128,9 +128,9 @@ function SignInForm() {
       </div>
       {/* The legal pages, reachable before anyone signs in. */}
       <nav className="absolute inset-x-0 bottom-5 flex justify-center gap-5 text-[12px] text-[var(--ink3)]">
-        <a href="/confidentialite" className="hover:text-[var(--ink)]">Confidentialité</a>
-        <a href="/mentions-legales" className="hover:text-[var(--ink)]">Mentions légales</a>
-        <a href="/conditions" className="hover:text-[var(--ink)]">Conditions</a>
+        <a href="/confidentialite" className="hover:text-[var(--ink)]">{t("privacyLink")}</a>
+        <a href="/mentions-legales" className="hover:text-[var(--ink)]">{t("legalLink")}</a>
+        <a href="/conditions" className="hover:text-[var(--ink)]">{t("termsLink")}</a>
       </nav>
     </main>
   );

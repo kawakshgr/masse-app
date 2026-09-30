@@ -29,7 +29,10 @@
     "codeVerify": "Confirm code",
     "codeChecking": "Checking…",
     "codeBad": "Wrong or expired code. Check it, or ask for a new link.",
-    "codeDone": "Signed in. Opening the app…"
+    "codeDone": "Signed in. Opening the app…",
+    "privacyLink": "Privacy",
+    "legalLink": "Legal notice",
+    "termsLink": "Terms"
   },
   "shell": {
     "clients": "Clients",

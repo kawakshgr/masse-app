@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import type { NextRequest } from "next/server";
 import {
   adjustExercise,
@@ -13,8 +14,9 @@ import { renderClientPdf, type ClientPdfDayType } from "@/lib/clientPdf";
 import { logoUrl } from "@/lib/logo";
 import { SUPPLEMENT_TIMINGS, type SupplementUnit } from "@/lib/supabase/types";
 
-/** "62.5" stays "62,5", "60.0" becomes "60". */
-const num = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(1).replace(".", ","));
+/** "62,5" in French, "62.5" in English; "60.0" becomes "60". */
+const figure = (v: number, locale: string) =>
+  v.toLocaleString(locale, { maximumFractionDigits: 1, useGrouping: false });
 
 /**
  * The client's PDF: `?contenu=programme`, `plan`, or both (the default).
@@ -31,6 +33,9 @@ export async function GET(request: NextRequest) {
   const tDays = await getTranslations("days");
   const tFuel = await getTranslations("fuel");
   const tSupp = await getTranslations("supp");
+  // The PDF is written in the language the client reads the app in.
+  const locale = intl(await getLocale());
+  const num = (v: number) => figure(v, locale);
 
   const [{ data: coach }, week, levers] = await Promise.all([
     supabase.from("coaches").select("name, logo_path").eq("id", client.coach_id).maybeSingle(),
@@ -55,7 +60,7 @@ export async function GET(request: NextRequest) {
                 .map((exercise) => ({
                   // Movement names stay as the coach wrote them — in English.
                   name: exercise.name,
-                  target: targetLine(exercise, (time) => t("rest", { time })),
+                  target: targetLine(exercise, (time) => t("rest", { time }), locale),
                   cue: exercise.cue,
                 })),
             };
@@ -135,7 +140,7 @@ export async function GET(request: NextRequest) {
       logo: logoUrl(coach?.logo_path),
       coachName: coach?.name ?? "Masse",
       clientName: client.name,
-      date: new Date(`${today}T12:00:00Z`).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
+      date: new Date(`${today}T12:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }),
       programme,
       plan,
     },

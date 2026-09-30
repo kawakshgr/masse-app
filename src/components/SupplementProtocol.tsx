@@ -3,7 +3,8 @@
 import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import type { SupplementTiming, SupplementUnit } from "@/lib/supabase/types";
 import { SUPPLEMENT_TIMINGS, SUPPLEMENT_UNITS } from "@/lib/supabase/types";
 import {
@@ -63,6 +64,7 @@ export function SupplementProtocol({
   rows: ProtocolRow[];
   library: PickableSupplement[];
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("proto");
   const tSupp = useTranslations("supp");
   const [adding, setAdding] = useState(false);
@@ -252,7 +254,7 @@ export function SupplementProtocol({
       <p className="tnum mt-2.5 text-[11px] leading-[1.5] text-[var(--ink3)]">
         {fromSupplements.kcal > 0
           ? t("inTotal", {
-              kcal: Math.round(fromSupplements.kcal).toLocaleString("fr-FR"),
+              kcal: Math.round(fromSupplements.kcal).toLocaleString(locale),
               protein: Math.round(fromSupplements.proteinG),
             })
           : t("noneInTotal")}

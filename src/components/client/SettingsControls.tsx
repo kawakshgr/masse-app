@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import {
   deleteMyAccount,
   giveHealthConsent,
@@ -105,6 +106,7 @@ export function SignOutButton() {
 export function HealthConsent({ givenAt }: { givenAt: string | null }) {
   const t = useTranslations("myData");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
   const [confirming, setConfirming] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -122,7 +124,7 @@ export function HealthConsent({ givenAt }: { givenAt: string | null }) {
   return (
     <div className="space-y-2.5">
       <p className="text-[13px] leading-[1.45] text-[var(--ink2)]">
-        {t("consentGiven", { date: new Date(givenAt).toLocaleDateString("fr-FR") })}
+        {t("consentGiven", { date: new Date(givenAt).toLocaleDateString(intl(locale)) })}
       </p>
       {confirming ? (
         <div className="space-y-2.5 rounded-r2 border border-[var(--a3)] p-3">

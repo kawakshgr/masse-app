@@ -1,4 +1,6 @@
+import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import { intl } from "@/lib/locale";
 import { loadQueue } from "@/lib/queue";
 import { QueuePanel } from "@/components/QueuePanel";
 
@@ -11,10 +13,11 @@ export default async function ClientsIndexPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const locale = intl(await getLocale());
   const [items, { data: coach }] = await Promise.all([
-    loadQueue(supabase),
+    loadQueue(supabase, undefined, locale),
     // Her video link goes into the confirmation message of each booked call.
     supabase.from("coaches").select("call_link").eq("id", user?.id ?? "").maybeSingle(),
   ]);
-  return <QueuePanel items={items} callLink={coach?.call_link ?? null} />;
+  return <QueuePanel items={items} callLink={coach?.call_link ?? null} locale={locale} />;
 }

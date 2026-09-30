@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { Icon } from "@/components/Icon";
 import { SectionTitle } from "@/components/Pane";
 import { RefuseRequest } from "@/components/RefuseRequest";
@@ -14,6 +15,7 @@ import type { ClientRow } from "@/lib/supabase/types";
  */
 export async function RequestSheet({ client, callOver }: { client: ClientRow; callOver: boolean }) {
   const t = await getTranslations("request");
+  const locale = intl(await getLocale());
   const tRecord = await getTranslations("record");
   const tOnb = await getTranslations("onboarding");
   const tGoal = await getTranslations("goal");
@@ -24,7 +26,7 @@ export async function RequestSheet({ client, callOver }: { client: ClientRow; ca
   const phone = client.whatsapp ?? client.phone;
   const age = client.birth_date ? ageFrom(client.birth_date) : null;
   const day = (iso: string) =>
-    new Date(iso).toLocaleDateString("fr-FR", { timeZone: "Europe/Paris", day: "numeric", month: "long" });
+    new Date(iso).toLocaleDateString(locale, { timeZone: "Europe/Paris", day: "numeric", month: "long" });
 
   const blocks: { icon: string; title: string; rows: [string, string | null | undefined][] }[] = [
     {

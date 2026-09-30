@@ -1,7 +1,8 @@
 import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import { loadClientDetail, formatHours } from "@/lib/clientDetail";
 import { MetricCard } from "@/components/MetricCard";
@@ -48,16 +49,16 @@ function initialsOf(name: string) {
 const panel = "glass rounded-r3 p-4";
 
 /** "22 sept. 2026" — never the raw ISO date. */
-function shortDate(iso: string): string {
-  return new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString("fr-FR", {
+function shortDate(iso: string, locale: string): string {
+  return new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",
   });
 }
 
-function signedKg(delta: number): string {
-  const figure = Math.abs(delta).toLocaleString("fr-FR");
+function signedKg(delta: number, locale: string): string {
+  const figure = Math.abs(delta).toLocaleString(locale);
   return `${delta > 0 ? "+" : delta < 0 ? "−" : "±"}${figure} kg`;
 }
 
@@ -232,6 +233,7 @@ export default async function ClientDetailPage({
           t={t}
           tProse={tProse}
           tDays={tDays}
+          locale={intl(await getLocale())}
         />
       )}
 
@@ -278,8 +280,11 @@ function OverviewTab({
   t,
   tProse,
   tDays,
+  locale,
 }: {
   detail: Awaited<ReturnType<typeof loadClientDetail>> & object;
+  /** The locale numbers are written in, from the coach's language. */
+  locale: string;
   avgLabel: string | null;
   targetLabel: string | null;
   t: Translate;
@@ -361,12 +366,12 @@ function OverviewTab({
           label={t("steps")}
           kind="steps"
           value={
-            steps.latest == null ? "—" : steps.latest.toLocaleString("fr-FR")
+            steps.latest == null ? "—" : steps.latest.toLocaleString(locale)
           }
           sub={
             steps.avg == null
               ? null
-              : t("stepsSub", { avg: steps.avg.toLocaleString("fr-FR") })
+              : t("stepsSub", { avg: steps.avg.toLocaleString(locale) })
           }
           wash="wash-1"
         />
@@ -447,6 +452,7 @@ async function HistoryTab({
   clientId: string;
   range: Range;
 }) {
+  const locale = intl(await getLocale());
   const supabase = await createClient();
   const t = await getTranslations("hist");
   const view = await loadHistory(supabase, clientId, range);
@@ -467,7 +473,7 @@ async function HistoryTab({
           }))}
         />
         <span className="ml-auto text-[11px] text-[var(--ink3)]">
-          {t("clientSince", { date: shortDate(view.since), weeks: view.weeksWithCoach })}
+          {t("clientSince", { date: shortDate(view.since, locale), weeks: view.weeksWithCoach })}
         </span>
       </div>
 
@@ -475,7 +481,7 @@ async function HistoryTab({
         <MetricCard
           label={t("withYou")}
           value={`${view.weeksWithCoach} sem.`}
-          sub={t("withYouSub", { date: shortDate(view.since) })}
+          sub={t("withYouSub", { date: shortDate(view.since, locale) })}
           wash="wash-1"
         />
         <MetricCard
@@ -498,7 +504,7 @@ async function HistoryTab({
             view.weightFrom == null || view.weightTo == null
               ? "—"
               : // A change, so it says so: "+0,5 kg", "−1 kg", "±0 kg".
-                signedKg(Math.round((view.weightTo - view.weightFrom) * 10) / 10)
+                signedKg(Math.round((view.weightTo - view.weightFrom) * 10) / 10, locale)
           }
           sub={
             view.weightFrom == null || view.weightTo == null
@@ -654,6 +660,7 @@ async function CycleTab({ clientId }: { clientId: string }) {
 }
 
 async function CheckInsTab({ clientId }: { clientId: string }) {
+  const locale = intl(await getLocale());
   const supabase = await createClient();
 
   const [{ data: rows }, { data: client }] = await Promise.all([
@@ -764,13 +771,13 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
 
   const tStatus = await getTranslations("coachCheckin");
   const day = (iso: string) =>
-    new Date(iso.length === 10 ? `${iso}T12:00:00Z` : iso).toLocaleDateString("fr-FR", {
+    new Date(iso.length === 10 ? `${iso}T12:00:00Z` : iso).toLocaleDateString(locale, {
       day: "numeric",
       month: "long",
     });
   // "dimanche 28 septembre": a due day reads better with its weekday.
   const weekdayDay = (iso: string) =>
-    new Date(`${iso}T12:00:00Z`).toLocaleDateString("fr-FR", {
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString(locale, {
       weekday: "long",
       day: "numeric",
       month: "long",
@@ -866,6 +873,7 @@ async function NutritionTab({
   /** The day type being edited, from the URL. Absent means the default. */
   jour?: string;
 }) {
+  const locale = intl(await getLocale());
   const supabase = await createClient();
   const tWeek = await getTranslations("nutWeek");
   const tRead = await getTranslations("nutRead");
@@ -1052,8 +1060,8 @@ async function NutritionTab({
   const dayName = (i: number) => tDays(String(i)).slice(0, 3);
 
   const now = tRead("today", {
-    today: Math.round(todayKcal).toLocaleString("fr-FR"),
-    target: targets.kcal.toLocaleString("fr-FR"),
+    today: Math.round(todayKcal).toLocaleString(locale),
+    target: targets.kcal.toLocaleString(locale),
   });
 
   let verdict: string;
@@ -1067,7 +1075,7 @@ async function NutritionTab({
   else if (short.length === 1)
     verdict = tRead("shortOne", {
       day: dayName(short[0]!.dayIndex),
-      gap: Math.round(targets.kcal - short[0]!.kcal).toLocaleString("fr-FR"),
+      gap: Math.round(targets.kcal - short[0]!.kcal).toLocaleString(locale),
     });
   else if (over.length > 0)
     verdict = tRead("over", {
@@ -1205,6 +1213,7 @@ async function StepsTab({
   clientId: string;
   tSteps: Translate;
 }) {
+  const locale = intl(await getLocale());
   const supabase = await createClient();
   const tDays = await getTranslations("days");
   const since = new Date();
@@ -1287,7 +1296,7 @@ async function StepsTab({
               ? "—"
               : Math.round(
                   stepped.reduce((a, b) => a + b, 0) / stepped.length,
-                ).toLocaleString("fr-FR")
+                ).toLocaleString(locale)
           }
           sub={null}
           wash="wash-1"
@@ -1308,7 +1317,7 @@ async function StepsTab({
               {row.sleep_quality ?? "—"}
             </span>
             <span className="min-w-0 flex-1">
-              {row.steps == null ? "—" : row.steps.toLocaleString("fr-FR")}
+              {row.steps == null ? "—" : row.steps.toLocaleString(locale)}
             </span>
           </li>
         ))}

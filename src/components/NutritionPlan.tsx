@@ -4,7 +4,8 @@ import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
 import { MacroDonut } from "@/components/MacroDonut";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import { FoodPicker, type PickableFood } from "@/components/FoodPicker";
 import {
   addPlanMeal,
@@ -126,6 +127,7 @@ function TargetsEditor({
   dayTypeId: string | null;
   targets: Targets;
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("nut");
   const [draft, setDraft] = useState(targets);
 
@@ -173,7 +175,7 @@ function TargetsEditor({
           drifting ? "text-[var(--a3)]" : "text-[var(--ink3)]"
         }`}
       >
-        {t("fromMacros", { kcal: fromMacros.toLocaleString("fr-FR") })}
+        {t("fromMacros", { kcal: fromMacros.toLocaleString(locale) })}
         {drifting && ` · ${t("drift", { gap: Math.abs(gap) })}`}
       </p>
 
@@ -182,7 +184,7 @@ function TargetsEditor({
           proteinG={draft.proteinG}
           carbsG={draft.carbsG}
           fatG={draft.fatG}
-          centre={`${draft.kcal.toLocaleString("fr-FR")}`}
+          centre={`${draft.kcal.toLocaleString(locale)}`}
           caption="kcal"
           labels={{ protein: t("protein"), carbs: t("carbs"), fat: t("fat") }}
         />
@@ -245,6 +247,7 @@ function PlanTotals({
   /** What this day's supplements contribute — a shake is food, whatever the tub. */
   supplements: Targets;
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("nut");
 
   const items = meals.flatMap((meal) => meal.items);
@@ -277,7 +280,7 @@ function PlanTotals({
       ) : (
         <>
           <p className="tnum mt-1 font-display text-[28px] font-extrabold leading-none tracking-[-.03em]">
-            {Math.round(total.kcal).toLocaleString("fr-FR")}
+            {Math.round(total.kcal).toLocaleString(locale)}
             <span className="ml-1 text-[13px] font-normal text-[var(--ink3)]">kcal</span>
           </p>
           <p className="mt-1 text-[11px] text-[var(--ink3)]">{t("planDerived")}</p>
@@ -293,7 +296,7 @@ function PlanTotals({
                 Math.round(total.proteinG) * 4 +
                   Math.round(total.carbsG) * 4 +
                   Math.round(total.fatG) * 9,
-              ).toLocaleString("fr-FR")}
+              ).toLocaleString(locale)}
               caption="kcal"
               labels={{ protein: t("protein"), carbs: t("carbs"), fat: t("fat") }}
             />
@@ -366,6 +369,7 @@ export function NutritionPlan({
   /** Names the client typed because the library had nothing to match. */
   foodAsks: string[];
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("nut");
 
   const planTotal = meals.reduce(
@@ -570,7 +574,7 @@ export function NutritionPlan({
 
           {mode === "plan" && planTotal > 0 && (
             <p className="tnum mt-2 text-[11px] text-[var(--ink3)]">
-              {t("planTotal")} {Math.round(planTotal).toLocaleString("fr-FR")} kcal ·{" "}
+              {t("planTotal")} {Math.round(planTotal).toLocaleString(locale)} kcal ·{" "}
               {planTotal <= targets.kcal
                 ? t("targetGap", { gap: Math.round(targets.kcal - planTotal) })
                 : t("targetOver", { gap: Math.round(planTotal - targets.kcal) })}

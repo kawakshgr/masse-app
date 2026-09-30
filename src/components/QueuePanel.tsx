@@ -46,7 +46,16 @@ function openHref(item: QueueItem): string {
  * her, grouped by why, each with the one action that answers it — a message
  * already written for WhatsApp, or the screen to go to.
  */
-export async function QueuePanel({ items, callLink }: { items: QueueItem[]; callLink: string | null }) {
+export async function QueuePanel({
+  items,
+  callLink,
+  locale,
+}: {
+  items: QueueItem[];
+  callLink: string | null;
+  /** The locale dates are written in: the coach's language. */
+  locale: string;
+}) {
   const t = await getTranslations("queue");
   const tCalls = await getTranslations("calls");
   const tPain = await getTranslations("pain");
@@ -81,7 +90,7 @@ export async function QueuePanel({ items, callLink }: { items: QueueItem[]; call
                   amount: item.amount ?? "",
                   period: item.period ?? "",
                 };
-                const when = item.call ? callLabel(item.call.startsAt) : "";
+                const when = item.call ? callLabel(item.call.startsAt, locale) : "";
                 const painLevel = item.pain ? tPain(`level.${item.pain.level}`) : "";
                 const wa = item.pain
                   ? waLink(item.phone, tPain("wa", { first: item.firstName, exercise: item.pain.exercise }))
@@ -119,7 +128,7 @@ export async function QueuePanel({ items, callLink }: { items: QueueItem[]; call
                           ? item.request.callAt
                             ? item.request.callOver
                               ? t("requestCallOver")
-                              : t("requestCall", { when: callLabel(item.request.callAt) })
+                              : t("requestCall", { when: callLabel(item.request.callAt, locale) })
                             : t("requestNoCall")
                           : item.pain
                           ? [item.pain.exercise, painLevel, item.pain.note].filter(Boolean).join(" · ")

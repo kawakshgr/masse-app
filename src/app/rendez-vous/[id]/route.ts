@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import { callIcs, callLabel } from "@/lib/calls";
 
@@ -37,7 +38,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
     startsAt: call.starts_at,
     minutes: call.minutes,
     title: t("icsTitle", { name: other }),
-    description: [t("icsWhen", { when: callLabel(call.starts_at), minutes: call.minutes }), link && t("icsLink", { link })]
+    description: [t("icsWhen", { when: callLabel(call.starts_at, intl(await getLocale())), minutes: call.minutes }), link && t("icsLink", { link })]
       .filter(Boolean)
       .join("\n"),
     link,

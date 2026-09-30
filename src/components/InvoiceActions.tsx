@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import { archiveInvoice, emailInvoice } from "@/app/(coach)/facturation/actions";
 
 const button =
@@ -28,6 +29,7 @@ export function InvoiceActions({
   archivedAt: string | null;
   sentAt: string | null;
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("invoice");
 
   return (
@@ -58,7 +60,7 @@ export function InvoiceActions({
           <input type="hidden" name="period" value={period} />
           <button type="submit" className={button}>
             {sentAt
-              ? t("emailed", { date: new Date(sentAt).toLocaleDateString("fr-FR") })
+              ? t("emailed", { date: new Date(sentAt).toLocaleDateString(locale) })
               : t("email")}
           </button>
         </form>

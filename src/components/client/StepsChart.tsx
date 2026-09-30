@@ -1,4 +1,5 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import { Kicker } from "./ui";
 
 /**
@@ -16,6 +17,7 @@ export function StepsChart({
 }) {
   const t = useTranslations("stepsChart");
   const tDays = useTranslations("days");
+  const locale = intl(useLocale());
 
   const logged = days.filter((d): d is number => d !== null);
   const average = logged.length
@@ -26,7 +28,7 @@ export function StepsChart({
   // The tallest bar is the larger of what she walked and what was asked, so
   // the target line never sits off the top of its own chart.
   const ceiling = Math.max(...logged, target ?? 0, 1);
-  const fmt = (n: number) => n.toLocaleString("fr-FR");
+  const fmt = (n: number) => n.toLocaleString(locale);
 
   const spoken = days
     .map((steps, i) => (steps === null ? null : t("spoken", { day: tDays(String(i)), steps: fmt(steps) })))

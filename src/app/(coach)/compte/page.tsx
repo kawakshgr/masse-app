@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import { Icon } from "@/components/Icon";
 import {
@@ -69,6 +70,7 @@ export default async function AccountPage({
   searchParams: Promise<{ enregistre?: string; erreur?: string; creneau?: string }>;
 }) {
   const t = await getTranslations("account");
+  const locale = intl(await getLocale());
   const tDays = await getTranslations("days");
   const { enregistre, erreur, creneau } = await searchParams;
   const supabase = await createClient();
@@ -242,7 +244,7 @@ export default async function AccountPage({
           {(daysOff ?? []).map(({ day }) => (
             <li key={day} className={rowClass}>
               <span className="flex-1 font-semibold first-letter:uppercase">
-                {new Date(`${day}T12:00:00Z`).toLocaleDateString("fr-FR", {
+                {new Date(`${day}T12:00:00Z`).toLocaleDateString(locale, {
                   weekday: "long",
                   day: "numeric",
                   month: "long",
@@ -266,6 +268,7 @@ export default async function AccountPage({
             weeks={13}
             label={t("weekOf")}
             todayLabel={t("today")}
+            locale={locale}
             placeholder={t("pickDay")}
             className={select}
           />

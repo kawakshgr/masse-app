@@ -2,7 +2,8 @@
 
 import { SectionTitle } from "@/components/Pane";
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import { BarChart } from "@/components/BarChart";
 import type { PhotoPose } from "@/lib/supabase/types";
 
@@ -12,9 +13,9 @@ const pickClass =
   "tnum h-9 rounded-rp border border-[var(--edge)] bg-[var(--glass2)] pl-3.5 text-[11.5px] font-bold uppercase tracking-[.1em] text-[var(--ink)]";
 
 /** −3,2 kg / +0,5 kg / 0 kg. */
-function signedKg(value: number): string {
+function signedKg(value: number, locale: string): string {
   const rounded = Math.round(value * 10) / 10;
-  const text = Math.abs(rounded).toLocaleString("fr-FR", { maximumFractionDigits: 1 });
+  const text = Math.abs(rounded).toLocaleString(locale, { maximumFractionDigits: 1 });
   return `${rounded > 0 ? "+" : rounded < 0 ? "−" : ""}${text} kg`;
 }
 
@@ -125,6 +126,7 @@ export function CheckInReview({
   firstName: string;
   weeks: ReviewWeek[];
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("review");
   const tFeel = useTranslations("feel");
   const tPain = useTranslations("pain");
@@ -274,7 +276,7 @@ export function CheckInReview({
               {t("between", {
                 a: selected.number,
                 b: against.number,
-                delta: signedKg(selected.bodyweight - against.bodyweight),
+                delta: signedKg(selected.bodyweight - against.bodyweight, locale),
               })}
             </p>
           )}

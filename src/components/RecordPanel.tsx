@@ -3,7 +3,8 @@
 import { MENU_DANGER, MENU_ITEM, SECTION_TITLE, SectionTitle } from "@/components/Pane";
 import { ActionMenu } from "@/components/ActionMenu";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import type { ClientRow } from "@/lib/supabase/types";
 import { GOALS, SESSIONS_PER_WEEK, TRAINING_AGES } from "@/lib/onboarding";
 import { removeClient, setClientArchived, updateClientRecord } from "@/app/(coach)/clients/actions";
@@ -121,6 +122,7 @@ export function RecordPanel({
   /** What was agreed, said once here and owned by the billing tab. */
   billingLine: string | null;
 }) {
+  const locale = intl(useLocale());
   const t = useTranslations("record");
   const tGoal = useTranslations("goal");
   const tOnb = useTranslations("onboarding");
@@ -133,7 +135,7 @@ export function RecordPanel({
   const firstName = client.first_name ?? client.name.split(/\s+/)[0] ?? "";
   const dateFmt = (iso: string | null) =>
     iso
-      ? new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", {
+      ? new Date(`${iso}T00:00:00Z`).toLocaleDateString(locale, {
           timeZone: "UTC",
           day: "numeric",
           month: "short",
@@ -381,7 +383,7 @@ export function RecordPanel({
                 : null,
             ],
             [t("sleepTarget"), sleepTargetLabel],
-            [t("stepsTarget"), client.steps_target?.toLocaleString("fr-FR") ?? null],
+            [t("stepsTarget"), client.steps_target?.toLocaleString(locale) ?? null],
             [
               t("equipment"),
               // Stored as keys ("gym"); anything the coach typed herself stays as typed.

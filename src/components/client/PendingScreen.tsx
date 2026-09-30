@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { clientSession } from "@/lib/clientData";
 import { callLabel, callsShownFrom } from "@/lib/calls";
 import { logoUrl } from "@/lib/logo";
@@ -15,6 +16,7 @@ export async function PendingScreen() {
   const { supabase, client } = await clientSession();
   const t = await getTranslations("pending");
   const tCalls = await getTranslations("calls");
+  const locale = intl(await getLocale());
 
   const [{ data: coach }, { data: call }] = await Promise.all([
     supabase.from("coaches").select("name, first_name, logo_path, call_link").eq("id", client.coach_id).maybeSingle(),
@@ -52,7 +54,7 @@ export async function PendingScreen() {
             {tCalls("kicker", { length: tCalls("length", { minutes: call.minutes }) })}
           </Kicker>
           <CardTitle>{tCalls("clientTitle", { coach: coachName })}</CardTitle>
-          <p className="text-[15px] font-semibold first-letter:uppercase">{callLabel(call.starts_at)}</p>
+          <p className="text-[15px] font-semibold first-letter:uppercase">{callLabel(call.starts_at, locale)}</p>
           <div className="flex gap-2">
             {coach?.call_link && (
               <a

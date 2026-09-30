@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { intl } from "@/lib/locale";
 import { ActionMenu } from "@/components/ActionMenu";
 import { Icon } from "@/components/Icon";
 import { MENU_DANGER, MENU_ITEM } from "@/components/Pane";
@@ -25,7 +26,7 @@ export async function CallBanner({
   callLink: string | null;
 }) {
   const t = await getTranslations("calls");
-  const when = callLabel(call.starts_at);
+  const when = callLabel(call.starts_at, intl(await getLocale()));
   const length = t("length", { minutes: call.minutes });
   const confirm = waLink(
     phone,

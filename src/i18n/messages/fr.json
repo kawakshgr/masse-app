@@ -29,7 +29,10 @@
     "codeVerify": "Valider le code",
     "codeChecking": "Vérification…",
     "codeBad": "Code incorrect ou expiré. Vérifie-le, ou demande un nouveau lien.",
-    "codeDone": "Connecté. Ouverture de l’app…"
+    "codeDone": "Connecté. Ouverture de l’app…",
+    "privacyLink": "Confidentialité",
+    "legalLink": "Mentions légales",
+    "termsLink": "Conditions"
   },
   "shell": {
     "clients": "Clients",

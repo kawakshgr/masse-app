@@ -25,10 +25,12 @@ export type LibraryEntry = {
 export function doseLabel(
   entry: Pick<LibraryEntry, "doseMin" | "doseMax" | "unit">,
   unitName: (unit: SupplementUnit, count: number) => string,
+  /** The locale figures are written in (see lib/locale). */
+  locale = "fr-FR",
 ): string | null {
   if (entry.doseMin === null && entry.doseMax === null) return null;
 
-  const fmt = (n: number) => n.toLocaleString("fr-FR");
+  const fmt = (n: number) => n.toLocaleString(locale);
   const count = entry.doseMax ?? entry.doseMin ?? 1;
   const unit = unitName(entry.unit, count);
 

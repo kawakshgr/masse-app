@@ -2,7 +2,8 @@
 
 import { SectionTitle } from "@/components/Pane";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { intl } from "@/lib/locale";
 import type { SupplementUnit } from "@/lib/supabase/types";
 import { doseLabel, type LibraryEntry } from "@/lib/supplementEntry";
 import { removeSupplement } from "@/app/(coach)/complements/actions";
@@ -25,12 +26,13 @@ function Row({ label, value }: { label: string; value: string }) {
  * Hers can be deleted; a built-in is hidden instead.
  */
 export function SupplementDetail({ entry }: { entry: LibraryEntry }) {
+  const locale = intl(useLocale());
   const t = useTranslations("supp");
   const tf = useTranslations("foods");
   const [confirming, setConfirming] = useState(false);
 
   const unitName = (unit: SupplementUnit, count: number) => t(`unit.${unit}`, { count });
-  const dose = doseLabel(entry, unitName);
+  const dose = doseLabel(entry, unitName, locale);
   const macros = [
     { label: tf("protein"), value: entry.proteinPerUnit },
     { label: tf("carbs"), value: entry.carbsPerUnit },
@@ -118,7 +120,7 @@ export function SupplementDetail({ entry }: { entry: LibraryEntry }) {
               <Row
                 key={macro.label}
                 label={t("perUnitOf", { macro: macro.label })}
-                value={`${macro.value!.toLocaleString("fr-FR")} g`}
+                value={`${macro.value!.toLocaleString(locale)} g`}
               />
             ))
           )}
