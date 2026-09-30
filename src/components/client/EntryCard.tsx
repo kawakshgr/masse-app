@@ -26,7 +26,9 @@ export function EntryCard({
   const t = useTranslations("entry");
   const locale = useLocale();
   const router = useRouter();
-  const [sleepH, setSleepH] = useState(initial?.sleepH ?? 0);
+  // A night starts at 8 h: most are near it, so one tap adjusts instead of
+  // sixteen. Nothing is saved until she presses the button.
+  const [sleepH, setSleepH] = useState(initial?.sleepH ?? 8);
   const [quality, setQuality] = useState<number | null>(initial?.sleepQuality ?? null);
   const [steps, setSteps] = useState(initial?.steps?.toString() ?? "");
   const [saved, setSaved] = useState(initial !== null);
