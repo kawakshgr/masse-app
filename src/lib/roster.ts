@@ -1,6 +1,7 @@
 import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import { plannedDays, weekdayFor, type DayMove } from "@/lib/dayMoves";
+import { nextStartAfter, sessionOwed } from "@/lib/sessionDue";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
@@ -159,6 +160,11 @@ export async function loadRoster(
   const expectedExercises = new Map<string, string[]>();
   const blockLabel = new Map<string, string>();
 
+  const startsOf = new Map<string, string[]>();
+  for (const row of assignments.data ?? []) {
+    startsOf.set(row.client_id, [...(startsOf.get(row.client_id) ?? []), row.start_date]);
+  }
+
   for (const row of assignments.data ?? []) {
     const week = row.programme_weeks as unknown as {
       id: string;
@@ -173,19 +179,14 @@ export async function loadRoster(
 
     if (week.programmes?.name) blockLabel.set(row.client_id, week.programmes.name);
 
-    const start = new Date(`${row.start_date}T00:00:00Z`);
-    const elapsed = Math.floor(
-      (Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()) -
-        start.getTime()) /
-        86_400_000,
-    );
-
     const due = expectedExercises.get(row.client_id) ?? [];
-    // In the running week a session is owed on the day the client put it.
-    const plan = plannedDays(elapsed < 7 ? movesOf.get(row.client_id) : null);
+    // The week the client is in is read as they arranged it; an earlier one
+    // stops owing anything from the day the next took over.
+    const nextStart = nextStartAfter(startsOf.get(row.client_id) ?? [], row.start_date);
+    const plan = plannedDays(nextStart ? null : movesOf.get(row.client_id));
     for (const session of week.sessions ?? []) {
-      // A day still in progress is reported, never judged.
-      if (weekdayFor(plan, session.day_index) >= elapsed) continue;
+      const weekday = weekdayFor(plan, session.day_index);
+      if (!sessionOwed(row.start_date, weekday, todayLocal, nextStart)) continue;
       for (const exercise of session.session_exercises ?? []) due.push(exercise.id);
     }
     expectedExercises.set(row.client_id, due);

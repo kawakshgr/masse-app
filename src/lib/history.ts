@@ -1,6 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
+import { localDay } from "@/lib/clientData";
 import { plannedDays, weekdayFor } from "@/lib/dayMoves";
+import { nextStartAfter, sessionOwed } from "@/lib/sessionDue";
 
 export type Range = "12w" | "6m" | "1y";
 
@@ -120,11 +122,8 @@ export async function loadHistory(
   // A session counts as prescribed once its day has passed, and as logged once
   // any of its exercises carries a set. A day still running is neither.
   const byWeek = new Map<string, WeekBar>();
-  const todayMidnight = Date.UTC(
-    today.getUTCFullYear(),
-    today.getUTCMonth(),
-    today.getUTCDate(),
-  );
+  const todayIso = localDay("Europe/Paris");
+  const starts = (assignmentsRes.data ?? []).map((row) => row.start_date);
 
   for (const assignment of assignmentsRes.data ?? []) {
     const week = assignment.programme_weeks as unknown as {
@@ -132,14 +131,15 @@ export async function loadHistory(
     } | null;
     if (!week) continue;
 
-    const start = new Date(`${assignment.start_date}T00:00:00Z`);
-    const elapsed = Math.floor((todayMidnight - start.getTime()) / 86_400_000);
     const key = assignment.start_date;
     const bar = byWeek.get(key) ?? { week: key, prescribed: 0, logged: 0 };
 
-    const plan = plannedDays(elapsed < 7 ? movesRes.data : null);
+    // The running week is read as the client arranged it (lib/dayMoves.ts).
+    const nextStart = nextStartAfter(starts, assignment.start_date);
+    const plan = plannedDays(nextStart ? null : movesRes.data);
     for (const session of week.sessions ?? []) {
-      if (weekdayFor(plan, session.day_index) >= elapsed) continue;
+      const weekday = weekdayFor(plan, session.day_index);
+      if (!sessionOwed(assignment.start_date, weekday, todayIso, nextStart)) continue;
       bar.prescribed += 1;
       if ((session.session_exercises ?? []).some((e) => loggedExerciseIds.has(e.id))) {
         bar.logged += 1;

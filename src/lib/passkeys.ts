@@ -1,3 +1,5 @@
+import { SITE_HOST } from "@/lib/site";
+
 /**
  * Passkeys (Face ID, a fingerprint, the device's code) as a quicker way back
  * in. The e-mail code stays the first sign-in and the fallback: a passkey is
@@ -7,7 +9,7 @@
  * ID). Anywhere else — the vercel.app address, localhost — the browser
  * refuses it, so nothing about passkeys is offered there.
  */
-export const PASSKEY_DOMAIN = "masseapp.online";
+export const PASSKEY_DOMAIN = SITE_HOST;
 
 /** Whether this page may offer passkeys: the right address, a capable browser. */
 export function passkeysHere(): boolean {

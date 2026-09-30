@@ -1,6 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ClientRow, CyclePhase, Database } from "@/lib/supabase/types";
+import { addDays, localDay } from "@/lib/clientData";
 import { isMoved, plannedDays, weekdayFor } from "@/lib/dayMoves";
+import { nextStartAfter, sessionOwed } from "@/lib/sessionDue";
 
 export type DayStatus = "logged" | "in-progress" | "scheduled" | "rest";
 
@@ -121,13 +123,18 @@ export async function loadClientDetail(
     today.getUTCDate(),
   );
 
+  const todayIso = localDay("Europe/Paris");
+  const starts = assignments.map((assignment) => assignment.start_date);
+  // The week the client is in: the latest one started, as on their screens.
+  const currentStart =
+    starts.filter((start) => start >= addDays(todayIso, -7)).sort().at(-1) ?? null;
+
   for (const assignment of assignments) {
     const week = assignment.programme_weeks as unknown as WeekShape | null;
     if (!week) continue;
 
-    const start = new Date(`${assignment.start_date}T00:00:00Z`);
-    const elapsed = Math.floor((todayMidnight - start.getTime()) / 86_400_000);
-    const isCurrentWeek = elapsed >= 0 && elapsed < 7;
+    const isCurrentWeek = assignment.start_date === currentStart;
+    const nextStart = nextStartAfter(starts, assignment.start_date);
 
     if (isCurrentWeek && blockLabel === null) {
       blockLabel = week.programmes?.name ?? null;
@@ -138,8 +145,7 @@ export async function loadClientDetail(
       const ids = (session.session_exercises ?? []).map((e) => e.id);
       // The running week is read as the client arranged it.
       const dayIndex = isCurrentWeek ? weekdayFor(plan, session.day_index) : session.day_index;
-      // A day still in progress is not yet owed.
-      if (dayIndex < elapsed) expectedAll.push(...ids);
+      if (sessionOwed(assignment.start_date, dayIndex, todayIso, nextStart)) expectedAll.push(...ids);
       if (isCurrentWeek) {
         thisWeekDays.push({
           dayIndex,

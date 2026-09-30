@@ -1,5 +1,33 @@
 [
   {
+    "version": "0.8",
+    "date": "2026-09-30",
+    "fr": [
+      "Masse a sa propre adresse : masseapp.online. Reconnecte-toi là-bas, puis réinstalle l’app sur ton écran d’accueil.",
+      "Clé d’accès : reviens dans l’app avec Face ID, ton empreinte ou le code de ton appareil. À activer dans Réglages → Clé d’accès.",
+      "Séance : ouvre la séance d’un autre jour de la semaine et échange-la avec aujourd’hui — ton alimentation suit, pour la semaine en cours.",
+      "Sous chaque mouvement, « la dernière fois » : tes séries de la fois précédente. Ta semaine s’affiche sous la séance, avec ce qui est déjà fait.",
+      "Une douleur pendant un exercice ? Signale-la en deux touches : ton coach est prévenu.",
+      "Visio avec ton coach : choisis un créneau parmi ses disponibilités et ajoute-le à ton calendrier.",
+      "Ton programme et ton plan alimentaire se téléchargent en PDF. Les repas sont numérotés : à toi de choisir l’heure.",
+      "Le temps de repos est écrit sur chaque exercice ; le minuteur disparaît, utilise celui de ton téléphone.",
+      "Tes données : télécharge-les, retire ou redonne ton accord sur les données de santé, supprime ton compte — dans Réglages → Mes données.",
+      "En anglais, les dates et les nombres suivent la langue. Les pages légales existent aussi en anglais."
+    ],
+    "en": [
+      "Masse has its own address: masseapp.online. Sign in again there, then reinstall the app on your home screen.",
+      "Passkey: come back to the app with Face ID, your fingerprint or your device code. Turn it on in Settings → Passkey.",
+      "Session: open another day’s session and swap it with today — your food follows, for the running week.",
+      "Under each movement, “last time”: your sets from the previous time. Your week shows under the session, with what is already done.",
+      "Pain during an exercise? Flag it in two taps: your coach is told.",
+      "Video call with your coach: pick a slot among their availability and add it to your calendar.",
+      "Your programme and your meal plan download as a PDF. Meals are numbered: the time is yours to choose.",
+      "Rest time is written on each exercise; the timer is gone, use your phone’s.",
+      "Your data: download it, withdraw or give back your consent to health data, delete your account — in Settings → My data.",
+      "In English, dates and numbers follow the language. The legal pages exist in English too."
+    ]
+  },
+  {
     "version": "0.7",
     "date": "2026-09-25",
     "fr": [
