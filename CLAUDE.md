@@ -78,7 +78,11 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   message already written (`lib/whatsapp.ts`) or the screen that answers it.
   `lib/queue.ts` reuses the roster's attention rule; it adds, never re-derives.
 - **Programme editor** (web) — weeks, seven day columns, sessions, ordered exercises,
-  drag between days, duplicate week, save as template, push to clients.
+  drag between days, duplicate week, save as template, push to clients —
+  one week, or the whole programme to several clients at once (30 Sep 2026,
+  `pushProgramme`: week 1 on the chosen date, each later week 7 days on). A
+  week pushed ahead stays out of sight until its start date: every reader
+  of `assignments` takes `start_date <= today`.
   The scheme she types ("4×8 @ 60 kg") is read into `target_sets`,
   `target_reps`, `target_weight_kg` (`lib/scheme.ts`); ranges and anything
   else stay text with no target. Next week can be written from the last (`progressWeek`, 29 Sep 2026): an

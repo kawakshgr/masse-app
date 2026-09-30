@@ -397,7 +397,14 @@
     "makeTraining": "Remettre une séance",
     "restTime": "Temps de repos",
     "restNone": "Repos : non précisé",
-    "restTimeValue": "Repos {time}"
+    "restTimeValue": "Repos {time}",
+    "selectAll": "Tout sélectionner ({count})",
+    "selectNone": "Tout désélectionner",
+    "scope": "Envoyer",
+    "scopeWeek": "Cette semaine",
+    "scopeProgramme": "Tout le programme ({count} semaines)",
+    "pushProgramme": "{count, plural, =0 {Envoyer le programme} =1 {Envoyer le programme à 1 client} other {Envoyer le programme à # clients}}",
+    "scopeProgrammeHint": "La semaine 1 commence à la date choisie, chaque semaine suivante 7 jours plus tard. Chaque client ne voit une semaine qu’à partir de sa date."
   },
   "goal": {
     "Get stronger": "Gagner en force",

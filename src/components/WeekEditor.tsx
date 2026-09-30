@@ -17,6 +17,7 @@ import {
   deleteExercise,
   deleteSession,
   moveExercise,
+  pushProgramme,
   pushWeek,
   renameSession,
   retractWeek,
@@ -77,9 +78,12 @@ export function WeekEditor({
   assignedClientIds,
   catalogue,
   hevyConfigured,
+  weekCount,
 }: {
   programmeId: string;
   weekId: string;
+  /** Weeks in the programme: more than one makes "the whole programme" an option. */
+  weekCount: number;
   sessions: EditorSession[];
   clients: { id: string; name: string }[];
   assignedClientIds: string[];
@@ -100,6 +104,8 @@ export function WeekEditor({
   const [startDate, setStartDate] = useState(() =>
     new Date().toISOString().slice(0, 10),
   );
+  // This week only, or every week of the programme, a week apart.
+  const [scope, setScope] = useState<"week" | "programme">("week");
 
   const byDay = (day: number) => sessions.find((s) => s.day_index === day);
 
@@ -489,7 +495,18 @@ export function WeekEditor({
           </p>
         ) : (
           <>
-            <ul className="mt-3 flex flex-wrap gap-2">
+            {clients.length > 1 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setSelected(selected.length === clients.length ? [] : clients.map((c) => c.id))
+                }
+                className="mt-3 text-[12px] font-semibold text-[var(--accent)]"
+              >
+                {selected.length === clients.length ? t("selectNone") : t("selectAll", { count: clients.length })}
+              </button>
+            )}
+            <ul className="mt-2 flex flex-wrap gap-2">
               {clients.map((client) => {
                 const on = selected.includes(client.id);
                 return (
@@ -539,7 +556,22 @@ export function WeekEditor({
               })}
             </ul>
 
-            <div className="mt-3 flex items-end gap-2">
+            <div className="mt-3 flex flex-wrap items-end gap-2">
+              {weekCount > 1 && (
+                <label className="block">
+                  <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+                    {t("scope")}
+                  </span>
+                  <select
+                    value={scope}
+                    onChange={(e) => setScope(e.target.value as "week" | "programme")}
+                    className="mt-1 h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)]"
+                  >
+                    <option value="week">{t("scopeWeek")}</option>
+                    <option value="programme">{t("scopeProgramme", { count: weekCount })}</option>
+                  </select>
+                </label>
+              )}
               <label className="block">
                 <span className="block text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
                   {t("startDate")}
@@ -556,14 +588,19 @@ export function WeekEditor({
                 disabled={selected.length === 0}
                 onClick={() =>
                   startTransition(() => {
-                    void pushWeek(weekId, selected, startDate, programmeId);
+                    void (scope === "programme"
+                      ? pushProgramme(programmeId, selected, startDate)
+                      : pushWeek(weekId, selected, startDate, programmeId));
                   })
                 }
                 className="h-9 rounded-r2 cta px-4 text-[13px] font-semibold text-[var(--on-accent)] disabled:opacity-40"
               >
-                {t("push")}
+                {scope === "programme" ? t("pushProgramme", { count: selected.length }) : t("push")}
               </button>
             </div>
+            {scope === "programme" && (
+              <p className="mt-2 text-[12px] leading-[1.45] text-[var(--ink3)]">{t("scopeProgrammeHint")}</p>
+            )}
           </>
         )}
       </section>

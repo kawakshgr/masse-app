@@ -692,3 +692,41 @@ export async function importHevyTemplates(): Promise<{
   revalidatePath("/programmes", "layout");
   return { added: rows.length, skipped };
 }
+
+/**
+ * The whole programme to several clients at once — a group, a challenge.
+ * Week 1 starts on the date given, each later week seven days after the one
+ * before; every client sees a week only from its own start date.
+ */
+export async function pushProgramme(programmeId: string, clientIds: string[], startDate: string) {
+  const supabase = await createClient();
+  if (clientIds.length === 0 || !/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return;
+
+  const { data: weeks } = await supabase
+    .from("programme_weeks")
+    .select("id, week_number")
+    .eq("programme_id", programmeId)
+    .order("week_number");
+  if (!weeks?.length) return;
+
+  const first = weeks[0].week_number;
+  const at = (offset: number) => {
+    const d = new Date(`${startDate}T12:00:00Z`);
+    d.setUTCDate(d.getUTCDate() + offset * 7);
+    return d.toISOString().slice(0, 10);
+  };
+  const now = new Date().toISOString();
+  const rows = weeks.flatMap((week) =>
+    clientIds.map((client_id) => ({
+      client_id,
+      week_id: week.id,
+      start_date: at(week.week_number - first),
+      pushed_at: now,
+    })),
+  );
+
+  await supabase.from("assignments").upsert(rows, { onConflict: "client_id,week_id" });
+  revalidatePath(`/programmes/${programmeId}`);
+  revalidatePath("/programmes");
+  revalidatePath("/clients");
+}

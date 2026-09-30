@@ -246,6 +246,7 @@ export default async function ProgrammeEditorPage({
               mine: e.coach_id !== null,
             }))}
           hevyConfigured={hevyConfigured()}
+          weekCount={weeks.length}
         />
       ) : (
         <p className="text-[13px] text-[var(--ink3)]">{tProg("emptyAction")}</p>

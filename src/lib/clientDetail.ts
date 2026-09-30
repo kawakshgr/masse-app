@@ -82,6 +82,8 @@ export async function loadClientDetail(
       .eq("client_id", clientId)
       .not("pushed_at", "is", null)
       .gte("start_date", isoDate(fourWeeksAgo))
+      // Weeks pushed ahead are not "current" before their day.
+      .lte("start_date", isoDate(today))
       .order("start_date", { ascending: false }),
     supabase
       .from("daily_metrics")

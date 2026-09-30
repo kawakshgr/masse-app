@@ -103,6 +103,8 @@ export const currentWeek = cache(async (): Promise<PushedWeek | null> => {
     .select(
       "start_date, programme_weeks(week_number, programmes(name), sessions(day_index, name, session_exercises(id, position, name, scheme, cue, target_sets, target_reps, target_weight_kg, rest_min_s, rest_max_s)))",
     )
+    // A week pushed ahead (the whole programme at once) waits for its day.
+    .lte("start_date", today)
     .gte("start_date", addDays(today, -7))
     .order("start_date", { ascending: false })
     .limit(1);

@@ -72,7 +72,8 @@ export async function loadHistory(
       )
       .eq("client_id", clientId)
       .not("pushed_at", "is", null)
-      .gte("start_date", fromIso),
+      .gte("start_date", fromIso)
+      .lte("start_date", today.toISOString().slice(0, 10)),
     supabase
       .from("set_logs")
       .select("reps, weight_kg, logged_at, session_exercise_id, session_exercises(name)")

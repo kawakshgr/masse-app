@@ -397,7 +397,14 @@
     "makeTraining": "Make it a session",
     "restTime": "Rest time",
     "restNone": "Rest: not set",
-    "restTimeValue": "Rest {time}"
+    "restTimeValue": "Rest {time}",
+    "selectAll": "Select all ({count})",
+    "selectNone": "Select none",
+    "scope": "Send",
+    "scopeWeek": "This week",
+    "scopeProgramme": "The whole programme ({count} weeks)",
+    "pushProgramme": "{count, plural, =0 {Send the programme} =1 {Send the programme to 1 client} other {Send the programme to # clients}}",
+    "scopeProgrammeHint": "Week 1 starts on the chosen date, each later week 7 days on. Each client sees a week only from its date."
   },
   "goal": {
     "Get stronger": "Get stronger",
