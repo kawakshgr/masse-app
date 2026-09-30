@@ -111,6 +111,11 @@ export default function OnboardingPage() {
   // taken by someone else meanwhile must not be offered.
   const [freeSlots, setFreeSlots] = useState<string[] | null>(null);
   const [callDay, setCallDay] = useState("");
+  // Eighteen years back from today, read once.
+  const [latestBirth] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear() - 18}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  });
 
   const set = (patch: Partial<Answers>) => {
     setMissing(false);
@@ -268,7 +273,15 @@ export default function OnboardingPage() {
               </Question>
               <div>
                 <Question label={t("birthDate")} required>
-                  <input type="date" autoComplete="bday" value={a.birthDate} onChange={(e) => set({ birthDate: e.target.value })} className={fieldClass} />
+                  <input
+                    type="date"
+                    autoComplete="bday"
+                    // The picker opens on the latest date an adult can have been born.
+                    max={latestBirth}
+                    value={a.birthDate}
+                    onChange={(e) => set({ birthDate: e.target.value })}
+                    className={fieldClass}
+                  />
                 </Question>
                 {a.birthDate !== "" && !isAdult(a.birthDate) && (
                   <p className="mt-2 text-[12.5px] leading-[1.45] text-[var(--a3)]">{t("adultsOnly")}</p>

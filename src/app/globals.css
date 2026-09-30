@@ -359,3 +359,21 @@ select {
   .desk { display: block !important; height: auto !important; }
   [data-print-sheet] { overflow: visible !important; }
 }
+
+/*
+ * Date fields on iPhone. Safari gives them an intrinsic width and centres
+ * the value, so a full-width field spills out of its card (seen on the
+ * invitation's birth date, 30 Sep 2026). Drawn as plain fields instead: they
+ * take the width they are given, and the value sits left like any other.
+ */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.2em;
+}
