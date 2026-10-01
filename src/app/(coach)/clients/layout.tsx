@@ -10,16 +10,17 @@ export default async function ClientsLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-  const t = await getTranslations("roster");
-  const { entries } = await rosterNow();
-
-  // The coach needs the codes themselves, not a count she cannot send.
-  const { data: pendingInvites } = await supabase
-    .from("invite_codes")
-    .select("id, code, state, expires_at")
-    .in("state", ["sent", "opened"])
-    .gt("expires_at", new Date().toISOString())
-    .order("issued_at", { ascending: false });
+  const [t, { entries }, { data: pendingInvites }] = await Promise.all([
+    getTranslations("roster"),
+    rosterNow(),
+    // The coach needs the codes themselves, not a count she cannot send.
+    supabase
+      .from("invite_codes")
+      .select("id, code, state, expires_at")
+      .in("state", ["sent", "opened"])
+      .gt("expires_at", new Date().toISOString())
+      .order("issued_at", { ascending: false }),
+  ]);
 
   return (
     <SplitPane

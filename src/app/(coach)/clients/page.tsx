@@ -11,12 +11,11 @@ import { authUser } from "@/lib/supabase/auth";
  */
 export default async function ClientsIndexPage() {
   const supabase = await createClient();
-  const user = await authUser();
   const locale = intl(await getLocale());
   const [items, { data: coach }] = await Promise.all([
     queueNow(locale),
     // Her video link goes into the confirmation message of each booked call.
-    supabase.from("coaches").select("call_link").eq("id", user?.id ?? "").maybeSingle(),
+    authUser().then((user) => supabase.from("coaches").select("call_link").eq("id", user?.id ?? "").maybeSingle()),
   ]);
   return <QueuePanel items={items} callLink={coach?.call_link ?? null} locale={locale} />;
 }

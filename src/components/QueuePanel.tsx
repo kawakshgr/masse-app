@@ -58,11 +58,13 @@ export async function QueuePanel({
   /** The locale dates are written in: the coach's language. */
   locale: string;
 }) {
-  const t = await getTranslations("queue");
-  const tCalls = await getTranslations("calls");
-  const tPain = await getTranslations("pain");
-  const write = await messageWriter();
-  const tRun = await getTranslations("run");
+  const [t, tCalls, tPain, write, tRun] = await Promise.all([
+    getTranslations("queue"),
+    getTranslations("calls"),
+    getTranslations("pain"),
+    messageWriter(),
+    getTranslations("run"),
+  ]);
 
   if (items.length === 0) {
     return <PaneEmpty icon="checkIns" title={t("empty")} hint={t("emptyHint")} />;
