@@ -581,7 +581,8 @@
     "swap": "Machine taken? Swap",
     "swapBack": "Change movement",
     "swapQuestion": "What are you doing instead?",
-    "swapCancel": "Cancel"
+    "swapCancel": "Cancel",
+    "history": "My past sessions"
   },
   "entry": {
     "title": "Entry",
@@ -1989,5 +1990,21 @@
     "doneSent": "{count, plural, =0 {No invoice sent} one {# invoice issued and sent} other {# invoices issued and sent}}",
     "doneNoEmail": "{count, plural, one {# invoice issued without e-mail: send it by hand.} other {# invoices issued without e-mail: send them by hand.}}",
     "doneFailed": "{count, plural, one {# invoice did not go: open the client's line to try again.} other {# invoices did not go: open the lines to try again.}}"
+  },
+  "sessionHistory": {
+    "title": "My sessions",
+    "kicker": "{count, plural, one {# week} other {last # weeks}}",
+    "thisWeek": "This week",
+    "weekOf": "Week of {date}",
+    "weekNumber": "week {n}",
+    "done": "{done}/{total} done",
+    "session": "Session",
+    "movements": "{done}/{total} movements",
+    "notLogged": "not logged",
+    "noSets": "Nothing logged",
+    "insteadOf": "Instead of {name}",
+    "emptyTitle": "No session yet",
+    "emptyHint": "As soon as your coach sends you a week, your past sessions show here, with your sets.",
+    "back": "‹ Back to the session"
   }
 }

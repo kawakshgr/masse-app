@@ -581,7 +581,8 @@
     "swap": "Machine prise ? Remplacer",
     "swapBack": "Changer de mouvement",
     "swapQuestion": "Que fais-tu à la place ?",
-    "swapCancel": "Annuler"
+    "swapCancel": "Annuler",
+    "history": "Mes séances passées"
   },
   "entry": {
     "title": "Saisie",
@@ -1989,5 +1990,21 @@
     "doneSent": "{count, plural, =0 {Aucune facture envoyée} one {# facture émise et envoyée} other {# factures émises et envoyées}}",
     "doneNoEmail": "{count, plural, one {# facture émise sans e-mail : à envoyer à la main.} other {# factures émises sans e-mail : à envoyer à la main.}}",
     "doneFailed": "{count, plural, one {# facture n’est pas partie : ouvre la ligne du client pour réessayer.} other {# factures ne sont pas parties : ouvre les lignes pour réessayer.}}"
+  },
+  "sessionHistory": {
+    "title": "Mes séances",
+    "kicker": "{count, plural, one {# semaine} other {# dernières semaines}}",
+    "thisWeek": "Cette semaine",
+    "weekOf": "Semaine du {date}",
+    "weekNumber": "semaine {n}",
+    "done": "{done}/{total} faites",
+    "session": "Séance",
+    "movements": "{done}/{total} mouvements",
+    "notLogged": "non saisie",
+    "noSets": "Rien de saisi",
+    "insteadOf": "À la place de {name}",
+    "emptyTitle": "Pas encore de séance",
+    "emptyHint": "Dès que ton coach t’envoie une semaine, tes séances passées s’affichent ici, avec tes séries.",
+    "back": "‹ Revenir à la séance"
   }
 }

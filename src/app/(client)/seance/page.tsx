@@ -216,6 +216,13 @@ export default async function SessionPage({
             </form>
           )}
           <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">{t("myWeekHint")}</p>
+          <Link
+            href="/seance/historique"
+            className="flex h-12 items-center justify-between rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3.5 text-[14px] font-semibold"
+          >
+            {t("history")}
+            <span aria-hidden className="text-[var(--ink3)]">›</span>
+          </Link>
         </Card>
       )}
 
