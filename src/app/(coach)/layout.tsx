@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { queueNow, rosterNow } from "@/lib/coachData";
 import { TabBar } from "@/components/TabBar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { authUser } from "@/lib/supabase/auth";
 
 /** "Kevin Cordeiro" → "KC"; one name gives its first two letters. */
 function initialsOf(name: string) {
@@ -20,16 +21,21 @@ export default async function CoachLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
   if (!user) redirect("/connexion");
 
-  const { data: coach } = await supabase
-    .from("coaches")
-    .select("name, first_name")
-    .eq("id", user.id)
-    .maybeSingle();
+  // The roster and À traiter start with the coach's row, not after it
+  // (1 Oct 2026); for a client sent away below they are simply not used.
+  const locale = intl(await getLocale());
+  const rosterRead = rosterNow();
+  const queueRead = queueNow(locale);
+  void rosterRead.catch(() => {});
+  void queueRead.catch(() => {});
+
+  const [{ data: coach }, t] = await Promise.all([
+    supabase.from("coaches").select("name, first_name").eq("id", user.id).maybeSingle(),
+    getTranslations("shell"),
+  ]);
   if (!coach) {
     // A client who lands here — the installed app opens at "/" — belongs on
     // her own screens, not on a page telling her she cannot be a coach.
@@ -41,12 +47,10 @@ export default async function CoachLayout({
     redirect(client ? "/aujourdhui" : "/bienvenue");
   }
 
-  const t = await getTranslations("shell");
-  const roster = await rosterNow();
-  const { entries, checkinsToReview } = roster;
   // Counted from the same list as À traiter, so the line under her name
   // never says nobody needs her beside a pane that says otherwise.
-  const queue = await queueNow(intl(await getLocale()));
+  const [roster, queue] = await Promise.all([rosterRead, queueRead]);
+  const { entries, checkinsToReview } = roster;
   const clientsNeedingYou = new Set(queue.map((item) => item.clientId)).size;
 
   return (

@@ -21,6 +21,7 @@ import {
   type MonthState,
 } from "@/lib/billing";
 import type { BillingType, InvoiceStatus } from "@/lib/supabase/types";
+import { authUser } from "@/lib/supabase/auth";
 
 type Filter = "all" | "open" | "monthly" | "pack";
 
@@ -52,9 +53,7 @@ export default async function BillingPage({
   const months = lastMonths(period, 6);
   const nextMonth = nextMonthOf(period);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
 
   const [clientsRes, arrangementsRes, invoicesRes, profileRes] =
     await Promise.all([

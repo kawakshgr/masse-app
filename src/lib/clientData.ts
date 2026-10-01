@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
 import { plannedDays } from "@/lib/dayMoves";
+import { authUser } from "@/lib/supabase/auth";
 
 /**
  * What every client screen needs first: who she is, and what day it is for her.
@@ -14,9 +15,7 @@ import { plannedDays } from "@/lib/dayMoves";
  */
 export const clientSession = cache(async () => {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
   if (!user) redirect("/connexion?suite=/aujourdhui");
 
   const { data: client } = await supabase

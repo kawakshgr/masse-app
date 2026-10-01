@@ -13,6 +13,7 @@ import {
 } from "./actions";
 import { HALF_HOURS, hm } from "@/lib/calls";
 import { DaySelect } from "@/components/DaySelect";
+import { authUser } from "@/lib/supabase/auth";
 
 const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 const cell =
@@ -68,9 +69,7 @@ export default async function AccountPage({
   const { enregistre, erreur, creneau, partie } = await searchParams;
   const part = (PARTS as readonly string[]).includes(partie ?? "") ? (partie as Part) : null;
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
   const me = user?.id ?? "";
 
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });

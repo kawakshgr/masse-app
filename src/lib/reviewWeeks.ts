@@ -11,12 +11,13 @@ import { isFiled } from "@/lib/checkIns";
 export async function loadReviewWeeks(
   supabase: SupabaseClient<Database>,
   clientId: string,
-  rows: CheckInRow[],
+  /** The rows, or the read under way: the photos are asked for alongside. */
+  rowsOrRead: CheckInRow[] | PromiseLike<CheckInRow[]>,
 ): Promise<{ checkIns: CheckInRow[]; weeks: ReviewWeek[] }> {
-  const { data: photos } = await supabase
-    .from("check_in_photos")
-    .select("id, check_in_id, storage_path, pose")
-    .eq("client_id", clientId);
+  const [rows, { data: photos }] = await Promise.all([
+    rowsOrRead,
+    supabase.from("check_in_photos").select("id, check_in_id, storage_path, pose").eq("client_id", clientId),
+  ]);
 
   // Rows she opened and left empty are not weeks: they would count as a
   // check-in and push the real baseline aside.

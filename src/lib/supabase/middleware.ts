@@ -39,11 +39,13 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // getUser() revalidates against the auth server. getSession() trusts the
-  // cookie, which is not good enough to gate a page on.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims() refreshes the session when it has expired and verifies the
+  // JWT's signature here, against the project's ES256 key (JWKS cached) —
+  // trustworthy enough to gate a page on, without a trip to the auth server
+  // on every request as getUser() made (1 Oct 2026). getSession() alone
+  // trusts the cookie and is not.
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims?.sub ? data.claims : null;
 
   const { pathname } = request.nextUrl;
   const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));

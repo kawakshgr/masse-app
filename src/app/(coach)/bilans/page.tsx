@@ -12,6 +12,7 @@ import { messageWriter } from "@/lib/coachMessages";
 import { waLink } from "@/lib/whatsapp";
 import type { CheckInRow } from "@/lib/supabase/types";
 import { readAndNext } from "./actions";
+import { authUser } from "@/lib/supabase/auth";
 
 function initialsOf(name: string) {
   const words = name.trim().split(/\s+/).filter(Boolean);
@@ -31,9 +32,7 @@ export default async function CheckInRunPage({ searchParams }: { searchParams: P
   const tReview = await getTranslations("coachCheckin");
   const locale = intl(await getLocale());
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
   const me = user?.id ?? "";
 
   const [{ data: clients }, { data: coach }] = await Promise.all([

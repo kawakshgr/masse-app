@@ -2,6 +2,7 @@ import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import { plannedDays, weekdayFor, type DayMove } from "@/lib/dayMoves";
 import { nextStartAfter, sessionOwed } from "@/lib/sessionDue";
+import { authUser } from "@/lib/supabase/auth";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
@@ -60,7 +61,7 @@ export async function loadRoster(
       .order("name"),
     // Late is judged by the rule her app uses, with the due day the coach
     // set: past it, and still empty. Paris time, like the coaches.
-    supabase.auth.getUser().then(async ({ data: { user } }) => {
+    authUser().then(async (user) => {
       const { data: coachRow } = await supabase
         .from("coaches")
         .select("check_in_due_offset")
@@ -84,7 +85,7 @@ export async function loadRoster(
   const thisMonday = addDays(todayLocal, -weekday);
   const lastMonday = addDays(thisMonday, -7);
 
-  const [checkins, metrics, assignments, lastWeek, moves] = await Promise.all([
+  const [checkins, metrics, assignments, lastWeek, moves, recentSets] = await Promise.all([
     // Waiting on the coach.
     supabase
       .from("check_ins")
@@ -125,6 +126,14 @@ export async function loadRoster(
       .select("client_id, day_index, planned_day")
       .in("client_id", ids)
       .eq("week_start", thisMonday),
+    // Sets logged since the oldest week read above could start (a day of
+    // margin for the clock): asked in the same round rather than after the
+    // weeks, by client rather than by exercise (1 Oct 2026).
+    supabase
+      .from("set_logs")
+      .select("session_exercise_id")
+      .in("client_id", ids)
+      .gte("logged_at", `${addDays(isoDate(weekAgo), -1)}T00:00:00Z`),
   ]);
 
   const movesOf = new Map<string, DayMove[]>();
@@ -197,11 +206,10 @@ export async function loadRoster(
   const logged = new Set<string>();
 
   if (allExpected.length > 0) {
-    const { data: logs } = await supabase
-      .from("set_logs")
-      .select("session_exercise_id")
-      .in("session_exercise_id", allExpected);
-    for (const log of logs ?? []) logged.add(log.session_exercise_id);
+    const expected = new Set(allExpected);
+    for (const log of recentSets.data ?? []) {
+      if (expected.has(log.session_exercise_id)) logged.add(log.session_exercise_id);
+    }
   }
 
   const entries: RosterEntry[] = clients.map((client) => {

@@ -38,6 +38,7 @@ import { SupplementProtocol } from "@/components/SupplementProtocol";
 import type { CyclePhase } from "@/lib/supabase/types";
 import { loadHistory, type Range } from "@/lib/history";
 import { dayLabel, euros } from "@/lib/billing";
+import { authUser } from "@/lib/supabase/auth";
 
 function initialsOf(name: string) {
   return name
@@ -77,25 +78,20 @@ export default async function ClientDetailPage({
   const detail = await loadClientDetail(supabase, id);
   if (!detail) notFound();
 
-  const t = await getTranslations("detail");
-  const locale = intl(await getLocale());
-  const tProse = await getTranslations("prose");
-  const tDays = await getTranslations("days");
-  const tGoal = await getTranslations("goal");
-  const tPhase = await getTranslations("phase");
-  const tSteps = await getTranslations("stepsTab");
-  const tRequest = await getTranslations("request");
+  const [t, rawLocale, tProse, tDays, tGoal, tPhase, tSteps, tRequest] = await Promise.all([
+    getTranslations("detail"),
+    getLocale(),
+    getTranslations("prose"),
+    getTranslations("days"),
+    getTranslations("goal"),
+    getTranslations("phase"),
+    getTranslations("stepsTab"),
+    getTranslations("request"),
+  ]);
+  const locale = intl(rawLocale);
 
   const { client, sleep } = detail;
 
-  const fileNote =
-    (
-      await supabase
-        .from("client_file_notes")
-        .select("note")
-        .eq("client_id", id)
-        .maybeSingle()
-    ).data?.note ?? null;
 
   let tab: ClientTab = isClientTab(onglet) ? onglet : "overview";
   // Cycle is absent, not disabled: a hand-typed URL must not reach it either.
@@ -114,24 +110,16 @@ export default async function ClientDetailPage({
 
   // What was agreed, read from the billing tab's own record rather than typed
   // a second time here.
-  const tBilling = await getTranslations("billing");
-  const { data: arrangement } = await supabase
-    .from("billing_arrangements")
-    .select("amount_cents, type, day_of_month, pack_sessions")
-    .eq("client_id", id)
-    .maybeSingle();
-  const billingLine = arrangement
-    ? arrangement.type === "monthly"
-      ? `${euros(arrangement.amount_cents, locale)} · ${tBilling("billedOn", {
-          day: dayLabel(arrangement.day_of_month, locale),
-        })}`
-      : `${euros(arrangement.amount_cents, locale)} · ${tBilling("pack")} · ${
-          arrangement.pack_sessions
-        }`
-    : null;
-
-  // Her booked video call, while it is still to come (or under way).
-  const [{ data: call }, { data: me }] = await Promise.all([
+  // The rest of the header's reads, side by side.
+  const [tBilling, { data: arrangement }, { data: noteRow }, { data: call }, { data: me }] = await Promise.all([
+    getTranslations("billing"),
+    supabase
+      .from("billing_arrangements")
+      .select("amount_cents, type, day_of_month, pack_sessions")
+      .eq("client_id", id)
+      .maybeSingle(),
+    supabase.from("client_file_notes").select("note").eq("client_id", id).maybeSingle(),
+    // Her booked video call, while it is still to come (or under way).
     supabase
       .from("appointments")
       .select("id, starts_at, minutes")
@@ -143,6 +131,17 @@ export default async function ClientDetailPage({
       .maybeSingle(),
     supabase.from("coaches").select("call_link").eq("id", client.coach_id).maybeSingle(),
   ]);
+  const fileNote = noteRow?.note ?? null;
+  const billingLine = arrangement
+    ? arrangement.type === "monthly"
+      ? `${euros(arrangement.amount_cents, locale)} · ${tBilling("billedOn", {
+          day: dayLabel(arrangement.day_of_month, locale),
+        })}`
+      : `${euros(arrangement.amount_cents, locale)} · ${tBilling("pack")} · ${
+          arrangement.pack_sessions
+        }`
+    : null;
+
 
   const firstName = client.first_name ?? client.name.split(/\s+/)[0] ?? client.name;
   const header = (
@@ -240,7 +239,7 @@ export default async function ClientDetailPage({
         clientId={id}
         current={tab}
         cycleTracking={client.cycle_tracking}
-      />
+      >
 
       {tab === "overview" && (
         <OverviewTab
@@ -279,6 +278,7 @@ export default async function ClientDetailPage({
           billingLine={billingLine}
         />
       )}
+      </ClientTabs>
     </div>
   );
 }
@@ -689,38 +689,30 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
   const locale = intl(await getLocale());
   const supabase = await createClient();
 
-  const [{ data: rows }, { data: client }] = await Promise.all([
-    supabase
-      .from("check_ins")
-      .select("*")
-      // Oldest first: week 1 is the baseline everything is measured against.
-      .eq("client_id", clientId)
-      .order("week_start_date", { ascending: true })
-      .limit(52),
-    supabase
-      .from("clients")
-      .select("first_name, name, whatsapp, phone, timezone")
-      .eq("id", clientId)
-      .maybeSingle(),
+  // Every read of the tab in one round (1 Oct 2026): the check-ins with
+  // their photos, the client, the reminders and her due day.
+  const rowsRead = supabase
+    .from("check_ins")
+    .select("*")
+    // Oldest first: week 1 is the baseline everything is measured against.
+    .eq("client_id", clientId)
+    .order("week_start_date", { ascending: true })
+    .limit(52)
+    .then(({ data }) => (data ?? []) as CheckInRow[]);
+  const [{ checkIns, weeks }, { data: client }, { data: reminders }, dueOffset] = await Promise.all([
+    loadReviewWeeks(supabase, clientId, rowsRead),
+    supabase.from("clients").select("first_name, name, whatsapp, phone, timezone").eq("id", clientId).maybeSingle(),
+    supabase.from("check_in_reminders").select("week_start_date, sent_at").eq("client_id", clientId),
+    // Her own rule for when a check-in is due, set in Admin.
+    authUser().then(async (user) => {
+      const { data: coachRow } = await supabase
+        .from("coaches")
+        .select("check_in_due_offset")
+        .eq("id", user?.id ?? "")
+        .maybeSingle();
+      return coachRow?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
+    }),
   ]);
-
-  const { data: reminders } = await supabase
-    .from("check_in_reminders")
-    .select("week_start_date, sent_at")
-    .eq("client_id", clientId);
-
-  // Her own rule for when a check-in is due, set in Admin.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const { data: coachRow } = await supabase
-    .from("coaches")
-    .select("check_in_due_offset")
-    .eq("id", user?.id ?? "")
-    .maybeSingle();
-  const dueOffset = coachRow?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
-
-  const { checkIns, weeks } = await loadReviewWeeks(supabase, clientId, (rows ?? []) as CheckInRow[]);
 
   const firstName = client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";
 

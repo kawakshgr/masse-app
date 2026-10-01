@@ -1,14 +1,13 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import { authUser } from "@/lib/supabase/auth";
 
 async function createCoach(formData: FormData) {
   "use server";
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
 
   if (!user) redirect("/connexion");
 
@@ -38,9 +37,7 @@ export default async function WelcomePage({
   const { erreur } = await searchParams;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
   if (!user) redirect("/connexion");
 
   // Already introduced — nothing to do here.

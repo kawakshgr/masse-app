@@ -11,6 +11,7 @@ import { monthLabel } from "@/lib/billing";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 import type { CoachBillingProfileRow } from "@/lib/supabase/types";
+import { authUser } from "@/lib/supabase/auth";
 
 export type InvoiceData = {
   profile: CoachBillingProfileRow;
@@ -44,9 +45,7 @@ export async function loadInvoice(
   clientId: string,
   period: string,
 ): Promise<InvoiceData | InvoiceProblem> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
 
   const [profileRes, clientRes, invoiceRes, arrangementRes, coachRes] = await Promise.all([
     supabase

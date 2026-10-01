@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { intl } from "@/lib/locale";
 import { queueNow } from "@/lib/coachData";
 import { QueuePanel } from "@/components/QueuePanel";
+import { authUser } from "@/lib/supabase/auth";
 
 /**
  * Where the coach lands: beside her roster, what needs her today — the
@@ -10,9 +11,7 @@ import { QueuePanel } from "@/components/QueuePanel";
  */
 export default async function ClientsIndexPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
   const locale = intl(await getLocale());
   const [items, { data: coach }] = await Promise.all([
     queueNow(locale),

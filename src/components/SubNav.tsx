@@ -20,10 +20,13 @@ export function SubNav({
   label,
   className = "",
   children,
+  onPick,
 }: {
   items: SubNavItem[];
   label?: string;
   className?: string;
+  /** From a client component: a plain click is handed over (shown at once, then navigated). */
+  onPick?: (item: SubNavItem, event: React.MouseEvent<HTMLAnchorElement>) => void;
   /** A trailing action inside the capsule, e.g. "+ week". */
   children?: React.ReactNode;
 }) {
@@ -38,6 +41,7 @@ export function SubNav({
           key={item.key}
           href={item.href}
           aria-current={item.active ? "page" : undefined}
+          onClick={onPick ? (event) => onPick(item, event) : undefined}
           className={`h-8 whitespace-nowrap rounded-rp border px-3.5 text-[11.5px] font-bold uppercase leading-[30px] tracking-[.1em] transition-colors ${
             item.active
               ? "sel text-[var(--ink)]"

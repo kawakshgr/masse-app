@@ -45,7 +45,8 @@
       "fr": "Français",
       "en": "English"
     },
-    "myAccount": "My account"
+    "myAccount": "My account",
+    "loading": "Loading…"
   },
   "roster": {
     "title": "Roster",

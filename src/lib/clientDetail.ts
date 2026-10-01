@@ -65,20 +65,15 @@ export async function loadClientDetail(
   supabase: SupabaseClient<Database>,
   clientId: string,
 ): Promise<ClientDetail | null> {
-  const { data: client } = await supabase
-    .from("clients")
-    .select("*")
-    .eq("id", clientId)
-    .maybeSingle();
-
-  if (!client) return null;
-
   const today = new Date();
   const weekStart = startOfWeekUTC(today);
   const fourWeeksAgo = new Date(weekStart);
   fourWeeksAgo.setUTCDate(fourWeeksAgo.getUTCDate() - 21);
 
-  const [assignmentsRes, metricsRes, cycleRes, movesRes] = await Promise.all([
+  // One round of reads, the client's row among them (1 Oct 2026: it used to
+  // be read first, alone).
+  const [{ data: client }, assignmentsRes, metricsRes, cycleRes, movesRes] = await Promise.all([
+    supabase.from("clients").select("*").eq("id", clientId).maybeSingle(),
     supabase
       .from("assignments")
       .select(
@@ -107,6 +102,7 @@ export async function loadClientDetail(
       .eq("week_start", isoDate(weekStart)),
   ]);
 
+  if (!client) return null;
   const plan = plannedDays(movesRes.data);
 
   const assignments = assignmentsRes.data ?? [];

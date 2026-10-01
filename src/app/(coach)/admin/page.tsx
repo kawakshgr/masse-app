@@ -13,6 +13,7 @@ import { PartHead, Tile, TileGrid } from "@/components/Tiles";
 import { MessageEditor } from "@/components/MessageEditor";
 import { coachMessageBodies } from "@/lib/coachMessages";
 import { MESSAGES, MESSAGE_GROUPS, toDisplay, tokenWord } from "@/lib/messages";
+import { authUser } from "@/lib/supabase/auth";
 
 /** What an invoice cannot go out without; the section header counts them. */
 const REQUIRED_MENTIONS = [
@@ -48,9 +49,7 @@ export default async function AdminPage({
   const supabase = await createClient();
   const { partie } = await searchParams;
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await authUser();
   const me = user?.id ?? "";
 
   const [{ data: admin }, { data: coach }, { data: profile }] = await Promise.all([
