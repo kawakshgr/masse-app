@@ -100,7 +100,12 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   of `assignments` takes `start_date <= today`.
   The scheme she types ("4×8 @ 60 kg") is read into `target_sets`,
   `target_reps`, `target_weight_kg` (`lib/scheme.ts`); ranges and anything
-  else stay text with no target. Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
+  else stay text with no target. Below lg there is no library pane: each
+  day has a big "+ Mouvement" opening `MovementPicker` (1 Oct 2026) — a
+  search, eight muscle families (`lib/movementFamilies.ts`), then one
+  family filtered by kit; a tap adds to the day. A push never re-dates a
+  week a client has already begun (`weeksBegun`): her history is read
+  against that date. Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
   exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
   who logged it hit every prescribed set; otherwise, or with no logs or no
   target, it stays. The new week is never pushed by this.
