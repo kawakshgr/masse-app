@@ -266,7 +266,11 @@ Each came out of a design decision or an audit. Not style preferences.
     large line icon (`SectionTitle`, icons in `components/Icon`); sub-menus
     are `SubNav` capsules; a filter with more than three choices is a
     dropdown (`LinkSelect` when it lives in the URL), not a row of chips;
-    secondary page actions go in `ActionMenu`. Plain modules only for shared
+    secondary page actions go in `ActionMenu`. Picking one of a handful of
+    things — a settings part, a family, a destination — is a grid of big
+    tiles (`components/Tiles.tsx`, 1 Oct 2026: client Réglages, Admin, Mon
+    compte, the libraries and the movement picker on a phone), each tile
+    opening its part on its own screen (`?partie=`); lists stay for data. Plain modules only for shared
     constants — a value exported from a `"use client"` file cannot be read
     by a server component.
 
