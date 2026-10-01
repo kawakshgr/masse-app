@@ -108,8 +108,9 @@ export default async function CheckInRunPage({ searchParams }: { searchParams: P
                 icon="checkIns"
                 aside={<span className="tnum text-[12px] font-bold text-[var(--ink3)]">{notYet.length}</span>}
               >
-                {t("notYet", { date: day(window.weekStart) })}
+                {t("notYet")}
               </SectionTitle>
+              <p className="mt-1 text-[12.5px] text-[var(--ink2)]">{t("notYetWeek", { date: day(window.weekStart) })}</p>
               <ul className="mt-3 flex flex-col gap-1.5">
                 {notYet.map((client) => {
                   const first = client.first_name ?? client.name.split(/\s+/)[0] ?? "";

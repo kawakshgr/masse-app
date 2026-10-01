@@ -25,9 +25,10 @@ export type EditableMessage = {
  */
 export function MessageEditor({ groups }: { groups: { title: string; icon: string; messages: EditableMessage[] }[] }) {
   return (
-    <div className="space-y-4">
+    // Already inside the part's card: groups are headed, not boxed again.
+    <div className="space-y-6">
       {groups.map((group) => (
-        <section key={group.title} className="glass space-y-3 rounded-r3 p-4">
+        <section key={group.title} className="space-y-3">
           <SectionTitle icon={group.icon}>{group.title}</SectionTitle>
           {group.messages.map((message) => (
             <OneMessage key={message.kind} message={message} />
@@ -75,7 +76,7 @@ function OneMessage({ message }: { message: EditableMessage }) {
   }
 
   return (
-    <div className="glass2 space-y-2.5 rounded-r2 p-3">
+    <div className="glass2 space-y-2.5 rounded-r2 p-3 max-md:p-2.5">
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-[13.5px] font-semibold">{message.label}</span>
         <span className={`shrink-0 text-[11px] font-bold uppercase tracking-[.1em] ${custom ? "text-[var(--accent)]" : "text-[var(--ink3)]"}`}>

@@ -1939,8 +1939,9 @@
     "doneSkippedHint": "Tu les retrouves en relançant le mode bilan, ou dans À traiter.",
     "again": "Reprendre les bilans passés",
     "back": "Retour à À traiter",
-    "notYet": "Pas encore déposé · semaine du {date}",
+    "notYet": "Pas encore déposé",
     "remind": "Relancer",
-    "start": "Traiter les bilans"
+    "start": "Traiter les bilans",
+    "notYetWeek": "Semaine du {date}"
   }
 }

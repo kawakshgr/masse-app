@@ -105,7 +105,7 @@ export function PartHead({
         <p className="truncate text-[11px] font-bold uppercase tracking-[.14em] text-[var(--accent)]">
           {kicker}
         </p>
-        <h1 className="mt-1 truncate font-display text-[26px] font-extrabold uppercase leading-none tracking-[-.01em]">
+        <h1 className="mt-1 font-display text-[26px] font-extrabold uppercase leading-[1.02] tracking-[-.01em] [overflow-wrap:anywhere]">
           {title}
         </h1>
       </div>

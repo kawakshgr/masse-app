@@ -1939,8 +1939,9 @@
     "doneSkippedHint": "Find them by starting the run again, or in To do.",
     "again": "Go back to the skipped ones",
     "back": "Back to To do",
-    "notYet": "Not filed yet · week of {date}",
+    "notYet": "Not filed yet",
     "remind": "Remind",
-    "start": "Go through check-ins"
+    "start": "Go through check-ins",
+    "notYetWeek": "Week of {date}"
   }
 }
