@@ -1965,5 +1965,16 @@
     "open": "See my progress",
     "todayLine": "{weight} kg · {change} kg since {date}",
     "todayLineFirst": "{count, plural, one {# check-in} other {# check-ins}}: weight, measurements, photos"
+  },
+  "deload": {
+    "title": "Deload week",
+    "load": "Load",
+    "pct": "−{pct}% load",
+    "fewerSets": "One set fewer",
+    "write": "Write week {week}",
+    "done": "Week {week}: deload written",
+    "summary": "{count, plural, one {# movement lightened} other {# movements lightened}}: −{pct}% load, rounded to a plate, reps unchanged.",
+    "asWritten": "{count, plural, one {# movement copied as written, its scheme unreadable: adjust it.} other {# movements copied as written, their scheme unreadable: adjust them.}}",
+    "notPushed": "Nothing is sent to clients: read the week through, then send it when you like."
   }
 }

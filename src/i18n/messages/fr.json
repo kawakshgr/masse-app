@@ -1965,5 +1965,16 @@
     "open": "Voir mon évolution",
     "todayLine": "{weight} kg · {change} kg depuis le {date}",
     "todayLineFirst": "{count, plural, one {# bilan} other {# bilans}} : poids, mensurations, photos"
+  },
+  "deload": {
+    "title": "Semaine de décharge",
+    "load": "Charge",
+    "pct": "−{pct} % de charge",
+    "fewerSets": "Une série de moins",
+    "write": "Écrire la semaine {week}",
+    "done": "Semaine {week} : décharge écrite",
+    "summary": "{count, plural, one {# mouvement allégé} other {# mouvements allégés}} : −{pct} % de charge, arrondi au disque, les répétitions restent.",
+    "asWritten": "{count, plural, one {# mouvement copié tel quel, son schéma n’étant pas lisible : à ajuster.} other {# mouvements copiés tels quels, leur schéma n’étant pas lisible : à ajuster.}}",
+    "notPushed": "Rien n’est envoyé aux clients : relis la semaine, puis envoie-la quand tu veux."
   }
 }

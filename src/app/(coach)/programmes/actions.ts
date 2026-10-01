@@ -856,3 +856,101 @@ export async function copySession(
   revalidatePath(`/programmes/${programmeId}`);
   return { copied, kept };
 }
+
+/**
+ * A deload week (1 Oct 2026): this week copied as the next one, lighter —
+ * a set fewer (never under one) when she asks, and the load cut by the
+ * share she picks, rounded to a plate (2.5 kg, 0.5 kg under 20 kg). Reps
+ * stay. A scheme that cannot be read ("3×8–10") is copied as written and
+ * counted, for her to adjust by hand. Never pushed by this.
+ */
+export async function deloadWeek(formData: FormData) {
+  const weekId = String(formData.get("week_id") ?? "");
+  const programmeId = String(formData.get("programme_id") ?? "");
+  const pct = Math.min(60, Math.max(0, Number(formData.get("pct") ?? 40) || 0));
+  const fewerSets = formData.get("fewer_sets") === "1";
+  if (!weekId || !programmeId) return;
+  const supabase = await createClient();
+
+  const { data: source } = await supabase
+    .from("programme_weeks")
+    .select(
+      "week_number, sessions(day_index, name, notes, kind, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s, alternatives))",
+    )
+    .eq("id", weekId)
+    .maybeSingle();
+  if (!source) return;
+
+  const { data: last } = await supabase
+    .from("programme_weeks")
+    .select("week_number")
+    .eq("programme_id", programmeId)
+    .order("week_number", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const number = (last?.week_number ?? 0) + 1;
+  const { data: created } = await supabase
+    .from("programme_weeks")
+    .insert({ programme_id: programmeId, week_number: number })
+    .select("id")
+    .single();
+  if (!created) return;
+
+  const plate = (kg: number) => {
+    const step = kg < 20 ? 0.5 : 2.5;
+    return Math.max(0, Math.round(kg / step) * step);
+  };
+
+  let lighter = 0;
+  let asWritten = 0;
+  const sessions = (source.sessions ?? []) as unknown as {
+    day_index: number;
+    name: string | null;
+    notes: string | null;
+    kind: "training" | "rest";
+    session_exercises: {
+      position: number;
+      name: string;
+      scheme: string | null;
+      target_sets: number | null;
+      target_reps: number | null;
+      target_weight_kg: number | null;
+      cue: string | null;
+      rest_min_s: number | null;
+      rest_max_s: number | null;
+      alternatives: string[];
+    }[];
+  }[];
+
+  for (const session of sessions) {
+    const { data: newSession } = await supabase
+      .from("sessions")
+      .insert({ week_id: created.id, day_index: session.day_index, name: session.name, notes: session.notes, kind: session.kind })
+      .select("id")
+      .single();
+    if (!newSession) continue;
+
+    const rows = (session.session_exercises ?? []).map((e) => {
+      const read = parseScheme(e.scheme);
+      if (!read) {
+        asWritten += 1;
+        return { ...e, session_id: newSession.id };
+      }
+      const sets = fewerSets ? Math.max(1, read.sets - 1) : read.sets;
+      const weight = read.weight == null ? null : plate(read.weight * (1 - pct / 100));
+      lighter += 1;
+      return {
+        ...e,
+        session_id: newSession.id,
+        scheme: formatScheme({ sets, reps: read.reps, weight }),
+        target_sets: sets,
+        target_reps: read.reps,
+        target_weight_kg: weight,
+      };
+    });
+    if (rows.length > 0) await supabase.from("session_exercises").insert(rows);
+  }
+
+  revalidatePath(`/programmes/${programmeId}`);
+  redirect(`/programmes/${programmeId}?semaine=${number}&decharge=${lighter}&inchange=${asWritten}&pct=${pct}`);
+}

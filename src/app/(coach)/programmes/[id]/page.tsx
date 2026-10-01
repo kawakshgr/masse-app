@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
 import { WeekExport, WeekPrintout } from "@/components/WeekExport";
-import { addWeek, deleteWeek, duplicateWeek, progressWeek, toggleTemplate } from "../actions";
+import { addWeek, deleteWeek, deloadWeek, duplicateWeek, progressWeek, toggleTemplate } from "../actions";
 import { ProgrammeHeader } from "@/components/ProgrammeHeader";
 import { hevyConfigured } from "@/lib/hevy";
 
@@ -20,10 +20,14 @@ export default async function ProgrammeEditorPage({
     stable?: string;
     inconnu?: string;
     regle?: string;
+    decharge?: string;
+    inchange?: string;
+    pct?: string;
   }>;
 }) {
   const { id } = await params;
-  const { semaine, progres, stable, inconnu, regle } = await searchParams;
+  const { semaine, progres, stable, inconnu, regle, decharge, inchange, pct } = await searchParams;
+  const tDeload = await getTranslations("deload");
   const tProgress = await getTranslations("progress");
   const supabase = await createClient();
 
@@ -146,6 +150,39 @@ export default async function ProgrammeEditorPage({
                   </form>
                 ))}
 
+              {/* A lighter week after this one: a set fewer, the load cut. */}
+              {current && (
+                <form action={deloadWeek} data-wide className="col-span-2 flex flex-col gap-2.5 p-2 max-md:p-0">
+                  <input type="hidden" name="week_id" value={current.id} />
+                  <input type="hidden" name="programme_id" value={programme.id} />
+                  <span className="flex items-center gap-2 text-[13px] font-semibold">
+                    <MenuIcon name="cycle" />
+                    {tDeload("title")}
+                  </span>
+                  <span className="flex flex-wrap items-center gap-2">
+                    <select
+                      name="pct"
+                      defaultValue="40"
+                      aria-label={tDeload("load")}
+                      className="h-10 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2.5 text-[16px] text-[var(--ink)] md:text-[13px]"
+                    >
+                      {[20, 30, 40, 50].map((value) => (
+                        <option key={value} value={value}>
+                          {tDeload("pct", { pct: value })}
+                        </option>
+                      ))}
+                    </select>
+                    <label className="flex h-10 items-center gap-2 text-[13px] text-[var(--ink2)]">
+                      <input type="checkbox" name="fewer_sets" value="1" defaultChecked className="size-4 accent-[var(--accent)]" />
+                      {tDeload("fewerSets")}
+                    </label>
+                  </span>
+                  <button type="submit" className="cta h-10 rounded-r2 px-4 text-[13px] font-semibold text-[var(--onA)]">
+                    {tDeload("write", { week: weeks.length + 1 })}
+                  </button>
+                </form>
+              )}
+
               {current && (
                 <WeekExport
                   programmeName={programme.name}
@@ -157,6 +194,17 @@ export default async function ProgrammeEditorPage({
           }
         />
       </header>
+
+      {decharge !== undefined && current && (
+        <section className="glass mb-4 rounded-r3 p-4 print:hidden">
+          <SectionTitle icon="cycle">{tDeload("done", { week: current.week_number })}</SectionTitle>
+          <p className="mt-2 text-[13px] leading-[1.5] text-[var(--ink2)]">
+            {tDeload("summary", { count: Number(decharge ?? 0), pct: Number(pct ?? 40) })}
+            {Number(inchange ?? 0) > 0 && ` ${tDeload("asWritten", { count: Number(inchange) })}`}
+          </p>
+          <p className="mt-2 text-[12.5px] leading-[1.5] text-[var(--ink3)]">{tDeload("notPushed")}</p>
+        </section>
+      )}
 
       {progres !== undefined && current && (
         <section className="glass mb-4 rounded-r3 p-4 print:hidden">

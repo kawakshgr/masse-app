@@ -121,7 +121,7 @@ export default async function EvolutionPage() {
               <div key={m.key} className="glass2 flex min-h-[92px] flex-col justify-between rounded-r3 p-3">
                 <span className="text-[11.5px] font-bold uppercase tracking-[.08em] text-[var(--ink2)]">{m.label}</span>
                 <span className="flex items-baseline justify-between gap-1.5">
-                  <span className="tnum font-display text-[22px] font-extrabold leading-none tracking-[-.03em]">{fig(m.last!)} cm</span>
+                  <span className="tnum whitespace-nowrap font-display text-[20px] font-extrabold leading-none tracking-[-.03em]">{fig(m.last!)} cm</span>
                   {m.first != null && m.first !== m.last && (
                     <span className="tnum text-[13px] font-bold text-[var(--accent)]">{signed(m.last! - m.first)}</span>
                   )}
