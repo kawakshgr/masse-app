@@ -8,6 +8,8 @@ import { Card, CardTitle, Kicker, ScreenHeader } from "@/components/client/ui";
 import { TrainLog } from "@/components/client/TrainLog";
 import { LeverLine } from "@/components/client/LeverLine";
 import { lastTimeLines, type PastSet } from "@/lib/lastTime";
+import { loadStrength } from "@/lib/history";
+import { StrengthPanel } from "@/components/StrengthPanel";
 
 /**
  * Séance — today's session, being done; or another day's, when it is asked
@@ -100,6 +102,8 @@ export default async function SessionPage({
   );
 
   const otherDay = asked !== undefined && asked !== weekday;
+  // Her progression, the same curve her coach reads (1 Oct 2026).
+  const strength = await loadStrength(supabase, client.id);
 
   return (
     <>
@@ -214,6 +218,8 @@ export default async function SessionPage({
           <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">{t("myWeekHint")}</p>
         </Card>
       )}
+
+      {Object.keys(strength).length > 0 && <StrengthPanel strengthByExercise={strength} client />}
 
       <ExportCard initial="programme" />
     </>

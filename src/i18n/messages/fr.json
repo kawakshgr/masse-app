@@ -968,7 +968,10 @@
     "records": "Records",
     "noRecords": "Aucun record sur la période.",
     "reps": "×",
-    "weeksShort": "{count} sem."
+    "weeksShort": "{count} sem.",
+    "myStrength": "Ma progression",
+    "otherMovement": "Autre mouvement…",
+    "strengthHint": "Ton 1RM estimé : la charge que tu pourrais soulever une fois, calculée d’après tes séries. Les mouvements que tu fais le plus sont en tuiles."
   },
   "cyc": {
     "on": "Le suivi de cycle est actif",

@@ -968,7 +968,10 @@
     "records": "Records",
     "noRecords": "No records in range.",
     "reps": "×",
-    "weeksShort": "{count} wk"
+    "weeksShort": "{count} wk",
+    "myStrength": "My progress",
+    "otherMovement": "Another movement…",
+    "strengthHint": "Your estimated 1RM: the load you could lift once, worked out from your sets. The movements you do most are the tiles."
   },
   "cyc": {
     "on": "Cycle tracking is on",

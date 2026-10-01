@@ -56,6 +56,57 @@ function oneRepMax(weight: number, reps: number): number {
   return Math.round(weight * (1 + reps / 30) * 10) / 10;
 }
 
+type StrengthLog = {
+  reps: number | null;
+  weight_kg: number | null;
+  logged_at: string;
+  done_as: string | null;
+  session_exercises: { name: string } | null;
+};
+
+/** The best estimated 1RM each week, per movement — as it was done. */
+export function strengthFrom(logs: StrengthLog[]): Record<string, StrengthPoint[]> {
+  const strengthByExercise: Record<string, StrengthPoint[]> = {};
+  const bestPerExerciseWeek = new Map<string, Map<string, number>>();
+
+  for (const log of logs) {
+    // A set done as a stand-in counts for the stand-in.
+    const name = log.done_as ?? log.session_exercises?.name;
+    if (!name) continue;
+    const estimate = oneRepMax(Number(log.weight_kg ?? 0), Number(log.reps ?? 0));
+    if (estimate <= 0) continue;
+
+    const week = mondayOf(log.logged_at);
+    const weeksFor = bestPerExerciseWeek.get(name) ?? new Map<string, number>();
+    weeksFor.set(week, Math.max(weeksFor.get(week) ?? 0, estimate));
+    bestPerExerciseWeek.set(name, weeksFor);
+  }
+
+  for (const [name, weeksFor] of bestPerExerciseWeek) {
+    strengthByExercise[name] = [...weeksFor.entries()]
+      .map(([week, best1rm]) => ({ week, best1rm }))
+      .sort((a, b) => a.week.localeCompare(b.week));
+  }
+
+  return strengthByExercise;
+}
+
+/** Her strength over the last six months: the client's own Séance reads it. */
+export async function loadStrength(
+  supabase: SupabaseClient<Database>,
+  clientId: string,
+): Promise<Record<string, StrengthPoint[]>> {
+  const from = new Date();
+  from.setUTCDate(from.getUTCDate() - RANGE_WEEKS["6m"] * 7);
+  const { data } = await supabase
+    .from("set_logs")
+    .select("reps, weight_kg, logged_at, done_as, session_exercises(name)")
+    .eq("client_id", clientId)
+    .gte("logged_at", from.toISOString())
+    .order("logged_at");
+  return strengthFrom((data ?? []) as unknown as StrengthLog[]);
+}
+
 export async function loadHistory(
   supabase: SupabaseClient<Database>,
   clientId: string,
@@ -154,28 +205,7 @@ export async function loadHistory(
   const sessionsPrescribed = weeks.reduce((s, w) => s + w.prescribed, 0);
   const sessionsLogged = weeks.reduce((s, w) => s + w.logged, 0);
 
-  // Strength: the best estimated 1RM each week, per exercise.
-  const strengthByExercise: Record<string, StrengthPoint[]> = {};
-  const bestPerExerciseWeek = new Map<string, Map<string, number>>();
-
-  for (const log of logs) {
-    // A set done as a stand-in counts for the stand-in.
-    const name = log.done_as ?? log.session_exercises?.name;
-    if (!name) continue;
-    const estimate = oneRepMax(Number(log.weight_kg ?? 0), Number(log.reps ?? 0));
-    if (estimate <= 0) continue;
-
-    const week = mondayOf(log.logged_at);
-    const weeksFor = bestPerExerciseWeek.get(name) ?? new Map<string, number>();
-    weeksFor.set(week, Math.max(weeksFor.get(week) ?? 0, estimate));
-    bestPerExerciseWeek.set(name, weeksFor);
-  }
-
-  for (const [name, weeksFor] of bestPerExerciseWeek) {
-    strengthByExercise[name] = [...weeksFor.entries()]
-      .map(([week, best1rm]) => ({ week, best1rm }))
-      .sort((a, b) => a.week.localeCompare(b.week));
-  }
+  const strengthByExercise = strengthFrom(logs);
 
   // Records: each time an exercise beat its own previous best.
   const records: Record_[] = [];
