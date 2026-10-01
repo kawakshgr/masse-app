@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 
 const PHONE = "(max-width: 767.98px)";
 
+const subscribeNever = () => () => {};
+
 function subscribePhone(onChange: () => void) {
   const query = window.matchMedia(PHONE);
   query.addEventListener("change", onChange);
@@ -14,8 +16,9 @@ function subscribePhone(onChange: () => void) {
 /**
  * A page's secondary actions behind one button, so the title keeps its room.
  * On a computer, a dropdown under the button; on a phone, a sheet of big
- * tiles from the bottom, under the thumb (1 Oct 2026). The sheet goes to
- * the body: a glass card's backdrop filter would trap a fixed panel inside.
+ * tiles from the bottom, under the thumb (1 Oct 2026). Both go to the body:
+ * a glass card's backdrop filter makes it a layer of its own, so a menu left
+ * inside slid under the next card (the call banner's, over the steps tab).
  * The panel is hidden, not unmounted, when it closes: a server-action form
  * inside it must still be in the page when its submit button is pressed.
  */
@@ -24,6 +27,9 @@ export function ActionMenu({ label, children }: { label: string; children: React
   const box = useRef<HTMLDivElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
   const phone = useSyncExternalStore(subscribePhone, () => window.matchMedia(PHONE).matches, () => false);
+  // Where the dropdown opens on a computer: under the button, right-aligned.
+  const [at, setAt] = useState<{ top: number; right: number } | null>(null);
+  const portalReady = useSyncExternalStore(subscribeNever, () => true, () => false);
 
   useEffect(() => {
     if (!open) return;
@@ -34,11 +40,17 @@ export function ActionMenu({ label, children }: { label: string; children: React
     const escape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
+    // A pane scrolled or a window resized moves the button: the menu closes.
+    const shut = () => setOpen(false);
     document.addEventListener("mousedown", away);
     document.addEventListener("keydown", escape);
+    document.addEventListener("scroll", shut, true);
+    window.addEventListener("resize", shut);
     return () => {
       document.removeEventListener("mousedown", away);
       document.removeEventListener("keydown", escape);
+      document.removeEventListener("scroll", shut, true);
+      window.removeEventListener("resize", shut);
     };
   }, [open]);
 
@@ -74,16 +86,21 @@ export function ActionMenu({ label, children }: { label: string; children: React
       </div>,
       document.body,
     )
-  ) : (
-    <div
-      role="menu"
-      hidden={!open}
-      onClick={closeAfter}
-      className="chrome lift absolute right-0 top-[calc(100%+8px)] z-50 w-[260px] rounded-r3 p-1.5"
-    >
-      {children}
-    </div>
-  );
+  ) : portalReady ? (
+    createPortal(
+      <div
+        ref={sheet}
+        role="menu"
+        hidden={!open}
+        onClick={closeAfter}
+        className="chrome lift fixed z-[70] w-[260px] rounded-r3 p-1.5"
+        style={at ? { top: at.top, right: at.right } : undefined}
+      >
+        {children}
+      </div>,
+      document.body,
+    )
+  ) : null;
 
   return (
     <div ref={box} className="relative shrink-0">
@@ -91,7 +108,11 @@ export function ActionMenu({ label, children }: { label: string; children: React
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
-        onClick={() => setOpen((on) => !on)}
+        onClick={(event) => {
+          const rect = event.currentTarget.getBoundingClientRect();
+          setAt({ top: rect.bottom + 8, right: window.innerWidth - rect.right });
+          setOpen((on) => !on);
+        }}
         className={`flex h-10 items-center gap-2 rounded-rp border px-4 text-[11.5px] font-bold uppercase tracking-[.1em] ${
           open ? "sel" : "glass2"
         }`}
