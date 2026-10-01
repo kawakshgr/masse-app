@@ -8,6 +8,7 @@ import { CallPicker } from "@/components/client/CallPicker";
 import { EntryCard } from "@/components/client/EntryCard";
 import { CheckInCard } from "@/components/client/CheckInCard";
 import { InstallPrompt } from "@/components/client/InstallPrompt";
+import { ReinstallPrompt } from "@/components/client/ReinstallPrompt";
 import { LeverLine } from "@/components/client/LeverLine";
 import { Icon } from "@/components/Icon";
 
@@ -112,6 +113,8 @@ export default async function TodayPage() {
 
       {/* Only in a browser, never once installed. */}
       <InstallPrompt />
+      {/* Installed before 1 Oct 2026 on an iPhone: the reinstall that gives the whole screen back. */}
+      <ReinstallPrompt />
 
       {/* A call the coach offered, not booked yet: the client takes a slot. */}
       {!call && client.call_offer_minutes && (

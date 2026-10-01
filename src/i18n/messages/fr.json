@@ -2006,5 +2006,14 @@
     "emptyTitle": "Pas encore de séance",
     "emptyHint": "Dès que ton coach t’envoie une semaine, tes séances passées s’affichent ici, avec tes séries.",
     "back": "‹ Revenir à la séance"
+  },
+  "reinstall": {
+    "title": "Masse en plein écran",
+    "lede": "Une nouvelle version de l’app utilise tout l’écran : le menu descend tout en bas, sans la bande grise. Pour l’avoir, réinstalle Masse en une minute.",
+    "step1": "Appui long sur l’icône Masse, puis « Supprimer l’app »",
+    "step2": "Dans Safari, ouvre masseapp.online",
+    "step3": "Touche Partager, puis « Sur l’écran d’accueil »",
+    "after": "Ensuite, reconnecte-toi et réactive les notifications dans Réglages. Tes séances, bilans et mesures restent en ligne. Seules tes notes de symptômes du cycle, gardées uniquement sur ce téléphone, partent avec l’ancienne app : recopie-les avant si tu y tiens.",
+    "later": "Plus tard"
   }
 }

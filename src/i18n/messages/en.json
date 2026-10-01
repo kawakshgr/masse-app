@@ -2006,5 +2006,14 @@
     "emptyTitle": "No session yet",
     "emptyHint": "As soon as your coach sends you a week, your past sessions show here, with your sets.",
     "back": "‹ Back to the session"
+  },
+  "reinstall": {
+    "title": "Masse full screen",
+    "lede": "A new version of the app uses the whole screen: the menu sits right at the bottom, without the grey band. To get it, reinstall Masse in a minute.",
+    "step1": "Long-press the Masse icon, then “Remove App”",
+    "step2": "In Safari, open masseapp.online",
+    "step3": "Tap Share, then “Add to Home Screen”",
+    "after": "Then sign in again and turn notifications back on in Settings. Your sessions, check-ins and measurements stay online. Only your cycle symptom notes, kept on this phone alone, go with the old app: copy them first if they matter to you.",
+    "later": "Later"
   }
 }
