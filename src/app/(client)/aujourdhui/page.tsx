@@ -9,6 +9,7 @@ import { EntryCard } from "@/components/client/EntryCard";
 import { CheckInCard } from "@/components/client/CheckInCard";
 import { InstallPrompt } from "@/components/client/InstallPrompt";
 import { LeverLine } from "@/components/client/LeverLine";
+import { Icon } from "@/components/Icon";
 
 /**
  * Today — TodayView.swift. The week the coach pushed and the session standing
@@ -48,7 +49,7 @@ export default async function TodayPage() {
       month: "long",
     });
 
-  const [{ week, session, levers }, metricsRes, checkIn] = await Promise.all([
+  const [{ week, session, levers }, metricsRes, checkIn, weighedRes] = await Promise.all([
     todaySession(),
     supabase
       .from("daily_metrics")
@@ -56,12 +57,24 @@ export default async function TodayPage() {
       .gte("day", monday)
       .lte("day", addDays(monday, 6)),
     checkInState(),
+    // Her weight across check-ins, for the line that opens Mon évolution.
+    supabase
+      .from("check_ins")
+      .select("week_start_date, bodyweight_kg")
+      .not("bodyweight_kg", "is", null)
+      .order("week_start_date"),
   ]);
 
   // Nothing current: is a programme on its way?
   const upcoming = week ? null : await upcomingWeek();
 
   const metrics = metricsRes.data ?? [];
+  const tEvolution = await getTranslations("evolution");
+  const weighed = weighedRes.data ?? [];
+  const weightChange =
+    weighed.length > 1
+      ? Math.round((Number(weighed.at(-1)!.bodyweight_kg) - Number(weighed[0].bodyweight_kg)) * 10) / 10
+      : 0;
   const todayRow = metrics.find((row) => row.day === today) ?? null;
   // Monday to Sunday, the week she is in — the same seven her coach reads.
   const stepsWeek = Array.from(
@@ -212,6 +225,28 @@ export default async function TodayPage() {
               : `${tBilan("prompt")} ${tBilan("due", { day: weekdayDay(checkIn.due) })}`
         }
       />
+
+      {/* What the check-ins add up to (1 Oct 2026). */}
+      <Link href="/evolution" className="glass flex items-center gap-3.5 rounded-r4 p-[18px]">
+        <span className="glass2 flex size-12 shrink-0 items-center justify-center rounded-r3 text-[var(--accent)]">
+          <Icon name="chart" size={26} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-display text-[18px] font-extrabold uppercase leading-tight tracking-[-.01em]">
+            {tEvolution("title")}
+          </span>
+          <span className="tnum block truncate text-[13px] text-[var(--ink2)]">
+            {weighed.length > 1
+              ? tEvolution("todayLine", {
+                  weight: Number(weighed.at(-1)!.bodyweight_kg).toLocaleString(locale),
+                  change: `${weightChange > 0 ? "+" : weightChange < 0 ? "−" : "±"}${Math.abs(weightChange).toLocaleString(locale)}`,
+                  date: dayMonth(weighed[0].week_start_date),
+                })
+              : tEvolution("todayLineFirst", { count: weighed.length })}
+          </span>
+        </span>
+        <span aria-hidden className="text-[22px] text-[var(--ink3)]">›</span>
+      </Link>
     </>
   );
 }

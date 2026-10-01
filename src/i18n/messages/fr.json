@@ -900,7 +900,7 @@
   },
   "offline": {
     "title": "Pas de connexion",
-    "lede": "Masse a besoin du réseau pour charger tes séances.",
+    "lede": "Cette page a besoin du réseau. Séance, Aujourd’hui et Nutrition, eux, s’ouvrent sans réseau une fois ouverts en ligne.",
     "held": "Tes séries saisies hors-ligne sont gardées sur cet appareil. Elles partiront dès que la connexion revient — tu n’as rien à faire.",
     "retry": "Réessayer"
   },
@@ -1944,5 +1944,26 @@
     "remind": "Relancer",
     "start": "Traiter les bilans",
     "notYetWeek": "Semaine du {date}"
+  },
+  "evolution": {
+    "title": "Mon évolution",
+    "kicker": "Tes bilans",
+    "since": "Depuis le {date}",
+    "count": "{count, plural, one {# bilan} other {# bilans}}",
+    "emptyTitle": "Rien à montrer pour l’instant",
+    "emptyHint": "Ton évolution se construit avec tes bilans : poids, mensurations et photos. Dès le premier, elle apparaît ici.",
+    "weight": "Poids",
+    "weightSince": "Depuis le {date} ({from} kg)",
+    "measures": "Mensurations",
+    "measuresHint": "L’écart se lit depuis ton premier bilan, le {date}.",
+    "photos": "Avant / après",
+    "photosEmpty": "Tes photos apparaîtront ici dès ton deuxième bilan avec photos, pour comparer la même pose.",
+    "pose": "Pose",
+    "weekOf": "{date}",
+    "share": "Partager mon avant / après",
+    "shareTitle": "Mon évolution",
+    "open": "Voir mon évolution",
+    "todayLine": "{weight} kg · {change} kg depuis le {date}",
+    "todayLineFirst": "{count, plural, one {# bilan} other {# bilans}} : poids, mensurations, photos"
   }
 }

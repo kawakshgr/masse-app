@@ -900,7 +900,7 @@
   },
   "offline": {
     "title": "No connection",
-    "lede": "Masse needs the network to load your sessions.",
+    "lede": "This page needs the network. Session, Today and Nutrition open without it once they have been opened online.",
     "held": "Sets you logged offline are kept on this device. They go as soon as the connection returns — you have nothing to do.",
     "retry": "Try again"
   },
@@ -1944,5 +1944,26 @@
     "remind": "Remind",
     "start": "Go through check-ins",
     "notYetWeek": "Week of {date}"
+  },
+  "evolution": {
+    "title": "My progress",
+    "kicker": "Your check-ins",
+    "since": "Since {date}",
+    "count": "{count, plural, one {# check-in} other {# check-ins}}",
+    "emptyTitle": "Nothing to show yet",
+    "emptyHint": "Your progress builds up from your check-ins: weight, measurements and photos. It appears here from the first one.",
+    "weight": "Weight",
+    "weightSince": "Since {date} ({from} kg)",
+    "measures": "Measurements",
+    "measuresHint": "Changes are against your first check-in, on {date}.",
+    "photos": "Before / after",
+    "photosEmpty": "Your photos appear here from your second check-in with photos, to compare the same pose.",
+    "pose": "Pose",
+    "weekOf": "{date}",
+    "share": "Share my before / after",
+    "shareTitle": "My progress",
+    "open": "See my progress",
+    "todayLine": "{weight} kg · {change} kg since {date}",
+    "todayLineFirst": "{count, plural, one {# check-in} other {# check-ins}}: weight, measurements, photos"
   }
 }

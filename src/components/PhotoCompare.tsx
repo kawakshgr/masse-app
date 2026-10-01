@@ -72,7 +72,18 @@ function load(url: string): Promise<HTMLImageElement> {
  * sheet where there is one (WhatsApp is in it), a download otherwise. Made
  * on this device; nothing is uploaded.
  */
-export function ShareCompare({ after, before, title }: { after: Side; before: Side; title: string }) {
+export function ShareCompare({
+  after,
+  before,
+  title,
+  label,
+}: {
+  after: Side;
+  before: Side;
+  title: string;
+  /** The button's words; the coach's "send the before/after" by default. */
+  label?: string;
+}) {
   const t = useTranslations("compare");
   const [state, setState] = useState<"idle" | "busy" | "failed">("idle");
 
@@ -128,7 +139,7 @@ export function ShareCompare({ after, before, title }: { after: Side; before: Si
         disabled={state === "busy"}
         className="cta h-11 w-full rounded-r2 text-[13.5px] font-semibold text-[var(--onA)] disabled:opacity-60"
       >
-        {t("share")}
+        {label ?? t("share")}
       </button>
       {state === "failed" && <p className="text-[12px] text-[var(--a3)]">{t("failed")}</p>}
     </div>
