@@ -1514,7 +1514,7 @@
     "windowInvalid": "The end must come after the start.",
     "daysOffTitle": "Days off",
     "dayOff": "Day off",
-    "addDayOff": "Block this day",
+    "addDayOff": "Add as a day off",
     "remove": "Remove",
     "weekOf": "Week of",
     "today": "today",
@@ -1746,5 +1746,34 @@
     "stepsTarget": "(target {target})",
     "nothing": "No figures this week.",
     "closing": "My feedback:"
+  },
+  "picker": {
+    "open": "Movement",
+    "title": "Add to",
+    "search": "Search a movement",
+    "back": "Back",
+    "close": "Close",
+    "all": "All",
+    "family": {
+      "chest": "Chest",
+      "back": "Back",
+      "shoulders": "Shoulders",
+      "arms": "Arms",
+      "legs": "Legs",
+      "glutes": "Glutes",
+      "abs": "Abs",
+      "cardio": "Cardio & full body"
+    },
+    "kit": {
+      "barbell": "Barbell",
+      "dumbbell": "Dumbbells",
+      "machine": "Machine",
+      "other": "Other"
+    },
+    "addFree": "Add “{name}”",
+    "addFreeSub": "Not in your library yet: it joins it.",
+    "added": "Added",
+    "none": "Nothing here yet. Type its name above to add it anyway.",
+    "done": "{count, plural, =0 {Close} =1 {Done · 1 added} other {Done · # added}}"
   }
 }

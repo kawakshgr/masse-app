@@ -1512,9 +1512,9 @@
     "to": "À",
     "addWindow": "Ajouter",
     "windowInvalid": "La fin doit être après le début.",
-    "daysOffTitle": "Jours bloqués",
-    "dayOff": "Jour bloqué",
-    "addDayOff": "Bloquer ce jour",
+    "daysOffTitle": "Jours off",
+    "dayOff": "Jour off",
+    "addDayOff": "Ajouter en jour off",
     "remove": "Retirer",
     "weekOf": "Semaine du",
     "today": "aujourd’hui",
@@ -1746,5 +1746,34 @@
     "stepsTarget": "(objectif {target})",
     "nothing": "Pas de chiffres cette semaine.",
     "closing": "Mon retour :"
+  },
+  "picker": {
+    "open": "Mouvement",
+    "title": "Ajouter à",
+    "search": "Chercher un mouvement",
+    "back": "Retour",
+    "close": "Fermer",
+    "all": "Tout",
+    "family": {
+      "chest": "Pecs",
+      "back": "Dos",
+      "shoulders": "Épaules",
+      "arms": "Bras",
+      "legs": "Jambes",
+      "glutes": "Fessiers",
+      "abs": "Abdos",
+      "cardio": "Cardio & global"
+    },
+    "kit": {
+      "barbell": "Barre",
+      "dumbbell": "Haltères",
+      "machine": "Machine",
+      "other": "Autre"
+    },
+    "addFree": "Ajouter « {name} »",
+    "addFreeSub": "Pas dans ta bibliothèque : il y entre.",
+    "added": "Ajouté",
+    "none": "Rien ici pour l’instant. Tape son nom en haut pour l’ajouter quand même.",
+    "done": "{count, plural, =0 {Fermer} =1 {Terminé · 1 ajouté} other {Terminé · # ajoutés}}"
   }
 }

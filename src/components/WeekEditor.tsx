@@ -5,6 +5,7 @@ import { SectionTitle } from "@/components/Pane";
 import { useState, useSyncExternalStore, useTransition } from "react";
 import { Icon } from "@/components/Icon";
 import { DaySelect } from "@/components/DaySelect";
+import { MovementPicker } from "@/components/MovementPicker";
 import {
   ExerciseLibrary,
   type CatalogueEntry,
@@ -114,6 +115,9 @@ export function WeekEditor({
   const [scope, setScope] = useState<"week" | "programme">("week");
   // Weeks a client has already begun are never re-dated by a push.
   const [kept, setKept] = useState(0);
+  // The day the phone's movement picker adds to; null when it is shut.
+  const [picking, setPicking] = useState<number | null>(null);
+  const tPicker = useTranslations("picker");
 
   const byDay = (day: number) => sessions.find((s) => s.day_index === day);
 
@@ -240,6 +244,7 @@ export function WeekEditor({
                       }`}
                     >
                       <span>{t("emptyDay")}</span>
+                      <PickButton label={tPicker("open")} onClick={() => setPicking(day)} className="mt-2 w-auto px-4" />
                       <button
                         type="button"
                         onClick={() =>
@@ -481,10 +486,13 @@ export function WeekEditor({
                             void addExercise(session.id, programmeId);
                           })
                         }
-                        className="mt-2 w-full rounded-r1 py-1 text-[12px] text-[var(--accent)]"
+                        className="mt-2 w-full rounded-r1 py-1 text-[12px] text-[var(--accent)] max-lg:hidden"
                       >
                         {t("addExercise")}
                       </button>
+                      {/* No library pane under lg, and nothing to drag with:
+                          the picker is how a movement gets in there. */}
+                      <PickButton label={tPicker("open")} onClick={() => setPicking(day)} className="mt-2 w-full" />
                     </div>
                   )}
                 </div>
@@ -493,6 +501,19 @@ export function WeekEditor({
           </div>
         </div>
       </div>
+
+      {picking !== null && (
+        <MovementPicker
+          dayLabel={tDays(String(picking))}
+          catalogue={catalogue}
+          onAdd={(name) =>
+            startTransition(async () => {
+              await addExerciseToDay(weekId, picking, name, programmeId);
+            })
+          }
+          onClose={() => setPicking(null)}
+        />
+      )}
 
       {/* The delivery boundary, made an explicit act. */}
       <section className="glass mt-4 rounded-r3 p-4">
@@ -629,5 +650,27 @@ export function WeekEditor({
         )}
       </section>
     </div>
+  );
+}
+
+/** The big "+ Mouvement" of a day, on screens without the library pane. */
+function PickButton({
+  label,
+  onClick,
+  className = "",
+}: {
+  label: string;
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`glass2 flex h-12 items-center justify-center gap-2 rounded-r2 border border-[var(--edge)] text-[14px] font-semibold text-[var(--accent)] lg:hidden ${className}`}
+    >
+      <span aria-hidden className="text-[20px] leading-none">+</span>
+      {label}
+    </button>
   );
 }
