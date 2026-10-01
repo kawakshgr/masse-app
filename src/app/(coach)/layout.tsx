@@ -53,7 +53,10 @@ export default async function CoachLayout({
   return (
     // On a phone the installed app draws under the status bar: the top inset
     // is kept clear, and the tab bar moves to the bottom, under the thumb.
-    <div className="desk flex h-dvh flex-col max-md:pt-[env(safe-area-inset-top)]">
+    // There the frame is pinned to the screen (fixed, inset 0) rather than
+    // sized by 100dvh, which iOS gets wrong for a moment at launch and left
+    // the tab bar floating above the bottom edge.
+    <div className="desk flex h-dvh flex-col max-md:fixed max-md:inset-0 max-md:h-auto print:static max-md:pt-[env(safe-area-inset-top)]">
       <div className="no-print contents">
         <TabBar
           name={coach.first_name ?? coach.name}

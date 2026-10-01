@@ -377,3 +377,18 @@ input[type="date"]::-webkit-date-and-time-value {
   text-align: left;
   min-height: 1.2em;
 }
+
+/*
+ * Fields on a touch screen. Safari on iPhone zooms in on any field written
+ * smaller than 16px when it takes focus, and leaves the page zoomed after.
+ * 16px there and nowhere else; the code field of the invitation and other
+ * large fields keep their size. Pinch-zoom stays available.
+ */
+@media (hover: none) and (pointer: coarse) {
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [class*="text-[2"], [class*="text-[3"]),
+  select:not([class*="text-[2"], [class*="text-[3"]),
+  textarea:not([class*="text-[2"], [class*="text-[3"]) {
+    font-size: 16px !important;
+  }
+}
+
