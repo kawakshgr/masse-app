@@ -2,9 +2,11 @@ import { getRequestConfig } from "next-intl/server";
 import { cookies } from "next/headers";
 import { defaultLocale, isLocale, LOCALE_COOKIE } from "./config";
 
-export default getRequestConfig(async () => {
+export default getRequestConfig(async ({ locale: asked }) => {
+  // A caller may ask for one language outright — the invoice is always
+  // French (lib/invoice.ts) — otherwise the app's language, from the cookie.
   const store = await cookies();
-  const candidate = store.get(LOCALE_COOKIE)?.value;
+  const candidate = asked ?? store.get(LOCALE_COOKIE)?.value;
   const locale = isLocale(candidate) ? candidate : defaultLocale;
 
   return {
