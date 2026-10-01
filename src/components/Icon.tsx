@@ -169,6 +169,24 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
     ),
     star: <path d="m12 4 2.4 5 5.4.6-4 3.7 1.1 5.4L12 16l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z" />,
     up: <path d="M4.5 16.5 10 11l3.5 3.5 6-6.5M14.5 8h5v5" />,
+    faceLow: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M8.5 16.5c1-1.3 2.2-2 3.5-2s2.5.7 3.5 2M9 10h.01M15 10h.01" />
+      </>
+    ),
+    faceMid: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M8.5 15.5h7M9 10h.01M15 10h.01" />
+      </>
+    ),
+    faceHigh: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M8.5 14c1 1.4 2.2 2.1 3.5 2.1s2.5-.7 3.5-2.1M9 10h.01M15 10h.01" />
+      </>
+    ),
     search: (
       <>
         <circle cx="10.5" cy="10.5" r="6" />

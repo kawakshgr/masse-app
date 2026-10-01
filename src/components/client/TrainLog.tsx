@@ -1,5 +1,6 @@
 "use client";
 
+import { ChoiceTiles } from "@/components/ChoiceTiles";
 import { restLabel } from "@/lib/rest";
 import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useTranslations, useLocale } from "next-intl";
@@ -330,6 +331,7 @@ function ExerciseCard({
 }
 
 const PAIN_LEVELS: PainLevel[] = ["mild", "sharp", "stopped"];
+const PAIN_ICONS: Record<PainLevel, string> = { mild: "pain", sharp: "bolt", stopped: "cancel" };
 
 /** "It hurts": the coach hears it at once, on the exercise it happened on. */
 function PainReport({ exercise }: { exercise: WeekExercise }) {
@@ -356,13 +358,13 @@ function PainReport({ exercise }: { exercise: WeekExercise }) {
   return (
     <div className="space-y-2.5 rounded-r2 border border-[var(--a3)] p-3">
       <p className="text-[13px] font-semibold">{t("question")}</p>
-      <div className="flex gap-1.5">
-        {PAIN_LEVELS.map((value) => (
-          <Choice key={value} selected={level === value} onClick={() => setLevel(value)}>
-            {t(`level.${value}`)}
-          </Choice>
-        ))}
-      </div>
+      <ChoiceTiles
+        label={t("question")}
+        columns={3}
+        value={level}
+        onChange={setLevel}
+        options={PAIN_LEVELS.map((value) => ({ value, label: t(`level.${value}`), icon: PAIN_ICONS[value] }))}
+      />
       <textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}

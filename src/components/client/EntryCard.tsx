@@ -1,10 +1,11 @@
 "use client";
 
+import { ChoiceTiles } from "@/components/ChoiceTiles";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { saveDailyMetrics } from "@/app/(client)/actions";
-import { Card, Choice, Cta, Kicker, RoundButton, shown } from "./ui";
+import { Card, Cta, Kicker, RoundButton, shown } from "./ui";
 import { StepsChart } from "./StepsChart";
 
 /**
@@ -73,20 +74,21 @@ export function EntryCard({
 
       <div className="space-y-2">
         <p className="text-[13px] text-[var(--ink2)]">{t("quality")}</p>
-        <div className="flex gap-1.5">
-          {[1, 2, 3].map((level) => (
-            <Choice
-              key={level}
-              selected={quality === level}
-              onClick={() => {
-                setQuality(quality === level ? null : level);
-                setSaved(false);
-              }}
-            >
-              {t(`q${level}`)}
-            </Choice>
-          ))}
-        </div>
+        {/* Big tiles with a face (1 Oct 2026); a second tap clears it. */}
+        <ChoiceTiles
+          label={t("quality")}
+          columns={3}
+          value={quality === null ? null : String(quality)}
+          onChange={(v) => {
+            setQuality(quality === Number(v) ? null : Number(v));
+            setSaved(false);
+          }}
+          options={[
+            { value: "1", label: t("q1"), icon: "faceLow" },
+            { value: "2", label: t("q2"), icon: "faceMid" },
+            { value: "3", label: t("q3"), icon: "faceHigh" },
+          ]}
+        />
       </div>
 
       <label className="flex items-center gap-3">
