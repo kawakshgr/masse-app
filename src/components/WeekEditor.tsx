@@ -7,6 +7,7 @@ import { Icon } from "@/components/Icon";
 import { DaySelect } from "@/components/DaySelect";
 import { MovementPicker } from "@/components/MovementPicker";
 import { ExerciseSheet } from "@/components/ExerciseSheet";
+import { CopySessionSheet } from "@/components/CopySessionSheet";
 import {
   ExerciseLibrary,
   type CatalogueEntry,
@@ -18,6 +19,7 @@ import {
   addExercise,
   addExerciseToDay,
   addSession,
+  copySession,
   deleteExercise,
   deleteSession,
   moveExercise,
@@ -83,11 +85,14 @@ export function WeekEditor({
   catalogue,
   hevyConfigured,
   weekCount,
+  weeks,
 }: {
   programmeId: string;
   weekId: string;
   /** Weeks in the programme: more than one makes "the whole programme" an option. */
   weekCount: number;
+  /** Every week of the programme, for copying a session into them. */
+  weeks: { id: string; number: number }[];
   sessions: EditorSession[];
   clients: { id: string; name: string }[];
   assignedClientIds: string[];
@@ -116,6 +121,9 @@ export function WeekEditor({
   const [scope, setScope] = useState<"week" | "programme">("week");
   // Weeks a client has already begun are never re-dated by a push.
   const [kept, setKept] = useState(0);
+  // The session being copied to other days or weeks.
+  const [copying, setCopying] = useState<{ id: string; day: number; name: string | null } | null>(null);
+  const tCopy = useTranslations("copySession");
   // The movement open in the phone's edit sheet.
   const [editing, setEditing] = useState<{ exercise: EditorExercise; day: number } | null>(null);
   // The day the phone's movement picker adds to; null when it is shut.
@@ -324,6 +332,15 @@ export function WeekEditor({
                         />
                         <button
                           type="button"
+                          aria-label={tCopy("open")}
+                          title={tCopy("open")}
+                          onClick={() => setCopying({ id: session.id, day, name: session.name })}
+                          className="shrink-0 px-1 text-[var(--ink3)] hover:text-[var(--accent)]"
+                        >
+                          <Icon name="copy" size={15} />
+                        </button>
+                        <button
+                          type="button"
                           aria-label={t("remove")}
                           onClick={() =>
                             startTransition(() => {
@@ -418,6 +435,17 @@ export function WeekEditor({
           </div>
         </div>
       </div>
+
+      {copying && (
+        <CopySessionSheet
+          title={copying.name || tDays(String(copying.day))}
+          weeks={weeks}
+          currentWeekId={weekId}
+          sourceDay={copying.day}
+          onCopy={(targets) => copySession(copying.id, targets, programmeId)}
+          onClose={() => setCopying(null)}
+        />
+      )}
 
       {editing && (
         <ExerciseSheet

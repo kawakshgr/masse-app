@@ -250,6 +250,7 @@ export default async function ProgrammeEditorPage({
             }))}
           hevyConfigured={hevyConfigured()}
           weekCount={weeks.length}
+          weeks={weeks.map((week) => ({ id: week.id, number: week.week_number }))}
         />
       ) : (
         <p className="text-[13px] text-[var(--ink3)]">{tProg("emptyAction")}</p>

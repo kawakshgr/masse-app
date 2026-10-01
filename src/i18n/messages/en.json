@@ -1838,5 +1838,17 @@
     "unsupported": "This browser does not receive notifications.",
     "notReady": "Coming soon.",
     "failed": "Turning them on failed. Try again."
+  },
+  "copySession": {
+    "open": "Copy the session",
+    "title": "Copy the session",
+    "close": "Close",
+    "weeks": "To which weeks",
+    "week": "W{number}",
+    "day": "Which day",
+    "rule": "A session already on that day is replaced, unless a client has logged sets on it: that one is left alone.",
+    "copy": "{count, plural, =0 {Pick a week} =1 {Copy to 1 day} other {Copy to # days}}",
+    "done": "{count, plural, =0 {Nothing was copied.} =1 {Copied to 1 day.} other {Copied to # days.}}",
+    "kept": "{count, plural, =1 {1 day kept: a client has sets on it.} other {# days kept: clients have sets on them.}}"
   }
 }

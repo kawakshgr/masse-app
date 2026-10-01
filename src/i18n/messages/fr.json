@@ -1838,5 +1838,17 @@
     "unsupported": "Ce navigateur ne reçoit pas de notifications.",
     "notReady": "Bientôt disponible.",
     "failed": "L’activation a échoué. Réessaie."
+  },
+  "copySession": {
+    "open": "Copier la séance",
+    "title": "Copier la séance",
+    "close": "Fermer",
+    "weeks": "Vers quelles semaines",
+    "week": "S{number}",
+    "day": "Quel jour",
+    "rule": "Une séance déjà présente ce jour-là est remplacée, sauf si un client y a déjà enregistré des séries : celle-là n’est pas touchée.",
+    "copy": "{count, plural, =0 {Choisis une semaine} =1 {Copier vers 1 jour} other {Copier vers # jours}}",
+    "done": "{count, plural, =0 {Rien n’a été copié.} =1 {Copiée vers 1 jour.} other {Copiée vers # jours.}}",
+    "kept": "{count, plural, =1 {1 jour gardé : un client y a déjà des séries.} other {# jours gardés : des clients y ont déjà des séries.}}"
   }
 }

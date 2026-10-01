@@ -764,3 +764,81 @@ export async function pushProgramme(programmeId: string, clientIds: string[], st
   revalidatePath("/clients");
   return { kept: begun.size };
 }
+
+/**
+ * A session copied to other days or weeks (1 Oct 2026): its name and its
+ * movements, in order, with schemes, targets, cues and rest. A target day
+ * already holding a session is replaced — unless a client has logged a set
+ * on it: deleting it would take their sets with it (set_logs cascade), so
+ * that one is left alone and counted as kept.
+ */
+export async function copySession(
+  sessionId: string,
+  targets: { weekId: string; dayIndex: number }[],
+  programmeId: string,
+): Promise<{ copied: number; kept: number }> {
+  const supabase = await createClient();
+  const { data: source } = await supabase
+    .from("sessions")
+    .select("week_id, day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s)")
+    .eq("id", sessionId)
+    .maybeSingle();
+  if (!source) return { copied: 0, kept: 0 };
+
+  const exercises = ((source.session_exercises ?? []) as unknown as {
+    position: number;
+    name: string;
+    scheme: string | null;
+    target_sets: number | null;
+    target_reps: number | null;
+    target_weight_kg: number | null;
+    cue: string | null;
+    rest_min_s: number | null;
+    rest_max_s: number | null;
+  }[]).sort((a, b) => a.position - b.position);
+
+  let copied = 0;
+  let kept = 0;
+  for (const target of targets) {
+    if (!Number.isInteger(target.dayIndex) || target.dayIndex < 0 || target.dayIndex > 6) continue;
+    if (target.weekId === source.week_id && target.dayIndex === source.day_index) continue;
+
+    const { data: existing } = await supabase
+      .from("sessions")
+      .select("id, session_exercises(id)")
+      .eq("week_id", target.weekId)
+      .eq("day_index", target.dayIndex)
+      .maybeSingle();
+
+    if (existing) {
+      const ids = ((existing.session_exercises ?? []) as unknown as { id: string }[]).map((e) => e.id);
+      if (ids.length > 0) {
+        const { count } = await supabase
+          .from("set_logs")
+          .select("id", { count: "exact", head: true })
+          .in("session_exercise_id", ids);
+        if ((count ?? 0) > 0) {
+          kept += 1;
+          continue;
+        }
+      }
+      await supabase.from("sessions").delete().eq("id", existing.id);
+    }
+
+    const { data: created } = await supabase
+      .from("sessions")
+      .insert({ week_id: target.weekId, day_index: target.dayIndex, name: source.name, notes: source.notes, kind: "training" })
+      .select("id")
+      .single();
+    if (!created) continue;
+    if (exercises.length > 0) {
+      await supabase
+        .from("session_exercises")
+        .insert(exercises.map((exercise, position) => ({ ...exercise, position, session_id: created.id })));
+    }
+    copied += 1;
+  }
+
+  revalidatePath(`/programmes/${programmeId}`);
+  return { copied, kept };
+}
