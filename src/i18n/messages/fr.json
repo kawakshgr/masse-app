@@ -1814,14 +1814,19 @@
     "filedTitle": "Nouveau bilan",
     "filedBody": "{first} a rempli son bilan.",
     "painTitle": "Douleur signalée",
-    "painBody": "{first} · {exercise}"
+    "painBody": "{first} · {exercise}",
+    "coachDayTitle": "Jour de bilan",
+    "coachToRead": "{count, plural, =1 {1 bilan à lire} other {# bilans à lire}}",
+    "coachNotYet": "{count, plural, =1 {1 pas encore rendu} other {# pas encore rendus}}",
+    "coachLate": "{count, plural, =1 {1 paiement en retard} other {# paiements en retard}}",
+    "coachPain": "{count, plural, =1 {1 douleur à voir} other {# douleurs à voir}}"
   },
   "pushSettings": {
     "title": "Notifications",
     "sub": "Séance, bilan, visio",
-    "subCoach": "Bilans, douleurs",
+    "subCoach": "Bilans, douleurs, jour de bilan",
     "lede": "Un rappel le matin quand il y a une séance, un bilan à rendre ou une visio, et un mot quand ton coach te relance. Sur ce téléphone seulement.",
-    "ledeCoach": "Un mot quand un client remplit son bilan ou signale une douleur. Sur ce téléphone seulement.",
+    "ledeCoach": "Un mot quand un client remplit son bilan ou signale une douleur, et le matin de ton jour de bilan, ce qui t’attend : bilans à lire, pas encore rendus, paiements en retard, douleurs. Sur ce téléphone seulement.",
     "enable": "Activer les notifications",
     "on": "Activées sur ce téléphone",
     "disable": "Désactiver sur ce téléphone",

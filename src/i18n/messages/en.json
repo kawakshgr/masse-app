@@ -1814,14 +1814,19 @@
     "filedTitle": "New check-in",
     "filedBody": "{first} filed their check-in.",
     "painTitle": "Pain reported",
-    "painBody": "{first} · {exercise}"
+    "painBody": "{first} · {exercise}",
+    "coachDayTitle": "Check-in day",
+    "coachToRead": "{count, plural, =1 {1 check-in to read} other {# check-ins to read}}",
+    "coachNotYet": "{count, plural, =1 {1 not filed yet} other {# not filed yet}}",
+    "coachLate": "{count, plural, =1 {1 late payment} other {# late payments}}",
+    "coachPain": "{count, plural, =1 {1 pain report to see} other {# pain reports to see}}"
   },
   "pushSettings": {
     "title": "Notifications",
     "sub": "Session, check-in, call",
-    "subCoach": "Check-ins, pain",
+    "subCoach": "Check-ins, pain, check-in day",
     "lede": "A reminder in the morning when there is a session, a check-in due or a call, and a word when your coach nudges you. On this phone only.",
-    "ledeCoach": "A word when a client files a check-in or reports pain. On this phone only.",
+    "ledeCoach": "A word when a client files a check-in or reports pain, and on the morning of your check-in day, what is waiting: check-ins to read, not filed yet, late payments, pain. On this phone only.",
     "enable": "Turn on notifications",
     "on": "On for this phone",
     "disable": "Turn off on this phone",

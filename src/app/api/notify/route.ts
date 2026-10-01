@@ -27,13 +27,15 @@ export async function GET(request: NextRequest) {
   const userIds = [...new Set((devices ?? []).map((d) => d.user_id))];
   if (userIds.length === 0) return Response.json({ ok: true, sent: 0 });
 
+  const coachSent = await coachDay(admin, userIds, today, weekday, monday);
+
   const { data: clients } = await admin
     .from("clients")
     .select("id, coach_id, coaches(first_name, name, check_in_due_offset)")
     .in("id", userIds)
     .eq("status", "active");
   const ids = (clients ?? []).map((c) => c.id);
-  if (ids.length === 0) return Response.json({ ok: true, sent: 0 });
+  if (ids.length === 0) return Response.json({ ok: true, sent: coachSent });
 
   // A day either side in UTC, then kept to today in Paris: no offset to get
   // wrong across the clock change.
@@ -115,5 +117,64 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  return Response.json({ ok: true, sent });
+  return Response.json({ ok: true, sent: sent + coachSent });
+}
+
+/**
+ * The coach's day of check-ins — the weekday she set them due, the day she
+ * keeps for them (Kevin, 1 Oct 2026): one morning notification with what
+ * waits — check-ins filed and unread, not yet filed, late payments, pain
+ * not yet seen. Nothing waiting, nothing sent.
+ */
+async function coachDay(
+  admin: ReturnType<typeof pushAdmin>,
+  userIds: string[],
+  today: string,
+  weekday: number,
+  monday: string,
+): Promise<number> {
+  const { data: coaches } = await admin.from("coaches").select("id, check_in_due_offset").in("id", userIds);
+  let sent = 0;
+  for (const coach of coaches ?? []) {
+    const offset = coach.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
+    if (offset % 7 !== weekday) continue;
+
+    const { data: mine } = await admin.from("clients").select("id").eq("coach_id", coach.id).eq("status", "active");
+    const ids = (mine ?? []).map((c) => c.id);
+    if (ids.length === 0) continue;
+
+    const window = checkInWindow(monday, weekday, offset);
+    const [unread, asked, late, pain] = await Promise.all([
+      admin
+        .from("check_ins")
+        .select("feel, pain, adherence, bodyweight_kg, note, waist_cm, chest_cm, hips_cm, thigh_cm, check_in_photos(id)")
+        .in("client_id", ids)
+        .is("reviewed_at", null),
+      admin
+        .from("check_ins")
+        .select("client_id, feel, pain, adherence, bodyweight_kg, note, waist_cm, chest_cm, hips_cm, thigh_cm, check_in_photos(id)")
+        .in("client_id", ids)
+        .eq("week_start_date", window.weekStart),
+      admin.from("invoices").select("id", { count: "exact", head: true }).eq("coach_id", coach.id).eq("status", "late"),
+      admin.from("pain_reports").select("id", { count: "exact", head: true }).in("client_id", ids).is("seen_at", null),
+    ]);
+
+    const toRead = (unread.data ?? []).filter((row) => isFiled(row, row.check_in_photos?.length ?? 0)).length;
+    const filedIds = new Set(
+      (asked.data ?? []).filter((row) => isFiled(row, row.check_in_photos?.length ?? 0)).map((row) => row.client_id),
+    );
+    const notYet = ids.filter((id) => !filedIds.has(id)).length;
+
+    sent += await pushTo([coach.id], (t) => {
+      const lines = [
+        toRead > 0 ? t("coachToRead", { count: toRead }) : null,
+        notYet > 0 ? t("coachNotYet", { count: notYet }) : null,
+        (late.count ?? 0) > 0 ? t("coachLate", { count: late.count ?? 0 }) : null,
+        (pain.count ?? 0) > 0 ? t("coachPain", { count: pain.count ?? 0 }) : null,
+      ].filter(Boolean);
+      if (lines.length === 0) return null;
+      return { title: t("coachDayTitle"), body: lines.join(" · "), url: "/clients", tag: `coach-day-${today}` };
+    });
+  }
+  return sent;
 }
