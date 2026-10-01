@@ -33,7 +33,7 @@ export function ClientNav({ cycleTracking }: { cycleTracking: boolean }) {
   return (
     <nav
       aria-label="Masse"
-      className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+10px)] z-20 mx-auto max-w-[520px]"
+      className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+10px-var(--app-gap,0px))] z-20 mx-auto max-w-[520px]"
     >
       <ul className="glass lift flex h-[62px] items-center justify-between gap-1 rounded-rp px-2">
         {items.map((item) => {

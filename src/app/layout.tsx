@@ -68,6 +68,17 @@ export default async function RootLayout({
             __html: `(function(){try{var c=localStorage.getItem("masse:theme");var r=(c==="light"||c==="dark")?c:(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=r;}catch(e){}})();`,
           }}
         />
+        {/* iOS 26, installed app (WebKit bug 301108): with the translucent
+            status bar the layout viewport comes out short by the top inset,
+            so whatever is pinned to the bottom floats that much too high.
+            An installed iPhone app fills the screen, so the screen's own
+            height is the truth: --app-h is it, --app-gap the shortfall.
+            Both are 0-cost elsewhere (the CSS falls back to 100dvh / 0). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var d=document.documentElement;function f(){try{if(!(navigator.standalone||matchMedia("(display-mode: standalone)").matches))return;var p=matchMedia("(orientation: portrait)").matches;var w=p?Math.min(screen.width,screen.height):Math.max(screen.width,screen.height);var h=p?Math.max(screen.width,screen.height):Math.min(screen.width,screen.height);if(w>=768||Math.abs(w-innerWidth)>2)return;var g=h-innerHeight;if(g<0||g>100)return;d.style.setProperty("--app-h",h+"px");d.style.setProperty("--app-gap",g+"px");}catch(e){}}f();addEventListener("orientationchange",function(){setTimeout(f,300)});addEventListener("pageshow",f);})();`,
+          }}
+        />
         {/* Chrome offers installation once, early — often before React has
             mounted anything to listen. Kept here until the prompt asks. */}
         <script

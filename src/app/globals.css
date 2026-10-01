@@ -392,3 +392,11 @@ input[type="date"]::-webkit-date-and-time-value {
   }
 }
 
+/* Installed app: the page never rubber-bands as a whole, so a frame pinned
+   to the screen cannot be dragged with it. Panes still scroll. */
+@media (display-mode: standalone) {
+  html,
+  body {
+    overscroll-behavior: none;
+  }
+}
