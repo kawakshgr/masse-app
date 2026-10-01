@@ -19,36 +19,50 @@ export async function saveAccount(formData: FormData) {
   } = await supabase.auth.getUser();
   if (!user) return;
 
-  const first = text(formData, "first_name");
-  const last = text(formData, "last_name");
-  const full = [first, last].filter(Boolean).join(" ");
-  if (!full) return;
-  // Her video link, joined to every booked call; only a web address.
-  // "zoom.us/j/123" is read as https://zoom.us/j/123.
-  const typed = text(formData, "call_link").replace(/^http:\/\//i, "https://");
-  const link = typed && !/^https:\/\//i.test(typed) ? `https://${typed}` : typed;
-  const callLink = /^https:\/\/[^\s.]+\.\S+$/i.test(link) ? link : null;
+  // Mon compte opens one part at a time (1 Oct 2026), so a form carries only
+  // its own fields: what it does not carry is left alone, never blanked.
+  const part = text(formData, "partie").replace(/[^a-z]/g, "");
+  const has = (key: string) => formData.has(key);
+  const coach: { first_name?: string | null; name?: string; phone?: string | null; call_link?: string | null } = {};
+
+  if (has("first_name")) {
+    const first = text(formData, "first_name");
+    const full = [first, text(formData, "last_name")].filter(Boolean).join(" ");
+    if (!full) return;
+    coach.first_name = first || null;
+    coach.name = full;
+  }
+  if (has("phone")) coach.phone = text(formData, "phone") || null;
+  if (has("call_link")) {
+    // Her video link, joined to every booked call; only a web address.
+    // "zoom.us/j/123" is read as https://zoom.us/j/123.
+    const typed = text(formData, "call_link").replace(/^http:\/\//i, "https://");
+    const link = typed && !/^https:\/\//i.test(typed) ? `https://${typed}` : typed;
+    coach.call_link = /^https:\/\/[^\s.]+\.\S+$/i.test(link) ? link : null;
+  }
 
   const [{ error: coachError }, { error: addressError }] = await Promise.all([
-    supabase
-      .from("coaches")
-      .update({ first_name: first || null, name: full, phone: text(formData, "phone") || null, call_link: callLink })
-      .eq("id", user.id),
-    supabase.from("coach_billing_profiles").upsert(
-      {
-        coach_id: user.id,
-        address_line1: text(formData, "address_line1") || null,
-        address_line2: text(formData, "address_line2") || null,
-        postcode: text(formData, "postcode") || null,
-        city: text(formData, "city") || null,
-        country: text(formData, "country") || "France",
-      },
-      { onConflict: "coach_id" },
-    ),
+    Object.keys(coach).length > 0
+      ? supabase.from("coaches").update(coach).eq("id", user.id)
+      : Promise.resolve({ error: null }),
+    has("address_line1")
+      ? supabase.from("coach_billing_profiles").upsert(
+          {
+            coach_id: user.id,
+            address_line1: text(formData, "address_line1") || null,
+            address_line2: text(formData, "address_line2") || null,
+            postcode: text(formData, "postcode") || null,
+            city: text(formData, "city") || null,
+            country: text(formData, "country") || "France",
+          },
+          { onConflict: "coach_id" },
+        )
+      : Promise.resolve({ error: null }),
   ]);
 
   revalidatePath("/", "layout");
-  redirect(coachError || addressError ? "/compte?erreur=1" : "/compte?enregistre=1");
+  const back = part ? `/compte?partie=${part}&` : "/compte?";
+  redirect(`${back}${coachError || addressError ? "erreur=1" : "enregistre=1"}`);
 }
 
 /* ---------- video calls ---------- */
@@ -68,7 +82,7 @@ export async function addAvailability(formData: FormData) {
   const weekday = Number(formData.get("weekday"));
   const start = Number(formData.get("start"));
   const end = Number(formData.get("end"));
-  if (!(weekday >= 0 && weekday <= 6) || !(end > start)) redirect("/compte?creneau=invalide#visio");
+  if (!(weekday >= 0 && weekday <= 6) || !(end > start)) redirect("/compte?partie=dispos&creneau=invalide");
   await supabase.from("coach_availability").insert({ coach_id: id, weekday, start_min: start, end_min: end });
   // Re-rendered in place, so the page stays on this section.
   revalidatePath("/compte");

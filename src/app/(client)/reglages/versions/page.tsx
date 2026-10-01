@@ -11,7 +11,7 @@ export default async function ReleasesPage() {
 
   return (
     <>
-      <BackHeader href="/reglages" back={tCommon("back")} title={t("releases")} />
+      <BackHeader href="/reglages?partie=apropos" back={tCommon("back")} title={t("releases")} />
       {releases.map((release) => (
         <Card key={release.version} className="space-y-2.5">
           <div className="flex items-baseline justify-between gap-2">

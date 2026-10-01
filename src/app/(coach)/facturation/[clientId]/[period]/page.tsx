@@ -35,7 +35,7 @@ export default async function InvoicePage({
           {tCompany("incomplete")}
         </p>
         <Link
-          href="/admin"
+          href="/admin?partie=entreprise"
           className="mt-3 inline-flex h-9 items-center rounded-r2 cta px-4 text-[13px] font-semibold text-[var(--on-accent)]"
         >
           {t("goToCompany")}

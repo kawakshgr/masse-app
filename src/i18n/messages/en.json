@@ -1385,7 +1385,12 @@
     "statusVoid": "Cancelled",
     "invoicePdf": "View invoice",
     "invoiceNumber": "Invoice {number}",
-    "pdfFailed": "The invoice could not be opened."
+    "pdfFailed": "The invoice could not be opened.",
+    "keySub": "Face ID, fingerprint",
+    "appearanceSub": "Light, dark or auto",
+    "privacySub": "What your coach sees",
+    "consentOn": "Health data: on",
+    "consentOff": "Health data: off"
   },
   "install": {
     "title": "Install Masse on your phone",
@@ -1518,7 +1523,11 @@
     "remove": "Remove",
     "weekOf": "Week of",
     "today": "today",
-    "pickDay": "Pick a day"
+    "pickDay": "Pick a day",
+    "toFill": "To fill in",
+    "noLink": "No link yet",
+    "availabilitySub": "{windows, plural, =0 {No window} =1 {1 window} other {# windows}} · {off, plural, =0 {no day off} =1 {1 day off} other {# days off}}",
+    "keySub": "Face ID, fingerprint"
   },
   "queue": {
     "title": "To do",

@@ -9,7 +9,7 @@ import {
 import { DUE_OFFSETS, DEFAULT_DUE_OFFSET } from "@/lib/checkIns";
 import { CoachBillingProfile } from "@/components/CoachBillingProfile";
 import { CoachLogo } from "@/components/CoachLogo";
-import { Icon } from "@/components/Icon";
+import { PartHead, Tile, TileGrid } from "@/components/Tiles";
 
 /** What an invoice cannot go out without; the section header counts them. */
 const REQUIRED_MENTIONS = [
@@ -25,56 +25,15 @@ const micro = "text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]";
 const cell =
   "h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2.5 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
 
-/**
- * One setting, folded. The header says where it stands — computed from the
- * same rows the body edits — so the page reads at a glance and opens only
- * where there is something to do. Native <details>: no state to keep, and a
- * server action that re-renders the page leaves it open.
- */
-function Section({
-  icon,
-  title,
-  status,
-  alert = false,
-  children,
-}: {
-  icon: string;
-  title: string;
-  status: string;
-  alert?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <details className="group glass rounded-r3">
-      <summary className="flex h-[68px] cursor-pointer list-none items-center gap-3 px-4 [&::-webkit-details-marker]:hidden">
-        <span className="glass2 flex size-11 shrink-0 items-center justify-center rounded-r2 text-[var(--ink2)] group-open:text-[var(--accent)]">
-          <Icon name={icon} size={24} />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-[12px] font-bold uppercase tracking-[.14em]">
-            {title}
-          </span>
-          <span
-            className={`block truncate text-[12px] ${
-              alert ? "text-[var(--a3)]" : "text-[var(--ink2)]"
-            }`}
-          >
-            {status}
-          </span>
-        </span>
-        <span
-          aria-hidden
-          className="shrink-0 text-[18px] leading-none text-[var(--ink3)] transition-transform group-open:rotate-90"
-        >
-          ›
-        </span>
-      </summary>
-      <div className="border-t border-[var(--hair)] p-4">{children}</div>
-    </details>
-  );
-}
+/** The parts a tile opens, by their key in the address. */
+const PARTS = ["bilan", "entreprise", "logo", "coachs", "autorises", "journal"] as const;
+type Part = (typeof PARTS)[number];
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ partie?: string }>;
+}) {
   const t = await getTranslations("admin");
   const tDue = await getTranslations("checkInDue");
   const tCompany = await getTranslations("company");
@@ -82,6 +41,7 @@ export default async function AdminPage() {
   const tLogo = await getTranslations("logo");
   const locale = await getLocale();
   const supabase = await createClient();
+  const { partie } = await searchParams;
 
   const {
     data: { user },
@@ -118,28 +78,24 @@ export default async function AdminPage() {
   const missing = REQUIRED_MENTIONS.filter((key) => !String(profile?.[key] ?? "").trim()).length;
   const suspendedCount = coaches.filter((row) => row.suspended_at != null).length;
 
-  return (
-    <div className="mx-auto max-w-[860px] space-y-6 p-5">
-      <header>
-        <h2 className="font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
-          {t("title")}
-        </h2>
-        <p className="mt-1 text-[13px] leading-[1.5] text-[var(--ink2)]">
-          {/* The platform line only means something to whoever runs it. */}
-          {t(admin ? "lede" : "coachLede")}
-        </p>
-      </header>
-
-      <div className="space-y-2">
-        {admin && <h3 className={`px-1 ${micro}`}>{t("mine")}</h3>}
-
-        <Section
-          icon="checkIns"
-          title={tDue("title")}
-          status={tDue("summary", {
+  const parts: {
+    key: Part;
+    icon: string;
+    title: string;
+    status: string;
+    alert?: boolean;
+    platform?: boolean;
+    body: React.ReactNode;
+  }[] = [
+    {
+      key: "bilan",
+      icon: "checkIns",
+      title: tDue("title"),
+      status: tDue("summary", {
             day: locale === "fr" ? dueDay.toLocaleLowerCase("fr") : dueDay,
-          })}
-        >
+          }),
+      body: (
+        <>
           <p className="max-w-[72ch] text-[13px] leading-[1.5] text-[var(--ink2)]">
             {tDue("lede")}
           </p>
@@ -161,47 +117,49 @@ export default async function AdminPage() {
               {tDue("save")}
             </button>
           </form>
-        </Section>
-
-        <Section
-          icon="company"
-          title={tCompany("title")}
-          alert={missing > 0}
-          status={
-            missing > 0
+        </>
+      ),
+    },
+    {
+      key: "entreprise",
+      icon: "company",
+      title: tCompany("title"),
+      status: missing > 0
               ? tCompany("missing", { count: missing })
               : tCompany("complete", {
                   date: new Date(profile!.updated_at).toLocaleDateString(locale),
-                })
-          }
-        >
+                }),
+      alert: missing > 0,
+      body: (
+        <>
           <CoachBillingProfile profile={profile} />
-        </Section>
-
-        <Section
-          icon="photo"
-          title={tLogo("title")}
-          status={tLogo(coach?.logo_path ? "statusSet" : "statusNone")}
-        >
+        </>
+      ),
+    },
+    {
+      key: "logo",
+      icon: "photo",
+      title: tLogo("title"),
+      status: tLogo(coach?.logo_path ? "statusSet" : "statusNone"),
+      body: (
+        <>
           <CoachLogo coachId={me} path={coach?.logo_path ?? null} />
-        </Section>
-      </div>
-
-      {/* Platform-wide, and only for whoever may read it. */}
-      {admin && (
-        <div className="space-y-2">
-          <h3 className={`px-1 ${micro}`}>{t("platform")}</h3>
-
-          <Section
-            icon="clients"
-            title={t("coaches")}
-            status={[
+        </>
+      ),
+    },
+    {
+      key: "coachs",
+      icon: "clients",
+      title: t("coaches"),
+      status: [
               t("coachCount", { count: coaches.length }),
               suspendedCount > 0 ? t("suspendedCount", { count: suspendedCount }) : null,
             ]
               .filter(Boolean)
-              .join(" · ")}
-          >
+              .join(" · "),
+      platform: true,
+      body: (
+        <>
             <ul className="flex flex-col gap-1.5">
               {coaches.map((row) => {
                 const suspended = row.suspended_at != null;
@@ -267,14 +225,18 @@ export default async function AdminPage() {
                 );
               })}
             </ul>
-          </Section>
-
-          <Section
-            icon="allowlist"
-            title={tAllow("title")}
-            alert={allowlist.length === 0}
-            status={tAllow("count", { count: allowlist.length })}
-          >
+                  </>
+      ),
+    },
+    {
+      key: "autorises",
+      icon: "allowlist",
+      title: tAllow("title"),
+      status: tAllow("count", { count: allowlist.length }),
+      alert: allowlist.length === 0,
+      platform: true,
+      body: (
+        <>
             <p className="text-[13px] leading-[1.5] text-[var(--ink2)]">{tAllow("lede")}</p>
 
             <form action={allowCoachEmail} className="mt-4 flex flex-wrap items-end gap-2">
@@ -322,9 +284,17 @@ export default async function AdminPage() {
                 ))}
               </ul>
             )}
-          </Section>
-
-          <Section icon="log" title={t("log")} status={t("logCount", { count: log.length })}>
+                  </>
+      ),
+    },
+    {
+      key: "journal",
+      icon: "log",
+      title: t("log"),
+      status: t("logCount", { count: log.length }),
+      platform: true,
+      body: (
+        <>
             {log.length === 0 ? (
               <p className="text-[13px] text-[var(--ink2)]">{t("logEmpty")}</p>
             ) : (
@@ -350,7 +320,66 @@ export default async function AdminPage() {
                 ))}
               </ul>
             )}
-          </Section>
+                  </>
+      ),
+    },
+  ];
+
+  const visible = parts.filter((entry) => admin || !entry.platform);
+  const open = visible.find((entry) => entry.key === partie && (PARTS as readonly string[]).includes(partie));
+
+  // A part opened from its tile: the tiles' screen as kicker, a way back.
+  if (open) {
+    return (
+      <div className="mx-auto w-full max-w-[860px] space-y-3 p-5">
+        <PartHead back="/admin" backLabel={t("title")} kicker={t("title")} title={open.title} />
+        <p className={`px-1 text-[12.5px] ${open.alert ? "text-[var(--a3)]" : "text-[var(--ink2)]"}`}>
+          {open.status}
+        </p>
+        <section className="glass rounded-r3 p-4">{open.body}</section>
+      </div>
+    );
+  }
+
+  const tiles = (platform: boolean) => (
+    <TileGrid wide>
+      {visible
+        .filter((entry) => !!entry.platform === platform)
+        .map((entry) => (
+          <Tile
+            key={entry.key}
+            href={`/admin?partie=${entry.key}`}
+            icon={entry.icon}
+            label={entry.title}
+            sub={entry.status}
+            alert={entry.alert}
+          />
+        ))}
+    </TileGrid>
+  );
+
+  return (
+    <div className="mx-auto w-full max-w-[860px] space-y-6 p-5">
+      <header>
+        <h2 className="font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
+          {t("title")}
+        </h2>
+        <p className="mt-1 text-[13px] leading-[1.5] text-[var(--ink2)]">
+          {/* The platform line only means something to whoever runs it. */}
+          {t(admin ? "lede" : "coachLede")}
+        </p>
+      </header>
+
+      <div className="space-y-2">
+        {admin && <h3 className={`px-1 ${micro}`}>{t("mine")}</h3>}
+        {tiles(false)}
+      </div>
+
+      {/* Platform-wide, and only for whoever may read it. */}
+      {admin && (
+        <div className="space-y-2">
+          <h3 className={`px-1 ${micro}`}>{t("platform")}</h3>
+          {tiles(true)}
         </div>
       )}
     </div>

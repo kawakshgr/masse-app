@@ -1385,7 +1385,12 @@
     "statusVoid": "Annulé",
     "invoicePdf": "Voir la facture",
     "invoiceNumber": "Facture {number}",
-    "pdfFailed": "La facture n’a pas pu s’ouvrir."
+    "pdfFailed": "La facture n’a pas pu s’ouvrir.",
+    "keySub": "Face ID, empreinte",
+    "appearanceSub": "Clair, sombre ou auto",
+    "privacySub": "Ce que ton coach voit",
+    "consentOn": "Données de santé : oui",
+    "consentOff": "Données de santé : non"
   },
   "install": {
     "title": "Installe Masse sur ton téléphone",
@@ -1518,7 +1523,11 @@
     "remove": "Retirer",
     "weekOf": "Semaine du",
     "today": "aujourd’hui",
-    "pickDay": "Choisir un jour"
+    "pickDay": "Choisir un jour",
+    "toFill": "À compléter",
+    "noLink": "Pas encore de lien",
+    "availabilitySub": "{windows, plural, =0 {Aucune plage} =1 {1 plage} other {# plages}} · {off, plural, =0 {aucun jour off} =1 {1 jour off} other {# jours off}}",
+    "keySub": "Face ID, empreinte"
   },
   "queue": {
     "title": "À traiter",

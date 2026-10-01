@@ -394,7 +394,7 @@ export function BillingInspector({
             </Link>
           ) : !companyReady ? (
             <Link
-              href="/admin"
+              href="/admin?partie=entreprise"
               className="glass2 flex h-10 min-w-0 flex-1 basis-32 items-center justify-center rounded-r2 px-3 text-center text-[12px] font-semibold text-[var(--ink2)]"
             >
               {tInvoice("goToCompany")}

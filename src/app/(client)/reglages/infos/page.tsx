@@ -17,7 +17,7 @@ export default async function DetailsPage() {
   return (
     <>
       <BackHeader
-        href="/reglages"
+        href="/reglages?partie=compte"
         back={tCommon("back")}
         title={t("profile")}
         lede={t("profileLede")}
