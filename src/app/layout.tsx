@@ -70,9 +70,10 @@ export default async function RootLayout({
         />
         {/* iOS 26, installed app (WebKit bug 301108): with the translucent
             status bar the layout viewport comes out short by the top inset,
-            so whatever is pinned to the bottom floats that much too high.
-            An installed iPhone app fills the screen, so the screen's own
-            height is the truth: --app-h is it, --app-gap the shortfall.
+            and nothing is painted in that band at the bottom of the screen.
+            --app-h is the screen's height, --app-gap the band: what sits on
+            the bottom edge lands just above it, and the home indicator's
+            inset is already behind it.
             Both are 0-cost elsewhere (the CSS falls back to 100dvh / 0). */}
         <script
           dangerouslySetInnerHTML={{

@@ -48,7 +48,7 @@ export function TabBar({
     // On a phone it is the last row instead, above the home indicator — the
     // client's bar sits there too — and the top of the screen is left to the
     // status bar.
-    <div className="relative z-40 shrink-0 px-3 pt-3 max-md:order-last max-md:pt-2 max-md:pb-[calc(env(safe-area-inset-bottom)+8px)]">
+    <div className="relative z-40 shrink-0 px-3 pt-3 max-md:order-last max-md:pt-2 max-md:pb-[max(8px,calc(env(safe-area-inset-bottom)+8px-var(--app-gap,0px)))]">
       {/* One floating capsule: who she is on the left, where she can go in the
           centre — icons, the current one opened out with its name — and her
           own switches on the right. The side columns share the free width
