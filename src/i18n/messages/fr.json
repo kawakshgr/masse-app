@@ -870,14 +870,10 @@
     "dropHint": "Déposer ici"
   },
   "compare": {
-    "vsLastWeek": "vs sem. préc.",
-    "vsLast": "vs précédent",
-    "noCompare": "rien à comparer",
-    "week": "Semaine",
-    "best": "Meilleure série",
-    "volume": "Volume",
-    "progress": "Progression",
-    "noHistory": "Pas encore assez de semaines pour comparer."
+    "side": "Côte à côte",
+    "slider": "Curseur",
+    "share": "Envoyer l’avant / après",
+    "failed": "L’image n’a pas pu être préparée."
   },
   "photos": {
     "title": "Photos",

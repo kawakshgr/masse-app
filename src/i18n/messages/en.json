@@ -870,14 +870,10 @@
     "dropHint": "Drop here"
   },
   "compare": {
-    "vsLastWeek": "vs last week",
-    "vsLast": "vs previous",
-    "noCompare": "nothing to compare",
-    "week": "Week",
-    "best": "Best set",
-    "volume": "Volume",
-    "progress": "Progress",
-    "noHistory": "Not enough weeks yet to compare."
+    "side": "Side by side",
+    "slider": "Slider",
+    "share": "Send the before / after",
+    "failed": "The picture could not be made."
   },
   "photos": {
     "title": "Photos",

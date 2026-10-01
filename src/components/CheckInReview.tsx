@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { intl } from "@/lib/locale";
 import { BarChart, barDate } from "@/components/BarChart";
+import { PhotoSlider, ShareCompare } from "@/components/PhotoCompare";
 import { CheckInSummary } from "@/components/CheckInSummary";
 import type { PhotoPose } from "@/lib/supabase/types";
 
@@ -145,6 +146,9 @@ export function CheckInReview({
   const [pose, setPose] = useState<PhotoPose | "all">("front");
   const [compareId, setCompareId] = useState<string | null>(weeks[0]?.id ?? null);
   const [zoom, setZoom] = useState<string | null>(null);
+  // Side by side, or one over the other with a line to drag (1 Oct 2026).
+  const [view, setView] = useState<"side" | "slider">("side");
+  const tCompare = useTranslations("compare");
 
   const baseline = weeks[0] ?? null;
   const selected = weeks.find((w) => w.id === selectedId) ?? weeks.at(-1) ?? null;
@@ -157,6 +161,19 @@ export function CheckInReview({
     const index = weeks.findIndex((w) => w.id === selected.id);
     return index > 0 ? weeks[index - 1] : null;
   }, [weeks, selected]);
+
+  // The two photos of one pose, when both weeks have it: what the slider
+  // and the picture to send are made of.
+  const pairOf = (p: PhotoPose | "all") => {
+    if (p === "all" || !selected || !against || against.id === selected.id) return null;
+    const a = selected.photos[p]?.url;
+    const b = against.photos[p]?.url;
+    if (!a || !b) return null;
+    return {
+      after: { url: a, label: t("week", { n: selected.number }), weight: kg(selected.bodyweight) },
+      before: { url: b, label: t("week", { n: against.number }), weight: kg(against.bodyweight) },
+    };
+  };
 
   const weightBars = useMemo(
     () =>
@@ -255,6 +272,30 @@ export function CheckInReview({
 
           {/* Both sides move together: the comparison is the point. The
               later week on the left, the one it is measured against on the right. */}
+          {pairOf(pose) && (
+            <div className="mt-3 inline-flex gap-1 rounded-rp p-1 glass2">
+              {(["side", "slider"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={view === mode}
+                  onClick={() => setView(mode)}
+                  className={`h-8 rounded-rp border px-3.5 text-[11.5px] font-bold uppercase tracking-[.1em] ${
+                    view === mode ? "sel text-[var(--ink)]" : "border-transparent text-[var(--ink2)]"
+                  }`}
+                  style={view === mode ? { boxShadow: "var(--spec)" } : undefined}
+                >
+                  {tCompare(mode)}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {view === "slider" && pairOf(pose) ? (
+            <div className="mt-3">
+              <PhotoSlider after={pairOf(pose)!.after} before={pairOf(pose)!.before} />
+            </div>
+          ) : (
           <div className="mt-3 space-y-4">
             {(pose === "all" ? POSES : [pose]).map((p) => (
               <div key={p} className="flex gap-3">
@@ -277,6 +318,17 @@ export function CheckInReview({
               </div>
             ))}
           </div>
+          )}
+
+          {pairOf(pose) && (
+            <div className="mt-3">
+              <ShareCompare
+                after={pairOf(pose)!.after}
+                before={pairOf(pose)!.before}
+                title={`${firstName} · ${pairOf(pose)!.before.label} → ${pairOf(pose)!.after.label}`}
+              />
+            </div>
+          )}
 
           {/* The weight between the two weeks on screen, from the same rows. */}
           {against && against.id !== selected.id && selected.bodyweight != null && against.bodyweight != null && (
