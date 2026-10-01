@@ -292,7 +292,9 @@ export function CheckInReview({
           )}
 
           {view === "slider" && pairOf(pose) ? (
-            <div className="mt-3">
+            // On a computer the column is wide: held to a size that fits
+            // the screen without scrolling, dragged with the mouse.
+            <div className="mx-auto mt-3 w-full max-w-[460px]">
               <PhotoSlider after={pairOf(pose)!.after} before={pairOf(pose)!.before} />
             </div>
           ) : (
@@ -321,7 +323,7 @@ export function CheckInReview({
           )}
 
           {pairOf(pose) && (
-            <div className="mt-3">
+            <div className="mx-auto mt-3 w-full max-w-[460px]">
               <ShareCompare
                 after={pairOf(pose)!.after}
                 before={pairOf(pose)!.before}
