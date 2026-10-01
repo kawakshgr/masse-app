@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { REST_PRESETS, restKey, restLabel, parseRestKey } from "@/lib/rest";
 import { formatScheme, parseScheme } from "@/lib/scheme";
@@ -47,6 +47,14 @@ export function ExerciseSheet({
   const [cue, setCue] = useState(exercise.cue ?? "");
   const [confirming, setConfirming] = useState(false);
 
+  useEffect(() => {
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", escape);
+    return () => document.removeEventListener("keydown", escape);
+  }, [onClose]);
+
   // The steppers read the scheme as typed; with nothing readable they start
   // from 3×10 without load.
   const current = parseScheme(scheme) ?? parsed ?? { sets: 3, reps: 10, weight: null };
@@ -63,11 +71,15 @@ export function ExerciseSheet({
   }
 
   return (
+    <>
+      {/* On a computer the week stays in sight on the left; a click beside
+          the panel closes it, as Escape does. */}
+      <div aria-hidden onClick={onClose} className="fixed inset-0 z-[59] bg-black/30 max-lg:hidden" />
     <div
       role="dialog"
       aria-modal="true"
       aria-label={exercise.name}
-      className="fixed inset-x-0 top-0 z-[60] flex h-[calc(var(--app-h,100dvh)-var(--app-gap,0px))] flex-col bg-[var(--deep)] pt-[env(safe-area-inset-top)]"
+      className="fixed inset-x-0 top-0 z-[60] flex h-[calc(var(--app-h,100dvh)-var(--app-gap,0px))] flex-col bg-[var(--deep)] pt-[env(safe-area-inset-top)] lg:left-auto lg:w-[440px] lg:border-l lg:border-[var(--edge)] lg:shadow-[-24px_0_60px_rgba(0,0,0,.35)]"
     >
       <header className="flex items-center gap-3 px-4 pb-3 pt-4">
         <div className="min-w-0 flex-1">
@@ -211,6 +223,7 @@ export function ExerciseSheet({
         </button>
       </div>
     </div>
+    </>
   );
 }
 

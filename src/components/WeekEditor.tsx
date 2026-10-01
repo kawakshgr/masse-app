@@ -1,6 +1,6 @@
 "use client";
 
-import { REST_PRESETS, parseRestKey, restKey, restLabel } from "@/lib/rest";
+import { restLabel } from "@/lib/rest";
 import { SectionTitle } from "@/components/Pane";
 import { useState, useSyncExternalStore, useTransition } from "react";
 import { Icon } from "@/components/Icon";
@@ -348,26 +348,11 @@ export function WeekEditor({
                               dragging === exercise.id ? "opacity-40" : ""
                             }`}
                           >
-                            {/* A phone has no room for four small fields: the
-                                card reads the movement, a tap edits it. */}
-                            <button
-                              type="button"
-                              onClick={() => setEditing({ exercise, day })}
-                              className="block w-full text-left lg:hidden"
-                            >
-                              <span className="block truncate text-[14px] font-semibold">{exercise.name}</span>
-                              <span className="tnum block truncate text-[12.5px] text-[var(--ink2)]">
-                                {[exercise.scheme, restLabel(exercise.rest_min_s, exercise.rest_max_s)]
-                                  .filter(Boolean)
-                                  .join(" · ") || t("schemeHint")}
-                              </span>
-                              {exercise.cue && (
-                                <span className="block truncate text-[12px] text-[var(--ink3)]">{exercise.cue}</span>
-                              )}
-                            </button>
-                            <div className="flex items-start gap-1 max-lg:hidden">
-                              {/* The handle carries the drag, not the row: the row
-                              is nearly all inputs, which swallow a grab. */}
+                            {/* The card reads the movement; a click (a tap on a
+                                phone) opens it in ExerciseSheet — a panel on the
+                                right on a computer, the whole screen on a phone.
+                                The handle carries the drag between days. */}
+                            <div className="flex items-start gap-1.5">
                               <span
                                 draggable
                                 role="button"
@@ -385,116 +370,28 @@ export function WeekEditor({
                                   setDragging(null);
                                   setOverDay(null);
                                 }}
-                                className="-m-1 cursor-grab select-none p-1 text-[13px] leading-none text-[var(--ink3)] active:cursor-grabbing"
+                                className="-ml-0.5 cursor-grab select-none py-0.5 text-[13px] leading-none text-[var(--ink3)] active:cursor-grabbing max-lg:hidden"
                               >
                                 ⠿
                               </span>
-                              <div className="min-w-0 flex-1">
-                                <input
-                                  defaultValue={exercise.name}
-                                  list="masse-exercise-catalogue"
-                                  aria-label={t("exName")}
-                                  onBlur={(e) =>
-                                    startTransition(() => {
-                                      void updateExercise(
-                                        exercise.id,
-                                        { name: e.target.value },
-                                        programmeId,
-                                      );
-                                    })
-                                  }
-                                  className="w-full rounded-r1 bg-transparent text-[13px] font-semibold text-[var(--ink)]"
-                                />
-                                <input
-                                  defaultValue={exercise.scheme ?? ""}
-                                  placeholder={t("schemeHint")}
-                                  aria-label={t("scheme")}
-                                  onBlur={(e) =>
-                                    startTransition(() => {
-                                      void updateExercise(
-                                        exercise.id,
-                                        { scheme: e.target.value || null },
-                                        programmeId,
-                                      );
-                                    })
-                                  }
-                                  className="tnum w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink2)] placeholder:text-[var(--ink3)]"
-                                />
-                                {/* Rest, exact or a range — one dropdown. */}
-                                <select
-                                  aria-label={t("restTime")}
-                                  defaultValue={restKey(exercise.rest_min_s, exercise.rest_max_s)}
-                                  onChange={(e) =>
-                                    startTransition(() => {
-                                      void updateExercise(
-                                        exercise.id,
-                                        parseRestKey(e.target.value),
-                                        programmeId,
-                                      );
-                                    })
-                                  }
-                                  className="tnum my-0.5 h-7 w-full rounded-r1 border border-[var(--hair)] bg-transparent pl-1.5 text-[11.5px] font-semibold text-[var(--ink2)]"
-                                >
-                                  <option value="">{t("restNone")}</option>
-                                  {REST_PRESETS.map(([min, max]) => (
-                                    <option key={`${min}-${max}`} value={`${min}-${max}`}>
-                                      {t("restTimeValue", { time: restLabel(min, max) ?? "" })}
-                                    </option>
-                                  ))}
-                                </select>
-                                <input
-                                  defaultValue={exercise.cue ?? ""}
-                                  placeholder={t("cue")}
-                                  aria-label={t("cue")}
-                                  onBlur={(e) =>
-                                    startTransition(() => {
-                                      void updateExercise(
-                                        exercise.id,
-                                        { cue: e.target.value || null },
-                                        programmeId,
-                                      );
-                                    })
-                                  }
-                                  className="w-full rounded-r1 bg-transparent text-[12px] text-[var(--ink3)] placeholder:text-[var(--ink3)]"
-                                />
-                              </div>
                               <button
                                 type="button"
-                                aria-label={t("remove")}
-                                onClick={() =>
-                                  startTransition(() => {
-                                    void deleteExercise(
-                                      exercise.id,
-                                      programmeId,
-                                    );
-                                  })
-                                }
-                                className="shrink-0 text-[12px] text-[var(--ink3)] hover:text-[var(--a3)]"
+                                onClick={() => setEditing({ exercise, day })}
+                                className={`min-w-0 flex-1 rounded-r1 text-left ${
+                                  editing?.exercise.id === exercise.id ? "text-[var(--accent)]" : ""
+                                }`}
                               >
-                                ×
+                                <span className="block truncate text-[13.5px] font-semibold max-lg:text-[14px]">{exercise.name}</span>
+                                <span className="tnum block truncate text-[12px] text-[var(--ink2)] max-lg:text-[12.5px]">
+                                  {[exercise.scheme, restLabel(exercise.rest_min_s, exercise.rest_max_s)]
+                                    .filter(Boolean)
+                                    .join(" · ") || t("schemeHint")}
+                                </span>
+                                {exercise.cue && (
+                                  <span className="block truncate text-[11.5px] text-[var(--ink3)] max-lg:text-[12px]">{exercise.cue}</span>
+                                )}
                               </button>
                             </div>
-
-                            <select
-                              aria-label={tEditor2("moveTo")}
-                              value=""
-                              onChange={(event) => {
-                                const target = Number(event.target.value);
-                                if (Number.isInteger(target)) {
-                                  moveToDay(exercise.id, target);
-                                }
-                              }}
-                              className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink3)] max-lg:hidden"
-                            >
-                              <option value="">{tEditor2("moveTo")}…</option>
-                              {[0, 1, 2, 3, 4, 5, 6]
-                                .filter((d) => d !== day && byDay(d))
-                                .map((d) => (
-                                  <option key={d} value={d}>
-                                    {tDays(String(d))}
-                                  </option>
-                                ))}
-                            </select>
                           </li>
                         ))}
                       </ul>
