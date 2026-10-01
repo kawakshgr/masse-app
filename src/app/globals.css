@@ -401,7 +401,21 @@ input[type="date"]::-webkit-date-and-time-value {
     --bar-room: calc(62px + 20px + max(8px, calc(env(safe-area-inset-bottom) + 8px - var(--app-gap, 0px))));
     background: transparent;
   }
-  .desk .overflow-y-auto:not(:has(.overflow-y-auto)):not([role="dialog"] *) {
+  /* "Innermost" counts only scrollers shown on a phone: a library or a
+     roster hidden there does not make its parent an outer frame. */
+  .desk
+    .overflow-y-auto:not(
+      :has(
+        .overflow-y-auto:not(
+            .hidden,
+            .hidden *,
+            .max-md\:hidden,
+            .max-md\:hidden *,
+            .max-lg\:hidden,
+            .max-lg\:hidden *
+          )
+      )
+    ):not([role="dialog"] *) {
     padding-bottom: var(--bar-room);
   }
 }
