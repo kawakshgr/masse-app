@@ -20,8 +20,20 @@ const OFFLINE_PAGES = ["/seance", "/aujourdhui", "/nutrition"];
 /** Past this, a weak signal gives way to the copy kept. */
 const PATIENCE_MS = 4000;
 
+/**
+ * No network and nothing kept: the offline page, at its own address. Served
+ * under another page's address it hydrated as the wrong page and the app
+ * showed its error screen.
+ */
+function offline(url) {
+  if (url.pathname === OFFLINE_URL) {
+    return caches.match(OFFLINE_URL).then((page) => page ?? Response.error());
+  }
+  return Promise.resolve(Response.redirect(OFFLINE_URL, 302));
+}
+
 /** Fresh when the network answers in time, the copy kept otherwise. */
-function freshOrKept(request, key) {
+function freshOrKept(request, key, url) {
   const network = fetch(request).then((response) => {
     if (response.ok && !response.redirected && response.type === "basic") {
       const copy = response.clone();
@@ -34,7 +46,7 @@ function freshOrKept(request, key) {
   return Promise.race([network, late])
     .then((response) => response ?? kept().then((hit) => hit ?? network))
     .catch(() =>
-      kept().then((hit) => hit ?? caches.match(OFFLINE_URL).then((page) => page ?? Response.error())),
+      kept().then((hit) => hit ?? offline(url)),
     );
 }
 
@@ -97,16 +109,14 @@ self.addEventListener("fetch", (event) => {
 
   // The client's three pages, as they stand, for opening without a signal.
   if (request.mode === "navigate" && OFFLINE_PAGES.includes(url.pathname) && !url.search) {
-    event.respondWith(freshOrKept(request, url.pathname));
+    event.respondWith(freshOrKept(request, url.pathname, url));
     return;
   }
 
   // Other pages: network only. On failure, the offline page — never a stale roster.
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch(request).catch(() =>
-        caches.match(OFFLINE_URL).then((hit) => hit ?? Response.error()),
-      ),
+      fetch(request).catch(() => offline(url)),
     );
   }
 });
