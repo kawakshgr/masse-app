@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { ActionMenu } from "@/components/ActionMenu";
-import { MENU_DANGER, MENU_ITEM } from "@/components/Pane";
+import { MENU_DANGER, MENU_ITEM, MenuIcon } from "@/components/Pane";
 import { deleteProgramme, renameProgramme } from "@/app/(coach)/programmes/actions";
 
 /** Rename in place, and the one destructive control, behind a typed name. */
@@ -53,6 +53,7 @@ export function ProgrammeHeader({
           </h2>
           <ActionMenu label={t("actions")}>
             <button type="button" onClick={() => setRenaming(true)} className={MENU_ITEM}>
+              <MenuIcon name="edit" />
               {t("rename")}
             </button>
             {actions}
@@ -62,6 +63,7 @@ export function ProgrammeHeader({
               onClick={() => setConfirming(true)}
               className={MENU_DANGER}
             >
+              <MenuIcon name="trash" />
               {t("remove")}
             </button>
           </ActionMenu>

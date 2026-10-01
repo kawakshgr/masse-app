@@ -358,7 +358,8 @@
     "slotTaken": "Your account is created.",
     "slotTakenBody": "The video call slot you picked was just taken by someone else. Your coach will get back to you on WhatsApp to set a new one.",
     "slotTakenGo": "Continue",
-    "resumed": "Picking up where you left off: your answers were kept on this device."
+    "resumed": "Picking up where you left off: your answers were kept on this device.",
+    "perWeekUnit": "sessions a week"
   },
   "equipment": {
     "gym": "Gym",

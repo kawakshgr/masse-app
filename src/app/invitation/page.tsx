@@ -7,6 +7,7 @@ import { intl } from "@/lib/locale";
 import { OtpCodeEntry } from "@/components/OtpCodeEntry";
 import { Icon } from "@/components/Icon";
 import { Cta, Secondary, fieldClass } from "@/components/client/ui";
+import { ChoiceTiles } from "@/components/ChoiceTiles";
 import {
   EMPTY,
   EQUIPMENT,
@@ -66,6 +67,18 @@ function Question({
     </label>
   );
 }
+
+// Big tiles for the few-answer questions (1 Oct 2026): an icon, or the
+// figure itself written large.
+const GOAL_ICONS: Record<string, string> = {
+  "Build muscle": "arms",
+  "Lose fat": "scale",
+  Recomposition: "recomp",
+  "Get stronger": "trophy",
+  Other: "note",
+};
+const AGE_ICONS = { lt6m: "leaf", "6to12m": "steps", "1to3y": "programmes", gt3y: "trophy" } as const;
+const PER_WEEK_BIG = { "1-2": "1–2", "3-4": "3–4", "5+": "5+", irregular: "≈" } as const;
 
 const area = `${fieldClass} h-auto min-h-[96px] py-3 leading-[1.45]`;
 
@@ -349,20 +362,24 @@ export default function OnboardingPage() {
           {step === 3 && (
             <>
               <Question label={t("trainingAge")} required>
-                <select value={a.trainingAge} onChange={(e) => set({ trainingAge: e.target.value })} className={fieldClass}>
-                  <option value="">{t("pick")}</option>
-                  {TRAINING_AGES.map((v) => (
-                    <option key={v} value={v}>{t(`trainingAgeOpt.${v}`)}</option>
-                  ))}
-                </select>
+                <ChoiceTiles
+                  label={t("trainingAge")}
+                  value={(a.trainingAge || null) as (typeof TRAINING_AGES)[number] | null}
+                  onChange={(v) => set({ trainingAge: v })}
+                  options={TRAINING_AGES.map((v) => ({ value: v, label: t(`trainingAgeOpt.${v}`), icon: AGE_ICONS[v] }))}
+                />
               </Question>
               <Question label={t("perWeek")} required>
-                <select value={a.sessionsPerWeek} onChange={(e) => set({ sessionsPerWeek: e.target.value })} className={fieldClass}>
-                  <option value="">{t("pick")}</option>
-                  {SESSIONS_PER_WEEK.map((v) => (
-                    <option key={v} value={v}>{t(`perWeekOpt.${v}`)}</option>
-                  ))}
-                </select>
+                <ChoiceTiles
+                  label={t("perWeek")}
+                  value={(a.sessionsPerWeek || null) as (typeof SESSIONS_PER_WEEK)[number] | null}
+                  onChange={(v) => set({ sessionsPerWeek: v })}
+                  options={SESSIONS_PER_WEEK.map((v) => ({
+                    value: v,
+                    big: PER_WEEK_BIG[v],
+                    label: v === "irregular" ? t(`perWeekOpt.${v}`) : t("perWeekUnit"),
+                  }))}
+                />
               </Question>
               <Question label={t("currentProgramme")} optional={t("optional")}>
                 <input value={a.currentProgramme} onChange={(e) => set({ currentProgramme: e.target.value })} className={fieldClass} />
@@ -376,16 +393,12 @@ export default function OnboardingPage() {
           {step === 4 && (
             <>
               <Question label={t("goalMain")} required>
-                <select
-                  value={a.goal ?? ""}
-                  onChange={(e) => set({ goal: (e.target.value || null) as Answers["goal"] })}
-                  className={fieldClass}
-                >
-                  <option value="">{t("pick")}</option>
-                  {GOALS.map((g) => (
-                    <option key={g} value={g}>{tGoal(g)}</option>
-                  ))}
-                </select>
+                <ChoiceTiles
+                  label={t("goalMain")}
+                  value={a.goal}
+                  onChange={(g) => set({ goal: g })}
+                  options={GOALS.map((g) => ({ value: g, label: tGoal(g), icon: GOAL_ICONS[g] ?? "note" }))}
+                />
               </Question>
               {a.goal === "Other" && (
                 <Question label={t("goalOther")} required>
@@ -547,14 +560,15 @@ export default function OnboardingPage() {
               <p className="glass2 rounded-r3 p-4 text-[13px] leading-[1.5] text-[var(--ink2)]">
                 {t("cyclePromise")}
               </p>
-              <div className="flex flex-wrap gap-2">
-                <Pill selected={a.cycleTracking} onClick={() => set({ cycleTracking: true })}>
-                  {t("cycleOn")}
-                </Pill>
-                <Pill selected={!a.cycleTracking} onClick={() => set({ cycleTracking: false })}>
-                  {t("cycleOff")}
-                </Pill>
-              </div>
+              <ChoiceTiles
+                label={t("cycleOn")}
+                value={a.cycleTracking ? "on" : "off"}
+                onChange={(v) => set({ cycleTracking: v === "on" })}
+                options={[
+                  { value: "on", label: t("cycleOn"), icon: "cycle" },
+                  { value: "off", label: t("cycleOff"), icon: "privacy" },
+                ]}
+              />
             </>
           )}
 

@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { intl } from "@/lib/locale";
 import { ActionMenu } from "@/components/ActionMenu";
 import { Icon } from "@/components/Icon";
-import { MENU_DANGER, MENU_ITEM } from "@/components/Pane";
+import { MENU_DANGER, MENU_ITEM, MenuIcon } from "@/components/Pane";
 import { cancelAppointment } from "@/app/(coach)/clients/actions";
 import { callLabel } from "@/lib/calls";
 import { waLink } from "@/lib/whatsapp";
@@ -60,15 +60,18 @@ export async function CallBanner({
       )}
       <ActionMenu label="Actions">
         <a href={`/rendez-vous/${call.id}`} className={MENU_ITEM}>
+          <MenuIcon name="calendar" />
           {t("addToCalendar")}
         </a>
         {callLink && (
           <a href={callLink} target="_blank" rel="noopener noreferrer" className={MENU_ITEM}>
+            <MenuIcon name="video" />
             {t("join")}
           </a>
         )}
         {cancelNote && (
           <a href={cancelNote} target="_blank" rel="noopener noreferrer" className={MENU_ITEM}>
+            <MenuIcon name="whatsapp" />
             {t("tellCancel")}
           </a>
         )}
@@ -79,6 +82,7 @@ export async function CallBanner({
           }}
         >
           <button type="submit" className={MENU_DANGER}>
+            <MenuIcon name="cancel" />
             {t("cancel")}
           </button>
         </form>

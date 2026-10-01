@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useFormatter, useTranslations } from "next-intl";
+import { ChoiceTiles, ToggleTile } from "@/components/ChoiceTiles";
 import { CALL_MINUTES, type CallMinutes } from "@/lib/supabase/types";
 import {
   createInvite,
@@ -99,7 +100,7 @@ export function InviteDialog({
             aria-modal="true"
             aria-label={t("title")}
             tabIndex={-1}
-            className="chrome lift w-full max-w-[460px] rounded-r4 p-6 outline-none"
+            className="chrome lift max-h-[calc(100dvh-24px)] w-full max-w-[600px] overflow-y-auto rounded-r4 p-6 outline-none"
           >
             <h2 className="font-display text-[24px] font-extrabold uppercase leading-none tracking-[-.01em]">
               {t("title")}
@@ -110,64 +111,25 @@ export function InviteDialog({
 
             {!created ? (
               <>
-                <label className="mt-4 flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    checked={askCycle}
-                    onChange={(e) => setAskCycle(e.target.checked)}
-                    className="mt-0.5 size-4 shrink-0 accent-[var(--a1)]"
-                  />
-                  <span className="min-w-0">
-                    <span className="block text-[13px] font-semibold">
-                      {t("askCycle")}
-                    </span>
-                    <span className="block text-[12px] leading-snug text-[var(--ink3)]">
-                      {t("askCycleHint")}
-                    </span>
-                  </span>
-                </label>
-
-                <div className="mt-3 flex flex-wrap items-start gap-x-3 gap-y-2">
-                  <label className="flex min-w-0 flex-1 items-start gap-2">
-                    <input
-                      type="checkbox"
-                      checked={offerCall}
-                      onChange={(e) => setOfferCall(e.target.checked)}
-                      className="mt-0.5 size-4 shrink-0 accent-[var(--a1)]"
-                    />
-                    <span className="min-w-0">
-                      <span className="block text-[13px] font-semibold">{t("offerCall")}</span>
-                      <span className="block text-[12px] leading-snug text-[var(--ink3)]">{t("offerCallHint")}</span>
-                    </span>
-                  </label>
-                  {offerCall && (
-                    <select
-                      aria-label={t("callLength")}
-                      value={callMinutes}
-                      onChange={(e) => setCallMinutes(Number(e.target.value) as CallMinutes)}
-                      className="h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2.5 text-[13px] text-[var(--ink)]"
-                    >
-                      {CALL_MINUTES.map((m) => (
-                        <option key={m} value={m}>
-                          {t("callMinutes", { minutes: m })}
-                        </option>
-                      ))}
-                    </select>
-                  )}
+                {/* Big tiles to switch on, as everywhere a choice is few (1 Oct 2026). */}
+                <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
+                  <ToggleTile icon="cycle" label={t("askCycle")} hint={t("askCycleHint")} on={askCycle} onChange={setAskCycle} />
+                  <ToggleTile icon="video" label={t("offerCall")} hint={t("offerCallHint")} on={offerCall} onChange={setOfferCall} />
+                  <ToggleTile icon="checkIns" label={t("needsApproval")} hint={t("needsApprovalHint")} on={needsApproval} onChange={setApproval} />
                 </div>
 
-                <label className="mt-3 flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    checked={needsApproval}
-                    onChange={(e) => setApproval(e.target.checked)}
-                    className="mt-0.5 size-4 shrink-0 accent-[var(--a1)]"
-                  />
-                  <span className="min-w-0">
-                    <span className="block text-[13px] font-semibold">{t("needsApproval")}</span>
-                    <span className="block text-[12px] leading-snug text-[var(--ink3)]">{t("needsApprovalHint")}</span>
-                  </span>
-                </label>
+                {offerCall && (
+                  <div className="mt-3">
+                    <p className="mb-2 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">{t("callLength")}</p>
+                    <ChoiceTiles
+                      label={t("callLength")}
+                      columns={4}
+                      value={String(callMinutes)}
+                      onChange={(v) => setCallMinutes(Number(v) as CallMinutes)}
+                      options={CALL_MINUTES.map((m) => ({ value: String(m), big: String(m), label: "min" }))}
+                    />
+                  </div>
+                )}
 
                 <button
                   type="button"

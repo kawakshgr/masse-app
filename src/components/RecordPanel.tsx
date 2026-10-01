@@ -1,6 +1,6 @@
 "use client";
 
-import { MENU_DANGER, MENU_ITEM, SECTION_TITLE, SectionTitle } from "@/components/Pane";
+import { MENU_DANGER, MENU_ITEM, MenuIcon, SECTION_TITLE, SectionTitle } from "@/components/Pane";
 import { ActionMenu } from "@/components/ActionMenu";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
@@ -324,10 +324,12 @@ export function RecordPanel({
                 title={client.status === "archived" ? undefined : t("archiveHint")}
                 className={MENU_ITEM}
               >
+                <MenuIcon name="archive" />
                 {client.status === "archived" ? t("unarchive") : t("archive")}
               </button>
             </form>
             <button type="button" onClick={() => setConfirming(true)} className={MENU_DANGER}>
+              <MenuIcon name="trash" />
               {tRemove("action")}
             </button>
           </ActionMenu>

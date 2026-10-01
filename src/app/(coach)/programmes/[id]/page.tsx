@@ -1,5 +1,5 @@
 import { SubNav } from "@/components/SubNav";
-import { MENU_ITEM, SectionTitle } from "@/components/Pane";
+import { MENU_ITEM, MenuIcon, SectionTitle } from "@/components/Pane";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
@@ -110,6 +110,7 @@ export default async function ProgrammeEditorPage({
                 }}
               >
                 <button type="submit" className={MENU_ITEM}>
+                  <MenuIcon name="star" />
                   {programme.is_template ? t("untemplate") : t("template")}
                 </button>
               </form>
@@ -122,6 +123,7 @@ export default async function ProgrammeEditorPage({
                   }}
                 >
                   <button type="submit" className={MENU_ITEM}>
+                    <MenuIcon name="copy" />
                     {t("duplicate")}
                   </button>
                 </form>
@@ -138,6 +140,7 @@ export default async function ProgrammeEditorPage({
                     }}
                   >
                     <button type="submit" className={MENU_ITEM}>
+                      <MenuIcon name="up" />
                       {tProgress(rule === "load" ? "menuLoad" : "menuReps")}
                     </button>
                   </form>

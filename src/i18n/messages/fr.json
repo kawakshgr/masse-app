@@ -358,7 +358,8 @@
     "slotTaken": "Ton compte est créé.",
     "slotTakenBody": "Le créneau de visio que tu avais choisi vient d’être pris par quelqu’un d’autre. Ton coach te recontacte sur WhatsApp pour en fixer un nouveau.",
     "slotTakenGo": "Continuer",
-    "resumed": "On reprend là où tu en étais : tes réponses ont été gardées sur cet appareil."
+    "resumed": "On reprend là où tu en étais : tes réponses ont été gardées sur cet appareil.",
+    "perWeekUnit": "séances / semaine"
   },
   "equipment": {
     "gym": "Salle",

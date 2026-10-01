@@ -142,9 +142,22 @@ export function SectionTitle({
   );
 }
 
-/** One row of an ActionMenu — a plain button or a form's submit. */
+/**
+ * One row of an ActionMenu — a plain button or a form's submit. On a phone
+ * the menu is a sheet of big tiles (1 Oct 2026), and a row becomes a tile:
+ * its MenuIcon large on top, the words under it.
+ */
 const MENU_ROW =
-  "flex h-10 w-full items-center rounded-r2 px-2.5 text-left text-[13px] font-semibold transition-colors hover:bg-[var(--glass2)]";
+  "flex h-10 w-full items-center rounded-r2 px-2.5 text-left text-[13px] font-semibold transition-colors hover:bg-[var(--glass2)] max-md:h-auto max-md:min-h-[92px] max-md:flex-col max-md:items-start max-md:justify-between max-md:gap-2.5 max-md:border max-md:border-[var(--edge)] max-md:bg-[var(--glass2)] max-md:p-3.5 max-md:text-[12.5px] max-md:uppercase max-md:leading-[1.25] max-md:tracking-[.08em]";
+
+/** The icon at the head of a menu row; the tile's large icon on a phone. */
+export function MenuIcon({ name }: { name: string }) {
+  return (
+    <span aria-hidden className="mr-2.5 flex shrink-0 opacity-90 max-md:mr-0 max-md:[&>svg]:size-8">
+      <Icon name={name} size={18} />
+    </span>
+  );
+}
 export const MENU_ITEM = `${MENU_ROW} text-[var(--ink)]`;
 /** The destructive row, last in the menu, in coral. */
 export const MENU_DANGER = `${MENU_ROW} text-[var(--a3)]`;

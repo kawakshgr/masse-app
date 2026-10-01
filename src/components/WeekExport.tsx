@@ -1,7 +1,7 @@
 "use client";
 
 import { restLabel } from "@/lib/rest";
-import { MENU_ITEM } from "@/components/Pane";
+import { MENU_ITEM, MenuIcon } from "@/components/Pane";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { EditorSession } from "@/components/WeekEditor";
@@ -70,6 +70,7 @@ export function WeekExport({
         onClick={copy}
         className={MENU_ITEM}
       >
+        <MenuIcon name="copy" />
         {copied ? t("copied") : t("copy")}
       </button>
       <button
@@ -77,6 +78,7 @@ export function WeekExport({
         onClick={() => window.print()}
         className={MENU_ITEM}
       >
+        <MenuIcon name="print" />
         {t("print")}
       </button>
     </div>
