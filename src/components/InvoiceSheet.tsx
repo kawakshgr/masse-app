@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { INVOICE_LOCALE } from "@/lib/invoice";
 import { euros } from "@/lib/billing";
 import type { CoachBillingProfileRow } from "@/lib/supabase/types";
 
@@ -46,8 +47,8 @@ export async function InvoiceSheet({
   description,
   monthName,
 }: InvoiceSheetProps) {
-  const t = await getTranslations("invoice");
-  const tCompany = await getTranslations("company");
+  const t = await getTranslations({ locale: INVOICE_LOCALE, namespace: "invoice" });
+  const tCompany = await getTranslations({ locale: INVOICE_LOCALE, namespace: "company" });
 
   const vatRate =
     profile.vat_regime === "assujetti" ? Number(profile.vat_rate) : 0;
@@ -135,17 +136,17 @@ export async function InvoiceSheet({
             <td className="pt-3 text-right text-[var(--ink2)]">
               {t("subtotal")}
             </td>
-            <td className="tnum pt-3 text-right">{euros(net)}</td>
+            <td className="tnum pt-3 pl-6 text-right">{euros(net)}</td>
           </tr>
           <tr>
             <td className="pt-1 text-right text-[var(--ink2)]">
               {vatRate > 0 ? t("vatAt", { rate: vatRate }) : t("vat")}
             </td>
-            <td className="tnum pt-1 text-right">{euros(vat)}</td>
+            <td className="tnum pt-1 pl-6 text-right">{euros(vat)}</td>
           </tr>
           <tr>
             <td className="pt-2 text-right font-semibold">{t("total")}</td>
-            <td className="tnum pt-2 text-right font-display text-[20px] font-extrabold tracking-[-.03em]">
+            <td className="tnum pt-2 pl-6 text-right font-display text-[20px] font-extrabold tracking-[-.03em]">
               {euros(gross)}
             </td>
           </tr>

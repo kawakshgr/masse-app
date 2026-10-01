@@ -109,7 +109,8 @@ export function StepTarget({
               <span className="tnum h-4 text-center text-[11px] text-[var(--ink2)]">
                 {day.steps == null
                   ? ""
-                  : `${(day.steps / 1000).toFixed(1)}k`}
+                  : // "7,6k" in French, "7.6k" in English.
+                    `${(day.steps / 1000).toLocaleString(locale, { maximumFractionDigits: 1 })}k`}
               </span>
               <div className="flex h-[104px] items-end">
                 <div

@@ -158,7 +158,8 @@ export default async function ClientDetailPage({
             {client.status === "pending" ? tRequest("title") : meta.join(" · ")}
           </p>
         )}
-        <h2 className="mt-1 truncate font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em]">
+        {/* On a phone the name wraps rather than end at "HUGO LE…". */}
+        <h2 className="mt-1 truncate font-display text-[28px] font-extrabold uppercase leading-none tracking-[-.01em] max-md:whitespace-normal max-md:break-words max-md:text-[24px] max-md:leading-[1.05]">
           {client.name}
         </h2>
       </div>
@@ -493,7 +494,9 @@ async function HistoryTab({
         </span>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      {/* Same two-by-two as the overview: four abreast on a phone cut
+          every figure to "5 sem. depui…". */}
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         <MetricCard
           label={t("withYou")}
           value={t("weeksShort", { count: view.weeksWithCoach })}
@@ -1294,7 +1297,8 @@ async function StepsTab({
     const steps = byDay.get(date.toISOString().slice(0, 10))?.steps;
     return {
       weekday,
-      label: tDays(String(weekday)),
+      // "Lun", "Mon": seven full names do not fit under seven bars on a phone.
+      label: tDays(String(weekday)).slice(0, 3),
       steps: steps == null ? null : Number(steps),
     };
   });

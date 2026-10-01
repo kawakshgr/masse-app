@@ -1,4 +1,11 @@
 import { getTranslations } from "next-intl/server";
+
+/**
+ * A French coach's invoice is a French legal document: its paper — on
+ * screen, in the PDF and in the e-mail — is French whatever language the
+ * app is read in. Only the buttons around it follow the app.
+ */
+export const INVOICE_LOCALE = "fr";
 import { logoUrl } from "@/lib/logo";
 import { monthLabel } from "@/lib/billing";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -74,7 +81,7 @@ export async function loadInvoice(
   // required to carry, so there is nothing to render.
   if (!profile?.legal_name || !profile?.siret) return "no-company";
 
-  const t = await getTranslations("invoice");
+  const t = await getTranslations({ locale: INVOICE_LOCALE, namespace: "invoice" });
   const invoice = invoiceRes.data;
   const arrangement = arrangementRes.data;
   const monthName = monthLabel(period);
@@ -111,7 +118,7 @@ export function invoiceFileName(data: InvoiceData, period: string): string {
  * which has no ICU formatter of its own, gets the template back intact.
  */
 export async function invoiceLabels() {
-  const t = await getTranslations("invoice");
+  const t = await getTranslations({ locale: INVOICE_LOCALE, namespace: "invoice" });
   return {
     invoice: t("title"),
     issuedOn: t("issuedOn", { date: "{date}" }),
@@ -129,7 +136,7 @@ export async function invoiceLabels() {
     defaultPenalty: t("defaultPenalty"),
     recovery: t("recovery", { amount: "{amount}" }),
     settledOn: t("settledOn", { date: "{date}" }),
-    vatNumber: (await getTranslations("company"))("vatNumber"),
+    vatNumber: (await getTranslations({ locale: INVOICE_LOCALE, namespace: "company" }))("vatNumber"),
     franchise: "TVA non applicable, art. 293 B du CGI",
   };
 }
