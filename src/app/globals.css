@@ -421,7 +421,7 @@ input[type="date"]::-webkit-date-and-time-value {
   /* The frame itself is a flex row: end padding there is not scrolled to
      in every browser, so the page in it carries the room instead. */
   .desk .pane-frame.overflow-y-auto {
-    padding-bottom: 0;
+    padding-bottom: 0 !important;
   }
   .desk
     .pane-frame:not(
@@ -437,6 +437,11 @@ input[type="date"]::-webkit-date-and-time-value {
       )
     )
     > * {
+    /* Stretched, the page would be held to the frame's height and its
+       overflow would run past any room; from the top, it grows with its
+       content and still fills the screen when short. */
+    align-self: flex-start;
+    min-height: calc(100% - var(--bar-room));
     margin-bottom: var(--bar-room);
   }
 }
