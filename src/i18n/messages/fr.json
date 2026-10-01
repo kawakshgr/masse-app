@@ -1976,5 +1976,18 @@
     "summary": "{count, plural, one {# mouvement allégé} other {# mouvements allégés}} : −{pct} % de charge, arrondi au disque, les répétitions restent.",
     "asWritten": "{count, plural, one {# mouvement copié tel quel, son schéma n’étant pas lisible : à ajuster.} other {# mouvements copiés tels quels, leur schéma n’étant pas lisible : à ajuster.}}",
     "notPushed": "Rien n’est envoyé aux clients : relis la semaine, puis envoie-la quand tu veux."
+  },
+  "monthInvoicing": {
+    "title": "Factures de {month}",
+    "lede": "Les clients au mois dont la facture n’est pas encore partie. Décoche ceux à laisser de côté : un appui émet, archive et envoie chaque facture par e-mail.",
+    "issued": "Émise, pas envoyée",
+    "toIssue": "À émettre",
+    "noEmail": "pas d’e-mail : à envoyer à la main",
+    "send": "{count, plural, =0 {Coche au moins un client} one {Émettre et envoyer la facture} other {Émettre et envoyer les # factures}}",
+    "sending": "Envoi en cours…",
+    "companyFirst": "Complète d’abord ton entreprise dans Admin → Mon entreprise : une facture ne part pas sans ses mentions.",
+    "doneSent": "{count, plural, =0 {Aucune facture envoyée} one {# facture émise et envoyée} other {# factures émises et envoyées}}",
+    "doneNoEmail": "{count, plural, one {# facture émise sans e-mail : à envoyer à la main.} other {# factures émises sans e-mail : à envoyer à la main.}}",
+    "doneFailed": "{count, plural, one {# facture n’est pas partie : ouvre la ligne du client pour réessayer.} other {# factures ne sont pas parties : ouvre les lignes pour réessayer.}}"
   }
 }

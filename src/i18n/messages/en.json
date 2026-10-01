@@ -1976,5 +1976,18 @@
     "summary": "{count, plural, one {# movement lightened} other {# movements lightened}}: −{pct}% load, rounded to a plate, reps unchanged.",
     "asWritten": "{count, plural, one {# movement copied as written, its scheme unreadable: adjust it.} other {# movements copied as written, their scheme unreadable: adjust them.}}",
     "notPushed": "Nothing is sent to clients: read the week through, then send it when you like."
+  },
+  "monthInvoicing": {
+    "title": "{month} invoices",
+    "lede": "Monthly clients whose invoice has not gone out. Untick anyone to leave aside: one press issues, archives and e-mails each invoice.",
+    "issued": "Issued, not sent",
+    "toIssue": "To issue",
+    "noEmail": "no e-mail: send by hand",
+    "send": "{count, plural, =0 {Tick at least one client} one {Issue and send the invoice} other {Issue and send the # invoices}}",
+    "sending": "Sending…",
+    "companyFirst": "Fill in your company first in Admin → My company: an invoice cannot go without its mentions.",
+    "doneSent": "{count, plural, =0 {No invoice sent} one {# invoice issued and sent} other {# invoices issued and sent}}",
+    "doneNoEmail": "{count, plural, one {# invoice issued without e-mail: send it by hand.} other {# invoices issued without e-mail: send them by hand.}}",
+    "doneFailed": "{count, plural, one {# invoice did not go: open the client's line to try again.} other {# invoices did not go: open the lines to try again.}}"
   }
 }

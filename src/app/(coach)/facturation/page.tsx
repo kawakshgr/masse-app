@@ -22,6 +22,7 @@ import {
 } from "@/lib/billing";
 import type { BillingType, InvoiceStatus } from "@/lib/supabase/types";
 import { authUser } from "@/lib/supabase/auth";
+import { MonthInvoicing } from "@/components/MonthInvoicing";
 
 type Filter = "all" | "open" | "monthly" | "pack";
 
@@ -39,9 +40,20 @@ function initialsOf(name: string): string {
 export default async function BillingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ filtre?: string; ligne?: string; probleme?: string; motif?: string; fait?: string }>;
+  searchParams: Promise<{
+    filtre?: string;
+    ligne?: string;
+    probleme?: string;
+    motif?: string;
+    fait?: string;
+    lot?: string;
+    envoyees?: string;
+    sansadresse?: string;
+    echecs?: string;
+  }>;
 }) {
   const t = await getTranslations("billing");
+  const tMonth = await getTranslations("monthInvoicing");
   const locale = intl(await getLocale());
   const params = await searchParams;
   const filter: Filter = FILTERS.includes(params.filtre as Filter)
@@ -68,7 +80,7 @@ export default async function BillingPage({
       supabase
         .from("invoices")
         .select(
-          "client_id, period_start, status, paid_at, issued_at, invoice_number",
+          "client_id, period_start, status, paid_at, issued_at, invoice_number, sent_at",
         )
         .gte("period_start", months[0]),
       supabase
@@ -158,6 +170,19 @@ export default async function BillingPage({
           ? packs
           : rows;
 
+  // The month's invoices not gone out yet, monthly clients only: a pack is
+  // billed when it is bought, not by the month.
+  const toSend = rows
+    .filter((r) => r.type === "monthly" && r.amountCents > 0)
+    .filter((r) => !invoiceAt.get(`${r.id}:${period}`)?.sent_at)
+    .map((r) => ({
+      id: r.id,
+      name: r.name,
+      amount: euros(r.amountCents, locale),
+      issued: r.issued,
+      hasEmail: Boolean(r.email),
+    }));
+
   const selected =
     shown.find((r) => r.id === params.ligne) ?? shown[0] ?? rows[0] ?? null;
   const periodLabel = monthLabel(period, locale);
@@ -240,6 +265,24 @@ export default async function BillingPage({
           }))}
         />
       </header>
+
+      {params.lot && (
+        <section role="status" className="glass rounded-r3 p-4">
+          <p className="text-[14px] font-semibold text-[var(--accent-soft)]">
+            ✓ {tMonth("doneSent", { count: Number(params.envoyees ?? 0) })}
+          </p>
+          {Number(params.sansadresse ?? 0) > 0 && (
+            <p className="mt-1 text-[12.5px] text-[var(--a2)]">{tMonth("doneNoEmail", { count: Number(params.sansadresse) })}</p>
+          )}
+          {Number(params.echecs ?? 0) > 0 && (
+            <p className="mt-1 text-[12.5px] text-[var(--a3)]">{tMonth("doneFailed", { count: Number(params.echecs) })}</p>
+          )}
+        </section>
+      )}
+
+      {toSend.length > 0 && (
+        <MonthInvoicing period={period} periodLabel={periodLabel} candidates={toSend} companyReady={companyReady} />
+      )}
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(166px,1fr))] gap-2.5">
         {totals.map((total) => (

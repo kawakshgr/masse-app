@@ -271,3 +271,86 @@ export async function emailInvoice(formData: FormData) {
   revalidatePath("/facturation");
   redirect(`/facturation?ligne=${clientId}&fait=envoye`);
 }
+
+/**
+ * The month's invoices in one go (1 Oct 2026): for each client she ticked,
+ * the invoice is written if it is not yet (one number each, under the same
+ * lock as issueInvoice), archived, and e-mailed. She presses it; nothing is
+ * sent on a schedule. A client without an address is issued and counted,
+ * to send by hand.
+ */
+export async function issueAndSendMonth(formData: FormData) {
+  const { supabase, userId } = await coachId();
+  if (!userId) return;
+  const period = String(formData.get("period") ?? "");
+  const ids = formData.getAll("client_id").map(String).filter(Boolean);
+  if (!period || ids.length === 0) redirect("/facturation");
+
+  const [{ data: arrangements }, { data: existing }] = await Promise.all([
+    supabase.from("billing_arrangements").select("client_id, amount_cents, type").in("client_id", ids),
+    supabase.from("invoices").select("client_id, issued_at").in("client_id", ids).eq("period_start", period),
+  ]);
+  const user = await (await createClient()).auth.getUser();
+  const replyTo = user.data.user?.email ?? null;
+  const t = await getTranslations("invoice");
+
+  let sent = 0;
+  let noAddress = 0;
+  let failed = 0;
+  for (const clientId of ids) {
+    const arrangement = (arrangements ?? []).find((a) => a.client_id === clientId);
+    if (!arrangement || arrangement.type !== "monthly" || arrangement.amount_cents <= 0) {
+      failed += 1;
+      continue;
+    }
+    if (!(existing ?? []).some((row) => row.client_id === clientId && row.issued_at)) {
+      const { error } = await supabase.rpc("assign_invoice_number", {
+        p_client: clientId,
+        p_period: period,
+        p_amount: arrangement.amount_cents,
+      });
+      if (error) {
+        if (error.message.includes("no billing profile")) redirect("/facturation?probleme=entreprise");
+        failed += 1;
+        continue;
+      }
+    }
+    const result = await renderAndArchive(clientId, period);
+    if (!result || "problem" in result) {
+      failed += 1;
+      continue;
+    }
+    const to = result.data.client.email;
+    if (!to) {
+      noAddress += 1;
+      continue;
+    }
+    const mail = await sendInvoiceMail({
+      to,
+      replyTo,
+      subject: t("mailSubject", { number: result.data.invoice?.invoice_number ?? "", month: result.data.monthName }),
+      body: t("mailBody", {
+        name: result.data.client.name,
+        month: result.data.monthName,
+        amount: euros(result.data.gross),
+        coach: result.data.profile.legal_name ?? "",
+      }),
+      fileName: result.fileName,
+      pdf: result.pdf,
+    });
+    if (!mail.ok) {
+      console.error("[invoice mail]", mail.reason);
+      failed += 1;
+      continue;
+    }
+    await supabase
+      .from("invoices")
+      .update({ sent_at: new Date().toISOString() })
+      .eq("client_id", clientId)
+      .eq("period_start", period);
+    sent += 1;
+  }
+
+  revalidatePath("/facturation");
+  redirect(`/facturation?lot=1&envoyees=${sent}&sansadresse=${noAddress}&echecs=${failed}`);
+}
