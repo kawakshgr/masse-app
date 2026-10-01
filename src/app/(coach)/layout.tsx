@@ -79,7 +79,7 @@ export default async function CoachLayout({
 
       {/* Every page scrolls in here, never the document: a page taller than
           the screen would otherwise carry the tab bar off with it. */}
-      <div className="flex min-h-0 flex-1 overflow-y-auto overscroll-contain print:block print:overflow-visible">{children}</div>
+      <div className="pane-frame flex min-h-0 flex-1 overflow-y-auto overscroll-contain print:block print:overflow-visible">{children}</div>
     </div>
     </>
   );

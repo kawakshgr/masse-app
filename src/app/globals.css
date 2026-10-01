@@ -418,6 +418,27 @@ input[type="date"]::-webkit-date-and-time-value {
     ):not([role="dialog"] *) {
     padding-bottom: var(--bar-room);
   }
+  /* The frame itself is a flex row: end padding there is not scrolled to
+     in every browser, so the page in it carries the room instead. */
+  .desk .pane-frame.overflow-y-auto {
+    padding-bottom: 0;
+  }
+  .desk
+    .pane-frame:not(
+      :has(
+        .overflow-y-auto:not(
+            .hidden,
+            .hidden *,
+            .max-md\:hidden,
+            .max-md\:hidden *,
+            .max-lg\:hidden,
+            .max-lg\:hidden *
+          )
+      )
+    )
+    > * {
+    margin-bottom: var(--bar-room);
+  }
 }
 
 /* Installed app: the page never rubber-bands as a whole, so a frame pinned
