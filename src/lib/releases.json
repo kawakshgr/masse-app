@@ -1,5 +1,19 @@
 [
   {
+    "version": "0.10",
+    "date": "2026-10-01",
+    "fr": [
+      "Machine prise ? Si ton coach a prévu des remplaçants, change de mouvement en une touche pendant ta séance : la charge repart de ta dernière fois sur ce mouvement, et ton coach voit ce que tu as fait.",
+      "Ma progression : sous ta semaine, ton 1RM estimé sur tes mouvements principaux, semaine après semaine.",
+      "Le matin, la notification te rappelle de noter ta nuit ; le soir, tes pas du jour s’ils manquent."
+    ],
+    "en": [
+      "Machine taken? If your coach set stand-ins, switch movement with one tap during your session: the load starts from your last time on it, and your coach sees what you did.",
+      "My progress: under your week, your estimated 1RM on your main movements, week after week.",
+      "In the morning, the notification reminds you to note your night; in the evening, your steps if they are missing."
+    ]
+  },
+  {
     "version": "0.9",
     "date": "2026-10-01",
     "fr": [
