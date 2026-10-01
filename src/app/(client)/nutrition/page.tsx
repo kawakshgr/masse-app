@@ -7,6 +7,7 @@ import { SUPPLEMENT_TIMINGS, type FoodRow, type MealRow } from "@/lib/supabase/t
 import { Card, CardTitle, Kicker, ScreenHeader, shown } from "@/components/client/ui";
 import { MyWeek } from "@/components/MyWeek";
 import { MealsPanel } from "@/components/MealsPanel";
+import { Equivalents } from "@/components/client/Equivalents";
 
 type PlanMeal = {
   id: string;
@@ -48,7 +49,10 @@ export default async function NutritionPage() {
         .select("id, name, dose, unit, timing, day_type_id")
         .eq("client_id", client.id)
         .order("position"),
-      supabase.from("foods").select("id, name, brand").order("name"),
+      supabase
+        .from("foods")
+        .select("id, name, brand, category, protein_100g, carbs_100g, fat_100g, kcal_100g")
+        .order("name"),
       supabase.from("meals").select("*").eq("day", today).order("logged_at"),
     ]);
 
@@ -118,6 +122,22 @@ export default async function NutritionPage() {
           </div>
           {phaseNutrition && <LeverLine levers={phaseNutrition} kind="nutrition" />}
         </Card>
+      )}
+
+      {/* On macros, not on fixed meals (Kevin, 1 Oct 2026): what to eat
+          instead, from the coach's library. */}
+      {target && meals.length === 0 && (
+        <Equivalents
+          foods={(foodsRes.data ?? []).map((food) => ({
+            id: food.id,
+            name: food.name,
+            category: food.category,
+            protein: food.protein_100g == null ? null : Number(food.protein_100g),
+            carbs: food.carbs_100g == null ? null : Number(food.carbs_100g),
+            fat: food.fat_100g == null ? null : Number(food.fat_100g),
+            kcal: food.kcal_100g == null ? null : Number(food.kcal_100g),
+          }))}
+        />
       )}
 
       {meals.length > 0 && (
@@ -191,7 +211,7 @@ export default async function NutritionPage() {
 
       <MealsPanel
         day={today}
-        foods={(foodsRes.data ?? []) as Pick<FoodRow, "id" | "name" | "brand">[]}
+        foods={(foodsRes.data ?? []).map(({ id, name, brand }) => ({ id, name, brand })) as Pick<FoodRow, "id" | "name" | "brand">[]}
         meals={(loggedRes.data ?? []) as MealRow[]}
       />
 

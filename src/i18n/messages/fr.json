@@ -1860,5 +1860,18 @@
     "copy": "{count, plural, =0 {Choisis une semaine} =1 {Copier vers 1 jour} other {Copier vers # jours}}",
     "done": "{count, plural, =0 {Rien n’a été copié.} =1 {Copiée vers 1 jour.} other {Copiée vers # jours.}}",
     "kept": "{count, plural, =1 {1 jour gardé : un client y a déjà des séries.} other {# jours gardés : des clients y ont déjà des séries.}}"
+  },
+  "equivalents": {
+    "title": "Équivalences",
+    "lede": "Envie de changer ? Choisis un aliment et sa quantité : voici combien prendre des autres pour la même chose.",
+    "food": "Aliment",
+    "brings": "Apporte {grams} g de {macro}",
+    "macro": {
+      "protein": "protéines",
+      "carbs": "glucides",
+      "fat": "lipides"
+    },
+    "same": "Autant avec",
+    "none": "Pas d’autre aliment de cette famille chez ton coach pour l’instant."
   }
 }

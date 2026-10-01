@@ -1860,5 +1860,18 @@
     "copy": "{count, plural, =0 {Pick a week} =1 {Copy to 1 day} other {Copy to # days}}",
     "done": "{count, plural, =0 {Nothing was copied.} =1 {Copied to 1 day.} other {Copied to # days.}}",
     "kept": "{count, plural, =1 {1 day kept: a client has sets on it.} other {# days kept: clients have sets on them.}}"
+  },
+  "equivalents": {
+    "title": "Swaps",
+    "lede": "Fancy a change? Pick a food and how much: here is how much of the others gives the same.",
+    "food": "Food",
+    "brings": "Brings {grams} g of {macro}",
+    "macro": {
+      "protein": "protein",
+      "carbs": "carbs",
+      "fat": "fat"
+    },
+    "same": "As much with",
+    "none": "No other food of this family in your coach’s library yet."
   }
 }
