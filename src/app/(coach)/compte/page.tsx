@@ -3,6 +3,7 @@ import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import { PartHead, Tile, TileGrid } from "@/components/Tiles";
 import { PasskeySettings } from "@/components/PasskeySettings";
+import { PushSettings } from "@/components/PushSettings";
 import {
   addAvailability,
   addUnavailableDay,
@@ -50,7 +51,7 @@ function Field({
 }
 
 /** The parts a tile opens, by their key in the address. */
-const PARTS = ["identite", "adresse", "visio", "dispos", "cle"] as const;
+const PARTS = ["identite", "adresse", "visio", "dispos", "notifications", "cle"] as const;
 type Part = (typeof PARTS)[number];
 
 /** Her own details, behind her name in the top bar. */
@@ -61,6 +62,7 @@ export default async function AccountPage({
 }) {
   const t = await getTranslations("account");
   const tKeys = await getTranslations("passkeys");
+  const tPush = await getTranslations("pushSettings");
   const locale = intl(await getLocale());
   const tDays = await getTranslations("days");
   const { enregistre, erreur, creneau, partie } = await searchParams;
@@ -109,6 +111,7 @@ export default async function AccountPage({
     adresse: t("address"),
     visio: t("callTitle"),
     dispos: t("availabilityTitle"),
+    notifications: tPush("title"),
     cle: tKeys("title"),
   };
   const windowCount = (windows ?? []).length;
@@ -152,6 +155,7 @@ export default async function AccountPage({
               sub={t("availabilitySub", { windows: windowCount, off: offCount })}
               alert={windowCount === 0}
             />
+            <Tile href="/compte?partie=notifications" icon="bell" label={tPush("title")} sub={tPush("subCoach")} />
             <Tile href="/compte?partie=cle" icon="key" label={tKeys("title")} sub={t("keySub")} />
             <Tile href="/admin?partie=entreprise" icon="company" label={t("companyTitle")} sub={t("companyHint")} />
           </TileGrid>
@@ -308,6 +312,17 @@ export default async function AccountPage({
                   {t("addDayOff")}
                 </button>
               </form>
+            </section>
+          </>
+        )}
+
+        {part === "notifications" && (
+          <>
+            {head(false)}
+            <section className="glass rounded-r3 p-4">
+              <div className="max-w-[460px]">
+                <PushSettings coach />
+              </div>
             </section>
           </>
         )}

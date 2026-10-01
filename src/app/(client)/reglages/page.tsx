@@ -4,6 +4,7 @@ import { clientSession } from "@/lib/clientData";
 import releases from "@/lib/releases.json";
 import { BackHeader, NavRow } from "@/components/client/ui";
 import { PasskeySettings } from "@/components/PasskeySettings";
+import { PushSettings } from "@/components/PushSettings";
 import {
   AppearanceChoice,
   ClearNotes,
@@ -19,7 +20,7 @@ import {
  * leaves the screen rather than apologising on it.
  */
 /** The parts a tile opens, by their key in the address. */
-const PARTS = ["compte", "cle", "apparence", "langue", "confidentialite", "donnees", "apropos"] as const;
+const PARTS = ["compte", "notifications", "cle", "apparence", "langue", "confidentialite", "donnees", "apropos"] as const;
 type Part = (typeof PARTS)[number];
 
 export default async function SettingsPage({
@@ -37,6 +38,7 @@ export default async function SettingsPage({
     .maybeSingle();
   const tCommon = await getTranslations("common");
   const tKeys = await getTranslations("passkeys");
+  const tPush = await getTranslations("pushSettings");
   const locale = await getLocale();
   const { partie } = await searchParams;
   const part = (PARTS as readonly string[]).includes(partie ?? "") ? (partie as Part) : null;
@@ -44,6 +46,7 @@ export default async function SettingsPage({
 
   const titles: Record<Part, string> = {
     compte: t("account"),
+    notifications: tPush("title"),
     cle: tKeys("title"),
     apparence: t("appearance"),
     langue: t("language"),
@@ -60,6 +63,7 @@ export default async function SettingsPage({
         <BackHeader href="/aujourdhui" back={tCommon("back")} title={t("title")} />
         <TileGrid>
           <Tile href="/reglages?partie=compte" icon="account" label={t("account")} sub={user.email ?? null} />
+          <Tile href="/reglages?partie=notifications" icon="bell" label={tPush("title")} sub={tPush("sub")} />
           <Tile href="/reglages?partie=cle" icon="key" label={tKeys("title")} sub={t("keySub")} />
           <Tile href="/reglages/facturation" icon="billing" label={t("billing")} sub={t("billingOpen")} />
           <Tile href="/reglages?partie=apparence" icon="appearance" label={t("appearance")} sub={t("appearanceSub")} />
@@ -93,6 +97,8 @@ export default async function SettingsPage({
             <SignOutButton />
           </>
         )}
+
+        {part === "notifications" && <PushSettings />}
 
         {part === "cle" && <PasskeySettings />}
 

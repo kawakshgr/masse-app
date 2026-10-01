@@ -1799,5 +1799,39 @@
     "keep": "Keep",
     "save": "Save",
     "restNone": "None"
+  },
+  "push": {
+    "testTitle": "Masse",
+    "testBody": "Notifications work on this phone.",
+    "morningTitle": "Today",
+    "session": "Today’s session: {name}",
+    "sessionUnnamed": "It’s a training day",
+    "checkInDue": "Your check-in is due today",
+    "checkInLate": "Your check-in is late",
+    "callToday": "Video call with {coach} at {time}",
+    "nudgeTitle": "Your check-in is waiting",
+    "nudgeBody": "{coach} is waiting for this week’s check-in.",
+    "filedTitle": "New check-in",
+    "filedBody": "{first} filed their check-in.",
+    "painTitle": "Pain reported",
+    "painBody": "{first} · {exercise}"
+  },
+  "pushSettings": {
+    "title": "Notifications",
+    "sub": "Session, check-in, call",
+    "subCoach": "Check-ins, pain",
+    "lede": "A reminder in the morning when there is a session, a check-in due or a call, and a word when your coach nudges you. On this phone only.",
+    "ledeCoach": "A word when a client files a check-in or reports pain. On this phone only.",
+    "enable": "Turn on notifications",
+    "on": "On for this phone",
+    "disable": "Turn off on this phone",
+    "test": "Send me a test",
+    "testSent": "Sent: it arrives in a few seconds.",
+    "testNone": "Nothing went out. Turn notifications off and on again.",
+    "install": "On iPhone, notifications only work in the installed app: Share → “Add to Home Screen”, then open Masse from the icon and come back here.",
+    "denied": "Notifications are blocked for Masse in the phone’s settings. Allow them there, then come back here.",
+    "unsupported": "This browser does not receive notifications.",
+    "notReady": "Coming soon.",
+    "failed": "Turning them on failed. Try again."
   }
 }

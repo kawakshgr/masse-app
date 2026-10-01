@@ -3,6 +3,9 @@
 import { removeCheckInPhotos } from "@/lib/erase";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { isFiled } from "@/lib/checkIns";
+import { pushAdmin, pushReady, pushTo } from "@/lib/push";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isLocale, LOCALE_COOKIE } from "@/i18n/config";
@@ -98,6 +101,16 @@ export async function submitCheckIn(input: {
   const { supabase, user } = await signedIn();
   if (!user) return { ok: false };
 
+  // Was it already filed? The coach hears of a check-in once, when it
+  // first holds something — not at every correction.
+  const { data: before } = await supabase
+    .from("check_ins")
+    .select("feel, pain, adherence, bodyweight_kg, note, waist_cm, chest_cm, hips_cm, thigh_cm, check_in_photos(id)")
+    .eq("client_id", user.id)
+    .eq("week_start_date", input.weekStart)
+    .maybeSingle();
+  const filedBefore = before ? isFiled(before, before.check_in_photos?.length ?? 0) : false;
+
   const { error } = await supabase.from("check_ins").upsert(
     {
       client_id: user.id,
@@ -116,8 +129,46 @@ export async function submitCheckIn(input: {
     { onConflict: "client_id,week_start_date" },
   );
 
+  const filedNow = isFiled(
+    {
+      feel: input.feel,
+      pain: input.pain,
+      adherence: input.adherence,
+      bodyweight_kg: input.bodyweightKg,
+      note: input.note,
+      waist_cm: input.waistCm,
+      chest_cm: input.chestCm,
+      hips_cm: input.hipsCm,
+      thigh_cm: input.thighCm,
+    },
+    before?.check_in_photos?.length ?? 0,
+  );
+  if (!error && !filedBefore && filedNow) {
+    after(() => tellCoach(user.id, (first) => (t) => ({
+      title: t("filedTitle"),
+      body: t("filedBody", { first }),
+      url: `/clients/${user.id}?onglet=checkins`,
+      tag: `checkin-${user.id}`,
+    })));
+  }
+
   revalidatePath("/aujourdhui");
   return { ok: !error };
+}
+
+/** A notification to the client's coach, on her phones (lib/push.ts). */
+async function tellCoach(
+  clientId: string,
+  compose: (first: string) => Parameters<typeof pushTo>[1],
+) {
+  if (!pushReady()) return;
+  const { data: row } = await pushAdmin()
+    .from("clients")
+    .select("coach_id, first_name, name")
+    .eq("id", clientId)
+    .maybeSingle();
+  if (!row?.coach_id) return;
+  await pushTo([row.coach_id], compose(row.first_name ?? row.name.split(/\s+/)[0] ?? row.name));
 }
 
 /* ---------- pain ---------- */
@@ -141,6 +192,14 @@ export async function reportPain(input: {
     level: input.level,
     note: input.note.trim().slice(0, 500) || null,
   });
+  if (!error) {
+    after(() => tellCoach(user.id, (first) => (t) => ({
+      title: t("painTitle"),
+      body: t("painBody", { first, exercise: input.exerciseName.slice(0, 80) }),
+      url: `/clients/${user.id}`,
+      tag: `pain-${user.id}`,
+    })));
+  }
   return { ok: !error };
 }
 

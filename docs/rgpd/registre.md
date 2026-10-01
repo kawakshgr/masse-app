@@ -48,3 +48,13 @@ Masse agit comme **sous-traitant** des coachs pour les données de leurs clients
 | Données | E-mail, journaux de connexion, clé publique des clés d'accès activées — jamais de donnée biométrique (Supabase Auth) |
 | Base légale | Intérêt légitime (6.1.f) — sécurité du service |
 | Conservation | Selon Supabase : [À vérifier dans les réglages du projet] |
+
+## 4 bis. Notifications (Masse responsable, depuis le 1er octobre 2026)
+
+| Rubrique | Contenu |
+|---|---|
+| Finalité | Rappels sur le téléphone (séance du jour, bilan à rendre, visio, relance du coach ; côté coach : bilan rempli, douleur signalée) |
+| Données | Adresse d'abonnement fournie par le navigateur (endpoint et clés de chiffrement), langue (`push_subscriptions`) ; aucun contenu de santé chiffré dans le message au-delà du nom de l'exercice d'une douleur, côté coach |
+| Base légale | Consentement (6.1.a) — activé appareil par appareil, retiré en un geste |
+| Destinataires | Service de notification du navigateur (Apple, Google, Mozilla) : message chiffré de bout en bout par le protocole Web Push |
+| Conservation | Tant que les notifications sont activées ; effacée à la désactivation, quand le service la déclare expirée, ou avec le compte |

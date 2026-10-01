@@ -1799,5 +1799,39 @@
     "keep": "Garder",
     "save": "Enregistrer",
     "restNone": "Aucun"
+  },
+  "push": {
+    "testTitle": "Masse",
+    "testBody": "Les notifications marchent sur ce téléphone.",
+    "morningTitle": "Aujourd’hui",
+    "session": "Séance du jour : {name}",
+    "sessionUnnamed": "C’est jour de séance",
+    "checkInDue": "Ton bilan est à rendre aujourd’hui",
+    "checkInLate": "Ton bilan est en retard",
+    "callToday": "Visio avec {coach} à {time}",
+    "nudgeTitle": "Ton bilan t’attend",
+    "nudgeBody": "{coach} attend ton bilan de la semaine.",
+    "filedTitle": "Nouveau bilan",
+    "filedBody": "{first} a rempli son bilan.",
+    "painTitle": "Douleur signalée",
+    "painBody": "{first} · {exercise}"
+  },
+  "pushSettings": {
+    "title": "Notifications",
+    "sub": "Séance, bilan, visio",
+    "subCoach": "Bilans, douleurs",
+    "lede": "Un rappel le matin quand il y a une séance, un bilan à rendre ou une visio, et un mot quand ton coach te relance. Sur ce téléphone seulement.",
+    "ledeCoach": "Un mot quand un client remplit son bilan ou signale une douleur. Sur ce téléphone seulement.",
+    "enable": "Activer les notifications",
+    "on": "Activées sur ce téléphone",
+    "disable": "Désactiver sur ce téléphone",
+    "test": "M’envoyer un test",
+    "testSent": "Envoyé : il arrive dans quelques secondes.",
+    "testNone": "Rien n’est parti. Désactive puis réactive les notifications.",
+    "install": "Sur iPhone, les notifications ne marchent que dans l’app installée : Partager → « Sur l’écran d’accueil », puis ouvre Masse depuis l’icône et reviens ici.",
+    "denied": "Les notifications sont bloquées pour Masse dans les réglages du téléphone. Autorise-les là-bas, puis reviens ici.",
+    "unsupported": "Ce navigateur ne reçoit pas de notifications.",
+    "notReady": "Bientôt disponible.",
+    "failed": "L’activation a échoué. Réessaie."
   }
 }

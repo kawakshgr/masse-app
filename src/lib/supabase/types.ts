@@ -642,6 +642,17 @@ export type DailyMetricRow = {
 
 /* ---------- table shape ---------- */
 
+/** One device that accepted notifications (web push). */
+export type PushSubscriptionRow = {
+  id: string;
+  user_id: string;
+  endpoint: string;
+  p256dh: string;
+  auth: string;
+  locale: "fr" | "en";
+  created_at: string;
+};
+
 type Table<Row, Required extends keyof Row, Generated extends keyof Row = never> = {
   Row: Row;
   /** A generated column is readable and not writable — the compiler says so. */
@@ -705,6 +716,7 @@ export type Database = {
       plan_meal_items: Table<PlanMealItemRow, "meal_id" | "name">;
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
+      push_subscriptions: Table<PushSubscriptionRow, "user_id" | "endpoint" | "p256dh" | "auth">;
     };
     Views: { [_ in never]: never };
     Functions: {

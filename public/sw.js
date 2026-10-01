@@ -10,7 +10,7 @@
  * and opening the app with no connection lands on a page that says so.
  */
 
-const VERSION = "masse-v2";
+const VERSION = "masse-v3";
 const SHELL = `${VERSION}-shell`;
 const OFFLINE_URL = "/hors-ligne";
 
@@ -80,3 +80,38 @@ self.addEventListener("fetch", (event) => {
     );
   }
 });
+
+/*
+ * Notifications (1 Oct 2026). The server sends { title, body, url, tag };
+ * a tap opens the app on that page, in the window already open if any.
+ */
+self.addEventListener("push", (event) => {
+  let message = { title: "Masse", body: "", url: "/" };
+  try {
+    message = { ...message, ...event.data.json() };
+  } catch {
+    // A push without a readable payload still says something.
+  }
+  event.waitUntil(
+    self.registration.showNotification(message.title, {
+      body: message.body,
+      tag: message.tag,
+      icon: "/icon-192.png?v=2",
+      badge: "/icon-192.png?v=2",
+      data: { url: message.url },
+    }),
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = new URL(event.notification.data?.url || "/", self.location.origin).href;
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((open) => {
+      const mine = open.find((client) => new URL(client.url).origin === self.location.origin);
+      if (mine) return mine.focus().then(() => mine.navigate(url));
+      return self.clients.openWindow(url);
+    }),
+  );
+});
+

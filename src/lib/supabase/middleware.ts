@@ -2,13 +2,14 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Onboarding runs before the client has an account.
-// /api/retention checks its own secret; the legal pages are for everyone.
+// /api/retention and /api/notify check their own secret; the legal pages are for everyone.
 const PUBLIC_PATHS = [
   "/connexion",
   "/auth",
   "/invitation",
   "/hors-ligne",
   "/api/retention",
+  "/api/notify",
   "/confidentialite",
   "/mentions-legales",
   "/conditions",

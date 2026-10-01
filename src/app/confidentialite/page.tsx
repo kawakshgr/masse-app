@@ -15,7 +15,7 @@ export default async function PrivacyPage({ searchParams }: Props) {
 
   if (lang === "en") {
     return (
-      <LegalPage lang="en" path="/confidentialite" kicker="Masse" title="Privacy policy" updated="30 September 2026">
+      <LegalPage lang="en" path="/confidentialite" kicker="Masse" title="Privacy policy" updated="1 October 2026">
         <section>
           <h2>1. Who is responsible for your data?</h2>
           <p>
@@ -32,6 +32,7 @@ export default async function PrivacyPage({ searchParams }: Props) {
             <li><strong>Identity and contact</strong>: first name, last name, date of birth, e-mail, WhatsApp number, Instagram account if you give it.</li>
             <li><strong>Intake questionnaire</strong>: training experience, sessions per week, goal, what has held you back, motivation, time available.</li>
             <li><strong>Video calls</strong>: the slot you book with your coach, and its cancellation if any.</li>
+            <li><strong>Notifications</strong>, if you turn them on: the address your browser gives to deliver them to this phone, and its language. Turned off, it is deleted.</li>
             <li><strong>Training</strong>: the programme you receive, the sets, reps and loads you log.</li>
             <li><strong>Check-ins</strong>: weight, measurements, answers, and three photos per check-in.</li>
             <li><strong>Nutrition</strong>: plan, meals logged, supplements.</li>
@@ -120,7 +121,7 @@ export default async function PrivacyPage({ searchParams }: Props) {
   }
 
   return (
-    <LegalPage lang="fr" path="/confidentialite" kicker="Masse" title="Politique de confidentialité" updated="30 septembre 2026">
+    <LegalPage lang="fr" path="/confidentialite" kicker="Masse" title="Politique de confidentialité" updated="1er octobre 2026">
       <section>
         <h2>1. Qui est responsable de tes données ?</h2>
         <p>
@@ -138,6 +139,7 @@ export default async function PrivacyPage({ searchParams }: Props) {
           <li><strong>Identité et contact</strong> : prénom, nom, date de naissance, e-mail, numéro WhatsApp, compte Instagram si tu le donnes.</li>
           <li><strong>Questionnaire d’arrivée</strong> : ancienneté d’entraînement, séances par semaine, objectif, ce qui t’a freiné, motivation, temps disponible.</li>
           <li><strong>Rendez-vous visio</strong> : le créneau que tu réserves avec ton coach, et son annulation éventuelle.</li>
+          <li><strong>Notifications</strong>, si tu les actives : l’adresse que ton navigateur fournit pour les livrer à ce téléphone, et sa langue. Désactivées, elle est effacée.</li>
           <li><strong>Entraînement</strong> : programme reçu, séries, répétitions et charges saisies.</li>
           <li><strong>Bilans</strong> : poids, mensurations, réponses, et trois photos par bilan.</li>
           <li><strong>Nutrition</strong> : plan, repas saisis, compléments.</li>

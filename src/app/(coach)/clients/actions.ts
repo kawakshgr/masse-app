@@ -2,6 +2,8 @@
 
 import { removeCheckInPhotos } from "@/lib/erase";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { pushTo } from "@/lib/push";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CALL_MINUTES, type CallMinutes } from "@/lib/supabase/types";
@@ -30,6 +32,25 @@ export async function recordCheckInReminder(clientId: string, weekStart: string)
   await supabase.from("check_in_reminders").upsert(
     { client_id: clientId, week_start_date: weekStart, sent_at: new Date().toISOString() },
     { onConflict: "client_id,week_start_date" },
+  );
+
+  // And on her phone, if she said yes to notifications.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: coach } = await supabase
+    .from("coaches")
+    .select("first_name, name")
+    .eq("id", user?.id ?? "")
+    .maybeSingle();
+  const coachName = coach?.first_name ?? coach?.name ?? "";
+  after(() =>
+    pushTo([clientId], (t) => ({
+      title: t("nudgeTitle"),
+      body: t("nudgeBody", { coach: coachName }),
+      url: "/aujourdhui",
+      tag: "check-in-nudge",
+    })),
   );
 
   revalidatePath(`/clients/${clientId}`);
