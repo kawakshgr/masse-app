@@ -86,6 +86,11 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   app is one waiting screen (`PendingScreen`) with the call and "Annuler
   ma demande", which erases it too. A client cannot lift `pending` alone.
 - **Roster** (web) — client list with the reason each client needs the coach.
+- **Her own words on WhatsApp** (1 Oct 2026) — Admin → Messages: the
+  eleven messages Masse writes (reminders, payment, calls, requests) can be
+  rewritten, placeholders shown in her language and stored as Masse's
+  ({first}…), in `coach_messages`. Every link writes through
+  `messageWriter()` (lib/coachMessages.ts): hers, else the default text.
 - **À traiter** (web, 29 Sep 2026) — the pane the coach lands on beside her
   roster (`/clients`): every client who needs her, grouped by reason — late
   and filed check-ins, late invoices, three days of silence, missed sessions,
@@ -108,7 +113,12 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   against that date. A session copies to other weeks and a day
   (`copySession`, CopySessionSheet), never replacing one a client has
   logged sets on (set_logs cascade). On a computer a movement edits in a
-  panel on the right (the same ExerciseSheet). Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
+  panel on the right (the same ExerciseSheet). A movement may name up to
+  three stand-ins (1 Oct 2026, `session_exercises.alternatives`): the
+  client swaps on Séance with one tile when the machine is taken, and each
+  set carries `set_logs.done_as` — history, records, "la dernière fois"
+  and the strength curve read `done_as ?? name`; progression ignores those
+  sets. Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
   exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
   who logged it hit every prescribed set; otherwise, or with no logs or no
   target, it stays. The new week is never pushed by this.
@@ -138,7 +148,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   sessions logged, average sleep and steps — composed by
   `lib/checkInSummary.ts` from the rows the review shows, read on demand
   (`checkInWeekFigures`), hers to edit, then opened in WhatsApp. Figures
-  only: the client's answers and pain are not repeated back. She sets the due weekday in Admin
+  only: the client's answers and pain are not repeated back. On her
+  check-in day she can take them one after the other (`/bilans`, 1 Oct
+  2026): the oldest unread first, "Lu, suivant" or "Passer", and at the
+  end who has not filed, with the reminder written. She sets the due weekday in Admin
   (`coaches.check_in_due_offset`); `checkInWindow` in src/lib/checkIns.ts,
   mirrored by `CheckInFeed.open` on iOS, decides which week is asked for,
   when it opens (3 days before) and when it is late (2 days of grace after).
@@ -171,7 +184,8 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`; inert without them).
   The client gets one morning notification (`/api/notify`, Vercel Cron
   05:00 UTC: session through the week as arranged, check-in due or late, a
-  call today) and the coach's nudge; the coach hears of a check-in first
+  call today, the night when not yet noted), an evening one for the day's
+  steps (`?moment=soir`, 19:00 UTC) and the coach's nudge; the coach hears of a check-in first
   filed and of pain reported. No figure of health in a payload. On her check-in day (the
   weekday she set them due) the coach gets one morning summary of what
   waits: to read, not filed yet, late payments, pain (1 Oct 2026).
