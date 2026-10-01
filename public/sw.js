@@ -1,18 +1,42 @@
 /*
  * Masse service worker.
  *
- * Deliberately narrow. It caches the build's immutable static assets and
- * nothing else — never a rendered page.
+ * Narrow on purpose. It caches the build's immutable static assets, and —
+ * since 1 Oct 2026 — three of the client's own pages: Séance, Aujourd'hui
+ * and Nutrition, so the app opens on the gym floor with no signal. Held sets
+ * live in localStorage and sync on reconnect.
  *
- * Caching authenticated HTML would put one person's roster in a cache that the
- * next person on that device could be served. The offline promise is kept the
- * honest way instead: held sets live in localStorage and sync on reconnect,
- * and opening the app with no connection lands on a page that says so.
+ * Those pages are one person's, so: kept only when actually served (never a
+ * redirect to sign-in), always fetched fresh first, and forgotten the moment
+ * the sign-in page shows (lib/offlinePages.ts) — signing out, deleting the
+ * account or a lapsed session all land there. Never a coach's page.
  */
 
-const VERSION = "masse-v3";
+const VERSION = "masse-v4";
 const SHELL = `${VERSION}-shell`;
+const PAGES = `${VERSION}-pages`;
 const OFFLINE_URL = "/hors-ligne";
+const OFFLINE_PAGES = ["/seance", "/aujourdhui", "/nutrition"];
+/** Past this, a weak signal gives way to the copy kept. */
+const PATIENCE_MS = 4000;
+
+/** Fresh when the network answers in time, the copy kept otherwise. */
+function freshOrKept(request, key) {
+  const network = fetch(request).then((response) => {
+    if (response.ok && !response.redirected && response.type === "basic") {
+      const copy = response.clone();
+      caches.open(PAGES).then((cache) => cache.put(key, copy));
+    }
+    return response;
+  });
+  const kept = () => caches.open(PAGES).then((cache) => cache.match(key));
+  const late = new Promise((resolve) => setTimeout(() => resolve(null), PATIENCE_MS));
+  return Promise.race([network, late])
+    .then((response) => response ?? kept().then((hit) => hit ?? network))
+    .catch(() =>
+      kept().then((hit) => hit ?? caches.match(OFFLINE_URL).then((page) => page ?? Response.error())),
+    );
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -71,7 +95,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Pages: network only. On failure, the offline page — never a stale roster.
+  // The client's three pages, as they stand, for opening without a signal.
+  if (request.mode === "navigate" && OFFLINE_PAGES.includes(url.pathname) && !url.search) {
+    event.respondWith(freshOrKept(request, url.pathname));
+    return;
+  }
+
+  // Other pages: network only. On failure, the offline page — never a stale roster.
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request).catch(() =>

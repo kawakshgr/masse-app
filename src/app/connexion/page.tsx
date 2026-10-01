@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { forgetOfflinePages } from "@/lib/offlinePages";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -146,6 +147,10 @@ function SignInForm() {
 }
 
 export default function SignInPage() {
+  // Whoever signs in next must never be shown the last person's pages.
+  useEffect(() => {
+    void forgetOfflinePages();
+  }, []);
   return (
     <Suspense>
       <SignInForm />
