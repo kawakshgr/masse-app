@@ -60,6 +60,9 @@ export default async function CoachLayout({
     // still paints (--app-h less --app-gap, set in the root layout: iOS 26
     // draws nothing in the bottom band of an installed app), so the tab bar
     // is whole and the document has nothing to scroll — only the pane does.
+    <>
+    {/* The client app's light behind the glass, on a phone (1 Oct 2026). */}
+    <div className="atmosphere md:hidden" aria-hidden />
     <div className="desk flex h-dvh flex-col max-md:fixed max-md:inset-x-0 max-md:top-0 max-md:h-[calc(var(--app-h,100dvh)-var(--app-gap,0px))] print:static max-md:pt-[env(safe-area-inset-top)]">
       <div className="no-print contents">
         <TabBar
@@ -78,5 +81,6 @@ export default async function CoachLayout({
           the screen would otherwise carry the tab bar off with it. */}
       <div className="flex min-h-0 flex-1 overflow-y-auto overscroll-contain print:block print:overflow-visible">{children}</div>
     </div>
+    </>
   );
 }

@@ -392,6 +392,20 @@ input[type="date"]::-webkit-date-and-time-value {
   }
 }
 
+/* The coach on a phone (1 Oct 2026): the client app's light shows through,
+   and the tab bar floats over the pane, as the client's does. The pane that
+   actually scrolls — the innermost, never a dialog's — keeps room at its
+   foot so its last row can come up above the bar. */
+@media (max-width: 767px) {
+  .desk {
+    --bar-room: calc(62px + 20px + max(8px, calc(env(safe-area-inset-bottom) + 8px - var(--app-gap, 0px))));
+    background: transparent;
+  }
+  .desk .overflow-y-auto:not(:has(.overflow-y-auto)):not([role="dialog"] *) {
+    padding-bottom: var(--bar-room);
+  }
+}
+
 /* Installed app: the page never rubber-bands as a whole, so a frame pinned
    to the screen cannot be dragged with it. Panes still scroll. */
 @media (display-mode: standalone) {

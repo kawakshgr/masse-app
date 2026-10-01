@@ -45,10 +45,11 @@ export function TabBar({
     // relative z-40: the capsule's blur makes it a stacking context of its
     // own, so without a z-index its menu would sit under any later panel
     // that has one (billing's cards did).
-    // On a phone it is the last row instead, above the home indicator — the
-    // client's bar sits there too — and the top of the screen is left to the
-    // status bar.
-    <div className="relative z-40 shrink-0 px-3 pt-3 max-md:order-last max-md:pt-2 max-md:pb-[max(8px,calc(env(safe-area-inset-bottom)+8px-var(--app-gap,0px)))]">
+    // On a phone it floats at the foot of the frame instead, above the home
+    // indicator, and the pane runs on under it (1 Oct 2026) — the glass
+    // blurs what scrolls behind, as the client's bar does. The top of the
+    // screen is left to the status bar.
+    <div className="relative z-40 shrink-0 px-3 pt-3 max-md:absolute max-md:inset-x-0 max-md:bottom-0 max-md:pt-2 max-md:pb-[max(8px,calc(env(safe-area-inset-bottom)+8px-var(--app-gap,0px)))]">
       {/* One floating capsule: who she is on the left, where she can go in the
           centre — icons, the current one opened out with its name — and her
           own switches on the right. The side columns share the free width
