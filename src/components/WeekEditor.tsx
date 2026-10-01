@@ -215,13 +215,15 @@ export function WeekEditor({
             ))}
           </datalist>
 
-          {/* Seven day columns. Empty days are visibly empty and clickable. */}
-          <div className="grid grid-cols-[repeat(7,minmax(172px,1fr))] gap-2 overflow-x-auto pb-2">
+          {/* Seven day columns. Empty days are visibly empty and clickable.
+              On a phone each day takes most of the width, the next one
+              peeking, and a swipe lands on a day rather than between two. */}
+          <div className="grid grid-cols-[repeat(7,minmax(172px,1fr))] gap-2 overflow-x-auto pb-2 max-md:snap-x max-md:snap-mandatory max-md:grid-cols-[repeat(7,84%)] max-md:overscroll-x-contain">
             {[0, 1, 2, 3, 4, 5, 6].map((day) => {
               const session = byDay(day);
 
               return (
-                <div key={day} className="flex min-w-0 flex-col">
+                <div key={day} className="flex min-w-0 snap-start flex-col">
                   <p className="mb-2 px-1 text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
                     {tDays(String(day))}
                   </p>
