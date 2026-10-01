@@ -5,12 +5,16 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ensureCheckIn, submitCheckIn } from "@/app/(client)/actions";
 import type { CheckInRow } from "@/lib/supabase/types";
-import { Card, CardTitle, Choice, Cta, Kicker, Secondary, clean } from "./ui";
+import { Card, CardTitle, Cta, Kicker, Secondary, clean } from "./ui";
 import { PoseGrid } from "./PoseGrid";
+import { ChoiceTiles } from "@/components/ChoiceTiles";
 
 const FEELS = ["Strong", "Steady", "Heavy"] as const;
 const PAINS = ["None", "Minor", "Need to talk"] as const;
 const ADHERENCES = ["All of it", "Most", "Struggled"] as const;
+const FEEL_ICONS = { Strong: "faceHigh", Steady: "faceMid", Heavy: "faceLow" } as const;
+const PAIN_ICONS = { None: "faceHigh", Minor: "pain", "Need to talk": "whatsapp" } as const;
+const ADHERENCE_ICONS = { "All of it": "trophy", Most: "up", Struggled: "faceLow" } as const;
 
 type Existing = Pick<
   CheckInRow,
@@ -162,95 +166,146 @@ function CheckInSheet({
     });
   }
 
+  // One question a screen, as the questionnaire she signed up with (1 Oct
+  // 2026): big tiles, a bar that fills, nothing required. A tile answered
+  // moves on by itself.
+  const steps = ["feel", "pain", "adherence", "weight", "measures", "photos", "note"] as const;
+  const [step, setStep] = useState(0);
+  const last = step === steps.length - 1;
+  const next = () => setStep((s) => Math.min(s + 1, steps.length - 1));
+  const answer = <T,>(set: (v: T) => void) => (value: T) => {
+    set(value);
+    window.setTimeout(next, 260);
+  };
+
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label={t("title")}
-      className="fixed inset-0 z-30 overflow-y-auto bg-[var(--bg)]"
+      className="fixed inset-0 z-30 flex flex-col bg-[var(--bg)]"
     >
       <div className="atmosphere" aria-hidden />
-      <div className="mx-auto max-w-[560px] space-y-[18px] px-[22px] pt-[calc(env(safe-area-inset-top)+22px)] pb-[calc(env(safe-area-inset-bottom)+28px)]">
-        <div className="space-y-2">
-          <h1 className="font-display text-[30px] font-extrabold tracking-[-.035em]">
-            {t("title")}
-          </h1>
-          <p className="text-[13px] leading-[1.45] text-[var(--ink2)]">{t("lede")}</p>
-        </div>
-
-        <Pick label={tCheckin("feel")} options={FEELS} value={feel} onChange={setFeel} word={tFeel} />
-        <Pick label={tCheckin("pain")} options={PAINS} value={pain} onChange={setPain} word={tPain} />
-        <Pick
-          label={tCheckin("adherence")}
-          options={ADHERENCES}
-          value={adherence}
-          onChange={setAdherence}
-          word={tAdherence}
-        />
-
-        <Measure label={tCheckin("bodyweight")} unit="kg" value={weight} onChange={setWeight} />
-        {/* Measurements ride on the check-in, so a delta is one row apart. */}
-        <div className="flex gap-2">
-          <Measure label={t("waist")} unit="cm" value={waist} onChange={setWaist} />
-          <Measure label={t("chest")} unit="cm" value={chest} onChange={setChest} />
-        </div>
-        <div className="flex gap-2">
-          <Measure label={t("hips")} unit="cm" value={hips} onChange={setHips} />
-          <Measure label={t("thigh")} unit="cm" value={thigh} onChange={setThigh} />
-        </div>
-
-        {checkInId && <PoseGrid checkInId={checkInId} clientId={clientId} />}
-
-        <label className="block space-y-2">
-          <span className="block text-[13px] text-[var(--ink2)]">{tCheckin("note")}</span>
-          <textarea
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            placeholder={t("notePlaceholder")}
-            rows={4}
-            className="w-full rounded-r1 bg-[var(--glass2)] p-2.5 text-[15px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+      <div className="mx-auto w-full max-w-[560px] px-[22px] pt-[calc(env(safe-area-inset-top)+18px)]">
+        <div className="h-1.5 overflow-hidden rounded-rp bg-[var(--glass2)]">
+          <div
+            className="h-full rounded-rp transition-[width] duration-300"
+            style={{ width: `${((step + 1) / steps.length) * 100}%`, background: "linear-gradient(90deg, var(--a1), var(--a2))" }}
           />
-        </label>
-
-        <Cta onClick={submit} disabled={pending}>
-          {tCheckin("save")}
-        </Cta>
-        <Secondary onClick={onClose} className="w-full">
-          {tCommon("cancel")}
-        </Secondary>
-      </div>
-    </div>
-  );
-}
-
-function Pick<T extends string>({
-  label,
-  options,
-  value,
-  onChange,
-  word,
-}: {
-  label: string;
-  options: readonly T[];
-  value: T | null;
-  onChange: (value: T | null) => void;
-  word: (key: string) => string;
-}) {
-  return (
-    <div className="space-y-2">
-      <p className="text-[13px] text-[var(--ink2)]">{label}</p>
-      <div className="flex gap-1.5">
-        {options.map((option) => (
-          <Choice
-            key={option}
-            selected={value === option}
-            onClick={() => onChange(value === option ? null : option)}
-            className="min-h-12"
+        </div>
+        <div className="mt-4 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-[.14em] text-[var(--accent)]">
+              {t("stepOf", { n: step + 1, total: steps.length })}
+            </p>
+            <h1 className="mt-1 font-display text-[28px] font-extrabold uppercase leading-[1.05] tracking-[-.02em]">
+              {t(`steps.${steps[step]}`)}
+            </h1>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={tCommon("cancel")}
+            className="flex size-11 shrink-0 items-center justify-center rounded-rp bg-[var(--glass2)] text-[22px] leading-none text-[var(--ink2)]"
           >
-            {/* The enum value is the key: the database stores English. */}
-            {word(option)}
-          </Choice>
-        ))}
+            ×
+          </button>
+        </div>
+      </div>
+
+      <div className="mx-auto min-h-0 w-full max-w-[560px] flex-1 overflow-y-auto px-[22px] py-5">
+        {steps[step] === "feel" && (
+          <ChoiceTiles
+            label={tCheckin("feel")}
+            columns={3}
+            value={feel}
+            onChange={answer(setFeel)}
+            options={FEELS.map((v) => ({ value: v, label: tFeel(v), icon: FEEL_ICONS[v] }))}
+          />
+        )}
+        {steps[step] === "pain" && (
+          <ChoiceTiles
+            label={tCheckin("pain")}
+            columns={3}
+            value={pain}
+            onChange={answer(setPain)}
+            options={PAINS.map((v) => ({ value: v, label: tPain(v), icon: PAIN_ICONS[v] }))}
+          />
+        )}
+        {steps[step] === "adherence" && (
+          <ChoiceTiles
+            label={tCheckin("adherence")}
+            columns={3}
+            value={adherence}
+            onChange={answer(setAdherence)}
+            options={ADHERENCES.map((v) => ({ value: v, label: tAdherence(v), icon: ADHERENCE_ICONS[v] }))}
+          />
+        )}
+        {steps[step] === "weight" && (
+          <label className="block space-y-3">
+            <span className="block text-[13px] text-[var(--ink2)]">{t("weightHint")}</span>
+            <span className="flex items-baseline justify-center gap-2 rounded-r3 bg-[var(--glass2)] px-4 py-6">
+              <input
+                inputMode="decimal"
+                autoFocus
+                value={weight}
+                placeholder="—"
+                onChange={(event) => setWeight(event.target.value)}
+                className="tnum w-[5ch] min-w-0 bg-transparent text-center font-display text-[44px] font-extrabold text-[var(--ink)] placeholder:text-[var(--ink3)] focus:outline-none"
+              />
+              <span className="text-[18px] font-semibold text-[var(--ink3)]">kg</span>
+            </span>
+          </label>
+        )}
+        {steps[step] === "measures" && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[var(--ink2)]">{t("measuresHint")}</p>
+            {/* Measurements ride on the check-in, so a delta is one row apart. */}
+            <div className="flex gap-2">
+              <Measure label={t("waist")} unit="cm" value={waist} onChange={setWaist} />
+              <Measure label={t("chest")} unit="cm" value={chest} onChange={setChest} />
+            </div>
+            <div className="flex gap-2">
+              <Measure label={t("hips")} unit="cm" value={hips} onChange={setHips} />
+              <Measure label={t("thigh")} unit="cm" value={thigh} onChange={setThigh} />
+            </div>
+          </div>
+        )}
+        {steps[step] === "photos" && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[var(--ink2)]">{t("photosHint")}</p>
+            {checkInId && <PoseGrid checkInId={checkInId} clientId={clientId} />}
+          </div>
+        )}
+        {steps[step] === "note" && (
+          <label className="block space-y-2">
+            <span className="block text-[13px] text-[var(--ink2)]">{tCheckin("note")}</span>
+            <textarea
+              value={note}
+              onChange={(event) => setNote(event.target.value)}
+              placeholder={t("notePlaceholder")}
+              rows={5}
+              className="w-full rounded-r2 bg-[var(--glass2)] p-3 text-[16px] text-[var(--ink)] placeholder:text-[var(--ink3)]"
+            />
+          </label>
+        )}
+      </div>
+
+      <div className="mx-auto flex w-full max-w-[560px] gap-2 px-[22px] pb-[max(14px,calc(env(safe-area-inset-bottom)+10px-var(--app-gap,0px)))] pt-2">
+        {step > 0 && (
+          <Secondary onClick={() => setStep(step - 1)} className="flex-1">
+            {tCommon("back")}
+          </Secondary>
+        )}
+        {last ? (
+          <Cta onClick={submit} disabled={pending} className="flex-[2]">
+            {tCheckin("save")}
+          </Cta>
+        ) : (
+          <Cta onClick={next} className="flex-[2]">
+            {t("next")}
+          </Cta>
+        )}
       </div>
     </div>
   );

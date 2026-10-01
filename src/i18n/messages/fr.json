@@ -1307,7 +1307,21 @@
     "latePrompt": "Le bilan de la semaine du {date} n’est pas encore rempli. Tu as jusqu’à {day}.",
     "due": "À remplir d’ici {day}.",
     "nudged": "Ton coach attend ce bilan.",
-    "upcoming": "Prochain bilan : {day}."
+    "upcoming": "Prochain bilan : {day}.",
+    "stepOf": "Étape {n} sur {total}",
+    "steps": {
+      "feel": "Comment tu te sens ?",
+      "pain": "Des douleurs ?",
+      "adherence": "Tu as suivi le plan ?",
+      "weight": "Ton poids",
+      "measures": "Tes mensurations",
+      "photos": "Tes photos",
+      "note": "Un mot pour ton coach"
+    },
+    "weightHint": "Le matin, à jeun, si tu peux. Laisse vide si tu ne t’es pas pesé·e.",
+    "measuresHint": "Facultatif. Mesure toujours au même endroit.",
+    "photosHint": "Face, profil, dos : même lumière, même endroit que d’habitude. Elles ne sont vues que par ton coach.",
+    "next": "Continuer"
   },
   "cycleChart": {
     "title": "Où tu en es",

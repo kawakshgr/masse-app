@@ -1307,7 +1307,21 @@
     "latePrompt": "The check-in for the week of {date} isn’t filled in yet. You have until {day}.",
     "due": "Fill it in by {day}.",
     "nudged": "Your coach is waiting for this check-in.",
-    "upcoming": "Next check-in: {day}."
+    "upcoming": "Next check-in: {day}.",
+    "stepOf": "Step {n} of {total}",
+    "steps": {
+      "feel": "How do you feel?",
+      "pain": "Any pain?",
+      "adherence": "Did you follow the plan?",
+      "weight": "Your weight",
+      "measures": "Your measurements",
+      "photos": "Your photos",
+      "note": "A word for your coach"
+    },
+    "weightHint": "In the morning, before eating, if you can. Leave it empty if you did not weigh yourself.",
+    "measuresHint": "Optional. Always measure at the same spot.",
+    "photosHint": "Front, side, back: same light, same place as usual. Only your coach sees them.",
+    "next": "Continue"
   },
   "cycleChart": {
     "title": "Where you are",
