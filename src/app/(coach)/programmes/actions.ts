@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { localDay } from "@/lib/clientData";
 import { formatScheme, parseScheme, schemeColumns } from "@/lib/scheme";
 import {
   fetchExerciseTemplates,
@@ -411,19 +412,46 @@ export async function pushWeek(
   programmeId: string,
 ) {
   const supabase = await createClient();
-  if (clientIds.length === 0) return;
+  if (clientIds.length === 0) return { kept: 0 };
 
-  const rows = clientIds.map((client_id) => ({
-    client_id,
-    week_id: weekId,
-    start_date: startDate,
-    pushed_at: new Date().toISOString(),
-  }));
+  const begun = await weeksBegun(supabase, clientIds, [weekId]);
+  const rows = clientIds
+    .filter((client_id) => !begun.has(`${client_id}:${weekId}`))
+    .map((client_id) => ({
+      client_id,
+      week_id: weekId,
+      start_date: startDate,
+      pushed_at: new Date().toISOString(),
+    }));
 
-  await supabase.from("assignments").upsert(rows, { onConflict: "client_id,week_id" });
+  if (rows.length > 0) {
+    await supabase.from("assignments").upsert(rows, { onConflict: "client_id,week_id" });
+  }
 
   revalidatePath(`/programmes/${programmeId}`);
   revalidatePath("/clients");
+  return { kept: begun.size };
+}
+
+/**
+ * The (client, week) pairs already delivered and begun. A push never moves
+ * them: the week's start date is what the client's history, adherence and
+ * missed sessions are read against, so re-dating a week she has trained
+ * would wipe it from her past and owe it again in the future.
+ */
+async function weeksBegun(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  clientIds: string[],
+  weekIds: string[],
+) {
+  const { data } = await supabase
+    .from("assignments")
+    .select("client_id, week_id")
+    .in("client_id", clientIds)
+    .in("week_id", weekIds)
+    .not("pushed_at", "is", null)
+    .lte("start_date", localDay("Europe/Paris"));
+  return new Set((data ?? []).map((row) => `${row.client_id}:${row.week_id}`));
 }
 
 export async function renameProgramme(formData: FormData) {
@@ -700,15 +728,16 @@ export async function importHevyTemplates(): Promise<{
  */
 export async function pushProgramme(programmeId: string, clientIds: string[], startDate: string) {
   const supabase = await createClient();
-  if (clientIds.length === 0 || !/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return;
+  if (clientIds.length === 0 || !/^\d{4}-\d{2}-\d{2}$/.test(startDate)) return { kept: 0 };
 
   const { data: weeks } = await supabase
     .from("programme_weeks")
     .select("id, week_number")
     .eq("programme_id", programmeId)
     .order("week_number");
-  if (!weeks?.length) return;
+  if (!weeks?.length) return { kept: 0 };
 
+  const begun = await weeksBegun(supabase, clientIds, weeks.map((week) => week.id));
   const first = weeks[0].week_number;
   const at = (offset: number) => {
     const d = new Date(`${startDate}T12:00:00Z`);
@@ -717,16 +746,21 @@ export async function pushProgramme(programmeId: string, clientIds: string[], st
   };
   const now = new Date().toISOString();
   const rows = weeks.flatMap((week) =>
-    clientIds.map((client_id) => ({
-      client_id,
-      week_id: week.id,
-      start_date: at(week.week_number - first),
-      pushed_at: now,
-    })),
+    clientIds
+      .filter((client_id) => !begun.has(`${client_id}:${week.id}`))
+      .map((client_id) => ({
+        client_id,
+        week_id: week.id,
+        start_date: at(week.week_number - first),
+        pushed_at: now,
+      })),
   );
 
-  await supabase.from("assignments").upsert(rows, { onConflict: "client_id,week_id" });
+  if (rows.length > 0) {
+    await supabase.from("assignments").upsert(rows, { onConflict: "client_id,week_id" });
+  }
   revalidatePath(`/programmes/${programmeId}`);
   revalidatePath("/programmes");
   revalidatePath("/clients");
+  return { kept: begun.size };
 }

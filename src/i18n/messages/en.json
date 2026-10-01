@@ -422,6 +422,7 @@
     "scopeProgramme": "The whole programme ({count} weeks)",
     "pushProgramme": "{count, plural, =0 {Send the programme} =1 {Send the programme to 1 client} other {Send the programme to # clients}}",
     "scopeProgrammeHint": "Week 1 starts on the chosen date, each later week 7 days on. Each client sees a week only from its date.",
+    "pushKept": "{count, plural, =1 {One week already begun stayed where it was, so its history is untouched. Withdraw it first to re-date it.} other {# weeks already begun stayed where they were, so their history is untouched. Withdraw them first to re-date them.}}",
     "weekOf": "Week of",
     "today": "today"
   },

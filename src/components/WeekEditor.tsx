@@ -112,6 +112,8 @@ export function WeekEditor({
   const [startDate, setStartDate] = useState(today);
   // This week only, or every week of the programme, a week apart.
   const [scope, setScope] = useState<"week" | "programme">("week");
+  // Weeks a client has already begun are never re-dated by a push.
+  const [kept, setKept] = useState(0);
 
   const byDay = (day: number) => sessions.find((s) => s.day_index === day);
 
@@ -601,10 +603,11 @@ export function WeekEditor({
                 type="button"
                 disabled={selected.length === 0}
                 onClick={() =>
-                  startTransition(() => {
-                    void (scope === "programme"
+                  startTransition(async () => {
+                    const result = await (scope === "programme"
                       ? pushProgramme(programmeId, selected, startDate)
                       : pushWeek(weekId, selected, startDate, programmeId));
+                    setKept(result.kept);
                   })
                 }
                 className="h-9 rounded-r2 cta px-4 text-[13px] font-semibold text-[var(--on-accent)] disabled:opacity-40"
@@ -614,6 +617,11 @@ export function WeekEditor({
             </div>
             {scope === "programme" && (
               <p className="mt-2 text-[12px] leading-[1.45] text-[var(--ink3)]">{t("scopeProgrammeHint")}</p>
+            )}
+            {kept > 0 && (
+              <p role="status" className="mt-2 text-[12px] leading-[1.45] text-[var(--a2)]">
+                {t("pushKept", { count: kept })}
+              </p>
             )}
           </>
         )}
