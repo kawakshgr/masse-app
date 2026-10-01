@@ -51,11 +51,24 @@ function isoDate(date: Date): string {
 export async function loadRoster(
   supabase: SupabaseClient<Database>,
 ): Promise<RosterSummary> {
-  const { data: clients } = await supabase
-    .from("clients")
-    .select("id, name, first_name, sleep_target_h, status")
-    .in("status", ["pending", "active", "archived"])
-    .order("name");
+  // The clients and her due day are independent: asked for together.
+  const [{ data: clients }, dueOffset] = await Promise.all([
+    supabase
+      .from("clients")
+      .select("id, name, first_name, sleep_target_h, status")
+      .in("status", ["pending", "active", "archived"])
+      .order("name"),
+    // Late is judged by the rule her app uses, with the due day the coach
+    // set: past it, and still empty. Paris time, like the coaches.
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      const { data: coachRow } = await supabase
+        .from("coaches")
+        .select("check_in_due_offset")
+        .eq("id", user?.id ?? "")
+        .maybeSingle();
+      return coachRow?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
+    }),
+  ]);
 
   if (!clients || clients.length === 0) {
     return { entries: [], clientsNeedingYou: 0, checkinsToReview: 0 };
@@ -65,18 +78,6 @@ export async function loadRoster(
   const today = new Date();
   const weekAgo = new Date(today);
   weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
-
-  // Late is judged by the rule her app uses, with the due day the coach set:
-  // past it, and still empty. Paris time, like the coaches.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const { data: coachRow } = await supabase
-    .from("coaches")
-    .select("check_in_due_offset")
-    .eq("id", user?.id ?? "")
-    .maybeSingle();
-  const dueOffset = coachRow?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
 
   const todayLocal = localDay("Europe/Paris");
   const weekday = weekdayOf(todayLocal);

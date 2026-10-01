@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { loadRoster } from "@/lib/roster";
+import { rosterNow } from "@/lib/coachData";
 import { SplitPane } from "@/components/SplitPane";
 import { RosterList } from "@/components/RosterList";
 
@@ -11,7 +11,7 @@ export default async function ClientsLayout({
 }) {
   const supabase = await createClient();
   const t = await getTranslations("roster");
-  const { entries } = await loadRoster(supabase);
+  const { entries } = await rosterNow();
 
   // The coach needs the codes themselves, not a count she cannot send.
   const { data: pendingInvites } = await supabase
