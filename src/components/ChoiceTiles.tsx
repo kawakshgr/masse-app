@@ -41,27 +41,24 @@ export function ChoiceTiles<T extends string>({
             onClick={() => onChange(option.value)}
             className={`flex min-h-[96px] flex-col items-start justify-between gap-2.5 rounded-r3 border p-3.5 text-left transition-transform active:scale-[.98] ${
               on
-                ? "border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_16%,var(--glass2))]"
+                ? "border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_18%,var(--deep))]"
                 : "glass border-[var(--edge)]"
             }`}
           >
-            {option.big ? (
-              <span
-                className={`tnum font-display text-[28px] font-extrabold leading-none tracking-[-.02em] ${
-                  on ? "text-[var(--accent)]" : "text-[var(--ink)]"
-                }`}
-              >
-                {option.big}
-              </span>
-            ) : option.icon ? (
-              <span className={on ? "text-[var(--accent)]" : "text-[var(--ink2)]"}>
-                <Icon name={option.icon} size={32} />
-              </span>
-            ) : null}
-            <span className="flex w-full items-end justify-between gap-2">
-              <span className="text-[13px] font-bold uppercase leading-[1.2] tracking-[.08em]">
-                {option.label}
-              </span>
+            <span className="flex w-full items-start justify-between gap-2">
+              {option.big ? (
+                <span
+                  className={`tnum font-display text-[28px] font-extrabold leading-none tracking-[-.02em] ${
+                    on ? "text-[var(--accent)]" : "text-[var(--ink)]"
+                  }`}
+                >
+                  {option.big}
+                </span>
+              ) : (
+                <span className={on ? "text-[var(--accent)]" : "text-[var(--ink2)]"}>
+                  <Icon name={option.icon ?? "note"} size={32} />
+                </span>
+              )}
               <span
                 aria-hidden
                 className={`flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px] ${
@@ -71,6 +68,7 @@ export function ChoiceTiles<T extends string>({
                 {on ? "✓" : ""}
               </span>
             </span>
+            <span className="text-[13px] font-bold uppercase leading-[1.2] tracking-[.08em]">{option.label}</span>
           </button>
         );
       })}
@@ -100,7 +98,7 @@ export function ToggleTile({
       onClick={() => onChange(!on)}
       className={`flex min-h-[96px] w-full flex-col items-start gap-2 rounded-r3 border p-3.5 text-left transition-transform active:scale-[.98] ${
         on
-          ? "border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_16%,var(--glass2))]"
+          ? "border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_18%,var(--deep))]"
           : "glass border-[var(--edge)]"
       }`}
     >

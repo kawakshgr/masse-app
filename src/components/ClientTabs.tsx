@@ -65,7 +65,7 @@ export function ClientTabs({
                   aria-current={on ? "page" : undefined}
                   className={`flex h-[78px] w-[86px] flex-col items-center justify-center gap-2 rounded-r3 border text-center ${
                     on
-                      ? "border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_16%,var(--glass2))] text-[var(--ink)]"
+                      ? "border-[var(--accent)] bg-[color-mix(in_oklab,var(--accent)_18%,var(--deep))] text-[var(--ink)]"
                       : "glass border-[var(--edge)] text-[var(--ink2)]"
                   }`}
                 >

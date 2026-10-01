@@ -98,7 +98,7 @@ export function MinuteTiles({
       {CALL_MINUTES.map((m) => (
         <label
           key={m}
-          className="flex h-16 cursor-pointer flex-col items-center justify-center rounded-r3 border border-[var(--edge)] bg-[var(--glass2)] has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[color-mix(in_oklab,var(--accent)_16%,var(--glass2))]"
+          className="flex h-16 cursor-pointer flex-col items-center justify-center rounded-r3 border border-[var(--edge)] bg-[var(--glass2)] has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[color-mix(in_oklab,var(--accent)_18%,var(--deep))]"
         >
           <input type="radio" name={name} value={m} defaultChecked={m === defaultValue} className="sr-only" />
           <span className="tnum font-display text-[22px] font-extrabold leading-none">{m}</span>

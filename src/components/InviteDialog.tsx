@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import { createPortal } from "react-dom";
 import { useFormatter, useTranslations } from "next-intl";
 import { ChoiceTiles, ToggleTile } from "@/components/ChoiceTiles";
 import { CALL_MINUTES, type CallMinutes } from "@/lib/supabase/types";
@@ -86,9 +87,11 @@ export function InviteDialog({
         {label}
       </button>
 
-      {open && (
+      {/* To the body: inside the roster pane the dialog sat under the
+          phone's tab bar, its "create" button hidden. */}
+      {open && createPortal(
         <div
-          className="fixed inset-0 z-50 grid place-items-center p-4"
+          className="fixed inset-0 z-[70] grid place-items-center p-4"
           style={{ background: "rgba(0, 0, 0, .58)" }}
           onClick={(event) => {
             if (event.target === event.currentTarget) setOpen(false);
@@ -213,7 +216,7 @@ export function InviteDialog({
             </button>
           </div>
         </div>
-      )}
+      , document.body)}
     </>
   );
 }
