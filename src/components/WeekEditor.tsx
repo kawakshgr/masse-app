@@ -6,6 +6,7 @@ import { useState, useSyncExternalStore, useTransition } from "react";
 import { Icon } from "@/components/Icon";
 import { DaySelect } from "@/components/DaySelect";
 import { MovementPicker } from "@/components/MovementPicker";
+import { ExerciseSheet } from "@/components/ExerciseSheet";
 import {
   ExerciseLibrary,
   type CatalogueEntry,
@@ -115,6 +116,8 @@ export function WeekEditor({
   const [scope, setScope] = useState<"week" | "programme">("week");
   // Weeks a client has already begun are never re-dated by a push.
   const [kept, setKept] = useState(0);
+  // The movement open in the phone's edit sheet.
+  const [editing, setEditing] = useState<{ exercise: EditorExercise; day: number } | null>(null);
   // The day the phone's movement picker adds to; null when it is shut.
   const [picking, setPicking] = useState<number | null>(null);
   const tPicker = useTranslations("picker");
@@ -345,7 +348,24 @@ export function WeekEditor({
                               dragging === exercise.id ? "opacity-40" : ""
                             }`}
                           >
-                            <div className="flex items-start gap-1">
+                            {/* A phone has no room for four small fields: the
+                                card reads the movement, a tap edits it. */}
+                            <button
+                              type="button"
+                              onClick={() => setEditing({ exercise, day })}
+                              className="block w-full text-left lg:hidden"
+                            >
+                              <span className="block truncate text-[14px] font-semibold">{exercise.name}</span>
+                              <span className="tnum block truncate text-[12.5px] text-[var(--ink2)]">
+                                {[exercise.scheme, restLabel(exercise.rest_min_s, exercise.rest_max_s)]
+                                  .filter(Boolean)
+                                  .join(" · ") || t("schemeHint")}
+                              </span>
+                              {exercise.cue && (
+                                <span className="block truncate text-[12px] text-[var(--ink3)]">{exercise.cue}</span>
+                              )}
+                            </button>
+                            <div className="flex items-start gap-1 max-lg:hidden">
                               {/* The handle carries the drag, not the row: the row
                               is nearly all inputs, which swallow a grab. */}
                               <span
@@ -464,7 +484,7 @@ export function WeekEditor({
                                   moveToDay(exercise.id, target);
                                 }
                               }}
-                              className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink3)]"
+                              className="mt-1 h-6 w-full rounded-r1 bg-transparent text-[11px] text-[var(--ink3)] max-lg:hidden"
                             >
                               <option value="">{tEditor2("moveTo")}…</option>
                               {[0, 1, 2, 3, 4, 5, 6]
@@ -501,6 +521,29 @@ export function WeekEditor({
           </div>
         </div>
       </div>
+
+      {editing && (
+        <ExerciseSheet
+          key={editing.exercise.id}
+          exercise={editing.exercise}
+          dayLabel={tDays(String(editing.day))}
+          moveTargets={[0, 1, 2, 3, 4, 5, 6]
+            .filter((d) => d !== editing.day && byDay(d)?.kind === "training")
+            .map((d) => ({ day: d, label: tDays(String(d)).slice(0, 3) }))}
+          onSave={(patch) =>
+            startTransition(() => {
+              void updateExercise(editing.exercise.id, patch, programmeId);
+            })
+          }
+          onMove={(d) => moveToDay(editing.exercise.id, d)}
+          onDelete={() =>
+            startTransition(() => {
+              void deleteExercise(editing.exercise.id, programmeId);
+            })
+          }
+          onClose={() => setEditing(null)}
+        />
+      )}
 
       {picking !== null && (
         <MovementPicker

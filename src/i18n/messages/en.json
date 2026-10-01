@@ -1785,5 +1785,17 @@
     "added": "Added",
     "none": "Nothing here yet. Type its name above to add it anyway.",
     "done": "{count, plural, =0 {Close} =1 {Done · 1 added} other {Done · # added}}"
+  },
+  "exerciseSheet": {
+    "title": "Edit",
+    "close": "Close",
+    "sets": "Sets",
+    "reps": "Reps",
+    "load": "Load",
+    "moveTo": "Move to",
+    "delete": "Remove this movement",
+    "deleteConfirm": "Yes, remove",
+    "keep": "Keep",
+    "save": "Save"
   }
 }

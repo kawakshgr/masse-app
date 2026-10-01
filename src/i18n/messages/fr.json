@@ -1785,5 +1785,17 @@
     "added": "Ajouté",
     "none": "Rien ici pour l’instant. Tape son nom en haut pour l’ajouter quand même.",
     "done": "{count, plural, =0 {Fermer} =1 {Terminé · 1 ajouté} other {Terminé · # ajoutés}}"
+  },
+  "exerciseSheet": {
+    "title": "Modifier",
+    "close": "Fermer",
+    "sets": "Séries",
+    "reps": "Reps",
+    "load": "Charge",
+    "moveTo": "Déplacer vers",
+    "delete": "Retirer ce mouvement",
+    "deleteConfirm": "Oui, retirer",
+    "keep": "Garder",
+    "save": "Enregistrer"
   }
 }
