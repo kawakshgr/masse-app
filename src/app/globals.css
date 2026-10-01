@@ -385,9 +385,9 @@ input[type="date"]::-webkit-date-and-time-value {
  * large fields keep their size. Pinch-zoom stays available.
  */
 @media (hover: none) and (pointer: coarse) {
-  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [class*="text-[2"], [class*="text-[3"]),
-  select:not([class*="text-[2"], [class*="text-[3"]),
-  textarea:not([class*="text-[2"], [class*="text-[3"]) {
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [class*="text-[2"], [class*="text-[3"], [class*="text-[4"], [class*="text-[5"], [class*="text-[6"]),
+  select:not([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]),
+  textarea:not([class*="text-[2"], [class*="text-[3"], [class*="text-[4"]) {
     font-size: 16px !important;
   }
 }
