@@ -105,7 +105,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   search, eight muscle families (`lib/movementFamilies.ts`), then one
   family filtered by kit; a tap adds to the day. A push never re-dates a
   week a client has already begun (`weeksBegun`): her history is read
-  against that date. Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
+  against that date. A session copies to other weeks and a day
+  (`copySession`, CopySessionSheet), never replacing one a client has
+  logged sets on (set_logs cascade). On a computer a movement edits in a
+  panel on the right (the same ExerciseSheet). Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
   exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
   who logged it hit every prescribed set; otherwise, or with no logs or no
   target, it stays. The new week is never pushed by this.
@@ -139,6 +142,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   (`coaches.check_in_due_offset`); `checkInWindow` in src/lib/checkIns.ts,
   mirrored by `CheckInFeed.open` on iOS, decides which week is asked for,
   when it opens (3 days before) and when it is late (2 days of grace after).
+  The client's form is one question a screen (1 Oct 2026); the coach's
+  review has a before/after slider and a picture to send (made on the
+  device, nothing uploaded).
   Opening the form creates an empty row for photos to hang off; `isFiled`
   (src/lib/checkIns.ts) keeps it out of the coach's review until it holds
   something.
@@ -166,7 +172,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   The client gets one morning notification (`/api/notify`, Vercel Cron
   05:00 UTC: session through the week as arranged, check-in due or late, a
   call today) and the coach's nudge; the coach hears of a check-in first
-  filed and of pain reported. No figure of health in a payload.
+  filed and of pain reported. No figure of health in a payload. On her check-in day (the
+  weekday she set them due) the coach gets one morning summary of what
+  waits: to read, not filed yet, late payments, pain (1 Oct 2026).
 - **Passkeys** (30 Sep 2026) — Face ID, a fingerprint or the device code as
   a quicker way back in, for clients and coaches alike. The e-mail code
   stays the first sign-in and the fallback. Turned on from Réglages → Clé
