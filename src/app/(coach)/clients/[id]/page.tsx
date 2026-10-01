@@ -1174,9 +1174,6 @@ async function NutritionTab({
   );
 }
 
-const metricsGrid =
-  "grid grid-cols-[minmax(0,1.4fr)_minmax(0,.8fr)_minmax(0,1fr)_minmax(0,.9fr)] items-center gap-3";
-
 async function StepsTab({
   clientId,
   tSteps,
@@ -1256,75 +1253,108 @@ async function StepsTab({
           <p className="text-[13px] text-[var(--ink2)]">{tSteps("none")}</p>
         </section>
       ) : (
-      <section className={panel}>
-      <div className="flex flex-wrap gap-3">
-        <MetricCard
-          label={tSteps("avgSleep")}
-          kind="sleep"
-          value={
-            slept.length === 0
-              ? "—"
-              : (formatHours(slept.reduce((a, b) => a + b, 0) / slept.length) ??
-                "—")
-          }
-          sub={tSteps("avgSleepSub", { count: slept.length })}
-          wash="wash-3"
-        />
-        <MetricCard
-          label={tSteps("avgSteps")}
-          kind="steps"
-          value={
-            stepped.length === 0
-              ? "—"
-              : Math.round(
-                  stepped.reduce((a, b) => a + b, 0) / stepped.length,
-                ).toLocaleString(locale)
-          }
-          sub={tSteps("avgStepsSub", { count: stepped.length })}
-          wash="wash-1"
-        />
-      </div>
-
-      <div className="mt-4 max-w-[560px]" role="table">
-        <div
-          role="row"
-          className={`${metricsGrid} border-b border-[var(--hair)] pb-2 text-[10.5px] font-semibold uppercase tracking-[.08em] text-[var(--ink3)]`}
-        >
-          <span role="columnheader">{tSteps("day")}</span>
-          <span role="columnheader">{tSteps("sleep")}</span>
-          <span role="columnheader">{tSteps("quality")}</span>
-          <span role="columnheader" className="text-right">{tSteps("steps")}</span>
-        </div>
-        {rows.map((row) => (
-          <div
-            key={row.day}
-            role="row"
-            className={`${metricsGrid} tnum border-b border-[var(--hair)] py-2 text-[12.5px] last:border-0`}
-          >
-            <span role="cell" className="truncate text-[var(--ink2)]">
-              {dayLabel(row.day)}
-            </span>
-            <span role="cell">{formatHours(Number(row.sleep_h)) ?? "—"}</span>
-            <span role="cell" className="flex items-center gap-1.5 text-[var(--ink2)]">
-              {row.sleep_quality == null ? (
-                "—"
-              ) : (
-                <>
-                  <span
-                    aria-hidden
-                    className="size-[7px] shrink-0 rounded-full"
-                    style={{ background: QUALITY_DOT[row.sleep_quality] }}
-                  />
-                  {tEntry(`q${row.sleep_quality}` as "q1")}
-                </>
-              )}
-            </span>
-            <span role="cell" className="text-right">
-              {row.steps == null ? "—" : row.steps.toLocaleString(locale)}
-            </span>
+      // Sleep on the left, steps on the right (1 Oct 2026): each list sits
+      // under its own average, day for day on the same rows, so a row is
+      // read across and a column down.
+      <section className={`${panel} grid gap-4 md:grid-cols-2`}>
+        <div className="flex min-w-0 flex-col gap-3">
+          <MetricCard
+            label={tSteps("avgSleep")}
+            kind="sleep"
+            value={
+              slept.length === 0
+                ? "—"
+                : (formatHours(slept.reduce((a, b) => a + b, 0) / slept.length) ?? "—")
+            }
+            sub={tSteps("avgSleepSub", { count: slept.length })}
+            wash="wash-3"
+          />
+          <div role="table" aria-label={tSteps("sleep")}>
+            <div
+              role="row"
+              className="grid h-8 grid-cols-[minmax(0,1.3fr)_minmax(0,0.8fr)_minmax(0,1fr)] items-center border-b border-[var(--hair)] text-[10.5px] font-semibold uppercase tracking-[.08em] text-[var(--ink3)]"
+            >
+              <span role="columnheader">{tSteps("day")}</span>
+              <span role="columnheader">{tSteps("sleep")}</span>
+              <span role="columnheader">{tSteps("quality")}</span>
+            </div>
+            {rows.map((row) => (
+              <div
+                key={row.day}
+                role="row"
+                className="tnum grid h-10 grid-cols-[minmax(0,1.3fr)_minmax(0,0.8fr)_minmax(0,1fr)] items-center border-b border-[var(--hair)] text-[12.5px] last:border-0"
+              >
+                <span role="cell" className="truncate text-[var(--ink2)]">
+                  {dayLabel(row.day)}
+                </span>
+                <span role="cell" className="font-semibold">{formatHours(Number(row.sleep_h)) ?? "—"}</span>
+                <span role="cell" className="flex min-w-0 items-center gap-1.5 text-[var(--ink2)]">
+                  {row.sleep_quality == null ? (
+                    "—"
+                  ) : (
+                    <>
+                      <span
+                        aria-hidden
+                        className="size-[7px] shrink-0 rounded-full"
+                        style={{ background: QUALITY_DOT[row.sleep_quality] }}
+                      />
+                      <span className="truncate">{tEntry(`q${row.sleep_quality}` as "q1")}</span>
+                    </>
+                  )}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+
+        <div className="flex min-w-0 flex-col gap-3">
+          <MetricCard
+            label={tSteps("avgSteps")}
+            kind="steps"
+            value={
+              stepped.length === 0
+                ? "—"
+                : Math.round(stepped.reduce((a, b) => a + b, 0) / stepped.length).toLocaleString(locale)
+            }
+            sub={tSteps("avgStepsSub", { count: stepped.length })}
+            wash="wash-1"
+          />
+          <div role="table" aria-label={tSteps("steps")}>
+            <div
+              role="row"
+              className="grid h-8 grid-cols-[minmax(0,1.3fr)_minmax(0,1.8fr)] items-center border-b border-[var(--hair)] text-[10.5px] font-semibold uppercase tracking-[.08em] text-[var(--ink3)]"
+            >
+              <span role="columnheader">{tSteps("day")}</span>
+              <span role="columnheader" className="text-right">{tSteps("steps")}</span>
+            </div>
+            {rows.map((row) => {
+              const target = clientRow?.steps_target ?? null;
+              // Against the target she set, when there is one: a bar, not a verdict.
+              const share = row.steps != null && target ? Math.min(1, Number(row.steps) / target) : null;
+              return (
+                <div
+                  key={row.day}
+                  role="row"
+                  className="tnum grid h-10 grid-cols-[minmax(0,1.3fr)_minmax(0,1.8fr)] items-center border-b border-[var(--hair)] text-[12.5px] last:border-0"
+                >
+                  <span role="cell" className="truncate text-[var(--ink2)]">
+                    {dayLabel(row.day)}
+                  </span>
+                  <span role="cell" className="flex items-center justify-end gap-2.5">
+                    {share != null && (
+                      <span aria-hidden className="h-1.5 w-full max-w-[120px] overflow-hidden rounded-full bg-[var(--glass2)]">
+                        <span className="block h-full rounded-full bg-[var(--a1)]" style={{ width: `${Math.round(share * 100)}%` }} />
+                      </span>
+                    )}
+                    <span className="w-14 shrink-0 text-right font-semibold">
+                      {row.steps == null ? "—" : row.steps.toLocaleString(locale)}
+                    </span>
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </section>
       )}
     </div>
