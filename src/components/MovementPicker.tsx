@@ -48,9 +48,9 @@ export function MovementPicker({
 
   const searching = fold(query) !== "";
 
-  // Her own movements first, then the alphabet.
-  const sorted = (rows: CatalogueEntry[]) =>
-    [...rows].sort((a, b) => Number(b.mine) - Number(a.mine) || a.name.localeCompare(b.name));
+  // The alphabet, nothing cleverer: Hevy imports count as hers, so "hers
+  // first" put the built-in Bench Press below Plate Squeeze.
+  const sorted = (rows: CatalogueEntry[]) => [...rows].sort((a, b) => a.name.localeCompare(b.name));
 
   const inFamily = useMemo(
     () => (family ? catalogue.filter((entry) => familyOf(entry.muscleGroup) === family) : []),
