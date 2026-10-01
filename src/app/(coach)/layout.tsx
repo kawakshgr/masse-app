@@ -61,8 +61,8 @@ export default async function CoachLayout({
     // draws nothing in the bottom band of an installed app), so the tab bar
     // is whole and the document has nothing to scroll — only the pane does.
     <>
-    {/* The client app's light behind the glass, on a phone (1 Oct 2026). */}
-    <div className="atmosphere md:hidden" aria-hidden />
+    {/* The client app's light behind the glass, on every screen (1 Oct 2026). */}
+    <div className="atmosphere print:hidden" aria-hidden />
     <div className="desk flex h-dvh flex-col max-md:fixed max-md:inset-x-0 max-md:top-0 max-md:h-[calc(var(--app-h,100dvh)-var(--app-gap,0px))] print:static max-md:pt-[env(safe-area-inset-top)]">
       <div className="no-print contents">
         <TabBar
