@@ -183,7 +183,7 @@ async function coachDay(
         (pain.count ?? 0) > 0 ? t("coachPain", { count: pain.count ?? 0 }) : null,
       ].filter(Boolean);
       if (lines.length === 0) return null;
-      return { title: t("coachDayTitle"), body: lines.join(" · "), url: "/clients", tag: `coach-day-${today}` };
+      return { title: t("coachDayTitle"), body: lines.join(" · "), url: toRead > 0 ? "/bilans" : "/clients", tag: `coach-day-${today}` };
     });
   }
   return sent;

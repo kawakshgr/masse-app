@@ -1,4 +1,4 @@
-import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { DEFAULT_DUE_OFFSET, checkInWindow } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -22,11 +22,12 @@ import { callEnded, callsShownFrom } from "@/lib/calls";
 import { ClientTabs } from "@/components/ClientTabs";
 import { isClientTab, type ClientTab } from "@/lib/clientTabs";
 import type { CheckInRow } from "@/lib/supabase/types";
-import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
+import { CheckInReview } from "@/components/CheckInReview";
 import { BarChart, barDate } from "@/components/BarChart";
 import { StepTarget } from "@/components/StepTarget";
 import { StrengthPanel } from "@/components/StrengthPanel";
 import { messageWriter } from "@/lib/coachMessages";
+import { loadReviewWeeks } from "@/lib/reviewWeeks";
 import { CyclePanel, type PhaseLevers } from "@/components/CyclePanel";
 import {
   NutritionPlan,
@@ -37,7 +38,6 @@ import { SupplementProtocol } from "@/components/SupplementProtocol";
 import type { CyclePhase } from "@/lib/supabase/types";
 import { loadHistory, type Range } from "@/lib/history";
 import { dayLabel, euros } from "@/lib/billing";
-import type { PhotoPose } from "@/lib/supabase/types";
 
 function initialsOf(name: string) {
   return name
@@ -720,66 +720,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
     .maybeSingle();
   const dueOffset = coachRow?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
 
-  const { data: photos } = await supabase
-    .from("check_in_photos")
-    .select("id, check_in_id, storage_path, pose")
-    .eq("client_id", clientId);
-
-  // Rows she opened and left empty are not weeks: they would count as a
-  // check-in and push the real baseline aside.
-  const photoCount = new Map<string, number>();
-  for (const photo of photos ?? []) {
-    photoCount.set(photo.check_in_id, (photoCount.get(photo.check_in_id) ?? 0) + 1);
-  }
-  const checkIns = ((rows ?? []) as CheckInRow[]).filter((row) =>
-    isFiled(row, photoCount.get(row.id) ?? 0),
-  );
-
-  // The bucket is private, so every file is served through a signed URL.
-  const paths = (photos ?? []).map((p) => p.storage_path);
-  const signed =
-    paths.length === 0
-      ? []
-      : ((
-          await supabase.storage
-            .from("check-in-photos")
-            .createSignedUrls(paths, 3600)
-        ).data ?? []);
-
-  const urlByPath = new Map(
-    signed.map((entry) => [entry.path ?? "", entry.signedUrl ?? null]),
-  );
-
-  const photosByCheckIn = new Map<
-    string,
-    Partial<Record<PhotoPose, { id: string; url: string | null }>>
-  >();
-
-  for (const photo of photos ?? []) {
-    const slot = photosByCheckIn.get(photo.check_in_id) ?? {};
-    slot[photo.pose] = {
-      id: photo.id,
-      url: urlByPath.get(photo.storage_path) ?? null,
-    };
-    photosByCheckIn.set(photo.check_in_id, slot);
-  }
-
-  const weeks: ReviewWeek[] = checkIns.map((row, index) => ({
-    id: row.id,
-    weekStart: row.week_start_date,
-    number: index + 1,
-    bodyweight: row.bodyweight_kg == null ? null : Number(row.bodyweight_kg),
-    feel: row.feel,
-    pain: row.pain,
-    adherence: row.adherence,
-    note: row.note,
-    waist: row.waist_cm == null ? null : Number(row.waist_cm),
-    chest: row.chest_cm == null ? null : Number(row.chest_cm),
-    hips: row.hips_cm == null ? null : Number(row.hips_cm),
-    thigh: row.thigh_cm == null ? null : Number(row.thigh_cm),
-    photos: photosByCheckIn.get(row.id) ?? {},
-    byClient: row.author === "client",
-  }));
+  const { checkIns, weeks } = await loadReviewWeeks(supabase, clientId, (rows ?? []) as CheckInRow[]);
 
   const firstName = client?.first_name ?? client?.name?.split(/\s+/)[0] ?? "";
 

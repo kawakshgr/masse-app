@@ -1920,5 +1920,24 @@
       "welcome": "Bienvenue (demande acceptée)",
       "decline": "Demande refusée"
     }
+  },
+  "run": {
+    "title": "Mode bilan",
+    "kicker": "Bilan {n} sur {total}",
+    "kickerDone": "Terminé",
+    "quit": "Quitter",
+    "file": "Fiche",
+    "skip": "Passer",
+    "readNext": "Lu, suivant →",
+    "readLast": "Lu, terminer ✓",
+    "done": "Tous les bilans sont lus",
+    "doneHint": "Plus rien à lire pour le moment. Les prochains arriveront ici.",
+    "doneSkipped": "{count, plural, one {# bilan passé} other {# bilans passés}}",
+    "doneSkippedHint": "Tu les retrouves en relançant le mode bilan, ou dans À traiter.",
+    "again": "Reprendre les bilans passés",
+    "back": "Retour à À traiter",
+    "notYet": "Pas encore déposé · semaine du {date}",
+    "remind": "Relancer",
+    "start": "Traiter les bilans"
   }
 }

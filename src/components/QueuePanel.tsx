@@ -62,6 +62,7 @@ export async function QueuePanel({
   const tCalls = await getTranslations("calls");
   const tPain = await getTranslations("pain");
   const write = await messageWriter();
+  const tRun = await getTranslations("run");
 
   if (items.length === 0) {
     return <PaneEmpty icon="checkIns" title={t("empty")} hint={t("emptyHint")} />;
@@ -85,6 +86,18 @@ export async function QueuePanel({
             >
               {t(`group.${group.kind}`)}
             </SectionTitle>
+
+            {/* Every filed check-in, one after the other (1 Oct 2026). */}
+            {group.kind === "checkin" && (
+              <Link
+                href="/bilans"
+                className="cta mt-3 flex h-12 items-center justify-center gap-2 rounded-r2 text-[14px] font-semibold text-[var(--onA)]"
+              >
+                <Icon name="checkIns" size={20} />
+                {tRun("start")}
+                <span className="tnum opacity-80">· {group.rows.length}</span>
+              </Link>
+            )}
 
             <ul className="mt-3 flex flex-col gap-1.5">
               {group.rows.map((item, index) => {

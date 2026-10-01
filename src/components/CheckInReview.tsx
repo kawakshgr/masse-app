@@ -126,12 +126,15 @@ export function CheckInReview({
   firstName,
   phone,
   weeks,
+  initialId,
 }: {
   clientId: string;
   firstName: string;
   /** Her WhatsApp number, for the summary to send. */
   phone: string | null;
   weeks: ReviewWeek[];
+  /** The week to open on; the latest when absent. */
+  initialId?: string;
 }) {
   const locale = intl(useLocale());
   const t = useTranslations("review");
@@ -141,7 +144,7 @@ export function CheckInReview({
 
   // weeks arrive oldest first, so the baseline is the first and the default
   // selection is the last.
-  const [selectedId, setSelectedId] = useState(weeks.at(-1)?.id ?? null);
+  const [selectedId, setSelectedId] = useState(initialId ?? weeks.at(-1)?.id ?? null);
   // One pose, or all three stacked; and which week the photos are set against.
   const [pose, setPose] = useState<PhotoPose | "all">("front");
   const [compareId, setCompareId] = useState<string | null>(weeks[0]?.id ?? null);
