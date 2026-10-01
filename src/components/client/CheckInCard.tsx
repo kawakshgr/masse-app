@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ensureCheckIn, submitCheckIn } from "@/app/(client)/actions";
@@ -82,14 +83,18 @@ export function CheckInCard({
         </>
       )}
 
-      {open && (
-        <CheckInSheet
-          weekStart={weekStart}
-          clientId={clientId}
-          existing={existing?.author === "client" ? existing : null}
-          onClose={() => setOpen(false)}
-        />
-      )}
+      {/* To the body: inside the card, whose glass blurs what is behind it,
+          a full-screen sheet is held to the card and taps miss it. */}
+      {open &&
+        createPortal(
+          <CheckInSheet
+            weekStart={weekStart}
+            clientId={clientId}
+            existing={existing?.author === "client" ? existing : null}
+            onClose={() => setOpen(false)}
+          />,
+          document.body,
+        )}
     </Card>
   );
 }
