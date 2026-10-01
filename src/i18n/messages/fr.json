@@ -670,6 +670,7 @@
       "carb": "Glucide",
       "fat": "Lipide",
       "veg": "Légume",
+      "fruit": "Fruit",
       "other": "Autre"
     }
   },

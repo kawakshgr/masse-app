@@ -670,6 +670,7 @@
       "carb": "Carb",
       "fat": "Fat",
       "veg": "Veg",
+      "fruit": "Fruit",
       "other": "Other"
     }
   },

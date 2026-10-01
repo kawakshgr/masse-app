@@ -14,7 +14,7 @@ import {
 import { FOOD_CATEGORIES } from "@/lib/supabase/types";
 
 /** The families' icons, for the big tiles on a phone. */
-const FOOD_ICONS = { all: "log", protein: "egg", carb: "bread", fat: "drop", veg: "leaf", other: "foods" } as const;
+const FOOD_ICONS = { all: "log", protein: "egg", carb: "bread", fat: "drop", veg: "leaf", fruit: "foods", other: "note" } as const;
 
 /**
  * The food library: a two-pane editor, like the programme builder — the list

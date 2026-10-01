@@ -394,13 +394,14 @@ export type ClientSupplementRow = {
   created_at: string;
 };
 
-export type FoodCategory = "protein" | "carb" | "fat" | "veg" | "other";
+export type FoodCategory = "protein" | "carb" | "fat" | "veg" | "fruit" | "other";
 
 export const FOOD_CATEGORIES: FoodCategory[] = [
   "protein",
   "carb",
   "fat",
   "veg",
+  "fruit",
   "other",
 ];
 
