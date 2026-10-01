@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { guessCategory } from "@/lib/foodCategory";
 import { searchOpenFoodFacts, type FoodCandidate } from "@/lib/openFoodFacts";
 import { FOOD_CATEGORIES, type FoodCategory } from "@/lib/supabase/types";
 
@@ -50,7 +51,9 @@ export async function addFood(formData: FormData) {
       fat_100g: num(formData.get("fat_100g")),
       serving_label: text(formData.get("serving_label")),
       serving_g: num(formData.get("serving_g")),
-      category: category(formData.get("category")),
+      category: formData.get("category")
+        ? category(formData.get("category"))
+        : guessCategory(num(formData.get("protein_100g")), num(formData.get("carbs_100g")), num(formData.get("fat_100g"))),
     })
     .select("id")
     .single();
@@ -164,6 +167,7 @@ export async function importFood(formData: FormData) {
     fat_100g: num(formData.get("fat_100g")),
     serving_label: "100 g",
     serving_g: 100,
+    category: guessCategory(num(formData.get("protein_100g")), num(formData.get("carbs_100g")), num(formData.get("fat_100g"))),
   });
 
   revalidatePath("/aliments");
