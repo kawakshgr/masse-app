@@ -67,7 +67,9 @@ export default async function CoachLayout({
 
       <CommandPalette clients={entries.map((e) => ({ id: e.id, name: e.name }))} />
 
-      <div className="flex min-h-0 flex-1">{children}</div>
+      {/* Every page scrolls in here, never the document: a page taller than
+          the screen would otherwise carry the tab bar off with it. */}
+      <div className="flex min-h-0 flex-1 overflow-y-auto overscroll-contain print:block print:overflow-visible">{children}</div>
     </div>
   );
 }
