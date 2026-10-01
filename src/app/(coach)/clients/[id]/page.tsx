@@ -26,6 +26,7 @@ import { CheckInReview, type ReviewWeek } from "@/components/CheckInReview";
 import { BarChart, barDate } from "@/components/BarChart";
 import { StepTarget } from "@/components/StepTarget";
 import { StrengthPanel } from "@/components/StrengthPanel";
+import { messageWriter } from "@/lib/coachMessages";
 import { CyclePanel, type PhaseLevers } from "@/components/CyclePanel";
 import {
   NutritionPlan,
@@ -204,6 +205,10 @@ export default async function ClientDetailPage({
     );
   }
 
+  const welcomeLink = bienvenue
+    ? waLink(client.whatsapp ?? client.phone, (await messageWriter())("welcome", { first: firstName }))
+    : null;
+
   return (
     <div className="space-y-4 p-5">
       {header}
@@ -215,9 +220,9 @@ export default async function ClientDetailPage({
             <Icon name="clients" size={24} />
           </span>
           <span className="min-w-0 flex-1 text-[14px] font-semibold">{tRequest("accepted", { first: firstName })}</span>
-          {waLink(client.whatsapp ?? client.phone, tRequest("waWelcome", { first: firstName })) && (
+          {welcomeLink && (
             <a
-              href={waLink(client.whatsapp ?? client.phone, tRequest("waWelcome", { first: firstName })) ?? "#"}
+              href={welcomeLink}
               target="_blank"
               rel="noopener noreferrer"
               className="cta flex h-10 shrink-0 items-center gap-1.5 rounded-rp px-4 text-[11px] font-bold uppercase tracking-[.08em] text-[var(--onA)]"
@@ -848,6 +853,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
               clientId={clientId}
               weekStart={open.weekStart}
               firstName={firstName}
+              message={(await messageWriter())("late", { first: firstName })}
               phone={client?.whatsapp || client?.phone || null}
             />
           </>

@@ -1888,5 +1888,37 @@
     },
     "same": "Autant avec",
     "none": "Pas d’autre aliment de cette famille chez ton coach pour l’instant."
+  },
+  "messages": {
+    "title": "Messages WhatsApp",
+    "lede": "Les messages que Masse écrit pour toi : relances, paiements, visios, demandes. Change-les à ton style (vouvoiement, emojis, ta signature). Les mots entre accolades sont remplacés au moment d’envoyer : '{prénom}' devient le prénom du client.",
+    "customCount": "{count, plural, one {# message à ton style} other {# messages à ton style}}",
+    "allOriginal": "Textes d’origine",
+    "custom": "À ton style",
+    "original": "Texte d’origine",
+    "insert": "Insérer :",
+    "save": "Enregistrer",
+    "reset": "Remettre le texte d’origine",
+    "saved": "Enregistré",
+    "failed": "Pas enregistré, réessaie.",
+    "group": {
+      "followUp": "Suivi",
+      "money": "Paiement",
+      "calls": "Visios",
+      "requests": "Demandes"
+    },
+    "kind": {
+      "late": "Relance du bilan",
+      "silent": "Trois jours sans nouvelles",
+      "missed": "Séances manquées",
+      "sleep": "Nuits courtes",
+      "pain": "Douleur signalée",
+      "unpaid": "Facture en retard",
+      "callOffer": "Proposer une visio",
+      "callConfirm": "Confirmer une visio",
+      "callCancel": "Annuler une visio",
+      "welcome": "Bienvenue (demande acceptée)",
+      "decline": "Demande refusée"
+    }
   }
 }

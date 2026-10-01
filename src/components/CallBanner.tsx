@@ -6,6 +6,7 @@ import { MENU_DANGER, MENU_ITEM, MenuIcon } from "@/components/Pane";
 import { cancelAppointment } from "@/app/(coach)/clients/actions";
 import { callLabel } from "@/lib/calls";
 import { waLink } from "@/lib/whatsapp";
+import { messageWriter } from "@/lib/coachMessages";
 
 /**
  * The client's booked video call, above her tabs while it is still to come:
@@ -26,13 +27,14 @@ export async function CallBanner({
   callLink: string | null;
 }) {
   const t = await getTranslations("calls");
+  const write = await messageWriter();
   const when = callLabel(call.starts_at, intl(await getLocale()));
   const length = t("length", { minutes: call.minutes });
   const confirm = waLink(
     phone,
-    t("waConfirm", { first: firstName, when, length, link: callLink ? t("waLink", { link: callLink }) : "" }),
+    write("callConfirm", { first: firstName, when, length, link: callLink ? t("waLink", { link: callLink }) : "" }),
   );
-  const cancelNote = waLink(phone, t("waCancel", { first: firstName, when }));
+  const cancelNote = waLink(phone, write("callCancel", { first: firstName, when }));
 
   return (
     <section className="glass flex flex-wrap items-center gap-3 rounded-r3 p-3">

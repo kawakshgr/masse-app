@@ -10,6 +10,9 @@ import { DUE_OFFSETS, DEFAULT_DUE_OFFSET } from "@/lib/checkIns";
 import { CoachBillingProfile } from "@/components/CoachBillingProfile";
 import { CoachLogo } from "@/components/CoachLogo";
 import { PartHead, Tile, TileGrid } from "@/components/Tiles";
+import { MessageEditor } from "@/components/MessageEditor";
+import { coachMessageBodies } from "@/lib/coachMessages";
+import { MESSAGES, MESSAGE_GROUPS, toDisplay, tokenWord } from "@/lib/messages";
 
 /** What an invoice cannot go out without; the section header counts them. */
 const REQUIRED_MENTIONS = [
@@ -26,7 +29,7 @@ const cell =
   "h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2.5 text-[13px] text-[var(--ink)] placeholder:text-[var(--ink3)]";
 
 /** The parts a tile opens, by their key in the address. */
-const PARTS = ["bilan", "entreprise", "logo", "coachs", "autorises", "journal"] as const;
+const PARTS = ["bilan", "messages", "entreprise", "logo", "coachs", "autorises", "journal"] as const;
 type Part = (typeof PARTS)[number];
 
 export default async function AdminPage({
@@ -39,6 +42,8 @@ export default async function AdminPage({
   const tCompany = await getTranslations("company");
   const tAllow = await getTranslations("allowlist");
   const tLogo = await getTranslations("logo");
+  const tMessages = await getTranslations("messages");
+  const tAll = await getTranslations();
   const locale = await getLocale();
   const supabase = await createClient();
   const { partie } = await searchParams;
@@ -72,6 +77,25 @@ export default async function AdminPage({
   const coaches = overviewRes.data ?? [];
   const log = logRes.data ?? [];
   const allowlist = allowlistRes.data ?? [];
+
+  // Her WhatsApp messages: hers where she rewrote them, Masse's elsewhere.
+  const bodies = await coachMessageBodies();
+  const customCount = Object.keys(bodies).length;
+  const messageGroups = MESSAGE_GROUPS.map((group) => ({
+    title: tMessages(`group.${group.key}`),
+    icon: { followUp: "checkIns", money: "billing", calls: "video", requests: "clients" }[group.key] ?? "whatsapp",
+    messages: group.kinds.map((kind) => {
+      const original = toDisplay(tAll.raw(MESSAGES[kind].key) as string, locale);
+      return {
+        kind,
+        label: tMessages(`kind.${kind}`),
+        text: bodies[kind] ? toDisplay(bodies[kind]!, locale) : original,
+        original,
+        custom: Boolean(bodies[kind]),
+        tokens: MESSAGES[kind].tokens.map((token) => tokenWord(token, locale)),
+      };
+    }),
+  }));
 
   const due = coach?.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
   const dueDay = tDue(`o${due}`);
@@ -117,6 +141,18 @@ export default async function AdminPage({
               {tDue("save")}
             </button>
           </form>
+        </>
+      ),
+    },
+    {
+      key: "messages",
+      icon: "whatsapp",
+      title: tMessages("title"),
+      status: customCount > 0 ? tMessages("customCount", { count: customCount }) : tMessages("allOriginal"),
+      body: (
+        <>
+          <p className="mb-4 max-w-[72ch] text-[13px] leading-[1.5] text-[var(--ink2)]">{tMessages("lede")}</p>
+          <MessageEditor groups={messageGroups} />
         </>
       ),
     },

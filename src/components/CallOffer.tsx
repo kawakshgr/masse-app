@@ -5,6 +5,7 @@ import { MENU_DANGER, MenuIcon } from "@/components/Pane";
 import { offerCall } from "@/app/(coach)/clients/actions";
 import { CALL_MINUTES, type CallMinutes } from "@/lib/supabase/types";
 import { waLink } from "@/lib/whatsapp";
+import { messageWriter } from "@/lib/coachMessages";
 
 /**
  * In the client's header when no call is booked: the way to offer one — a
@@ -44,7 +45,8 @@ export async function CallOfferBanner({
 }) {
   const t = await getTranslations("calls");
   const length = t("length", { minutes });
-  const message = waLink(phone, t("waOffer", { first: firstName, length }));
+  const write = await messageWriter();
+  const message = waLink(phone, write("callOffer", { first: firstName, length }));
 
   return (
     <section className="glass flex flex-wrap items-center gap-3 rounded-r3 p-3">

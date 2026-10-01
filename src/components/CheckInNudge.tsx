@@ -14,11 +14,14 @@ export function CheckInNudge({
   clientId,
   weekStart,
   firstName,
+  message,
   phone,
 }: {
   clientId: string;
   weekStart: string;
   firstName: string;
+  /** Already written, in the coach's words when she rewrote it. */
+  message: string;
   phone: string | null;
 }) {
   const t = useTranslations("coachCheckin");
@@ -31,7 +34,7 @@ export function CheckInNudge({
       <div className="flex flex-wrap gap-2">
         {number && (
           <a
-            href={`https://wa.me/${number}?text=${encodeURIComponent(t("waText", { first: firstName }))}`}
+            href={`https://wa.me/${number}?text=${encodeURIComponent(message)}`}
             target="_blank"
             rel="noopener noreferrer"
             // The link opens WhatsApp; the click also records the nudge.

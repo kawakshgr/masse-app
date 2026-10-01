@@ -6,6 +6,7 @@ import { RefuseRequest } from "@/components/RefuseRequest";
 import { acceptClient } from "@/app/(coach)/clients/actions";
 import { SESSIONS_PER_WEEK, TRAINING_AGES, ageFrom } from "@/lib/onboarding";
 import { waLink } from "@/lib/whatsapp";
+import { messageWriter } from "@/lib/coachMessages";
 import type { ClientRow } from "@/lib/supabase/types";
 
 /**
@@ -15,6 +16,7 @@ import type { ClientRow } from "@/lib/supabase/types";
  */
 export async function RequestSheet({ client, callOver }: { client: ClientRow; callOver: boolean }) {
   const t = await getTranslations("request");
+  const write = await messageWriter();
   const locale = intl(await getLocale());
   const tRecord = await getTranslations("record");
   const tOnb = await getTranslations("onboarding");
@@ -113,7 +115,7 @@ export async function RequestSheet({ client, callOver }: { client: ClientRow; ca
           <RefuseRequest
             clientId={client.id}
             firstName={first}
-            declineLink={waLink(phone, t("waDecline", { first }))}
+            declineLink={waLink(phone, write("decline", { first }))}
           />
         </div>
         <p className="mt-3 text-[12px] leading-[1.5] text-[var(--ink3)]">{t("hint")}</p>

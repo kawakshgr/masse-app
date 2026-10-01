@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import { MESSAGES, fromDisplay, isMessageKind } from "@/lib/messages";
 
 /**
  * Suspending a coach is an audited act: the reason travels with it into
@@ -155,4 +157,32 @@ export async function setCoachLogo(path: string | null) {
     await supabase.storage.from("coach-logos").remove([coach.logo_path]);
   }
   revalidatePath("/", "layout");
+}
+
+/**
+ * One WhatsApp message in the coach's own words (1 Oct 2026). She edits it
+ * with placeholders in her language; it is stored with Masse's. An empty
+ * text, or the default one, puts the default back.
+ */
+export async function saveCoachMessage(kind: string, text: string, locale: string): Promise<{ ok: boolean }> {
+  if (!isMessageKind(kind)) return { ok: false };
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false };
+
+  const body = fromDisplay(text.trim(), locale).slice(0, 1000);
+  const t = await getTranslations({ locale: locale === "en" ? "en" : "fr" });
+  const fallback = t.raw(MESSAGES[kind].key) as string;
+
+  const { error } =
+    body === "" || body === fallback
+      ? await supabase.from("coach_messages").delete().eq("coach_id", user.id).eq("kind", kind)
+      : await supabase
+          .from("coach_messages")
+          .upsert({ coach_id: user.id, kind, body, updated_at: new Date().toISOString() }, { onConflict: "coach_id,kind" });
+
+  revalidatePath("/admin");
+  return { ok: !error };
 }

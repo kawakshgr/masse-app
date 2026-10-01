@@ -4,6 +4,8 @@ import { Icon } from "@/components/Icon";
 import { PaneEmpty, PaneHead, SectionTitle, Tile } from "@/components/Pane";
 import { QUEUE_ORDER, type QueueItem, type QueueKind } from "@/lib/queue";
 import { waLink } from "@/lib/whatsapp";
+import { messageWriter } from "@/lib/coachMessages";
+import type { MessageKind } from "@/lib/messages";
 import { callLabel } from "@/lib/calls";
 import { markPainSeen } from "@/app/(coach)/clients/actions";
 
@@ -59,6 +61,7 @@ export async function QueuePanel({
   const t = await getTranslations("queue");
   const tCalls = await getTranslations("calls");
   const tPain = await getTranslations("pain");
+  const write = await messageWriter();
 
   if (items.length === 0) {
     return <PaneEmpty icon="checkIns" title={t("empty")} hint={t("emptyHint")} />;
@@ -93,11 +96,11 @@ export async function QueuePanel({
                 const when = item.call ? callLabel(item.call.startsAt, locale) : "";
                 const painLevel = item.pain ? tPain(`level.${item.pain.level}`) : "";
                 const wa = item.pain
-                  ? waLink(item.phone, tPain("wa", { first: item.firstName, exercise: item.pain.exercise }))
+                  ? waLink(item.phone, write("pain", { first: item.firstName, exercise: item.pain.exercise }))
                   : item.call
                   ? waLink(
                       item.phone,
-                      tCalls("waConfirm", {
+                      write("callConfirm", {
                         first: item.firstName,
                         when,
                         length: tCalls("length", { minutes: item.call.minutes }),
@@ -105,7 +108,7 @@ export async function QueuePanel({
                       }),
                     )
                   : NUDGED.includes(item.kind)
-                    ? waLink(item.phone, t(`wa.${item.kind}`, values))
+                    ? waLink(item.phone, write(item.kind as MessageKind, values))
                     : null;
                 const action =
                   item.kind === "request" ? t("decide") : item.kind === "checkin" ? t("read") : item.kind === "nextWeek" || item.kind === "noProgramme" ? t("write") : t("open");

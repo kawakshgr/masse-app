@@ -1888,5 +1888,37 @@
     },
     "same": "As much with",
     "none": "No other food of this family in your coach’s library yet."
+  },
+  "messages": {
+    "title": "WhatsApp messages",
+    "lede": "The messages Masse writes for you: reminders, payments, calls, requests. Rewrite them in your own style (formal or not, emojis, your sign-off). Words in braces are filled in when you send: '{firstname}' becomes the client’s first name.",
+    "customCount": "{count, plural, one {# message in your style} other {# messages in your style}}",
+    "allOriginal": "Original texts",
+    "custom": "Your style",
+    "original": "Original",
+    "insert": "Insert:",
+    "save": "Save",
+    "reset": "Back to the original",
+    "saved": "Saved",
+    "failed": "Not saved, try again.",
+    "group": {
+      "followUp": "Follow-up",
+      "money": "Payment",
+      "calls": "Video calls",
+      "requests": "Requests"
+    },
+    "kind": {
+      "late": "Check-in reminder",
+      "silent": "Three quiet days",
+      "missed": "Missed sessions",
+      "sleep": "Short nights",
+      "pain": "Pain reported",
+      "unpaid": "Late invoice",
+      "callOffer": "Offer a call",
+      "callConfirm": "Confirm a call",
+      "callCancel": "Cancel a call",
+      "welcome": "Welcome (request accepted)",
+      "decline": "Request declined"
+    }
   }
 }
