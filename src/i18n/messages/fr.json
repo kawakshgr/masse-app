@@ -1796,6 +1796,7 @@
     "delete": "Retirer ce mouvement",
     "deleteConfirm": "Oui, retirer",
     "keep": "Garder",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "restNone": "Aucun"
   }
 }

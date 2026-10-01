@@ -120,7 +120,7 @@ export function ExerciseSheet({
         <div className="space-y-2">
           <p className={micro}>{t("restTime")}</p>
           <div className="grid grid-cols-4 gap-2">
-            {[["", t("restNone")] as const, ...REST_PRESETS.map(([min, max]) => [`${min}-${max}`, restLabel(min, max) ?? ""] as const)].map(
+            {[["", tSheet("restNone")] as const, ...REST_PRESETS.map(([min, max]) => [`${min}-${max}`, restLabel(min, max) ?? ""] as const)].map(
               ([key, label]) => (
                 <button
                   key={key || "none"}
