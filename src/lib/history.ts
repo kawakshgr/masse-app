@@ -82,7 +82,7 @@ export async function loadHistory(
       .lte("start_date", today.toISOString().slice(0, 10)),
     supabase
       .from("set_logs")
-      .select("reps, weight_kg, logged_at, session_exercise_id, session_exercises(name)")
+      .select("reps, weight_kg, logged_at, session_exercise_id, done_as, session_exercises(name)")
       .eq("client_id", clientId)
       .gte("logged_at", `${fromIso}T00:00:00Z`)
       .order("logged_at"),
@@ -114,6 +114,7 @@ export async function loadHistory(
     weight_kg: number | null;
     logged_at: string;
     session_exercise_id: string;
+    done_as: string | null;
     session_exercises: { name: string } | null;
   }[];
 
@@ -158,7 +159,8 @@ export async function loadHistory(
   const bestPerExerciseWeek = new Map<string, Map<string, number>>();
 
   for (const log of logs) {
-    const name = log.session_exercises?.name;
+    // A set done as a stand-in counts for the stand-in.
+    const name = log.done_as ?? log.session_exercises?.name;
     if (!name) continue;
     const estimate = oneRepMax(Number(log.weight_kg ?? 0), Number(log.reps ?? 0));
     if (estimate <= 0) continue;
@@ -180,7 +182,8 @@ export async function loadHistory(
   const runningBest = new Map<string, number>();
 
   for (const log of logs) {
-    const name = log.session_exercises?.name;
+    // A set done as a stand-in counts for the stand-in.
+    const name = log.done_as ?? log.session_exercises?.name;
     const weight = Number(log.weight_kg ?? 0);
     const reps = Number(log.reps ?? 0);
     if (!name || weight <= 0 || reps <= 0) continue;

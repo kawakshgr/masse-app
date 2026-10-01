@@ -9,7 +9,12 @@ import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
  * every active client with a device that said yes, one notification for
  * the day — the session, read through the week as they arranged it (as
  * Today does), the check-in when it is due or late, and a video call booked
- * for today. Nothing to say, nothing sent. Service role, CRON_SECRET only.
+ * for today, and the night to note when it is not yet (1 Oct 2026). Nothing
+ * to say, nothing sent. Service role, CRON_SECRET only.
+ *
+ * `?moment=soir` is the evening run (21:00 in Paris in summer, 20:00 in
+ * winter): only the day's steps — and the night, if still missing — to
+ * those who have not typed them. Nothing else is repeated at night.
  */
 export async function GET(request: NextRequest) {
   const secret = process.env.CRON_SECRET;
@@ -20,6 +25,7 @@ export async function GET(request: NextRequest) {
 
   const admin = pushAdmin();
   const today = localDay("Europe/Paris");
+  if (request.nextUrl.searchParams.get("moment") === "soir") return evening(admin, today);
   const weekday = (new Date(`${today}T12:00:00Z`).getUTCDay() + 6) % 7;
   const monday = addDays(today, -weekday);
 
@@ -42,7 +48,7 @@ export async function GET(request: NextRequest) {
   const dayStart = new Date(`${addDays(today, -1)}T00:00:00Z`).toISOString();
   const dayEnd = new Date(`${addDays(today, 2)}T00:00:00Z`).toISOString();
 
-  const [assignments, moves, checkIns, calls] = await Promise.all([
+  const [assignments, moves, checkIns, calls, metrics] = await Promise.all([
     admin
       .from("assignments")
       .select("client_id, start_date, programme_weeks(sessions(day_index, kind, name, session_exercises(id)))")
@@ -63,6 +69,7 @@ export async function GET(request: NextRequest) {
       .is("cancelled_at", null)
       .gte("starts_at", dayStart)
       .lt("starts_at", dayEnd),
+    admin.from("daily_metrics").select("client_id, sleep_h").in("client_id", ids).eq("day", today),
   ]);
 
   let sent = 0;
@@ -91,6 +98,8 @@ export async function GET(request: NextRequest) {
       (c) => c.client_id === client.id && localDay("Europe/Paris", new Date(c.starts_at)) === today,
     );
     const coachName = coach?.first_name ?? coach?.name ?? "";
+    // Last night, typed on today's row as Today asks for it.
+    const sleepMissing = !(metrics.data ?? []).some((m) => m.client_id === client.id && m.sleep_h != null);
 
     sent += await pushTo([client.id], (t, locale) => {
       const lines = [
@@ -106,6 +115,7 @@ export async function GET(request: NextRequest) {
               }),
             })
           : null,
+        sleepMissing ? t("sleepAsk") : null,
       ].filter(Boolean);
       if (lines.length === 0) return null;
       return {
@@ -177,4 +187,34 @@ async function coachDay(
     });
   }
   return sent;
+}
+
+/**
+ * The evening reminder (1 Oct 2026): the day's steps, and the night if it
+ * is still not noted, to every active client with a device who has not
+ * typed them today. One line, one notification, then nothing until morning.
+ */
+async function evening(admin: ReturnType<typeof pushAdmin>, today: string) {
+  const { data: devices } = await admin.from("push_subscriptions").select("user_id");
+  const userIds = [...new Set((devices ?? []).map((d) => d.user_id))];
+  if (userIds.length === 0) return Response.json({ ok: true, sent: 0 });
+
+  const [{ data: clients }, { data: metrics }] = await Promise.all([
+    admin.from("clients").select("id").in("id", userIds).eq("status", "active"),
+    admin.from("daily_metrics").select("client_id, sleep_h, steps").in("client_id", userIds).eq("day", today),
+  ]);
+
+  let sent = 0;
+  for (const client of clients ?? []) {
+    const row = (metrics ?? []).find((m) => m.client_id === client.id);
+    if (row?.steps != null) continue;
+    const sleepToo = row?.sleep_h == null;
+    sent += await pushTo([client.id], (t) => ({
+      title: t("eveningTitle"),
+      body: sleepToo ? t("stepsAndSleepAsk") : t("stepsAsk"),
+      url: "/aujourdhui",
+      tag: `evening-${today}`,
+    }));
+  }
+  return Response.json({ ok: true, sent });
 }

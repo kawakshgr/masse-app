@@ -29,6 +29,8 @@ export type QueuedSet = {
   rpe: number | null;
   logged_at: string;
   synced_at: string | null;
+  /** The stand-in the set was done as; null, the movement written. */
+  done_as?: string | null;
 };
 
 /** Subscribe/snapshot pair for useSyncExternalStore. */
@@ -112,7 +114,7 @@ export async function flush(): Promise<QueuedSet[]> {
   flushing = true;
   try {
     const now = new Date().toISOString();
-    const payload = held.map((row) => ({ ...row, synced_at: now }));
+    const payload = held.map((row) => ({ ...row, done_as: row.done_as ?? null, synced_at: now }));
     const { error } = await createClient().from("set_logs").upsert(payload, { onConflict: "id" });
     if (error) return [];
 

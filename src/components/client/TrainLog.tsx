@@ -16,13 +16,16 @@ import {
 } from "@/lib/setQueue";
 import type { WeekExercise } from "@/lib/clientData";
 import { Card, Choice, Cta, RoundButton, Secondary, shown } from "./ui";
+import { Icon } from "@/components/Icon";
 import { reportPain } from "@/app/(client)/actions";
 import type { PainLevel } from "@/lib/supabase/types";
 
 type LoggedSet = Pick<
   QueuedSet,
-  "id" | "session_exercise_id" | "set_index" | "reps" | "weight_kg" | "rpe" | "synced_at"
+  "id" | "session_exercise_id" | "set_index" | "reps" | "weight_kg" | "rpe" | "synced_at" | "done_as"
 >;
+
+type Last = Record<string, { line: string; weightKg: number | null }>;
 
 /**
  * The session, being done — TrainView.swift. Every control a thumb's width,
@@ -38,8 +41,8 @@ export function TrainLog({
 }: {
   clientId: string;
   exercises: WeekExercise[];
-  /** Per exercise id: "La dernière fois (23 sept.) · 3 × 8 · 60 kg", when she has done it before. */
-  last: Record<string, string>;
+  /** Per movement name, stand-ins included: "La dernière fois (23 sept.) · 3 × 8 · 60 kg", when it was done before. */
+  last: Last;
   /** Pain is health data: offered only while consent to it stands. */
   canReportPain: boolean;
   /** What the server already holds for today: both halves are shown. */
@@ -93,7 +96,13 @@ export function TrainLog({
     if (online) void flush().then(settle);
   }, [online]);
 
-  async function log(exercise: WeekExercise, reps: number | null, weight: number | null, rpe: number | null) {
+  async function log(
+    exercise: WeekExercise,
+    reps: number | null,
+    weight: number | null,
+    rpe: number | null,
+    doneAs: string | null,
+  ) {
     const last = setsFor(exercise.id).at(-1);
     enqueue({
       client_id: clientId,
@@ -102,6 +111,7 @@ export function TrainLog({
       reps,
       weight_kg: weight,
       rpe,
+      done_as: doneAs,
     });
     await send();
   }
@@ -141,10 +151,10 @@ export function TrainLog({
             logged={setsFor(exercise.id)}
             expanded={open === exercise.id}
             onToggle={() => setOpen(open === exercise.id ? null : exercise.id)}
-            onLog={(reps, weight, rpe) => log(exercise, reps, weight, rpe)}
+            onLog={(reps, weight, rpe, doneAs) => log(exercise, reps, weight, rpe, doneAs)}
             onUndo={() => undo(exercise.id)}
             canReportPain={canReportPain}
-            lastTime={last[exercise.id] ?? null}
+            last={last}
           />
         ))}
       </div>
@@ -160,14 +170,14 @@ function ExerciseCard({
   onLog,
   onUndo,
   canReportPain,
-  lastTime,
+  last: lastByName,
 }: {
   exercise: WeekExercise;
-  lastTime: string | null;
+  last: Last;
   logged: LoggedSet[];
   expanded: boolean;
   onToggle: () => void;
-  onLog: (reps: number | null, weight: number | null, rpe: number | null) => Promise<void>;
+  onLog: (reps: number | null, weight: number | null, rpe: number | null, doneAs: string | null) => Promise<void>;
   onUndo: () => Promise<void>;
   canReportPain: boolean;
 }) {
@@ -185,12 +195,54 @@ function ExerciseCard({
   const [weight, setWeight] = useState(Number(last?.weight_kg ?? exercise.target_weight_kg ?? 0));
   const [rpe, setRpe] = useState<number | null>(last?.rpe ?? null);
 
+  // The stand-in she is doing instead, when the machine was taken: kept on
+  // the device for this week's exercise, and on every set logged with it.
+  const alternatives = exercise.alternatives ?? [];
+  const standInKey = `masse:standin:${exercise.id}`;
+  const kept = useSyncExternalStore(
+    () => () => {},
+    () => {
+      try {
+        return window.localStorage.getItem(standInKey);
+      } catch {
+        // Storage blocked: the choice lasts as long as the page.
+        return null;
+      }
+    },
+    () => null,
+  );
+  // Undefined until she picks on this page: then the sets, then the device.
+  const [picked, setPicked] = useState<string | null | undefined>(undefined);
+  const doneAs =
+    picked !== undefined
+      ? picked
+      : last
+        ? (last.done_as ?? null)
+        : kept && alternatives.includes(kept)
+          ? kept
+          : null;
+  const [choosing, setChoosing] = useState(false);
+  function choose(name: string | null) {
+    setPicked(name);
+    setChoosing(false);
+    try {
+      if (name) window.localStorage.setItem(standInKey, name);
+      else window.localStorage.removeItem(standInKey);
+    } catch {}
+    // A different movement starts from its own last load, not this one's.
+    const from = name ? lastByName[name]?.weightKg : exercise.target_weight_kg;
+    setWeight(Number(from ?? 0));
+  }
+  const shownName = doneAs ?? exercise.name;
+  const lastTime = lastByName[shownName]?.line ?? null;
+
   const target = (() => {
     const parts: string[] = [];
     if (exercise.target_sets && exercise.target_reps) {
       parts.push(`${exercise.target_sets} × ${exercise.target_reps}`);
     } else if (exercise.scheme) parts.push(exercise.scheme);
-    if (exercise.target_weight_kg) parts.push(`${shown(Number(exercise.target_weight_kg), locale)} kg`);
+    // The coach's load is for her movement, not for the stand-in.
+    if (exercise.target_weight_kg && !doneAs) parts.push(`${shown(Number(exercise.target_weight_kg), locale)} kg`);
     const rest = restLabel(exercise.rest_min_s, exercise.rest_max_s);
     if (rest) parts.push(t("restTime", { time: rest }));
     return parts.length ? `${t("target")} · ${parts.join(" · ")}` : null;
@@ -200,8 +252,15 @@ function ExerciseCard({
     <Card className={expanded ? "space-y-4" : "space-y-2"}>
       <button type="button" onClick={onToggle} className="block w-full space-y-1 text-left">
         <span className="flex items-baseline justify-between gap-2.5">
-          <span className="font-display text-[19px] font-extrabold leading-tight tracking-[-.03em]">
-            {exercise.name}
+          <span className="min-w-0">
+            <span className="block font-display text-[19px] font-extrabold leading-tight tracking-[-.03em]">
+              {shownName}
+            </span>
+            {doneAs && (
+              <span className="block text-[12.5px] font-semibold text-[var(--accent)]">
+                {t("insteadOf", { name: exercise.name })}
+              </span>
+            )}
           </span>
           <span
             className={`tnum shrink-0 text-[13px] font-bold ${
@@ -261,6 +320,12 @@ function ExerciseCard({
                   .filter(Boolean)
                   .join(" · ") || "—"}
               </span>
+              {/* A set done as another movement than the one now shown. */}
+              {(set.done_as ?? null) !== doneAs && (
+                <span className="max-w-[40%] shrink truncate text-[11.5px] text-[var(--ink3)]">
+                  {set.done_as ?? exercise.name}
+                </span>
+              )}
               {extra > 0 && index >= planned && (
                 <span className="shrink-0 text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent)]">
                   {tToday("extraSet")}
@@ -285,6 +350,34 @@ function ExerciseCard({
           {exercise.cue && (
             <p className="text-[13px] leading-[1.45] text-[var(--ink3)]">{exercise.cue}</p>
           )}
+
+          {/* Machine taken: one of the stand-ins the coach accepted. */}
+          {alternatives.length > 0 &&
+            (choosing ? (
+              <div className="space-y-2.5">
+                <p className="text-[13px] font-semibold">{t("swapQuestion")}</p>
+                <ChoiceTiles
+                  label={t("swapQuestion")}
+                  value={doneAs ?? exercise.name}
+                  onChange={(name) => choose(name === exercise.name ? null : name)}
+                  options={[exercise.name, ...alternatives].map((name) => ({
+                    value: name,
+                    label: name,
+                    icon: name === exercise.name ? "programmes" : "swap",
+                  }))}
+                />
+                <Secondary onClick={() => setChoosing(false)}>{t("swapCancel")}</Secondary>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setChoosing(true)}
+                className="glass2 flex h-12 w-full items-center justify-center gap-2 rounded-rp border border-[var(--edge)] text-[14px] font-semibold"
+              >
+                <Icon name="swap" size={20} />
+                {doneAs ? t("swapBack") : t("swap")}
+              </button>
+            ))}
 
           <Stepper
             label={t("reps")}
@@ -313,7 +406,7 @@ function ExerciseCard({
           </div>
 
           <div className="flex gap-2.5">
-            <Cta onClick={() => void onLog(reps > 0 ? reps : null, weight > 0 ? weight : null, rpe)}>
+            <Cta onClick={() => void onLog(reps > 0 ? reps : null, weight > 0 ? weight : null, rpe, doneAs)}>
               {t("addSet")}
             </Cta>
             {logged.length > 0 && (
@@ -323,7 +416,7 @@ function ExerciseCard({
             )}
           </div>
 
-          {canReportPain && <PainReport exercise={exercise} />}
+          {canReportPain && <PainReport exercise={exercise} name={shownName} />}
         </div>
       )}
     </Card>
@@ -334,7 +427,7 @@ const PAIN_LEVELS: PainLevel[] = ["mild", "sharp", "stopped"];
 const PAIN_ICONS: Record<PainLevel, string> = { mild: "pain", sharp: "bolt", stopped: "cancel" };
 
 /** "It hurts": the coach hears it at once, on the exercise it happened on. */
-function PainReport({ exercise }: { exercise: WeekExercise }) {
+function PainReport({ exercise, name }: { exercise: WeekExercise; name: string }) {
   const t = useTranslations("pain");
   const [open, setOpen] = useState(false);
   const [level, setLevel] = useState<PainLevel | null>(null);
@@ -381,7 +474,7 @@ function PainReport({ exercise }: { exercise: WeekExercise }) {
             setState("sending");
             const { ok } = await reportPain({
               sessionExerciseId: exercise.id,
-              exerciseName: exercise.name,
+              exerciseName: name,
               level,
               note,
             });

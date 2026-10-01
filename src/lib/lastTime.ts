@@ -6,7 +6,12 @@
  */
 export type PastSet = { name: string; reps: number | null; weightKg: number | null; day: string };
 
-export type LastTime = { day: string; summary: string };
+export type LastTime = {
+  day: string;
+  summary: string;
+  /** The heaviest load that day: where the stepper starts on a stand-in. */
+  weightKg: number | null;
+};
 
 /** "62,5" in French, "62.5" in English; whole numbers bare. */
 function figure(value: number, locale: string): string {
@@ -51,6 +56,7 @@ export function lastTimeLines(
     lines.set(name, {
       day: new Date(`${day}T12:00:00Z`).toLocaleDateString(locale, { timeZone: "UTC", day: "numeric", month: "short" }),
       summary,
+      weightKg: best.weightKg,
     });
   }
   return lines;

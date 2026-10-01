@@ -425,7 +425,8 @@
     "scopeProgrammeHint": "La semaine 1 commence à la date choisie, chaque semaine suivante 7 jours plus tard. Chaque client ne voit une semaine qu’à partir de sa date.",
     "pushKept": "{count, plural, =1 {Une semaine déjà commencée n’a pas bougé : son historique reste tel quel. Retire-la d’abord pour la redater.} other {# semaines déjà commencées n’ont pas bougé : leur historique reste tel quel. Retire-les d’abord pour les redater.}}",
     "weekOf": "Semaine du",
-    "today": "aujourd’hui"
+    "today": "aujourd’hui",
+    "altCount": "{count, plural, one {# remplaçant} other {# remplaçants}}"
   },
   "goal": {
     "Get stronger": "Gagner en force",
@@ -574,7 +575,12 @@
     "weekPartial": "{done}/{total} exercices",
     "lastMixed": "{count} séries, la plus lourde {best}",
     "swapWithToday": "Échanger avec aujourd’hui",
-    "swapHint": "{day} et aujourd’hui échangent leur place pour cette semaine : la séance et l’alimentation suivent."
+    "swapHint": "{day} et aujourd’hui échangent leur place pour cette semaine : la séance et l’alimentation suivent.",
+    "insteadOf": "À la place de {name}",
+    "swap": "Machine prise ? Remplacer",
+    "swapBack": "Changer de mouvement",
+    "swapQuestion": "Que fais-tu à la place ?",
+    "swapCancel": "Annuler"
   },
   "entry": {
     "title": "Saisie",
@@ -1630,7 +1636,8 @@
     "everyDay": "Tous les jours",
     "phaseTraining": "Charges ajustées à ta phase du jour, comme dans l’app.",
     "phaseNutrition": "Objectifs ajustés à ta phase du jour, comme dans l’app.",
-    "preparedBy": "Préparé par"
+    "preparedBy": "Préparé par",
+    "standIns": "Ou : {names}"
   },
   "myData": {
     "title": "Mes données",
@@ -1808,7 +1815,11 @@
     "deleteConfirm": "Oui, retirer",
     "keep": "Garder",
     "save": "Enregistrer",
-    "restNone": "Aucun"
+    "restNone": "Aucun",
+    "alternatives": "Remplaçants",
+    "alternativesHint": "Si la machine est prise, le client fait l’un de ces mouvements à la place, d’un tap. Tu verras lequel dans son historique.",
+    "alternativePlaceholder": "Un mouvement de secours",
+    "alternativeRemove": "Retirer ce remplaçant"
   },
   "push": {
     "testTitle": "Masse",
@@ -1829,7 +1840,11 @@
     "coachToRead": "{count, plural, =1 {1 bilan à lire} other {# bilans à lire}}",
     "coachNotYet": "{count, plural, =1 {1 pas encore rendu} other {# pas encore rendus}}",
     "coachLate": "{count, plural, =1 {1 paiement en retard} other {# paiements en retard}}",
-    "coachPain": "{count, plural, =1 {1 douleur à voir} other {# douleurs à voir}}"
+    "coachPain": "{count, plural, =1 {1 douleur à voir} other {# douleurs à voir}}",
+    "sleepAsk": "Note ta nuit",
+    "eveningTitle": "Ce soir",
+    "stepsAsk": "Note tes pas du jour, ça prend dix secondes.",
+    "stepsAndSleepAsk": "Note tes pas du jour et ta nuit, ça prend dix secondes."
   },
   "pushSettings": {
     "title": "Notifications",

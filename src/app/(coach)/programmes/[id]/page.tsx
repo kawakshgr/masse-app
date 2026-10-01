@@ -53,7 +53,7 @@ export default async function ProgrammeEditorPage({
     const [sessionsRes, assignmentsRes] = await Promise.all([
       supabase
         .from("sessions")
-        .select("id, day_index, name, kind, session_exercises(id, position, name, scheme, cue, rest_min_s, rest_max_s)")
+        .select("id, day_index, name, kind, session_exercises(id, position, name, scheme, cue, rest_min_s, rest_max_s, alternatives)")
         .eq("week_id", current.id)
         .order("day_index"),
       supabase

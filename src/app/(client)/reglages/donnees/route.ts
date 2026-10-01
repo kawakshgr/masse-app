@@ -13,7 +13,7 @@ export async function GET() {
   const [profile, metrics, sets, checkIns, photos, cycle, meals, invoices, supplements, calls, pains, moves] = await Promise.all([
     supabase.from("clients").select("*").eq("id", id).maybeSingle(),
     supabase.from("daily_metrics").select("day, sleep_h, sleep_quality, steps").eq("client_id", id).order("day"),
-    supabase.from("set_logs").select("session_exercise_id, set_index, reps, weight_kg, rpe, logged_at").eq("client_id", id).order("logged_at"),
+    supabase.from("set_logs").select("session_exercise_id, set_index, reps, weight_kg, rpe, logged_at, done_as").eq("client_id", id).order("logged_at"),
     supabase.from("check_ins").select("*").eq("client_id", id).order("week_start_date"),
     supabase.from("check_in_photos").select("check_in_id, pose, storage_path, uploaded_at").eq("client_id", id),
     supabase.from("cycle_logs").select("*").eq("client_id", id),

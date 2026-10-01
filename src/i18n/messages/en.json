@@ -425,7 +425,8 @@
     "scopeProgrammeHint": "Week 1 starts on the chosen date, each later week 7 days on. Each client sees a week only from its date.",
     "pushKept": "{count, plural, =1 {One week already begun stayed where it was, so its history is untouched. Withdraw it first to re-date it.} other {# weeks already begun stayed where they were, so their history is untouched. Withdraw them first to re-date them.}}",
     "weekOf": "Week of",
-    "today": "today"
+    "today": "today",
+    "altCount": "{count, plural, one {# stand-in} other {# stand-ins}}"
   },
   "goal": {
     "Get stronger": "Get stronger",
@@ -574,7 +575,12 @@
     "weekPartial": "{done}/{total} exercises",
     "lastMixed": "{count} sets, heaviest {best}",
     "swapWithToday": "Swap with today",
-    "swapHint": "{day} and today trade places for this week: the session and the food follow."
+    "swapHint": "{day} and today trade places for this week: the session and the food follow.",
+    "insteadOf": "Instead of {name}",
+    "swap": "Machine taken? Swap",
+    "swapBack": "Change movement",
+    "swapQuestion": "What are you doing instead?",
+    "swapCancel": "Cancel"
   },
   "entry": {
     "title": "Entry",
@@ -1630,7 +1636,8 @@
     "everyDay": "Every day",
     "phaseTraining": "Loads adjusted to today’s phase, as in the app.",
     "phaseNutrition": "Targets adjusted to today’s phase, as in the app.",
-    "preparedBy": "Prepared by"
+    "preparedBy": "Prepared by",
+    "standIns": "Or: {names}"
   },
   "myData": {
     "title": "My data",
@@ -1808,7 +1815,11 @@
     "deleteConfirm": "Yes, remove",
     "keep": "Keep",
     "save": "Save",
-    "restNone": "None"
+    "restNone": "None",
+    "alternatives": "Stand-ins",
+    "alternativesHint": "If the machine is taken, the client does one of these instead, with one tap. You will see which in their history.",
+    "alternativePlaceholder": "A back-up movement",
+    "alternativeRemove": "Remove this stand-in"
   },
   "push": {
     "testTitle": "Masse",
@@ -1829,7 +1840,11 @@
     "coachToRead": "{count, plural, =1 {1 check-in to read} other {# check-ins to read}}",
     "coachNotYet": "{count, plural, =1 {1 not filed yet} other {# not filed yet}}",
     "coachLate": "{count, plural, =1 {1 late payment} other {# late payments}}",
-    "coachPain": "{count, plural, =1 {1 pain report to see} other {# pain reports to see}}"
+    "coachPain": "{count, plural, =1 {1 pain report to see} other {# pain reports to see}}",
+    "sleepAsk": "Note last night’s sleep",
+    "eveningTitle": "Tonight",
+    "stepsAsk": "Note today’s steps, it takes ten seconds.",
+    "stepsAndSleepAsk": "Note today’s steps and last night’s sleep, it takes ten seconds."
   },
   "pushSettings": {
     "title": "Notifications",

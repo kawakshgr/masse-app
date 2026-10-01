@@ -155,6 +155,7 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
         <path d="m6 6 12 12" />
       </>
     ),
+    swap: <path d="M4.5 8.5h15L16 5M19.5 15.5h-15L8 19" />,
     copy: (
       <>
         <rect x="8.5" y="8.5" width="11" height="11" rx="2" />

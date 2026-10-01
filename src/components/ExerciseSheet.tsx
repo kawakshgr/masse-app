@@ -12,6 +12,7 @@ type Patch = {
   cue?: string | null;
   rest_min_s?: number | null;
   rest_max_s?: number | null;
+  alternatives?: string[];
 };
 
 /**
@@ -45,6 +46,10 @@ export function ExerciseSheet({
   const [scheme, setScheme] = useState(exercise.scheme ?? "");
   const [rest, setRest] = useState(restKey(exercise.rest_min_s, exercise.rest_max_s));
   const [cue, setCue] = useState(exercise.cue ?? "");
+  const [alternatives, setAlternatives] = useState<string[]>(exercise.alternatives ?? []);
+  // The ones written, and one empty field while there is room for a third.
+  const altFields =
+    alternatives.length < 3 && alternatives.at(-1) !== "" ? [...alternatives, ""] : alternatives;
   const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
@@ -65,6 +70,7 @@ export function ExerciseSheet({
       name: name.trim() || exercise.name,
       scheme: scheme.trim() || null,
       cue: cue.trim() || null,
+      alternatives: alternatives.map((a) => a.trim()).filter(Boolean),
       ...parseRestKey(rest),
     });
     onClose();
@@ -160,6 +166,39 @@ export function ExerciseSheet({
             className="min-h-[84px] w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3.5 py-2.5 text-[16px] leading-[1.4] text-[var(--ink)]"
           />
         </label>
+
+        {/* Stand-ins (1 Oct 2026): when the machine is taken, the client
+            does one of these instead, with a tap, and the coach sees which. */}
+        <div className="space-y-2">
+          <p className={micro}>{tSheet("alternatives")}</p>
+          <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">{tSheet("alternativesHint")}</p>
+          {altFields.map((value, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <input
+                value={value}
+                onChange={(e) => {
+                  const next = [...altFields];
+                  next[index] = e.target.value;
+                  setAlternatives(next.slice(0, 3));
+                }}
+                list="masse-exercise-catalogue"
+                placeholder={tSheet("alternativePlaceholder")}
+                aria-label={`${tSheet("alternatives")} ${index + 1}`}
+                className="h-12 min-w-0 flex-1 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3.5 text-[16px] font-semibold text-[var(--ink)] placeholder:font-normal placeholder:text-[var(--ink3)]"
+              />
+              {value !== "" && (
+                <button
+                  type="button"
+                  aria-label={tSheet("alternativeRemove")}
+                  onClick={() => setAlternatives(alternatives.filter((_, i) => i !== index))}
+                  className="glass2 flex size-12 shrink-0 items-center justify-center rounded-full text-[22px] leading-none text-[var(--ink2)]"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
 
         {moveTargets.length > 0 && (
           <div className="space-y-2">

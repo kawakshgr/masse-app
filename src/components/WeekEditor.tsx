@@ -40,6 +40,7 @@ export type EditorExercise = {
   cue: string | null;
   rest_min_s: number | null;
   rest_max_s: number | null;
+  alternatives: string[];
 };
 
 const LIBRARY_KEY = "masse:library";
@@ -400,7 +401,11 @@ export function WeekEditor({
                               >
                                 <span className="block truncate text-[13.5px] font-semibold max-lg:text-[14px]">{exercise.name}</span>
                                 <span className="tnum block truncate text-[12px] text-[var(--ink2)] max-lg:text-[12.5px]">
-                                  {[exercise.scheme, restLabel(exercise.rest_min_s, exercise.rest_max_s)]
+                                  {[
+                                    exercise.scheme,
+                                    restLabel(exercise.rest_min_s, exercise.rest_max_s),
+                                    exercise.alternatives?.length ? t("altCount", { count: exercise.alternatives.length }) : null,
+                                  ]
                                     .filter(Boolean)
                                     .join(" · ") || t("schemeHint")}
                                 </span>

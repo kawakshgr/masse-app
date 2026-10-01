@@ -68,7 +68,7 @@ export async function duplicateWeek(weekId: string, programmeId: string) {
 
   const { data: source } = await supabase
     .from("programme_weeks")
-    .select("week_number, sessions(day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s))")
+    .select("week_number, sessions(day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s, alternatives))")
     .eq("id", weekId)
     .maybeSingle();
 
@@ -104,6 +104,7 @@ export async function duplicateWeek(weekId: string, programmeId: string) {
       cue: string | null;
       rest_min_s: number | null;
       rest_max_s: number | null;
+      alternatives: string[];
     }[];
   }[];
 
@@ -153,7 +154,7 @@ export async function progressWeek(weekId: string, programmeId: string, rule: Pr
   const { data: source } = await supabase
     .from("programme_weeks")
     .select(
-      "week_number, sessions(day_index, name, notes, session_exercises(id, position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s))",
+      "week_number, sessions(day_index, name, notes, session_exercises(id, position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s, alternatives))",
     )
     .eq("id", weekId)
     .maybeSingle();
@@ -170,6 +171,7 @@ export async function progressWeek(weekId: string, programmeId: string, rule: Pr
     cue: string | null;
     rest_min_s: number | null;
     rest_max_s: number | null;
+    alternatives: string[];
   };
   const sessions = (source.sessions ?? []) as unknown as {
     day_index: number;
@@ -182,9 +184,9 @@ export async function progressWeek(weekId: string, programmeId: string, rule: Pr
   const { data: logs } = exerciseIds.length
     ? await supabase
         .from("set_logs")
-        .select("client_id, session_exercise_id, reps, weight_kg")
+        .select("client_id, session_exercise_id, reps, weight_kg, done_as")
         .in("session_exercise_id", exerciseIds)
-    : { data: [] as { client_id: string; session_exercise_id: string; reps: number | null; weight_kg: number | null }[] };
+    : { data: [] as { client_id: string; session_exercise_id: string; reps: number | null; weight_kg: number | null; done_as: string | null }[] };
 
   // Per exercise: the clients who logged it at all.
   const byExercise = new Map<string, Set<string>>();
@@ -209,6 +211,8 @@ export async function progressWeek(weekId: string, programmeId: string, rule: Pr
           (l) =>
             l.session_exercise_id === e.id &&
             l.client_id === clientId &&
+            // A set done as a stand-in says nothing of the movement itself.
+            l.done_as == null &&
             (l.reps ?? 0) >= (e.target_reps ?? 0) &&
             (target == null || Number(l.weight_kg ?? 0) >= target),
         ).length;
@@ -323,13 +327,21 @@ export async function updateExercise(
     cue?: string | null;
     rest_min_s?: number | null;
     rest_max_s?: number | null;
+    alternatives?: string[];
   },
   programmeId: string,
 ) {
   const supabase = await createClient();
   // A scheme she types is read into targets — "4×8 @ 60 kg" — so logging,
   // the cycle levers and next week's progression have numbers to work from.
-  const row = "scheme" in patch ? { ...patch, ...schemeColumns(patch.scheme) } : patch;
+  const row = "scheme" in patch ? { ...patch, ...schemeColumns(patch.scheme) } : { ...patch };
+  if (patch.alternatives) {
+    // Three at most, each once, never the movement itself.
+    row.alternatives = [...new Set(patch.alternatives.map((a) => a.trim()).filter(Boolean))]
+      .filter((a) => a.toLowerCase() !== (patch.name ?? "").trim().toLowerCase())
+      .map((a) => a.slice(0, 120))
+      .slice(0, 3);
+  }
   await supabase.from("session_exercises").update(row).eq("id", exerciseId);
 
   // A name she typed that the catalogue does not know becomes hers, so the
@@ -337,6 +349,7 @@ export async function updateExercise(
   if (patch.name && patch.name.trim() !== "") {
     await rememberExercise(patch.name.trim());
   }
+  for (const alternative of row.alternatives ?? []) await rememberExercise(alternative);
 
   revalidatePath(`/programmes/${programmeId}`);
 }
@@ -780,7 +793,7 @@ export async function copySession(
   const supabase = await createClient();
   const { data: source } = await supabase
     .from("sessions")
-    .select("week_id, day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s)")
+    .select("week_id, day_index, name, notes, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s, alternatives)")
     .eq("id", sessionId)
     .maybeSingle();
   if (!source) return { copied: 0, kept: 0 };
@@ -795,6 +808,7 @@ export async function copySession(
     cue: string | null;
     rest_min_s: number | null;
     rest_max_s: number | null;
+    alternatives: string[];
   }[]).sort((a, b) => a.position - b.position);
 
   let copied = 0;

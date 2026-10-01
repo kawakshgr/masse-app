@@ -229,6 +229,8 @@ export type SessionExerciseRow = {
   /** Rest between sets in seconds; min = max is exact, else a range. */
   rest_min_s: number | null;
   rest_max_s: number | null;
+  /** Up to three movements accepted in its place (1 Oct 2026). */
+  alternatives: string[];
 };
 
 export type AssignmentRow = {
@@ -251,6 +253,8 @@ export type SetLogRow = {
   logged_at: string;
   /** Null means the row exists only on the device — held, not lost. */
   synced_at: string | null;
+  /** The stand-in it was done as; null, the movement written. */
+  done_as: string | null;
 };
 
 export type CheckInRow = {
@@ -640,6 +644,14 @@ export type DailyMetricRow = {
   steps: number | null;
 };
 
+/** The coach's own wording of one WhatsApp message (lib/messages.ts). */
+export type CoachMessageRow = {
+  coach_id: string;
+  kind: string;
+  body: string;
+  updated_at: string;
+};
+
 /* ---------- table shape ---------- */
 
 /** One device that accepted notifications (web push). */
@@ -717,6 +729,7 @@ export type Database = {
       platform_admins: Table<PlatformAdminRow, "user_id">;
       admin_access_log: Table<AdminAccessLogRow, "admin_id" | "action" | "reason">;
       push_subscriptions: Table<PushSubscriptionRow, "user_id" | "endpoint" | "p256dh" | "auth">;
+      coach_messages: Table<CoachMessageRow, "coach_id" | "kind" | "body">;
     };
     Views: { [_ in never]: never };
     Functions: {

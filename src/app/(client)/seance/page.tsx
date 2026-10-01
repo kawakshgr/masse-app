@@ -40,7 +40,7 @@ export default async function SessionPage({
   const { data: weekLogs } = weekIds.length
     ? await supabase
         .from("set_logs")
-        .select("id, session_exercise_id, set_index, reps, weight_kg, rpe, synced_at, logged_at")
+        .select("id, session_exercise_id, set_index, reps, weight_kg, rpe, synced_at, logged_at, done_as")
         .in("session_exercise_id", weekIds)
         .gte("logged_at", `${week!.startDate}T00:00:00Z`)
     : { data: [] };
@@ -48,8 +48,9 @@ export default async function SessionPage({
   const onServer = logs.filter((row) => exercises.some((e) => e.id === row.session_exercise_id));
 
   // "La dernière fois": her latest sets on the same movements, from earlier
-  // weeks — the figure she is trying to beat.
-  const names = [...new Set(exercises.map((e) => e.name))];
+  // weeks — the figure she is trying to beat. Stand-ins too: a set is read
+  // as the movement it was done as.
+  const names = [...new Set(exercises.flatMap((e) => [e.name, ...(e.alternatives ?? [])]))];
   // Two plain reads rather than a filter on an embedded table: every row of
   // these movements she was ever sent (RLS shows only hers), then her sets.
   const { data: sameMovements } = names.length
@@ -57,26 +58,44 @@ export default async function SessionPage({
     : { data: [] };
   const nameOf = new Map((sameMovements ?? []).map((row) => [row.id, row.name]));
   const earlierIds = [...nameOf.keys()].filter((id) => !weekIds.includes(id));
-  const { data: past } = earlierIds.length
-    ? await supabase
-        .from("set_logs")
-        .select("reps, weight_kg, logged_at, session_exercise_id")
-        .eq("client_id", client.id)
-        .in("session_exercise_id", earlierIds)
-        .order("logged_at", { ascending: false })
-        .limit(400)
-    : { data: [] };
-  const pastSets: PastSet[] = (past ?? []).map((row) => ({
-    name: nameOf.get(row.session_exercise_id) ?? "",
+  const [{ data: past }, { data: pastStandIns }] = await Promise.all([
+    earlierIds.length
+      ? supabase
+          .from("set_logs")
+          .select("reps, weight_kg, logged_at, session_exercise_id, done_as")
+          .eq("client_id", client.id)
+          .in("session_exercise_id", earlierIds)
+          .order("logged_at", { ascending: false })
+          .limit(400)
+      : Promise.resolve({ data: [] }),
+    names.length
+      ? supabase
+          .from("set_logs")
+          .select("reps, weight_kg, logged_at, session_exercise_id, done_as")
+          .eq("client_id", client.id)
+          .in("done_as", names)
+          .order("logged_at", { ascending: false })
+          .limit(200)
+      : Promise.resolve({ data: [] }),
+  ]);
+  const seen = new Set<string>();
+  const pastRows = [...(past ?? []), ...(pastStandIns ?? [])].filter((row) => {
+    const key = `${row.session_exercise_id}-${row.logged_at}`;
+    if (seen.has(key) || weekIds.includes(row.session_exercise_id)) return false;
+    seen.add(key);
+    return true;
+  });
+  const pastSets: PastSet[] = pastRows.map((row) => ({
+    name: row.done_as ?? nameOf.get(row.session_exercise_id) ?? "",
     reps: row.reps,
     weightKg: row.weight_kg === null ? null : Number(row.weight_kg),
     day: localDay(zone, new Date(row.logged_at)),
   }));
   const lastByName = lastTimeLines(pastSets, locale, (count, best) => t("lastMixed", { count, best }));
   const last = Object.fromEntries(
-    exercises.flatMap((e) => {
-      const line = lastByName.get(e.name);
-      return line ? [[e.id, t("lastTime", { day: line.day, sets: line.summary })]] : [];
+    names.flatMap((name) => {
+      const line = lastByName.get(name);
+      return line ? [[name, { line: t("lastTime", { day: line.day, sets: line.summary }), weightKg: line.weightKg }]] : [];
     }),
   );
 

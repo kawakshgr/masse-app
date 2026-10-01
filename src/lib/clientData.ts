@@ -81,6 +81,7 @@ export type WeekExercise = {
   target_weight_kg: number | null;
   rest_min_s: number | null;
   rest_max_s: number | null;
+  alternatives: string[];
 };
 
 export type PushedWeek = {
@@ -104,7 +105,7 @@ export const currentWeek = cache(async (): Promise<PushedWeek | null> => {
   const { data } = await supabase
     .from("assignments")
     .select(
-      "start_date, programme_weeks(week_number, programmes(name), sessions(day_index, name, session_exercises(id, position, name, scheme, cue, target_sets, target_reps, target_weight_kg, rest_min_s, rest_max_s)))",
+      "start_date, programme_weeks(week_number, programmes(name), sessions(day_index, name, session_exercises(id, position, name, scheme, cue, target_sets, target_reps, target_weight_kg, rest_min_s, rest_max_s, alternatives)))",
     )
     // A week pushed ahead (the whole programme at once) waits for its day.
     .lte("start_date", today)

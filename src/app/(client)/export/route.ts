@@ -64,7 +64,11 @@ export async function GET(request: NextRequest) {
                   // Movement names stay as the coach wrote them — in English.
                   name: exercise.name,
                   target: targetLine(exercise, (time) => t("rest", { time }), locale),
-                  cue: exercise.cue,
+                  // The stand-ins accepted, under the cue.
+                  cue:
+                    [exercise.cue, exercise.alternatives?.length ? t("standIns", { names: exercise.alternatives.join(", ") }) : null]
+                      .filter(Boolean)
+                      .join("\n") || null,
                 })),
             };
           }),
