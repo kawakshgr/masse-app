@@ -31,9 +31,11 @@ export function StrengthPanel({
     new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "short" });
   const kg = (value: number) => value.toLocaleString(locale, { maximumFractionDigits: 1 });
 
-  // The main lifts are the ones she comes back to: the most weeks logged.
+  // The main lifts are the ones come back to most weeks, and among those the
+  // heaviest — a squat before a lateral raise.
+  const top = (name: string) => strengthByExercise[name].at(-1)?.best1rm ?? 0;
   const names = Object.keys(strengthByExercise).sort(
-    (a, b) => strengthByExercise[b].length - strengthByExercise[a].length || a.localeCompare(b),
+    (a, b) => strengthByExercise[b].length - strengthByExercise[a].length || top(b) - top(a),
   );
   const tiles = names.slice(0, TILES);
   const others = names.slice(TILES).sort((a, b) => a.localeCompare(b));
