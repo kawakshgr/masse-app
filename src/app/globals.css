@@ -177,8 +177,8 @@ select {
 .glass {
   background: var(--glass);
   border: 1px solid var(--edge);
-  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
   -webkit-backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
   box-shadow: var(--spec);
 }
 
@@ -201,8 +201,8 @@ select {
 .topbar {
   background: var(--glass);
   border-bottom: 1px solid var(--hair);
-  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
   -webkit-backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
 }
 
 /* Floating chrome — menus, the palette, dialogs, toasts — is NOT white-alpha
@@ -212,8 +212,8 @@ select {
 .chrome {
   background: var(--chrome);
   border: 1px solid var(--edge);
-  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
   -webkit-backdrop-filter: blur(var(--bl)) saturate(var(--sat));
+  backdrop-filter: blur(var(--bl)) saturate(var(--sat));
 }
 
 /* The primary action is a teal-to-violet gradient, never a flat accent fill:
@@ -351,8 +351,8 @@ select {
   .chrome {
     background: none !important;
     box-shadow: none !important;
-    backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
 
   /* An invoice is a page, not a pane: let it use the sheet it is printed on. */
