@@ -47,7 +47,10 @@ export function RosterList({
             </p>
           </div>
         ) : (
-          <ul className="flex flex-col gap-1 p-2">
+          <ul className="flex flex-col gap-1 p-2 max-md:gap-2 max-md:p-3">
+            {/* On a phone the rows grow for a thumb — a bigger face, bigger
+                words, each row on its card (1 Oct 2026); still a list, since
+                the reason under each name is what is read. */}
             {shown.map((entry) => {
               const active = params?.id === entry.id;
               const secondLine = entry.pending
@@ -66,19 +69,21 @@ export function RosterList({
                         : `/clients/${entry.id}`
                     }
                     aria-current={active ? "page" : undefined}
-                    className={`${rowClass(active)} ${entry.archived ? "opacity-60" : ""}`}
+                    className={`${rowClass(active)} max-md:h-[78px] max-md:gap-3.5 max-md:px-3.5 max-md:[&>span:first-child]:size-12 max-md:[&>span:first-child]:text-[15px] ${
+                      active ? "" : "max-md:border-[var(--hair)] max-md:bg-[var(--glass)]"
+                    } ${entry.archived ? "opacity-60" : ""}`}
                   >
                     <Tile accent>{entry.initials}</Tile>
 
                     <span className="min-w-0 flex-1">
                       <span
-                        className="block truncate text-[13.5px] font-semibold leading-tight"
+                        className="block truncate text-[13.5px] font-semibold leading-tight max-md:text-[16.5px]"
                         title={entry.name}
                       >
                         {entry.name}
                       </span>
                       <span
-                        className={`block truncate text-[12px] leading-tight ${
+                        className={`mt-0.5 block truncate text-[12px] leading-tight max-md:mt-1 max-md:text-[13.5px] ${
                           entry.attention ? "text-[var(--a3)]" : "text-[var(--ink2)]"
                         }`}
                         title={secondLine}
