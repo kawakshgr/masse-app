@@ -48,12 +48,33 @@ export async function pushTo(
   userIds: string[],
   compose: (t: Translate, locale: Locale) => PushMessage | null,
 ): Promise<number> {
-  if (!pushReady() || userIds.length === 0) return 0;
+  return (await pushToWithReason(userIds, compose)).sent;
+}
+
+/**
+ * The same, with why nothing left when nothing did — for the test button
+ * and the logs. The reason never carries key material: the library's own
+ * message, or the push service's status and answer.
+ */
+export async function pushToWithReason(
+  userIds: string[],
+  compose: (t: Translate, locale: Locale) => PushMessage | null,
+): Promise<{ sent: number; reason: string | null }> {
+  if (!pushReady()) {
+    const missing = [
+      !process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && "NEXT_PUBLIC_VAPID_PUBLIC_KEY",
+      !process.env.VAPID_PRIVATE_KEY && "VAPID_PRIVATE_KEY",
+      !process.env.SUPABASE_SERVICE_ROLE_KEY && "SUPABASE_SERVICE_ROLE_KEY",
+    ].filter(Boolean);
+    return { sent: 0, reason: `missing ${missing.join(", ")}` };
+  }
+  if (userIds.length === 0) return { sent: 0, reason: "nobody" };
+  let reason: string | null = null;
   try {
     webpush.setVapidDetails(
       "mailto:contact@masseapp.online",
-      process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-      process.env.VAPID_PRIVATE_KEY!,
+      process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!.trim(),
+      process.env.VAPID_PRIVATE_KEY!.trim(),
     );
     const admin = pushAdmin();
     const { data: devices } = await admin
@@ -74,15 +95,20 @@ export async function pushTo(
           );
           sent += 1;
         } catch (error) {
-          const status = (error as { statusCode?: number }).statusCode;
+          const { statusCode: status, body } = error as { statusCode?: number; body?: string };
+          reason = status ? `push service ${status} ${String(body ?? "").slice(0, 120)}` : String((error as Error).message).slice(0, 160);
+          console.error("push failed:", reason);
           if (status === 404 || status === 410) {
             await admin.from("push_subscriptions").delete().eq("id", device.id);
           }
         }
       }),
     );
-    return sent;
-  } catch {
-    return 0;
+    if ((devices ?? []).length === 0) reason = "no device";
+    return { sent, reason: sent > 0 ? null : reason };
+  } catch (error) {
+    reason = String((error as Error).message).slice(0, 160);
+    console.error("push failed:", reason);
+    return { sent: 0, reason };
   }
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { pushReady, pushTo } from "@/lib/push";
+import { pushReady, pushToWithReason } from "@/lib/push";
 
 /**
  * This device says yes to notifications: the browser's subscription is kept
@@ -38,12 +38,17 @@ export async function removePushSubscription(endpoint: string): Promise<void> {
 }
 
 /** A test, to every device of the person asking. */
-export async function sendTestPush(): Promise<{ sent: number; ready: boolean }> {
+export async function sendTestPush(): Promise<{ sent: number; ready: boolean; reason?: string | null }> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { sent: 0, ready: pushReady() };
-  const sent = await pushTo([user.id], (t) => ({ title: t("testTitle"), body: t("testBody"), url: "/", tag: "test" }));
-  return { sent, ready: pushReady() };
+  const { sent, reason } = await pushToWithReason([user.id], (t) => ({
+    title: t("testTitle"),
+    body: t("testBody"),
+    url: "/",
+    tag: "test",
+  }));
+  return { sent, ready: pushReady(), reason };
 }

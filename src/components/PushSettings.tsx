@@ -103,8 +103,9 @@ export function PushSettings({ coach = false }: { coach?: boolean }) {
 
   async function test() {
     setBusy(true);
-    const { sent } = await sendTestPush();
-    setNote(sent > 0 ? t("testSent") : t("testNone"));
+    const { sent, reason } = await sendTestPush();
+    // The cause, for whoever runs Masse; never key material.
+    setNote(sent > 0 ? t("testSent") : `${t("testNone")}${reason ? ` (${reason})` : ""}`);
     setBusy(false);
   }
 
