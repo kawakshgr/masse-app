@@ -118,7 +118,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   client swaps on Séance with one tile when the machine is taken, and each
   set carries `set_logs.done_as` — history, records, "la dernière fois"
   and the strength curve read `done_as ?? name`; progression ignores those
-  sets. Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
+  sets. A deload week is written from the menu (`deloadWeek`, 1 Oct 2026:
+  a set fewer if asked, load −20 to −50 % rounded to a plate, reps kept,
+  never pushed). Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
   exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
   who logged it hit every prescribed set; otherwise, or with no logs or no
   target, it stays. The new week is never pushed by this.
@@ -197,6 +199,15 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   browser client opts in (`lib/supabase/client.ts`). Bound to the domain
   masseapp.online (the Relying Party ID — never change it, every passkey
   would die); nothing is offered on any other address (`lib/passkeys.ts`).
+- **The client's own progress** (1 Oct 2026) — `/evolution`, from Today:
+  weight by check-in, measurements against the first, the first and latest
+  photo of a pose on the slider (shared from the phone), and strength
+  (`loadStrength`). `/seance/historique`: the last eight weeks sent, with
+  the sets logged per movement.
+- **Offline pages** (1 Oct 2026) — the service worker keeps Séance,
+  Aujourd'hui and Nutrition as last served (fresh first, the copy after 4 s
+  or offline, never a redirect) and `/connexion` forgets them
+  (`lib/offlinePages.ts`): one person's pages, never a coach's.
 - **Her own billing, read only** — the client reads her arrangement, her
   non-draft invoices and their archived PDFs. She never writes a money row.
 - **Her own details** — a client may update `first_name`, `name`, `phone`,
@@ -231,6 +242,18 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   Public pages: `/confidentialite`, `/mentions-legales`, `/conditions` — in
   French and in English (30 Sep 2026: `?lang=`, else the app's language);
   the French version binds. Change one language, change the other.
+
+Billing (1 Oct 2026): the month's invoices go out in one press —
+Facturation lists monthly clients whose invoice has not gone, ticked by
+default; `issueAndSendMonth` issues, archives and e-mails each.
+
+Speed (1 Oct 2026): server components read the user with `authUser()`
+(`lib/supabase/auth.ts`, getClaims verified locally against the ES256 key,
+once per request) — not `auth.getUser()`, a trip to the auth server each
+time; server actions that write keep getUser. Reads that do not depend on
+one another go in one `Promise.all`. Every route group has a `loading.tsx`
+skeleton (`components/Skeleton.tsx`), and a client file's tabs show theirs
+the moment one is tapped.
 
 ## Deliberately not in v1
 

@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.11",
+    "date": "2026-10-01",
+    "fr": [
+      "Plus rapide : chaque écran s’affiche aussitôt, en esquisse, pendant qu’il se charge.",
+      "Sans réseau à la salle ? Séance, Aujourd’hui et Nutrition s’ouvrent quand même, tels que tu les as vus la dernière fois.",
+      "Mon évolution : ton poids semaine après semaine, tes mensurations, ton avant / après au curseur (à partager) et ta force. Depuis Aujourd’hui.",
+      "Mes séances passées : tes huit dernières semaines, avec les séries de chaque mouvement. Depuis Séance."
+    ],
+    "en": [
+      "Faster: every screen shows at once, sketched, while it loads.",
+      "No signal at the gym? Session, Today and Nutrition still open, as you last saw them.",
+      "My progress: your weight week by week, your measurements, your before / after on a slider (to share) and your strength. From Today.",
+      "My past sessions: your last eight weeks, with the sets of each movement. From Session."
+    ]
+  },
+  {
     "version": "0.10",
     "date": "2026-10-01",
     "fr": [
