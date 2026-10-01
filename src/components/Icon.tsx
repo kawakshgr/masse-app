@@ -104,7 +104,12 @@ export function Icon({ name, size = 26 }: { name: string; size?: number }) {
       </>
     ),
     // Food and supplement families, for the libraries on a phone.
-    egg: <path d="M12 3.5c3.4 0 6.2 5.1 6.2 9.6a6.2 6.2 0 0 1-12.4 0c0-4.5 2.8-9.6 6.2-9.6z" />,
+    egg: (
+      <>
+        <path d="M12 3.5c3.4 0 6.2 5.1 6.2 9.6a6.2 6.2 0 0 1-12.4 0c0-4.5 2.8-9.6 6.2-9.6z" />
+        <circle cx="12" cy="14" r="2.6" />
+      </>
+    ),
     bread: (
       <>
         <path d="M6 11.2A3.6 3.6 0 0 1 7.4 4.5h9.2A3.6 3.6 0 0 1 18 11.2V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19z" />

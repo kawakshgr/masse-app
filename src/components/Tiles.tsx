@@ -49,8 +49,9 @@ export function Tile({
           <Icon name={icon} size={34} />
         </span>
         <span className="block min-w-0">
-          <span className="flex items-baseline justify-between gap-2">
-            <span className="min-w-0 truncate text-[13px] font-bold uppercase tracking-[.1em]">
+          <span className="flex items-end justify-between gap-2">
+            {/* Two lines rather than "BILAN HEBDOMA…" on a phone. */}
+            <span className="line-clamp-2 min-w-0 break-words text-[13px] font-bold uppercase leading-[1.2] tracking-[.1em]">
               {label}
             </span>
             {count != null && (
