@@ -1,5 +1,21 @@
 [
   {
+    "version": "0.9",
+    "date": "2026-10-01",
+    "fr": [
+      "Notifications : un rappel le matin quand tu as une séance, un bilan à rendre ou une visio, et un mot quand ton coach te relance. À activer dans Réglages → Notifications, depuis l’app installée.",
+      "Réglages en grandes tuiles : chaque réglage s’ouvre sur son propre écran.",
+      "La qualité de ton sommeil et une douleur se signalent avec de grandes tuiles, plus faciles à toucher.",
+      "Sur téléphone, le menu du bas reste en place et les champs ne zooment plus quand tu écris."
+    ],
+    "en": [
+      "Notifications: a reminder in the morning when you have a session, a check-in due or a call, and a word when your coach nudges you. Turn them on in Settings → Notifications, from the installed app.",
+      "Settings as big tiles: each setting opens on its own screen.",
+      "Your sleep quality and pain are reported with big tiles, easier to tap.",
+      "On a phone, the bottom bar stays in place and fields no longer zoom in while you type."
+    ]
+  },
+  {
     "version": "0.8",
     "date": "2026-09-30",
     "fr": [

@@ -157,8 +157,16 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   check-in already opens a prefilled WhatsApp message. There is no inbox tab
   on either side (removed 26 Sep 2026); do not add one back.
 - **Settings** (both) — behind the gear on Today: her details, her payments,
-  appearance, language, privacy, her data, release notes. No notifications
-  section on the web (removed 30 Sep 2026): reminders were the iPhone app's.
+  appearance, language, privacy, her data, release notes, notifications.
+- **Notifications** (1 Oct 2026, web push) — turned on per device from
+  Réglages → Notifications or Mon compte (`PushSettings`; on iPhone only in
+  the installed app), kept in `push_subscriptions` with the device's
+  language, sent by `lib/push.ts` with the service role and the VAPID keys
+  (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`; inert without them).
+  The client gets one morning notification (`/api/notify`, Vercel Cron
+  05:00 UTC: session through the week as arranged, check-in due or late, a
+  call today) and the coach's nudge; the coach hears of a check-in first
+  filed and of pain reported. No figure of health in a payload.
 - **Passkeys** (30 Sep 2026) — Face ID, a fingerprint or the device code as
   a quicker way back in, for clients and coaches alike. The e-mail code
   stays the first sign-in and the fallback. Turned on from Réglages → Clé
