@@ -5,11 +5,16 @@ import { FoodSearch } from "@/components/FoodSearch";
 import { AddFoodButton } from "@/components/AddFoodButton";
 import {
   LibraryEmpty,
+  LibraryHome,
   LibraryPane,
+  PhoneBack,
   LibraryRow,
   libraryHref,
 } from "@/components/LibraryPane";
 import { FOOD_CATEGORIES } from "@/lib/supabase/types";
+
+/** The families' icons, for the big tiles on a phone. */
+const FOOD_ICONS = { all: "log", protein: "egg", carb: "bread", fat: "drop", veg: "leaf", other: "foods" } as const;
 
 /**
  * The food library: a two-pane editor, like the programme builder — the list
@@ -19,7 +24,7 @@ import { FOOD_CATEGORIES } from "@/lib/supabase/types";
 export default async function FoodsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; cat?: string; aliment?: string }>;
+  searchParams: Promise<{ q?: string; cat?: string; aliment?: string; tout?: string }>;
 }) {
   const t = await getTranslations("foods");
   const params = await searchParams;
@@ -34,11 +39,48 @@ export default async function FoodsPage({
     .order("name");
   if (cat !== "all") request = request.eq("category", cat);
   if (query) request = request.ilike("name", `%${query}%`);
-  const rows = (await request).data ?? [];
+  const [rows, { data: everyCategory }] = await Promise.all([
+    request.then((result) => result.data ?? []),
+    supabase.from("foods").select("category"),
+  ]);
 
-  const current = { q: query || undefined, cat: cat === "all" ? undefined : cat };
+  const current = {
+    q: query || undefined,
+    cat: cat === "all" ? undefined : cat,
+    // "Tout" opened from its tile on a phone; a row picked there comes back to it.
+    tout: params.tout ? "1" : undefined,
+  };
   const href = (next: Record<string, string | undefined>) =>
     libraryHref("/aliments", current, next);
+
+  const list =
+    rows.length === 0 ? (
+      <p className="p-5 text-center text-[12.5px] leading-[1.5] text-[var(--ink3)]">
+        {query ? t("noMatch", { query }) : t("emptyHint")}
+      </p>
+    ) : (
+      <ul className="flex flex-col gap-1">
+        {rows.map((food) => (
+          <LibraryRow
+            key={food.id}
+            href={href({ aliment: food.id })}
+            on={selected === food.id}
+            name={food.name}
+            line={[food.serving_label, t(`cat.${food.category}`)]
+              .filter(Boolean)
+              .join(" · ")}
+            trailing={
+              <span className="tnum text-right text-[13px] font-extrabold leading-none">
+                {Math.round(Number(food.kcal_100g ?? 0))}
+                <span className="block pt-1 text-[9.5px] font-bold uppercase tracking-[.12em] text-[var(--ink3)]">
+                  kcal
+                </span>
+              </span>
+            }
+          />
+        ))}
+      </ul>
+    );
 
   return (
     <LibraryPane
@@ -57,37 +99,47 @@ export default async function FoodsPage({
       }))}
       footer={<AddFoodButton label={t("newFood")} />}
       detailTop={<FoodSearch />}
-      list={
-        rows.length === 0 ? (
-          <p className="p-5 text-center text-[12.5px] leading-[1.5] text-[var(--ink3)]">
-            {query ? t("noMatch", { query }) : t("emptyHint")}
-          </p>
-        ) : (
-          <ul className="flex flex-col gap-1">
-            {rows.map((food) => (
-              <LibraryRow
-                key={food.id}
-                href={href({ aliment: food.id })}
-                on={selected === food.id}
-                name={food.name}
-                line={[food.serving_label, t(`cat.${food.category}`)]
-                  .filter(Boolean)
-                  .join(" · ")}
-                trailing={
-                  <span className="tnum text-right text-[13px] font-extrabold leading-none">
-                    {Math.round(Number(food.kcal_100g ?? 0))}
-                    <span className="block pt-1 text-[9.5px] font-bold uppercase tracking-[.12em] text-[var(--ink3)]">
-                      kcal
-                    </span>
-                  </span>
-                }
-              />
-            ))}
-          </ul>
-        )
-      }
+      list={list}
     >
-      <FoodDetail id={selected} />
+      {selected ? (
+        <>
+          <PhoneBack href={href({ aliment: undefined })} label={t("title")} />
+          <FoodDetail id={selected} />
+        </>
+      ) : (
+        <>
+          <LibraryHome
+            path="/aliments"
+            title={t("title")}
+            kicker={t("count", { count: (everyCategory ?? []).length })}
+            searchLabel={t("search")}
+            query={query}
+            keep={{ cat: current.cat }}
+            backLabel={t("title")}
+            open={
+              cat !== "all"
+                ? t(`cat.${cat}`)
+                : query
+                  ? `« ${query} »`
+                  : params.tout
+                    ? t("cat.all")
+                    : null
+            }
+            tiles={(["all", ...FOOD_CATEGORIES] as const).map((value) => ({
+              key: value,
+              label: t(`cat.${value}`),
+              icon: FOOD_ICONS[value],
+              count: (everyCategory ?? []).filter((row) => value === "all" || row.category === value).length,
+              href: value === "all" ? "/aliments?tout=1" : `/aliments?cat=${value}`,
+            }))}
+            rows={list}
+            add={<AddFoodButton label={t("newFood")} />}
+          />
+          <div className="flex min-h-0 flex-1 flex-col max-md:hidden">
+            <LibraryEmpty title={t("pickFood")} lede={t("lede")} />
+          </div>
+        </>
+      )}
     </LibraryPane>
   );
 }

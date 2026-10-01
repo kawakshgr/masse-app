@@ -2,6 +2,8 @@ import Link from "next/link";
 import { SplitPane } from "@/components/SplitPane";
 import { LibrarySwitch } from "@/components/LibrarySwitch";
 import { PaneEmpty, PaneHead, Tile, rowClass } from "@/components/Pane";
+import { PartHead, Tile as BigTile, TileGrid } from "@/components/Tiles";
+import { Icon } from "@/components/Icon";
 import { LinkSelect } from "@/components/LinkSelect";
 
 /**
@@ -161,4 +163,92 @@ export function libraryHref(
   }
   const qs = search.toString();
   return `${path}${qs ? `?${qs}` : ""}`;
+}
+
+/**
+ * A library's front door on a phone, where the list hides behind a button:
+ * a search and the families as big tiles (Kevin, 1 Oct 2026). A family or
+ * a search shows its rows right here, with a way back to the tiles.
+ */
+export function LibraryHome({
+  path,
+  title,
+  kicker,
+  searchLabel,
+  query,
+  keep,
+  tiles,
+  open,
+  rows,
+  add,
+  backLabel,
+}: {
+  path: string;
+  title: string;
+  kicker: string;
+  searchLabel: string;
+  query: string;
+  /** Filters the search must carry over. */
+  keep: Record<string, string | undefined>;
+  tiles: { key: string; label: string; icon: string; count: number; href: string }[];
+  /** The family or search being shown, by name; null shows the tiles. */
+  open: string | null;
+  rows: React.ReactNode;
+  add: React.ReactNode;
+  backLabel: string;
+}) {
+  return (
+    <div className="space-y-4 p-4 md:hidden">
+      {open ? (
+        <PartHead back={path} backLabel={backLabel} kicker={title} title={open} />
+      ) : (
+        <PaneHead kicker={kicker} title={title} />
+      )}
+
+      <form action={path}>
+        {Object.entries(keep).map(([name, value]) =>
+          value ? <input key={name} type="hidden" name={name} value={value} /> : null,
+        )}
+        <label className="flex h-12 items-center gap-2.5 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3.5 text-[var(--ink3)]">
+          <Icon name="search" size={20} />
+          <input
+            type="search"
+            name="q"
+            defaultValue={query}
+            placeholder={searchLabel}
+            aria-label={searchLabel}
+            enterKeyHint="search"
+            className="min-w-0 flex-1 bg-transparent text-[16px] text-[var(--ink)] placeholder:text-[var(--ink3)] focus:outline-none"
+          />
+        </label>
+      </form>
+
+      {open ? (
+        rows
+      ) : (
+        <TileGrid>
+          {tiles.map((tile) => (
+            <BigTile key={tile.key} href={tile.href} icon={tile.icon} label={tile.label} count={tile.count} />
+          ))}
+        </TileGrid>
+      )}
+
+      {add}
+    </div>
+  );
+}
+
+/** On a phone, the way from an entry back to the family it was picked in. */
+export function PhoneBack({ href, label }: { href: string; label: string }) {
+  return (
+    <div className="px-4 pt-4 md:hidden">
+      <Link
+        href={href}
+        className="glass2 inline-flex h-10 items-center gap-2 rounded-rp px-4 text-[12px] font-bold uppercase tracking-[.12em] text-[var(--ink2)]"
+      >
+        <span aria-hidden className="text-[18px] leading-none">‹</span>
+        {label}
+      </Link>
+    </div>
+  );
 }

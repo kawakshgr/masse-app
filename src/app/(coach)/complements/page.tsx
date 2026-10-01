@@ -4,7 +4,9 @@ import { intl } from "@/lib/locale";
 import { createClient } from "@/lib/supabase/server";
 import {
   LibraryEmpty,
+  LibraryHome,
   LibraryPane,
+  PhoneBack,
   LibraryRow,
   libraryHref,
 } from "@/components/LibraryPane";
@@ -18,6 +20,16 @@ import {
   type SupplementRow,
   type SupplementUnit,
 } from "@/lib/supabase/types";
+
+/** The families' icons, for the big tiles on a phone. */
+const SUPPLEMENT_ICONS = {
+  all: "log",
+  performance: "bolt",
+  protein: "egg",
+  health: "health",
+  recovery: "sleep",
+  other: "supplements",
+} as const;
 
 function entryOf(row: SupplementRow): LibraryEntry {
   const n = (value: number | null) => (value === null ? null : Number(value));
@@ -47,7 +59,7 @@ function entryOf(row: SupplementRow): LibraryEntry {
 export default async function SupplementsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; cat?: string; complement?: string; nouveau?: string }>;
+  searchParams: Promise<{ q?: string; cat?: string; complement?: string; nouveau?: string; tout?: string }>;
 }) {
   const t = await getTranslations("supp");
   const locale = intl(await getLocale());
@@ -80,12 +92,72 @@ export default async function SupplementsPage({
     )
     .sort((a, b) => a.name.localeCompare(b.name, "fr"));
 
-  const current = { q: query || undefined, cat: cat === "all" ? undefined : cat };
+  const current = {
+    q: query || undefined,
+    cat: cat === "all" ? undefined : cat,
+    // "Tout" opened from its tile on a phone; a row picked there comes back to it.
+    tout: params.tout ? "1" : undefined,
+  };
+  const visible = all.filter((row) => !hiddenIds.has(row.id));
   const href = (next: Record<string, string | undefined>) =>
     libraryHref("/complements", current, next);
   const unitName = (unit: SupplementUnit, count: number) => t(`unit.${unit}`, { count });
 
   const picked = selected ? all.find((row) => row.id === selected) : undefined;
+
+  const desktopEmpty = (
+    <LibraryEmpty icon="supplements" title={selected ? t("gone") : t("pick")} lede={selected ? undefined : t("lede")}>
+      {!selected && hidden.length > 0 && (
+        <div className="mt-5 border-t border-[var(--hair)] pt-4">
+          <p className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
+            {t("hidden", { count: hidden.length })}
+          </p>
+          <ul className="mt-2 flex flex-wrap justify-center gap-2">
+            {hidden.map((row) => (
+              <li key={row.id}>
+                <form action={unhideSupplement}>
+                  <input type="hidden" name="supplement_id" value={row.id} />
+                  <button
+                    type="submit"
+                    className="h-8 rounded-rp border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)] hover:text-[var(--ink)]"
+                  >
+                    {row.name} · {t("unhide")}
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </LibraryEmpty>
+  );
+
+  const list =
+    shown.length === 0 ? (
+      <p className="p-5 text-center text-[12.5px] leading-[1.5] text-[var(--ink3)]">
+        {query ? t("noMatch", { query }) : t("empty")}
+      </p>
+    ) : (
+      <ul className="flex flex-col gap-1">
+        {shown.map((entry) => (
+          <LibraryRow
+            key={entry.id}
+            href={href({ complement: entry.id })}
+            on={selected === entry.id}
+            muted={!entry.usable}
+            name={entry.name}
+            line={[doseLabel(entry, unitName, locale), t(`cat.${entry.category}`)]
+              .filter(Boolean)
+              .join(" · ")}
+            trailing={
+              <Badge tone={entry.usable ? "plain" : "alert"}>
+                {t(!entry.usable ? "unusable" : entry.mine ? "mine" : "builtIn")}
+              </Badge>
+            }
+          />
+        ))}
+      </ul>
+    );
 
   return (
     <LibraryPane
@@ -110,63 +182,57 @@ export default async function SupplementsPage({
           {t("newOne")}
         </Link>
       }
-      list={
-        shown.length === 0 ? (
-          <p className="p-5 text-center text-[12.5px] leading-[1.5] text-[var(--ink3)]">
-            {query ? t("noMatch", { query }) : t("empty")}
-          </p>
-        ) : (
-          <ul className="flex flex-col gap-1">
-            {shown.map((entry) => (
-              <LibraryRow
-                key={entry.id}
-                href={href({ complement: entry.id })}
-                on={selected === entry.id}
-                muted={!entry.usable}
-                name={entry.name}
-                line={[doseLabel(entry, unitName, locale), t(`cat.${entry.category}`)]
-                  .filter(Boolean)
-                  .join(" · ")}
-                trailing={
-                  <Badge tone={entry.usable ? "plain" : "alert"}>
-                    {t(!entry.usable ? "unusable" : entry.mine ? "mine" : "builtIn")}
-                  </Badge>
-                }
-              />
-            ))}
-          </ul>
-        )
-      }
+      list={list}
     >
       {params.nouveau ? (
         <SupplementForm />
       ) : picked ? (
-        <SupplementDetail entry={entryOf(picked)} />
+        <>
+          <PhoneBack href={href({ complement: undefined })} label={t("title")} />
+          <SupplementDetail entry={entryOf(picked)} />
+        </>
+      ) : !selected ? (
+        <>
+          <LibraryHome
+            path="/complements"
+            title={t("title")}
+            kicker={t("count", { count: visible.length })}
+            searchLabel={t("search")}
+            query={query}
+            keep={{ cat: current.cat }}
+            backLabel={t("title")}
+            open={
+              cat !== "all"
+                ? t(`cat.${cat}`)
+                : query
+                  ? `« ${query} »`
+                  : params.tout
+                    ? t("allGroups")
+                    : null
+            }
+            tiles={(["all", ...SUPPLEMENT_CATEGORIES] as const).map((value) => ({
+              key: value,
+              label: value === "all" ? t("allGroups") : t(`cat.${value}`),
+              icon: SUPPLEMENT_ICONS[value],
+              count: visible.filter((row) => value === "all" || row.category === value).length,
+              href: value === "all" ? "/complements?tout=1" : `/complements?cat=${value}`,
+            }))}
+            rows={list}
+            add={
+              <Link
+                href={href({ nouveau: "1" })}
+                className="cta block h-12 w-full rounded-r2 text-center text-[14px] font-semibold leading-[48px] text-[var(--onA)]"
+              >
+                {t("newOne")}
+              </Link>
+            }
+          />
+          <div className="flex min-h-0 flex-1 flex-col max-md:hidden">
+            {desktopEmpty}
+          </div>
+        </>
       ) : (
-        <LibraryEmpty icon="supplements" title={selected ? t("gone") : t("pick")} lede={selected ? undefined : t("lede")}>
-          {!selected && hidden.length > 0 && (
-            <div className="mt-5 border-t border-[var(--hair)] pt-4">
-              <p className="text-[11px] uppercase tracking-[.14em] text-[var(--ink2)]">
-                {t("hidden", { count: hidden.length })}
-              </p>
-              <ul className="mt-2 flex flex-wrap justify-center gap-2">
-                {hidden.map((row) => (
-                  <li key={row.id}>
-                    <form action={unhideSupplement}>
-                      <input type="hidden" name="supplement_id" value={row.id} />
-                      <button
-                        type="submit"
-                        className="h-8 rounded-rp border border-[var(--edge)] px-3 text-[12px] text-[var(--ink2)] hover:text-[var(--ink)]"
-                      >
-                        {row.name} · {t("unhide")}
-                      </button>
-                    </form>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </LibraryEmpty>
+        desktopEmpty
       )}
     </LibraryPane>
   );
