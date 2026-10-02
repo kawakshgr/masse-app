@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { intl } from "@/lib/locale";
@@ -32,10 +33,7 @@ export default async function CoachLayout({
   void rosterRead.catch(() => {});
   void queueRead.catch(() => {});
 
-  const [{ data: coach }, t] = await Promise.all([
-    supabase.from("coaches").select("name, first_name").eq("id", user.id).maybeSingle(),
-    getTranslations("shell"),
-  ]);
+  const { data: coach } = await supabase.from("coaches").select("name, first_name").eq("id", user.id).maybeSingle();
   if (!coach) {
     // A client who lands here — the installed app opens at "/" — belongs on
     // her own screens, not on a page telling her she cannot be a coach.
@@ -47,11 +45,9 @@ export default async function CoachLayout({
     redirect(client ? "/aujourdhui" : "/bienvenue");
   }
 
-  // Counted from the same list as À traiter, so the line under her name
-  // never says nobody needs her beside a pane that says otherwise.
-  const [roster, queue] = await Promise.all([rosterRead, queueRead]);
-  const { entries, checkinsToReview } = roster;
-  const clientsNeedingYou = new Set(queue.map((item) => item.clientId)).size;
+  // The line under her name and the palette's names arrive when ready
+  // (2 Oct 2026): the page beside them no longer waits for the roster and
+  // À traiter to be counted before it shows.
 
   return (
     // On a phone the installed app draws under the status bar: the top inset
@@ -68,14 +64,17 @@ export default async function CoachLayout({
         <TabBar
           name={coach.first_name ?? coach.name}
           initials={initialsOf(coach.name)}
-          subtitle={t("subtitle", {
-            clients: clientsNeedingYou,
-            checkins: checkinsToReview,
-          })}
+          subtitle={
+            <Suspense fallback={<span className="opacity-0">·</span>}>
+              <NeedsLine locale={locale} />
+            </Suspense>
+          }
         />
       </div>
 
-      <CommandPalette clients={entries.map((e) => ({ id: e.id, name: e.name }))} />
+      <Suspense fallback={null}>
+        <Palette />
+      </Suspense>
 
       {/* Every page scrolls in here, never the document: a page taller than
           the screen would otherwise carry the tab bar off with it. */}
@@ -83,4 +82,16 @@ export default async function CoachLayout({
     </div>
     </>
   );
+}
+
+/** Counted from the same list as À traiter, so the line under her name
+ *  never says nobody needs her beside a pane that says otherwise. */
+async function NeedsLine({ locale }: { locale: string }) {
+  const [{ checkinsToReview }, queue, t] = await Promise.all([rosterNow(), queueNow(locale), getTranslations("shell")]);
+  return <>{t("subtitle", { clients: new Set(queue.map((item) => item.clientId)).size, checkins: checkinsToReview })}</>;
+}
+
+async function Palette() {
+  const { entries } = await rosterNow();
+  return <CommandPalette clients={entries.map((e) => ({ id: e.id, name: e.name }))} />;
 }

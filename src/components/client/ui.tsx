@@ -237,14 +237,19 @@ export function BackHeader({
 export function NavRow({
   href,
   icon,
+  file = false,
   children,
 }: {
   href: string;
   icon?: string;
+  /** A file to download, not a screen: a plain link, never prefetched — a
+   *  prefetch built the whole data export on every visit (2 Oct 2026). */
+  file?: boolean;
   children: React.ReactNode;
 }) {
+  const Tag = file ? "a" : Link;
   return (
-    <Link
+    <Tag
       href={href}
       className="glass2 flex min-h-[52px] items-center gap-3 rounded-r2 px-3.5 text-[15px] font-semibold"
     >
@@ -257,6 +262,6 @@ export function NavRow({
       <span aria-hidden className="text-[18px] text-[var(--ink3)]">
         ›
       </span>
-    </Link>
+    </Tag>
   );
 }

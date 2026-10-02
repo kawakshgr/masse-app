@@ -172,7 +172,9 @@ export async function QueuePanel({
                         href={`/rendez-vous/${item.call.id}`}
                         aria-label={`${tCalls("addToCalendar")} · ${item.name}`}
                         title={tCalls("addToCalendar")}
-                        className="glass flex size-9 shrink-0 items-center justify-center rounded-rp text-[var(--ink)]"
+                        // On a phone the name needs the room; the calendar
+                        // file is a tap away on the client's file.
+                        className="glass flex size-9 shrink-0 items-center justify-center rounded-rp text-[var(--ink)] max-md:hidden"
                       >
                         <Icon name="calendar" size={16} />
                       </a>

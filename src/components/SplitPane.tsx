@@ -68,9 +68,13 @@ export function SplitPane({
   list,
   detail,
   listLabel,
+  phoneListAt,
 }: {
   /** What the list is called, for the button that opens it on a phone. */
   listLabel: string;
+  /** The address where a phone shows the list itself, the detail having
+   *  nothing yet (2 Oct 2026: /programmes said "pick one on the left"). */
+  phoneListAt?: string;
   storageKey: string;
   initial?: number;
   min?: number;
@@ -91,6 +95,7 @@ export function SplitPane({
   const pathname = usePathname();
   const [openOn, setOpenOn] = useState<string | null>(null);
   const listOpen = openOn === pathname;
+  const listHere = phoneListAt === pathname;
 
   const paneRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -140,8 +145,13 @@ export function SplitPane({
       <div
         ref={paneRef}
         style={{ width }}
-        className={`min-w-0 shrink-0 overflow-y-auto max-md:!w-full ${
-          listOpen ? "max-md:absolute max-md:inset-0 max-md:z-30 max-md:bg-[var(--deep)]" : "max-md:hidden"
+        // On a phone the list ends above the floating tab bar.
+        className={`min-w-0 shrink-0 overflow-y-auto max-md:!w-full max-md:pb-[var(--bar-room)] ${
+          listHere
+            ? ""
+            : listOpen
+              ? "max-md:absolute max-md:inset-0 max-md:z-30 max-md:bg-[var(--deep)]"
+              : "max-md:hidden"
         }`}
       >
         {list}
@@ -183,7 +193,7 @@ export function SplitPane({
         className="w-2 shrink-0 cursor-col-resize touch-none bg-[var(--hair)] transition-colors hover:bg-[var(--glass2)] max-md:hidden"
       />
 
-      <div className="min-w-0 flex-1 overflow-y-auto">
+      <div className={`min-w-0 flex-1 overflow-y-auto ${listHere ? "max-md:hidden" : ""}`}>
         <div className="sticky top-0 z-20 px-3 pt-3 md:hidden">
           <button
             type="button"

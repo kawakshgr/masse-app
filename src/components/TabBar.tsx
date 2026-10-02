@@ -24,7 +24,7 @@ export function TabBar({
   name: string;
   initials: string;
   /** Derived from the roster, singular and plural handled by the caller. */
-  subtitle: string;
+  subtitle: React.ReactNode;
 }) {
   const t = useTranslations("nav");
   const pathname = usePathname();

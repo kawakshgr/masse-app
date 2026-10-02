@@ -23,6 +23,7 @@ import {
 import type { BillingType, InvoiceStatus } from "@/lib/supabase/types";
 import { authUser } from "@/lib/supabase/auth";
 import { MonthInvoicing } from "@/components/MonthInvoicing";
+import { LinkSelect } from "@/components/LinkSelect";
 
 type Filter = "all" | "open" | "monthly" | "pack";
 
@@ -255,15 +256,32 @@ export default async function BillingPage({
                 })}
           </p>
         </div>
-        <SubNav
-          items={FILTERS.map((value) => ({
-            key: value,
-            href: `/facturation?filtre=${value}`,
-            label: t(value === "open" ? "filterOpen" : `filter_${value}`),
-            count: value === "open" && open.length > 0 ? open.length : undefined,
-            active: filter === value,
-          }))}
-        />
+        {/* Four filters: capsules on a computer, a dropdown on a phone, where
+            they wrapped to two rows. */}
+        <div className="max-md:hidden">
+          <SubNav
+            items={FILTERS.map((value) => ({
+              key: value,
+              href: `/facturation?filtre=${value}`,
+              label: t(value === "open" ? "filterOpen" : `filter_${value}`),
+              count: value === "open" && open.length > 0 ? open.length : undefined,
+              active: filter === value,
+            }))}
+          />
+        </div>
+        <div className="md:hidden">
+          <LinkSelect
+            label={t("title")}
+            value={filter}
+            options={FILTERS.map((value) => ({
+              value,
+              label:
+                t(value === "open" ? "filterOpen" : `filter_${value}`) +
+                (value === "open" && open.length > 0 ? ` · ${open.length}` : ""),
+              href: `/facturation?filtre=${value}`,
+            }))}
+          />
+        </div>
       </header>
 
       {params.lot && (

@@ -123,7 +123,7 @@ export default async function SettingsPage({
         {part === "donnees" && (
           <>
             <HealthConsent givenAt={consent?.health_consent_at ?? null} />
-            <NavRow href="/reglages/donnees" icon="note">{tData("download")}</NavRow>
+            <NavRow href="/reglages/donnees" icon="note" file>{tData("download")}</NavRow>
             <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">{tData("downloadHint")}</p>
             <DeleteAccount />
             <p className="text-[12.5px] leading-[1.45] text-[var(--ink3)]">

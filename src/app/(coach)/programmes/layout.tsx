@@ -80,6 +80,12 @@ export default async function ProgrammesLayout({
   );
 
   return (
-    <SplitPane storageKey="masse:pane:programmes" listLabel={t("title")} list={list} detail={children} />
+    <SplitPane
+      storageKey="masse:pane:programmes"
+      listLabel={t("title")}
+      list={list}
+      detail={children}
+      phoneListAt="/programmes"
+    />
   );
 }
