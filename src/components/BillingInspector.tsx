@@ -456,13 +456,33 @@ export function BillingInspector({
               </div>
               <label className="flex flex-wrap items-center gap-2 text-[12.5px] text-[var(--ink2)]">
                 {t("paidOn")}
-                <input
-                  type="date"
-                  value={paidOn}
-                  max={today}
-                  onChange={(event) => setPaidOn(event.target.value)}
-                  className="h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] max-md:text-[16px]"
-                />
+                {/* The date written in the app's language ("2 octobre 2026"),
+                    whatever the browser's; the native picker sits over it,
+                    transparent, so a tap still opens the calendar. */}
+                <span className="relative inline-flex h-9 items-center gap-2 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-3 text-[13px] font-semibold text-[var(--ink)]">
+                  <span aria-hidden>📅</span>
+                  {new Date(`${paidOn}T12:00:00Z`).toLocaleDateString(locale, {
+                    timeZone: "UTC",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                  <input
+                    type="date"
+                    value={paidOn}
+                    max={today}
+                    aria-label={t("paidOn")}
+                    onChange={(event) => event.target.value && setPaidOn(event.target.value)}
+                    onClick={(event) => {
+                      try {
+                        event.currentTarget.showPicker();
+                      } catch {
+                        // Older browsers open it on their own.
+                      }
+                    }}
+                    className="absolute inset-0 size-full cursor-pointer opacity-0 max-md:text-[16px]"
+                  />
+                </span>
                 {opened.state === "paid" && paidOn !== opened.paidOn && (
                   <button
                     type="button"
