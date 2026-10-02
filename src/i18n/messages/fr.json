@@ -771,7 +771,9 @@
     "yearTitle": "12 derniers mois",
     "yearPaid": "{amount} encaissés",
     "yearPaidLegend": "Encaissé",
-    "yearOpenLegend": "Facturé, pas encore réglé"
+    "yearOpenLegend": "Facturé, pas encore réglé",
+    "lockedPaid": "Mois verrouillé : le montant payé ne change plus. Un nouveau tarif vaudra à partir du mois suivant. Décoche pour rouvrir le mois.",
+    "lockedIssued": "Facture émise : son montant, son numéro et sa date ne changent plus."
   },
   "programme": {
     "rename": "Renommer",

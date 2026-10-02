@@ -771,7 +771,9 @@
     "yearTitle": "Last 12 months",
     "yearPaid": "{amount} received",
     "yearPaidLegend": "Received",
-    "yearOpenLegend": "Billed, not yet paid"
+    "yearOpenLegend": "Billed, not yet paid",
+    "lockedPaid": "Month locked: the amount paid no longer changes. A new rate applies from next month. Untick to reopen the month.",
+    "lockedIssued": "Invoice issued: its amount, number and date no longer change."
   },
   "programme": {
     "rename": "Rename",

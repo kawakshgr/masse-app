@@ -357,6 +357,14 @@ export function BillingInspector({
                   : t("notReceived")}
             </span>
           </button>
+          {/* A paid month, or an issued invoice, is closed (2 Oct 2026): the
+              database keeps its amount; a new rate applies to next month. */}
+          {(paid || client.issued) && (
+            <p className="flex items-start gap-2 text-[12px] leading-[1.45] text-[var(--ink2)]">
+              <span aria-hidden>🔒</span>
+              <span>{paid ? t("lockedPaid") : t("lockedIssued")}</span>
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">

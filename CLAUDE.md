@@ -257,7 +257,8 @@ received at the foot of each bar, billed and still owed above. A
 changed monthly rate moves this month's row with it (`saveArrangement`)
 unless the invoice is issued: a numbered invoice keeps its amount, number
 and issue date — the trigger `invoices_issued_fixed` holds every path to
-that, ticking paid included (2 Oct 2026).
+that, ticking paid included (2 Oct 2026). A month marked paid is locked
+the same way while it stays paid; unticking reopens it.
 
 Speed (1 Oct 2026): server components read the user with `authUser()`
 (`lib/supabase/auth.ts`, getClaims verified locally against the ES256 key,
