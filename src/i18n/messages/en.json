@@ -773,7 +773,12 @@
     "yearPaidLegend": "Received",
     "yearOpenLegend": "Billed, not yet paid",
     "lockedPaid": "Month locked: the amount paid no longer changes. A new rate applies from next month. Untick to reopen the month.",
-    "lockedIssued": "Invoice issued: its amount, number and date no longer change."
+    "lockedIssued": "Invoice issued: its amount, number and date no longer change.",
+    "monthTapHint": "Tap a month to settle or correct it, even late.",
+    "paidOn": "Paid on",
+    "savePaidOn": "Save the date",
+    "paidOnSaid": "Paid on {date}.",
+    "paidOnHint": "Pick the day it was paid, then tap “Paid”."
   },
   "programme": {
     "rename": "Rename",

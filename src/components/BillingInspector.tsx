@@ -34,7 +34,17 @@ export type BillingClient = {
   /** The agreed day has gone by. Said beside the state, never instead of it. */
   overdue: boolean;
   /** Oldest first: one mark per month, six of them. */
-  history: { label: string; state: MonthState | "none" }[];
+  history: {
+    period: string;
+    label: string;
+    longLabel: string;
+    state: MonthState | "none";
+    /** The day it was paid, YYYY-MM-DD. */
+    paidOn: string | null;
+    /** The month's own amount, once it has a row. */
+    amountCents: number | null;
+    invoiceNumber: string | null;
+  }[];
 };
 
 function Chip({
@@ -98,6 +108,12 @@ export function BillingInspector({
   const [day, setDay] = useState(client.dayOfMonth);
   const [pack, setPack] = useState(client.packSessions);
 
+  // A month of the six opened from its tile, to settle it late (2 Oct 2026).
+  const [openMonth, setOpenMonth] = useState<string | null>(null);
+  const opened = client.history.find((h) => h.period === openMonth) ?? null;
+  const today = new Date().toISOString().slice(0, 10);
+  const [paidOn, setPaidOn] = useState(today);
+
   // A different row was picked: adopt its values rather than keeping the last.
   const shown = useRef(client.id);
   useEffect(() => {
@@ -107,6 +123,7 @@ export function BillingInspector({
     setType(client.type);
     setDay(client.dayOfMonth);
     setPack(client.packSessions);
+    setOpenMonth(null);
   }, [client]);
 
   function save(next: {
@@ -130,6 +147,18 @@ export function BillingInspector({
     const next = Math.max(0, amount + euroDelta * 100);
     setAmount(next);
     save({ amountCents: next });
+  }
+
+  function setPastState(month: NonNullable<typeof opened>, state: MonthState, on?: string) {
+    const body = new FormData();
+    body.set("client_id", client.id);
+    body.set("period", month.period);
+    body.set("amount", ((month.amountCents ?? amount) / 100).toFixed(2));
+    body.set("state", state);
+    if (on) body.set("paid_on", on);
+    startTransition(() => {
+      void setMonthStatus(body);
+    });
   }
 
   function setState(state: MonthState) {
@@ -370,26 +399,87 @@ export function BillingInspector({
         <div className="flex flex-col gap-1.5">
           <SectionTitle icon="chart">{t("lastSixMonths")}</SectionTitle>
           <div className="flex gap-1.5">
-            {client.history.map((h) => (
-              <div
-                key={h.label}
-                className="glass2 flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-r2 px-1 py-2"
-              >
-                <span className="truncate text-[10px] text-[var(--ink2)]">{h.label}</span>
-                <span
-                  className={`text-[12px] ${
-                    h.state === "paid"
-                      ? "text-[var(--accent-soft)]"
-                      : h.state === "late"
-                        ? "text-[var(--a3)]"
-                        : "text-[var(--ink3)]"
+            {client.history.map((h) => {
+              const on = h.period === openMonth;
+              return (
+                <button
+                  key={h.period}
+                  type="button"
+                  aria-pressed={on}
+                  aria-label={h.longLabel}
+                  onClick={() => {
+                    setOpenMonth(on ? null : h.period);
+                    setPaidOn(h.paidOn ?? today);
+                  }}
+                  className={`flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-r2 border px-1 py-2 ${
+                    on ? "sel" : "glass2 border-transparent"
                   }`}
                 >
-                  {h.state === "paid" ? "✓" : h.state === "none" ? "·" : "!"}
+                  <span className="truncate text-[10px] text-[var(--ink2)]">{h.label}</span>
+                  <span
+                    className={`text-[12px] ${
+                      h.state === "paid"
+                        ? "text-[var(--accent-soft)]"
+                        : h.state === "late"
+                          ? "text-[var(--a3)]"
+                          : "text-[var(--ink3)]"
+                    }`}
+                  >
+                    {h.state === "paid" ? "✓" : h.state === "none" ? "·" : "!"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {!opened && <p className="text-[11.5px] text-[var(--ink3)]">{t("monthTapHint")}</p>}
+
+          {/* The month opened: its state, and the day it was paid. */}
+          {opened && (
+            <div className="glass2 flex flex-col gap-2.5 rounded-r2 p-3">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-[13px] font-semibold first-letter:uppercase">{opened.longLabel}</span>
+                <span className="tnum text-[12.5px] text-[var(--ink2)]">
+                  {euros(opened.amountCents ?? amount, locale)}
+                  {opened.invoiceNumber ? ` · ${opened.invoiceNumber}` : ""}
                 </span>
               </div>
-            ))}
-          </div>
+              <div className="grid grid-cols-3 gap-2">
+                <Chip on={opened.state === "paid"} onClick={() => setPastState(opened, "paid", paidOn)}>
+                  {t("paid")}
+                </Chip>
+                <Chip on={opened.state === "awaiting"} onClick={() => setPastState(opened, "awaiting")}>
+                  {t("awaiting")}
+                </Chip>
+                <Chip on={opened.state === "late"} onClick={() => setPastState(opened, "late")}>
+                  {t("late")}
+                </Chip>
+              </div>
+              <label className="flex flex-wrap items-center gap-2 text-[12.5px] text-[var(--ink2)]">
+                {t("paidOn")}
+                <input
+                  type="date"
+                  value={paidOn}
+                  max={today}
+                  onChange={(event) => setPaidOn(event.target.value)}
+                  className="h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] max-md:text-[16px]"
+                />
+                {opened.state === "paid" && paidOn !== opened.paidOn && (
+                  <button
+                    type="button"
+                    onClick={() => setPastState(opened, "paid", paidOn)}
+                    className="cta h-9 rounded-r2 px-3 text-[12.5px] font-semibold text-[var(--onA)]"
+                  >
+                    {t("savePaidOn")}
+                  </button>
+                )}
+              </label>
+              <p className="text-[11.5px] leading-[1.45] text-[var(--ink3)]">
+                {opened.state === "paid" && opened.paidOn
+                  ? t("paidOnSaid", { date: new Date(`${opened.paidOn}T12:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "long" }) })
+                  : t("paidOnHint")}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-2">

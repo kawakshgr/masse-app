@@ -773,7 +773,12 @@
     "yearPaidLegend": "Encaissé",
     "yearOpenLegend": "Facturé, pas encore réglé",
     "lockedPaid": "Mois verrouillé : le montant payé ne change plus. Un nouveau tarif vaudra à partir du mois suivant. Décoche pour rouvrir le mois.",
-    "lockedIssued": "Facture émise : son montant, son numéro et sa date ne changent plus."
+    "lockedIssued": "Facture émise : son montant, son numéro et sa date ne changent plus.",
+    "monthTapHint": "Touche un mois pour le régler ou le corriger, même avec du retard.",
+    "paidOn": "Réglé le",
+    "savePaidOn": "Enregistrer la date",
+    "paidOnSaid": "Réglé le {date}.",
+    "paidOnHint": "Choisis la date du règlement, puis touche « Payé »."
   },
   "programme": {
     "rename": "Renommer",

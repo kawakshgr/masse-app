@@ -102,6 +102,14 @@ export async function setMonthStatus(formData: FormData) {
   const state: MonthState =
     raw === "paid" || raw === "late" ? raw : "awaiting";
   if (!clientId || !period) return;
+  // The day it was paid, when she gives it (a past month settled late,
+  // 2 Oct 2026); today otherwise. Never a day to come.
+  const paidOn = String(formData.get("paid_on") ?? "");
+  const today = new Date().toISOString().slice(0, 10);
+  const paidAt =
+    /^\d{4}-\d{2}-\d{2}$/.test(paidOn) && paidOn <= today
+      ? new Date(`${paidOn}T12:00:00Z`).toISOString()
+      : new Date().toISOString();
 
   await supabase.from("invoices").upsert(
     {
@@ -110,7 +118,7 @@ export async function setMonthStatus(formData: FormData) {
       period_start: period,
       amount_cents: toCents(formData.get("amount")),
       status: statusFor(state),
-      paid_at: state === "paid" ? new Date().toISOString() : null,
+      paid_at: state === "paid" ? paidAt : null,
     },
     { onConflict: "client_id,period_start" },
   );

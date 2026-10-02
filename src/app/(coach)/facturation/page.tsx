@@ -83,7 +83,7 @@ export default async function BillingPage({
       supabase
         .from("invoices")
         .select(
-          "client_id, period_start, status, paid_at, issued_at, invoice_number, sent_at",
+          "client_id, period_start, status, paid_at, issued_at, invoice_number, sent_at, amount_cents",
         )
         .gte("period_start", months[0]),
       supabase
@@ -163,10 +163,15 @@ export default async function BillingPage({
       history: months.map((m) => {
         const row = invoiceAt.get(`${client.id}:${m}`);
         return {
+          period: m,
           label: shortMonth(m, locale),
+          longLabel: monthLabel(m, locale),
           state: (row == null
             ? "none"
             : monthState(row.status as InvoiceStatus)) as MonthState | "none",
+          paidOn: row?.paid_at ? row.paid_at.slice(0, 10) : null,
+          amountCents: row?.amount_cents ?? null,
+          invoiceNumber: row?.invoice_number ?? null,
         };
       }),
     };
