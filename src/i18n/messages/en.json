@@ -2020,5 +2020,18 @@
     "step3": "Tap Share, then “Add to Home Screen”",
     "after": "Then sign in again and turn notifications back on in Settings. Your sessions, check-ins and measurements stay online. Only your cycle symptom notes, kept on this phone alone, go with the old app: copy them first if they matter to you.",
     "later": "Later"
+  },
+  "camera": {
+    "close": "Close",
+    "noCamera": "The camera cannot be reached. Allow it in your phone's settings, or choose a photo already taken.",
+    "pick": "Choose a photo",
+    "guide": "Guide",
+    "noGuide": "From your next check-in, today's photo will be the guide to take the same pose.",
+    "now": "Now",
+    "timer": "{s} s",
+    "flip": "Flip",
+    "shoot": "Take the photo",
+    "retake": "Retake",
+    "use": "Use this photo"
   }
 }

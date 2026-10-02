@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { Kicker } from "./ui";
+import { CameraSheet } from "./CameraSheet";
 
 const BUCKET = "check-in-photos";
 const POSES = ["front", "side", "back"] as const;
@@ -25,18 +26,26 @@ export function PoseGrid({ checkInId, clientId }: { checkInId: string; clientId:
   const [failed, setFailed] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   const picking = useRef<Pose | null>(null);
+  // The camera, open on one pose, with last time's photo of it as a guide.
+  const [camera, setCamera] = useState<Pose | null>(null);
+  const [guides, setGuides] = useState<Partial<Record<Pose, string>>>({});
 
   useEffect(() => {
     let live = true;
     void signedUrls(checkInId).then((next) => {
       if (live) setUrls(next);
     });
+    void lastGuides(clientId, checkInId).then((next) => {
+      if (live) setGuides(next);
+    });
     return () => {
       live = false;
     };
-  }, [checkInId]);
+  }, [checkInId, clientId]);
 
-  async function accept(file: File, pose: Pose) {
+  const hasCamera = typeof navigator !== "undefined" && Boolean(navigator.mediaDevices?.getUserMedia);
+
+  async function accept(file: Blob, pose: Pose) {
     setBusy(pose);
     setFailed(false);
     try {
@@ -90,7 +99,8 @@ export function PoseGrid({ checkInId, clientId }: { checkInId: string; clientId:
             aria-label={tPoses(pose)}
             onClick={() => {
               picking.current = pose;
-              input.current?.click();
+              if (hasCamera) setCamera(pose);
+              else input.current?.click();
             }}
             className="flex flex-1 flex-col items-center gap-1.5"
           >
@@ -124,6 +134,22 @@ export function PoseGrid({ checkInId, clientId }: { checkInId: string; clientId:
           if (file && pose) void accept(file, pose);
         }}
       />
+      {camera && (
+        <CameraSheet
+          title={tPoses(camera)}
+          guideUrl={guides[camera] ?? null}
+          onUse={(photo) => {
+            const pose = camera;
+            setCamera(null);
+            void accept(photo, pose);
+          }}
+          onPickFile={() => {
+            setCamera(null);
+            input.current?.click();
+          }}
+          onClose={() => setCamera(null)}
+        />
+      )}
       <p className={`text-[13px] leading-[1.45] ${failed ? "text-[var(--a3)]" : "text-[var(--ink3)]"}`}>
         {failed ? t("failed") : tBilan("discipline")}
       </p>
@@ -152,7 +178,7 @@ async function signedUrls(checkInId: string): Promise<Partial<Record<Pose, strin
  * Re-encoded rather than sent as picked: a phone photo is several megabytes of
  * detail nobody looks at on a check-in, and the bucket caps at eight.
  */
-async function shrink(file: File, longest = 1600): Promise<Blob> {
+async function shrink(file: Blob, longest = 1600): Promise<Blob> {
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, longest / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
@@ -163,4 +189,30 @@ async function shrink(file: File, longest = 1600): Promise<Blob> {
   return new Promise((resolve, reject) =>
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("encode"))), "image/jpeg", 0.8),
   );
+}
+
+/**
+ * The latest earlier check-in's photo of each pose: what the camera lays
+ * over its picture, so this week's stands where last week's stood.
+ */
+async function lastGuides(clientId: string, checkInId: string): Promise<Partial<Record<Pose, string>>> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("check_in_photos")
+    .select("storage_path, pose, check_in_id, check_ins(week_start_date)")
+    .eq("client_id", clientId)
+    .neq("check_in_id", checkInId);
+  const latest: Partial<Record<Pose, { path: string; week: string }>> = {};
+  for (const row of (data ?? []) as unknown as { storage_path: string; pose: Pose; check_ins: { week_start_date: string } | null }[]) {
+    const week = row.check_ins?.week_start_date ?? "";
+    if (!latest[row.pose] || week > latest[row.pose]!.week) latest[row.pose] = { path: row.storage_path, week };
+  }
+  const out: Partial<Record<Pose, string>> = {};
+  for (const pose of POSES) {
+    const found = latest[pose];
+    if (!found) continue;
+    const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(found.path, 600);
+    if (signed?.signedUrl) out[pose] = signed.signedUrl;
+  }
+  return out;
 }

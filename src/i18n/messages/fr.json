@@ -2020,5 +2020,18 @@
     "step3": "Touche Partager, puis « Sur l’écran d’accueil »",
     "after": "Ensuite, reconnecte-toi et réactive les notifications dans Réglages. Tes séances, bilans et mesures restent en ligne. Seules tes notes de symptômes du cycle, gardées uniquement sur ce téléphone, partent avec l’ancienne app : recopie-les avant si tu y tiens.",
     "later": "Plus tard"
+  },
+  "camera": {
+    "close": "Fermer",
+    "noCamera": "L’appareil photo n’est pas accessible. Autorise-le dans les réglages de ton téléphone, ou choisis une photo déjà prise.",
+    "pick": "Choisir une photo",
+    "guide": "Guide",
+    "noGuide": "Dès ton prochain bilan, ta photo d’aujourd’hui servira de guide pour reprendre la même pose.",
+    "now": "Tout de suite",
+    "timer": "{s} s",
+    "flip": "Retourner",
+    "shoot": "Prendre la photo",
+    "retake": "Reprendre",
+    "use": "Utiliser cette photo"
   }
 }
