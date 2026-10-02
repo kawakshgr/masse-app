@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getTranslations } from "next-intl/server";
-import { euros, statusFor, type MonthState } from "@/lib/billing";
+import { euros, monthStart, statusFor, type MonthState } from "@/lib/billing";
 import { invoiceFileName, invoiceLabels, loadInvoice } from "@/lib/invoice";
 import { renderInvoicePdf } from "@/lib/invoicePdf";
 import { mailFailure, sendInvoiceMail } from "@/lib/invoiceMail";
@@ -59,18 +59,31 @@ export async function saveArrangement(formData: FormData) {
     Math.max(1, intOr(formData.get("pack"), 10) + intOr(formData.get("pack_delta"), 0)),
   );
 
-  await supabase.from("billing_arrangements").upsert(
-    {
-      client_id: clientId,
-      coach_id: userId,
-      amount_cents: amountCents,
-      type: type === "pack" ? "pack" : "monthly",
-      day_of_month: day,
-      pack_sessions: pack,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: "client_id" },
-  );
+  await Promise.all([
+    supabase.from("billing_arrangements").upsert(
+      {
+        client_id: clientId,
+        coach_id: userId,
+        amount_cents: amountCents,
+        type: type === "pack" ? "pack" : "monthly",
+        day_of_month: day,
+        pack_sessions: pack,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "client_id" },
+    ),
+    // This month's row follows the new amount (2 Oct 2026), so the twelve
+    // months and the totals move at once — unless its invoice is issued: a
+    // numbered invoice keeps the amount it was written with.
+    type === "pack"
+      ? Promise.resolve()
+      : supabase
+          .from("invoices")
+          .update({ amount_cents: amountCents })
+          .eq("client_id", clientId)
+          .eq("period_start", monthStart())
+          .is("invoice_number", null),
+  ]);
 
   revalidatePath("/facturation");
 }
