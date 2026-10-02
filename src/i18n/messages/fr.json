@@ -767,7 +767,11 @@
     "nothingAutomaticBody": "Masse ne débite aucune carte. L’app garde ce que vous avez convenu, te dit ce qui reste ouvert et écrit la facture — c’est toi qui demandes.",
     "noClients": "Ajoute un client avant de facturer.",
     "dueDayPassed": "échéance passée le {day}",
-    "packOf": "forfait de {count} séances"
+    "packOf": "forfait de {count} séances",
+    "yearTitle": "12 derniers mois",
+    "yearPaid": "{amount} encaissés",
+    "yearPaidLegend": "Encaissé",
+    "yearOpenLegend": "Facturé, pas encore réglé"
   },
   "programme": {
     "rename": "Renommer",

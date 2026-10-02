@@ -23,6 +23,7 @@ import {
 import type { BillingType, InvoiceStatus } from "@/lib/supabase/types";
 import { authUser } from "@/lib/supabase/auth";
 import { MonthInvoicing } from "@/components/MonthInvoicing";
+import { RevenueChart } from "@/components/RevenueChart";
 import { LinkSelect } from "@/components/LinkSelect";
 
 type Filter = "all" | "open" | "monthly" | "pack";
@@ -68,7 +69,8 @@ export default async function BillingPage({
 
   const user = await authUser();
 
-  const [clientsRes, arrangementsRes, invoicesRes, profileRes] =
+  const year = lastMonths(period, 12);
+  const [clientsRes, arrangementsRes, invoicesRes, profileRes, yearRes] =
     await Promise.all([
       supabase
         .from("clients")
@@ -89,7 +91,25 @@ export default async function BillingPage({
         .select("legal_name, siret")
         .eq("coach_id", user?.id ?? "")
         .maybeSingle(),
+      // Twelve months of invoices, for the chart: what came in, what is owed.
+      supabase
+        .from("invoices")
+        .select("period_start, amount_cents, status")
+        .gte("period_start", year[0])
+        .neq("status", "void")
+        .neq("status", "draft"),
     ]);
+
+  const revenue = year.map((month) => {
+    const rows = (yearRes.data ?? []).filter((row) => row.period_start === month);
+    return {
+      label: shortMonth(month, locale),
+      paidCents: rows.filter((row) => row.status === "paid").reduce((sum, row) => sum + row.amount_cents, 0),
+      openCents: rows.filter((row) => row.status !== "paid").reduce((sum, row) => sum + row.amount_cents, 0),
+      current: month === period,
+    };
+  });
+  const yearPaid = revenue.reduce((sum, m) => sum + m.paidCents, 0);
 
   // An invoice cannot be written without the mentions it has to carry, so the
   // panel says so rather than offering a button that quietly fails.
@@ -333,6 +353,15 @@ export default async function BillingPage({
           </div>
         ))}
       </div>
+
+      <RevenueChart
+        months={revenue}
+        title={t("yearTitle")}
+        aside={t("yearPaid", { amount: euros(yearPaid, locale) })}
+        paidLabel={t("yearPaidLegend")}
+        openLabel={t("yearOpenLegend")}
+        money={(cents) => euros(cents, locale)}
+      />
 
       <div className="grid gap-3.5 @5xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] @5xl:items-start">
         <BillingTable

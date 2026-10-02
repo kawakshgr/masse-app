@@ -767,7 +767,11 @@
     "nothingAutomaticBody": "Masse never charges a card. It tracks what you agreed, tells you what is open, and writes the invoice — you stay the one who asks.",
     "noClients": "Add a client before you invoice.",
     "dueDayPassed": "due day passed on the {day}",
-    "packOf": "pack of {count} sessions"
+    "packOf": "pack of {count} sessions",
+    "yearTitle": "Last 12 months",
+    "yearPaid": "{amount} received",
+    "yearPaidLegend": "Received",
+    "yearOpenLegend": "Billed, not yet paid"
   },
   "programme": {
     "rename": "Rename",
