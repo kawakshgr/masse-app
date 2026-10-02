@@ -1,6 +1,7 @@
 import { clientSession } from "@/lib/clientData";
 import { ClientNav } from "@/components/client/ClientNav";
 import { PendingScreen } from "@/components/client/PendingScreen";
+import { PullToRefresh } from "@/components/PullToRefresh";
 
 /**
  * The client's app on the web — the Android client, and anyone without the
@@ -19,6 +20,7 @@ export default async function ClientLayout({ children }: { children: React.React
         <main className="mx-auto min-h-dvh max-w-[560px] space-y-[18px] px-[22px] pt-[calc(env(safe-area-inset-top)+12px)] pb-[calc(env(safe-area-inset-bottom)+32px)]">
           <PendingScreen />
         </main>
+        <PullToRefresh />
       </>
     );
   }
@@ -30,6 +32,7 @@ export default async function ClientLayout({ children }: { children: React.React
         {children}
       </main>
       <ClientNav cycleTracking={client.cycle_tracking} />
+      <PullToRefresh />
     </>
   );
 }

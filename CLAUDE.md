@@ -210,6 +210,11 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   photo of a pose on the slider (shared from the phone), and strength
   (`loadStrength`). `/seance/historique`: the last eight weeks sent, with
   the sets logged per movement.
+- **Fresh data** (2 Oct 2026, `PullToRefresh`, in both layouts) — on a
+  touch screen, pulling down from the top of whatever scrolls runs
+  `router.refresh()` (server data again, client state kept); never in a
+  sheet or while typing; offline it says so. Everywhere, coming back after
+  five minutes in the background refreshes unasked. A computer has F5.
 - **Offline pages** (1 Oct 2026) — the service worker keeps Séance,
   Aujourd'hui and Nutrition as last served (fresh first, the copy after 4 s
   or offline, never a redirect) and `/connexion` forgets them

@@ -2045,5 +2045,11 @@
     "shoot": "Prendre la photo",
     "retake": "Reprendre",
     "use": "Utiliser cette photo"
+  },
+  "refresh": {
+    "pull": "Tire pour actualiser",
+    "release": "Relâche pour actualiser",
+    "loading": "Actualisation…",
+    "offline": "Hors ligne : rien à actualiser"
   }
 }

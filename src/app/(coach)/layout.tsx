@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { queueNow, rosterNow } from "@/lib/coachData";
 import { TabBar } from "@/components/TabBar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { PullToRefresh } from "@/components/PullToRefresh";
 import { authUser } from "@/lib/supabase/auth";
 
 /** "Kevin Cordeiro" → "KC"; one name gives its first two letters. */
@@ -80,6 +81,7 @@ export default async function CoachLayout({
           the screen would otherwise carry the tab bar off with it. */}
       <div className="pane-frame flex min-h-0 flex-1 overflow-y-auto overscroll-contain print:block print:overflow-visible">{children}</div>
     </div>
+    <PullToRefresh />
     </>
   );
 }
