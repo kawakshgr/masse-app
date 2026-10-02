@@ -1113,7 +1113,8 @@
     "disclaimer": "Masse n’est pas un conseil juridique ni comptable. Fais valider une première facture par ton comptable avant de l’envoyer.",
     "incomplete": "Renseigne ton entreprise dans Admin pour pouvoir éditer une facture.",
     "missing": "{count, plural, =1 {1 mention manquante} other {# mentions manquantes}}",
-    "complete": "Complet · mis à jour le {date}"
+    "complete": "Complet · mis à jour le {date}",
+    "required": "obligatoire pour facturer"
   },
   "invoice": {
     "title": "Facture",

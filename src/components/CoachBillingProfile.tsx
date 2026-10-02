@@ -16,6 +16,7 @@ function Field({
   hint,
   placeholder,
   wide,
+  required,
 }: {
   label: string;
   name: string;
@@ -23,15 +24,24 @@ function Field({
   hint?: string;
   placeholder?: string;
   wide?: boolean;
+  /** A mention no invoice goes out without: red while empty (2 Oct 2026). */
+  required?: string;
 }) {
+  const [text, setText] = useState(String(value ?? ""));
+  const missing = Boolean(required) && text.trim() === "";
   return (
     <label className={`block min-w-0 ${wide ? "sm:col-span-2" : ""}`}>
-      <span className="block text-[12px] text-[var(--ink2)]">{label}</span>
+      <span className={`block text-[12px] ${missing ? "font-semibold text-[var(--a3)]" : "text-[var(--ink2)]"}`}>
+        {label}
+        {missing && <span className="font-normal"> · {required}</span>}
+      </span>
       <input
         name={name}
-        defaultValue={value ?? ""}
+        value={text}
+        onChange={(event) => setText(event.target.value)}
         placeholder={placeholder}
-        className={`mt-1 ${cell}`}
+        aria-invalid={missing || undefined}
+        className={`mt-1 ${cell} ${missing ? "!border-[var(--a3)]" : ""}`}
       />
       {hint && (
         <span className="mt-1 block text-[11px] leading-[1.45] text-[var(--ink3)]">
@@ -65,6 +75,7 @@ export function CoachBillingProfile({
 }) {
   const t = useTranslations("company");
   const [regime, setRegime] = useState(profile?.vat_regime ?? "franchise");
+  const req = t("required");
 
   return (
     <div>
@@ -74,7 +85,7 @@ export function CoachBillingProfile({
 
       <form action={saveBillingProfile} className="mt-4 space-y-4">
         <Group title={t("identity")}>
-          <Field label={t("legalName")} name="legal_name" value={profile?.legal_name ?? ""} />
+          <Field label={t("legalName")} name="legal_name" required={req} value={profile?.legal_name ?? ""} />
           <Field
             label={t("legalForm")}
             name="legal_form"
@@ -83,7 +94,7 @@ export function CoachBillingProfile({
           />
           <Field
             label={t("siret")}
-            name="siret"
+            name="siret" required={req}
             value={profile?.siret ?? ""}
             hint={t("siretHint")}
           />
@@ -98,10 +109,10 @@ export function CoachBillingProfile({
         </Group>
 
         <Group title={t("address")}>
-          <Field label={t("line1")} name="address_line1" value={profile?.address_line1 ?? ""} wide />
+          <Field label={t("line1")} name="address_line1" required={req} value={profile?.address_line1 ?? ""} wide />
           <Field label={t("line2")} name="address_line2" value={profile?.address_line2 ?? ""} wide />
-          <Field label={t("postcode")} name="postcode" value={profile?.postcode ?? ""} />
-          <Field label={t("city")} name="city" value={profile?.city ?? ""} />
+          <Field label={t("postcode")} name="postcode" required={req} value={profile?.postcode ?? ""} />
+          <Field label={t("city")} name="city" required={req} value={profile?.city ?? ""} />
           <Field label={t("country")} name="country" value={profile?.country ?? "France"} />
         </Group>
 
@@ -143,7 +154,7 @@ export function CoachBillingProfile({
         </Group>
 
         <Group title={t("payment")}>
-          <Field label="IBAN" name="iban" value={profile?.iban ?? ""} wide />
+          <Field label="IBAN" name="iban" required={req} value={profile?.iban ?? ""} wide />
           <Field label="BIC" name="bic" value={profile?.bic ?? ""} />
           <Field
             label={t("terms")}

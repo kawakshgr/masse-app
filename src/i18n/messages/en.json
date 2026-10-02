@@ -1113,7 +1113,8 @@
     "disclaimer": "Masse is not legal or accounting advice. Have your accountant check a first invoice before you send it.",
     "incomplete": "Fill in your company under Admin before you can write an invoice.",
     "missing": "{count, plural, =1 {1 required detail missing} other {# required details missing}}",
-    "complete": "Complete · updated {date}"
+    "complete": "Complete · updated {date}",
+    "required": "required to invoice"
   },
   "invoice": {
     "title": "Invoice",
