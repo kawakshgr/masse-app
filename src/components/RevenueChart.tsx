@@ -36,8 +36,10 @@ export function RevenueChart({
       <SectionTitle icon="chart" aside={<span className="tnum text-[12px] font-bold text-[var(--ink2)]">{aside}</span>}>
         {title}
       </SectionTitle>
-      <div className="mt-4 overflow-x-auto [scrollbar-width:none]">
-        <div className="flex min-w-[560px] items-end gap-1.5" style={{ height: 150 }} role="img" aria-label={title}>
+      {/* Too narrow for twelve bars, a phone scrolls them sideways — opening
+          on the latest months (right to left), not on last November. */}
+      <div className="mt-4 overflow-x-auto [direction:rtl] [scrollbar-width:none]">
+        <div className="flex min-w-[560px] items-end gap-1.5 [direction:ltr]" style={{ height: 150 }} role="img" aria-label={title}>
           {months.map((m) => {
             const total = m.paidCents + m.openCents;
             const h = (total / max) * 110;
