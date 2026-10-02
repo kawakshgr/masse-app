@@ -253,7 +253,11 @@ Billing (1 Oct 2026): the month's invoices go out in one press —
 Facturation lists monthly clients whose invoice has not gone, ticked by
 default; `issueAndSendMonth` issues, archives and e-mails each. Above the
 table, the last twelve months from the invoice rows (`RevenueChart`):
-received at the foot of each bar, billed and still owed above.
+received at the foot of each bar, billed and still owed above. A
+changed monthly rate moves this month's row with it (`saveArrangement`)
+unless the invoice is issued: a numbered invoice keeps its amount, number
+and issue date — the trigger `invoices_issued_fixed` holds every path to
+that, ticking paid included (2 Oct 2026).
 
 Speed (1 Oct 2026): server components read the user with `authUser()`
 (`lib/supabase/auth.ts`, getClaims verified locally against the ES256 key,
