@@ -120,7 +120,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   and the strength curve read `done_as ?? name`; progression ignores those
   sets. A deload week is written from the menu (`deloadWeek`, 1 Oct 2026:
   a set fewer if asked, load −20 to −50 % rounded to a plate, reps kept,
-  never pushed). Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
+  never pushed). A new programme can start from a template or from any
+  programme's menu (2 Oct 2026, `copyProgramme`: every week, session and
+  movement, rest days and stand-ins; nothing assigned; not a template).
+  Next week can be written from the last (`progressWeek`, 29 Sep 2026): an
   exercise moves on (+2.5 kg or +1 rep, her choice) only when every client
   who logged it hit every prescribed set; otherwise, or with no logs or no
   target, it stays. The new week is never pushed by this.
@@ -157,7 +160,10 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   (`coaches.check_in_due_offset`); `checkInWindow` in src/lib/checkIns.ts,
   mirrored by `CheckInFeed.open` on iOS, decides which week is asked for,
   when it opens (3 days before) and when it is late (2 days of grace after).
-  The client's form is one question a screen (1 Oct 2026); the coach's
+  The client's form is one question a screen (1 Oct 2026); a photo slot
+  opens the camera with the last check-in's photo of that pose laid over
+  it (2 Oct 2026, `CameraSheet`: guide opacity, 5/10 s timer, front/back,
+  3:4 crop; picking a file stays one tap away); the coach's
   review has a before/after slider and a picture to send (made on the
   device, nothing uploaded).
   Opening the form creates an empty row for photos to hang off; `isFiled`
@@ -245,7 +251,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
 
 Billing (1 Oct 2026): the month's invoices go out in one press —
 Facturation lists monthly clients whose invoice has not gone, ticked by
-default; `issueAndSendMonth` issues, archives and e-mails each.
+default; `issueAndSendMonth` issues, archives and e-mails each. Above the
+table, the last twelve months from the invoice rows (`RevenueChart`):
+received at the foot of each bar, billed and still owed above.
 
 Speed (1 Oct 2026): server components read the user with `authUser()`
 (`lib/supabase/auth.ts`, getClaims verified locally against the ES256 key,
@@ -253,7 +261,10 @@ once per request) — not `auth.getUser()`, a trip to the auth server each
 time; server actions that write keep getUser. Reads that do not depend on
 one another go in one `Promise.all`. Every route group has a `loading.tsx`
 skeleton (`components/Skeleton.tsx`), and a client file's tabs show theirs
-the moment one is tapped.
+the moment one is tapped. The coach layout waits only for the coach's row:
+the top line's count and the ⌘K names stream in (`NeedsLine`, `Palette`).
+A link to a file (the data export) is a plain `<a>`, never a prefetching
+`Link`.
 
 ## Deliberately not in v1
 

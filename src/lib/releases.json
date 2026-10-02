@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.12",
+    "date": "2026-10-02",
+    "fr": [
+      "Photos de bilan avec guide : l’appareil photo s’ouvre avec ta photo du bilan précédent en transparence, pour reprendre la même pose. Retardateur de 5 ou 10 secondes pour poser le téléphone.",
+      "Encore plus rapide : les écrans s’ouvrent plus vite."
+    ],
+    "en": [
+      "Check-in photos with a guide: the camera opens with your last check-in's photo laid over it, faint, to take the same pose. A 5 or 10 second timer to set the phone down.",
+      "Faster again: screens open sooner."
+    ]
+  },
+  {
     "version": "0.11",
     "date": "2026-10-01",
     "fr": [
