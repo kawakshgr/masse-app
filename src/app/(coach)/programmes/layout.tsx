@@ -60,7 +60,25 @@ export default async function ProgrammesLayout({
       </div>
 
       <div className="shrink-0 border-t border-[var(--hair)] p-3">
-        <form action={createProgramme} className="flex gap-2">
+        <form action={createProgramme} className="flex flex-wrap gap-2">
+          {/* From a template, every week copied (2 Oct 2026); or empty. */}
+          {rows.some((row) => row.isTemplate) && (
+            <select
+              name="from"
+              defaultValue=""
+              aria-label={t("fromLabel")}
+              className="h-9 w-full rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2 text-[13px] text-[var(--ink)] max-md:text-[16px]"
+            >
+              <option value="">{t("fromEmpty")}</option>
+              {rows
+                .filter((row) => row.isTemplate)
+                .map((row) => (
+                  <option key={row.id} value={row.id}>
+                    {t("fromTemplate", { name: row.name })}
+                  </option>
+                ))}
+            </select>
+          )}
           <input
             name="name"
             placeholder={t("new")}

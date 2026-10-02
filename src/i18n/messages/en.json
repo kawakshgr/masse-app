@@ -78,7 +78,11 @@
     "push": "Push to clients",
     "pushed": "Pushed on {date}",
     "notPushed": "Never pushed — invisible to the client",
-    "count": "{count, plural, =0 {no programmes} =1 {1 programme} other {# programmes}}"
+    "count": "{count, plural, =0 {no programmes} =1 {1 programme} other {# programmes}}",
+    "copyName": "{name} · new block",
+    "fromLabel": "Start from",
+    "fromEmpty": "Empty programme",
+    "fromTemplate": "Template: {name}"
   },
   "days": {
     "0": "Monday",
@@ -427,7 +431,8 @@
     "pushKept": "{count, plural, =1 {One week already begun stayed where it was, so its history is untouched. Withdraw it first to re-date it.} other {# weeks already begun stayed where they were, so their history is untouched. Withdraw them first to re-date them.}}",
     "weekOf": "Week of",
     "today": "today",
-    "altCount": "{count, plural, one {# stand-in} other {# stand-ins}}"
+    "altCount": "{count, plural, one {# stand-in} other {# stand-ins}}",
+    "newFrom": "New programme from this one"
   },
   "goal": {
     "Get stronger": "Get stronger",

@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { WeekEditor, type EditorSession } from "@/components/WeekEditor";
 import { WeekExport, WeekPrintout } from "@/components/WeekExport";
-import { addWeek, deleteWeek, deloadWeek, duplicateWeek, progressWeek, toggleTemplate } from "../actions";
+import { addWeek, deleteWeek, deloadWeek, duplicateWeek, newFromProgramme, progressWeek, toggleTemplate } from "../actions";
 import { ProgrammeHeader } from "@/components/ProgrammeHeader";
 import { hevyConfigured } from "@/lib/hevy";
 
@@ -116,6 +116,15 @@ export default async function ProgrammeEditorPage({
                 <button type="submit" className={MENU_ITEM}>
                   <MenuIcon name="star" />
                   {programme.is_template ? t("untemplate") : t("template")}
+                </button>
+              </form>
+
+              {/* A whole new programme from this one, every week copied. */}
+              <form action={newFromProgramme}>
+                <input type="hidden" name="programme_id" value={programme.id} />
+                <button type="submit" className={MENU_ITEM}>
+                  <MenuIcon name="programmes" />
+                  {t("newFrom")}
                 </button>
               </form>
 

@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/supabase/types";
 import { localDay } from "@/lib/clientData";
 import { formatScheme, parseScheme, schemeColumns } from "@/lib/scheme";
 import {
@@ -24,7 +26,15 @@ export async function createProgramme(formData: FormData) {
   const id = await coachId();
   if (!id) return;
 
-  const name = String(formData.get("name") ?? "").trim() || "Nouveau bloc";
+  const from = String(formData.get("from") ?? "");
+  const typed = String(formData.get("name") ?? "").trim();
+  // From a template (2 Oct 2026): every week of it, copied.
+  if (from) {
+    const copied = await copyProgramme(from, typed || null);
+    if (copied) redirect(`/programmes/${copied}`);
+    return;
+  }
+  const name = typed || "Nouveau bloc";
 
   const { data } = await supabase
     .from("programmes")
@@ -41,6 +51,81 @@ export async function createProgramme(formData: FormData) {
 
   revalidatePath("/programmes");
   redirect(`/programmes/${data.id}`);
+}
+
+/** From the programme's own menu: a new programme, this one copied. */
+export async function newFromProgramme(formData: FormData) {
+  const source = String(formData.get("programme_id") ?? "");
+  if (!source) return;
+  const copied = await copyProgramme(source, null);
+  if (copied) redirect(`/programmes/${copied}`);
+}
+
+/**
+ * A new programme made from another (2 Oct 2026) — a template, usually:
+ * every week, session and movement with its scheme, rest, cue and
+ * stand-ins, rest days included. Nothing is assigned or pushed, and the copy
+ * is not a template itself. Returns the new programme's id.
+ */
+async function copyProgramme(sourceId: string, name: string | null): Promise<string | null> {
+  const supabase = await createClient();
+  const owner = await coachId();
+  if (!owner) return null;
+
+  const { data: source } = await supabase
+    .from("programmes")
+    .select(
+      "name, programme_weeks(week_number, sessions(day_index, name, notes, kind, session_exercises(position, name, scheme, target_sets, target_reps, target_weight_kg, cue, rest_min_s, rest_max_s, alternatives)))",
+    )
+    .eq("id", sourceId)
+    .maybeSingle();
+  if (!source) return null;
+
+  const t = await getTranslations("programmes");
+  const { data: created } = await supabase
+    .from("programmes")
+    .insert({ coach_id: owner, name: name ?? t("copyName", { name: source.name }) })
+    .select("id")
+    .single();
+  if (!created) return null;
+
+  type Week = {
+    week_number: number;
+    sessions: {
+      day_index: number;
+      name: string | null;
+      notes: string | null;
+      kind: "training" | "rest";
+      session_exercises: Record<string, unknown>[];
+    }[];
+  };
+  const weeks = ((source.programme_weeks ?? []) as unknown as Week[]).sort((a, b) => a.week_number - b.week_number);
+  if (weeks.length === 0) {
+    await supabase.from("programme_weeks").insert({ programme_id: created.id, week_number: 1 });
+  }
+  for (const week of weeks) {
+    const { data: newWeek } = await supabase
+      .from("programme_weeks")
+      .insert({ programme_id: created.id, week_number: week.week_number })
+      .select("id")
+      .single();
+    if (!newWeek) continue;
+    for (const session of week.sessions ?? []) {
+      const { data: newSession } = await supabase
+        .from("sessions")
+        .insert({ week_id: newWeek.id, day_index: session.day_index, name: session.name, notes: session.notes, kind: session.kind })
+        .select("id")
+        .single();
+      if (!newSession) continue;
+      const rows = (session.session_exercises ?? []).map((e) => ({ ...e, session_id: newSession.id }));
+      if (rows.length > 0) {
+        await supabase.from("session_exercises").insert(rows as unknown as Database["public"]["Tables"]["session_exercises"]["Insert"][]);
+      }
+    }
+  }
+
+  revalidatePath("/programmes");
+  return created.id;
 }
 
 export async function addWeek(programmeId: string) {

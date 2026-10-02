@@ -78,7 +78,11 @@
     "push": "Pousser aux clients",
     "pushed": "Poussée le {date}",
     "notPushed": "Jamais poussée — invisible pour le client",
-    "count": "{count, plural, =0 {aucun programme} =1 {1 programme} other {# programmes}}"
+    "count": "{count, plural, =0 {aucun programme} =1 {1 programme} other {# programmes}}",
+    "copyName": "{name} · nouveau bloc",
+    "fromLabel": "À partir de",
+    "fromEmpty": "Programme vide",
+    "fromTemplate": "Modèle : {name}"
   },
   "days": {
     "0": "Lundi",
@@ -427,7 +431,8 @@
     "pushKept": "{count, plural, =1 {Une semaine déjà commencée n’a pas bougé : son historique reste tel quel. Retire-la d’abord pour la redater.} other {# semaines déjà commencées n’ont pas bougé : leur historique reste tel quel. Retire-les d’abord pour les redater.}}",
     "weekOf": "Semaine du",
     "today": "aujourd’hui",
-    "altCount": "{count, plural, one {# remplaçant} other {# remplaçants}}"
+    "altCount": "{count, plural, one {# remplaçant} other {# remplaçants}}",
+    "newFrom": "Nouveau programme à partir de celui-ci"
   },
   "goal": {
     "Get stronger": "Gagner en force",
