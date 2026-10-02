@@ -113,10 +113,13 @@ export function CameraSheet({
       </header>
 
       <div className="relative mx-auto aspect-[3/4] max-h-full w-full min-h-0 flex-1 overflow-hidden bg-neutral-900">
-        {shot ? (
+        {/* The video stays mounted under the picture taken: "Reprendre" finds
+            the camera still running instead of a black frame. */}
+        {shot && (
           // eslint-disable-next-line @next/next/no-img-element -- a local capture
-          <img src={shot.url} alt="" className="absolute inset-0 size-full object-cover" />
-        ) : failed ? (
+          <img src={shot.url} alt="" className="absolute inset-0 z-10 size-full object-cover" />
+        )}
+        {failed ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
             <p className="text-[15px] leading-[1.5] text-white/80">{t("noCamera")}</p>
             <button type="button" onClick={onPickFile} className="cta h-12 rounded-rp px-5 text-[15px] font-semibold text-[var(--onA)]">
