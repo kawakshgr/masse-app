@@ -190,6 +190,8 @@ export async function loadHistory(
     const nextStart = nextStartAfter(starts, assignment.start_date);
     const plan = plannedDays(nextStart ? null : movesRes.data);
     for (const session of week.sessions ?? []) {
+      // A rest day has nothing to log: it is not a session owed (7 Oct 2026).
+      if (!(session.session_exercises ?? []).length) continue;
       const weekday = weekdayFor(plan, session.day_index);
       if (!sessionOwed(assignment.start_date, weekday, todayIso, nextStart)) continue;
       bar.prescribed += 1;
