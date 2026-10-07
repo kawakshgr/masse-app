@@ -1735,7 +1735,8 @@
     "frameBlock": "Cadre",
     "profileBlock": "Profil et contact",
     "noInjury": "Aucune déclarée",
-    "age": "Âge"
+    "age": "Âge",
+    "dueDay": "Bilan le"
   },
   "pending": {
     "kicker": "Demande envoyée",

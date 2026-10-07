@@ -160,8 +160,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   2026): the oldest unread first, "Lu, suivant" or "Passer", and at the
   end who has not filed, with the reminder written. She sets the due weekday in Admin
   (`coaches.check_in_due_offset`), and may give one client a day of their
-  own from their check-ins tab (7 Oct 2026, `clients.check_in_due_offset`,
-  null = hers; every reader goes through `dueOffsetFor`); `checkInWindow` in src/lib/checkIns.ts,
+  own from their check-ins tab or when accepting their request (7 Oct 2026,
+  `clients.check_in_due_offset`, null = hers; every reader goes through
+  `dueOffsetFor`); `checkInWindow` in src/lib/checkIns.ts,
   mirrored by `CheckInFeed.open` on iOS, decides which week is asked for,
   when it opens (3 days before) and when it is late (2 days of grace after).
   The client's form is one question a screen (1 Oct 2026); a photo slot

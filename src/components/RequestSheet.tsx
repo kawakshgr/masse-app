@@ -8,11 +8,15 @@ import { SESSIONS_PER_WEEK, TRAINING_AGES, ageFrom } from "@/lib/onboarding";
 import { waLink } from "@/lib/whatsapp";
 import { messageWriter } from "@/lib/coachMessages";
 import type { ClientRow } from "@/lib/supabase/types";
+import { createClient } from "@/lib/supabase/server";
+import { DUE_OFFSETS, dueOffsetFor } from "@/lib/checkIns";
 
 /**
  * A sign-up waiting for the coach: everything the client answered on one
  * screen, and the two ways out — accept, and the coaching opens; refuse, and
  * the account is erased. Shown in place of the tabs, which have nothing yet.
+ * Accepting sets the client's check-in day at the same time (7 Oct 2026):
+ * hers from Admin unless she picks another.
  */
 export async function RequestSheet({ client, callOver }: { client: ClientRow; callOver: boolean }) {
   const t = await getTranslations("request");
@@ -23,6 +27,14 @@ export async function RequestSheet({ client, callOver }: { client: ClientRow; ca
   const tGoal = await getTranslations("goal");
   const tDays = await getTranslations("days");
   const tEquip = await getTranslations("equipment");
+  const tDue = await getTranslations("checkInDue");
+  const supabase = await createClient();
+  const { data: coach } = await supabase
+    .from("coaches")
+    .select("check_in_due_offset")
+    .eq("id", client.coach_id)
+    .maybeSingle();
+  const coachDue = dueOffsetFor(null, coach?.check_in_due_offset);
 
   const first = client.first_name ?? client.name.split(/\s+/)[0] ?? client.name;
   const phone = client.whatsapp ?? client.phone;
@@ -103,8 +115,22 @@ export async function RequestSheet({ client, callOver }: { client: ClientRow; ca
               {callOver ? t("decideAfterCall") : t("decide", { first })}
             </span>
           </span>
-          <form action={acceptClient}>
+          <form action={acceptClient} className="flex flex-wrap items-center gap-2">
             <input type="hidden" name="client_id" value={client.id} />
+            <label className="flex items-center gap-2 text-[12px] text-[var(--ink2)]">
+              {t("dueDay")}
+              <select
+                name="check_in_due_offset"
+                defaultValue={dueOffsetFor(client.check_in_due_offset, coachDue)}
+                className="h-10 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2.5 text-[13px] text-[var(--ink)]"
+              >
+                {DUE_OFFSETS.map((offset) => (
+                  <option key={offset} value={offset}>
+                    {tDue(`o${offset}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
             <button
               type="submit"
               className="cta h-10 rounded-rp px-5 text-[11.5px] font-bold uppercase tracking-[.1em] text-[var(--onA)]"

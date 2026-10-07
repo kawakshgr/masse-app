@@ -12,6 +12,7 @@ import type {
   CyclePhase,
 } from "@/lib/supabase/types";
 import { addDays } from "@/lib/clientData";
+import { dueOffsetFor } from "@/lib/checkIns";
 import type { WeekFigures } from "@/lib/checkInSummary";
 
 function num(value: FormDataEntryValue | null): number | null {
@@ -487,7 +488,26 @@ export async function acceptClient(formData: FormData) {
   const supabase = await createClient();
   const clientId = String(formData.get("client_id") ?? "");
   if (!clientId) return;
-  await supabase.from("clients").update({ status: "active" }).eq("id", clientId).eq("status", "pending");
+  // The check-in day chosen on acceptance (7 Oct 2026). Her own day is kept
+  // as null, so the client follows her if she changes it in Admin later.
+  const asked = Number(formData.get("check_in_due_offset"));
+  let ownDue: number | null = null;
+  if (Number.isInteger(asked) && asked >= 4 && asked <= 10) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const { data: coach } = await supabase
+      .from("coaches")
+      .select("check_in_due_offset")
+      .eq("id", user?.id ?? "")
+      .maybeSingle();
+    ownDue = asked === dueOffsetFor(null, coach?.check_in_due_offset) ? null : asked;
+  }
+  await supabase
+    .from("clients")
+    .update({ status: "active", check_in_due_offset: ownDue })
+    .eq("id", clientId)
+    .eq("status", "pending");
   revalidatePath("/clients", "layout");
   redirect(`/clients/${clientId}?bienvenue=1`);
 }

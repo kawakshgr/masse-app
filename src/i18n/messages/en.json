@@ -1735,7 +1735,8 @@
     "frameBlock": "Frame",
     "profileBlock": "Profile and contact",
     "noInjury": "None declared",
-    "age": "Age"
+    "age": "Age",
+    "dueDay": "Check-in on"
   },
   "pending": {
     "kicker": "Request sent",
