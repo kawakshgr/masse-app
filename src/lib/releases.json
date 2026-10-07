@@ -1,5 +1,17 @@
 [
   {
+    "version": "0.13",
+    "date": "2026-10-07",
+    "fr": [
+      "Touche le chiffre des charges ou des répétitions pour le taper au clavier numérique, sans enchaîner les +.",
+      "Ton coach peut te donner un jour de bilan à toi."
+    ],
+    "en": [
+      "Tap the load or reps figure to type it on the keypad, no more strings of +.",
+      "Your coach can give you a check-in day of your own."
+    ]
+  },
+  {
     "version": "0.12",
     "date": "2026-10-02",
     "fr": [

@@ -145,6 +145,25 @@ export async function markCheckInReviewed(formData: FormData) {
   revalidatePath("/clients");
 }
 
+/**
+ * This client's own check-in day (7 Oct 2026), or back to the coach's with
+ * an empty value. RLS keeps it to her clients.
+ */
+export async function setClientCheckInDue(formData: FormData) {
+  const supabase = await createClient();
+  const clientId = String(formData.get("client_id") ?? "");
+  const raw = String(formData.get("check_in_due_offset") ?? "");
+  if (!clientId) return;
+  const offset = raw === "" ? null : Number(raw);
+  if (offset !== null && (!Number.isInteger(offset) || offset < 4 || offset > 10)) return;
+
+  await supabase.from("clients").update({ check_in_due_offset: offset }).eq("id", clientId);
+
+  revalidatePath(`/clients/${clientId}`);
+  revalidatePath("/clients");
+  revalidatePath("/bilans");
+}
+
 /** The record as typed, edited in place. */
 export async function updateClientRecord(formData: FormData) {
   const supabase = await createClient();

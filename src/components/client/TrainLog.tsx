@@ -392,6 +392,7 @@ function ExerciseCard({
             format={(n) => shown(n, locale)}
             onChange={(n) => setWeight(Math.max(0, n))}
             step={2.5}
+            decimal
           />
 
           <div className="space-y-2">
@@ -490,29 +491,58 @@ function PainReport({ exercise, name }: { exercise: WeekExercise; name: string }
   );
 }
 
-/** A number with a thumb on each side, read at arm's length mid-set. */
+/**
+ * A number with a thumb on each side, read at arm's length mid-set. A tap on
+ * the number opens the phone's keypad (7 Oct 2026): 102,5 kg is typed, not
+ * reached in forty-one presses. The keypad's comma or point both work.
+ */
 function Stepper({
   label,
   value,
   step,
+  decimal = false,
   format,
   onChange,
 }: {
   label: string;
   value: number;
   step: number;
+  decimal?: boolean;
   format: (n: number) => string;
   onChange: (n: number) => void;
 }) {
+  // What is being typed, while the keypad is open; the value otherwise.
+  const [draft, setDraft] = useState<string | null>(null);
   return (
     <div className="flex items-center gap-3">
       <span className="w-11 text-[13px] text-[var(--ink2)]">{label}</span>
       <RoundButton label={`${label} −`} onClick={() => onChange(value - step)} size={52}>
         −
       </RoundButton>
-      <span className="tnum flex-1 text-center font-display text-[26px] font-extrabold tracking-[-.03em]">
-        {format(value)}
-      </span>
+      <input
+        type="text"
+        inputMode={decimal ? "decimal" : "numeric"}
+        enterKeyHint="done"
+        aria-label={label}
+        value={draft ?? format(value)}
+        onFocus={(event) => {
+          setDraft(value ? format(value).replace(/\s/g, "") : "");
+          const field = event.currentTarget;
+          requestAnimationFrame(() => field.select());
+        }}
+        onChange={(event) => {
+          const text = event.target.value.replace(/[^\d.,]/g, "");
+          setDraft(text);
+          const n = Number(text.replace(",", "."));
+          if (text !== "" && Number.isFinite(n)) onChange(Math.round(n * 100) / 100);
+          else if (text === "") onChange(0);
+        }}
+        onBlur={() => setDraft(null)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") event.currentTarget.blur();
+        }}
+        className="tnum min-w-0 flex-1 rounded-r2 bg-transparent text-center font-display text-[26px] font-extrabold tracking-[-.03em] outline-none focus:bg-[var(--glass2)]"
+      />
       <RoundButton label={`${label} +`} onClick={() => onChange(value + step)} size={52}>
         +
       </RoundButton>

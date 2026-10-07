@@ -1467,7 +1467,9 @@
     "toRead": "À relire",
     "markRead": "Marquer comme relu",
     "read": "Relu le {date}",
-    "upcoming": "Prochain bilan dû {day}."
+    "upcoming": "Prochain bilan dû {day}.",
+    "dueLabel": "Jour du bilan",
+    "dueDefault": "Comme les autres ({day})"
   },
   "checkInDue": {
     "title": "Bilan hebdomadaire",

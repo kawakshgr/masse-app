@@ -1,4 +1,4 @@
-import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { DEFAULT_DUE_OFFSET, checkInWindow, dueOffsetFor, isFiled } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import { plannedDays, weekdayFor, type DayMove } from "@/lib/dayMoves";
 import { nextStartAfter, sessionOwed } from "@/lib/sessionDue";
@@ -56,7 +56,7 @@ export async function loadRoster(
   const [{ data: clients }, dueOffset] = await Promise.all([
     supabase
       .from("clients")
-      .select("id, name, first_name, sleep_target_h, status")
+      .select("id, name, first_name, sleep_target_h, status, check_in_due_offset")
       .in("status", ["pending", "active", "archived"])
       .order("name"),
     // Late is judged by the rule her app uses, with the due day the coach
@@ -141,8 +141,8 @@ export async function loadRoster(
     movesOf.set(move.client_id, [...(movesOf.get(move.client_id) ?? []), move]);
   }
 
-  // The week asked of every client today, by this coach's due day.
-  const asked = checkInWindow(thisMonday, weekday, dueOffset);
+  // The week asked of each client today: their own due day, else the coach's.
+  const askedOf = (offset: number | null) => checkInWindow(thisMonday, weekday, dueOffsetFor(offset, dueOffset));
 
   const filed = new Set(
     (lastWeek.data ?? [])
@@ -226,6 +226,7 @@ export async function loadRoster(
     const due = expectedExercises.get(client.id) ?? [];
     const missed = due.length > 0 && due.every((id) => !logged.has(id));
 
+    const asked = askedOf(client.check_in_due_offset);
     const late = asked.late && !filed.has(`${client.id}:${asked.weekStart}`);
 
     // Order matters: the chip opens the tab that answers it.

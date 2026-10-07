@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { pushAdmin, pushReady, pushTo } from "@/lib/push";
 import { localDay, addDays } from "@/lib/clientData";
 import { plannedDays } from "@/lib/dayMoves";
-import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { DEFAULT_DUE_OFFSET, checkInWindow, dueOffsetFor, isFiled } from "@/lib/checkIns";
 
 /**
  * The morning notification (1 Oct 2026), run once a day by Vercel Cron: to
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 
   const { data: clients } = await admin
     .from("clients")
-    .select("id, coach_id, coaches(first_name, name, check_in_due_offset)")
+    .select("id, coach_id, check_in_due_offset, coaches(first_name, name, check_in_due_offset)")
     .in("id", userIds)
     .eq("status", "active");
   const ids = (clients ?? []).map((c) => c.id);
@@ -88,8 +88,9 @@ export async function GET(request: NextRequest) {
       (s) => s.day_index === plan[weekday] && s.kind !== "rest" && s.session_exercises.length > 0,
     );
 
-    // The check-in asked today, by her coach's due day: due today, or late.
-    const window = checkInWindow(monday, weekday, coach?.check_in_due_offset ?? DEFAULT_DUE_OFFSET);
+    // The check-in asked today, by their own due day or the coach's: due
+    // today, or late.
+    const window = checkInWindow(monday, weekday, dueOffsetFor(client.check_in_due_offset, coach?.check_in_due_offset));
     const row = (checkIns.data ?? []).find((c) => c.client_id === client.id && c.week_start_date === window.weekStart);
     const filed = row ? isFiled(row, row.check_in_photos?.length ?? 0) : false;
     const checkIn = filed ? null : window.due === today ? "due" : window.late && today <= window.lastChance ? "late" : null;
@@ -149,11 +150,16 @@ async function coachDay(
     const offset = coach.check_in_due_offset ?? DEFAULT_DUE_OFFSET;
     if (offset % 7 !== weekday) continue;
 
-    const { data: mine } = await admin.from("clients").select("id").eq("coach_id", coach.id).eq("status", "active");
+    const { data: mine } = await admin
+      .from("clients")
+      .select("id, check_in_due_offset")
+      .eq("coach_id", coach.id)
+      .eq("status", "active");
     const ids = (mine ?? []).map((c) => c.id);
     if (ids.length === 0) continue;
 
-    const window = checkInWindow(monday, weekday, offset);
+    // Each client's week asked, by their own due day or hers (7 Oct 2026).
+    const windowOf = new Map((mine ?? []).map((c) => [c.id, checkInWindow(monday, weekday, dueOffsetFor(c.check_in_due_offset, offset))]));
     const [unread, asked, late, pain] = await Promise.all([
       admin
         .from("check_ins")
@@ -162,18 +168,23 @@ async function coachDay(
         .is("reviewed_at", null),
       admin
         .from("check_ins")
-        .select("client_id, feel, pain, adherence, bodyweight_kg, note, waist_cm, chest_cm, hips_cm, thigh_cm, check_in_photos(id)")
+        .select("client_id, week_start_date, feel, pain, adherence, bodyweight_kg, note, waist_cm, chest_cm, hips_cm, thigh_cm, check_in_photos(id)")
         .in("client_id", ids)
-        .eq("week_start_date", window.weekStart),
+        .in("week_start_date", [addDays(monday, -7), monday]),
       admin.from("invoices").select("id", { count: "exact", head: true }).eq("coach_id", coach.id).eq("status", "late"),
       admin.from("pain_reports").select("id", { count: "exact", head: true }).in("client_id", ids).is("seen_at", null),
     ]);
 
     const toRead = (unread.data ?? []).filter((row) => isFiled(row, row.check_in_photos?.length ?? 0)).length;
-    const filedIds = new Set(
-      (asked.data ?? []).filter((row) => isFiled(row, row.check_in_photos?.length ?? 0)).map((row) => row.client_id),
+    const filed = new Set(
+      (asked.data ?? [])
+        .filter((row) => isFiled(row, row.check_in_photos?.length ?? 0))
+        .map((row) => `${row.client_id}:${row.week_start_date}`),
     );
-    const notYet = ids.filter((id) => !filedIds.has(id)).length;
+    const notYet = ids.filter((id) => {
+      const window = windowOf.get(id);
+      return window && !window.upcoming && !filed.has(`${id}:${window.weekStart}`);
+    }).length;
 
     sent += await pushTo([coach.id], (t) => {
       const lines = [

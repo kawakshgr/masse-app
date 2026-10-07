@@ -50,6 +50,14 @@ export const OPENS_BEFORE = 3;
 export const DUE_OFFSETS = [7, 8, 9, 10, 4, 5, 6] as const;
 
 /**
+ * The due day that applies to one client (7 Oct 2026): their own when the
+ * coach set one on their file, else the coach's, else Masse's default.
+ */
+export function dueOffsetFor(clientOffset?: number | null, coachOffset?: number | null) {
+  return clientOffset ?? coachOffset ?? DEFAULT_DUE_OFFSET;
+}
+
+/**
  * Which week's check-in is asked for today, and where it stands.
  *
  * Each week's check-in has a window: it opens three days before its due day

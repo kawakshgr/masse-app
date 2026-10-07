@@ -126,6 +126,8 @@ export type ClientRow = {
   cycle_tracking_paused: boolean;
   /** A video call the coach has offered and the client has not booked yet. */
   call_offer_minutes: CallMinutes | null;
+  /** This client's check-in due day (4–10, as the coach's); null = the coach's. */
+  check_in_due_offset: number | null;
   cycle_mode: CycleMode;
   nutrition_mode: NutritionMode;
   /** Used only when cycle_mode is 'manual'. */

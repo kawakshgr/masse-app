@@ -2,7 +2,7 @@ import { cache } from "react";
 import { restLabel } from "@/lib/rest";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { checkInWindow, dueOffsetFor, isFiled } from "@/lib/checkIns";
 import { plannedDays } from "@/lib/dayMoves";
 import { authUser } from "@/lib/supabase/auth";
 
@@ -20,7 +20,7 @@ export const clientSession = cache(async () => {
 
   const { data: client } = await supabase
     .from("clients")
-    .select("id, coach_id, name, first_name, cycle_tracking, steps_target, timezone, health_consent_at, status, call_offer_minutes")
+    .select("id, coach_id, name, first_name, cycle_tracking, steps_target, timezone, health_consent_at, status, call_offer_minutes, check_in_due_offset")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -260,7 +260,7 @@ export function signed(n: number): string {
 }
 
 /**
- * The check-in she is asked for today, by her coach's due day — checkInWindow
+ * The check-in asked for today, by their own due day or the coach's — checkInWindow
  * in src/lib/checkIns.ts, the rule the coach's side and the iPhone share. The
  * row comes back only once it holds something: an empty one is a form she
  * opened, not a check-in.
@@ -283,7 +283,7 @@ export async function checkInState() {
   const asked = checkInWindow(
     monday,
     weekday,
-    coachRes.data?.check_in_due_offset ?? DEFAULT_DUE_OFFSET,
+    dueOffsetFor(client.check_in_due_offset, coachRes.data?.check_in_due_offset),
   );
   const row = (rowsRes.data ?? []).find(
     (candidate) =>

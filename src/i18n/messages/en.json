@@ -1467,7 +1467,9 @@
     "toRead": "To read",
     "markRead": "Mark as read",
     "read": "Read on {date}",
-    "upcoming": "Next check-in due {day}."
+    "upcoming": "Next check-in due {day}.",
+    "dueLabel": "Check-in day",
+    "dueDefault": "Same as the others ({day})"
   },
   "checkInDue": {
     "title": "Weekly check-in",

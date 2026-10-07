@@ -130,7 +130,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
 - **Session logging** (both) — offline-first. Séance opens today's session
   or another day's (`?jour=`, 30 Sep 2026: sessions get moved), lists the
   week ("Ma semaine") with what is logged, and shows under each movement
-  the client's last sets on it (`lib/lastTime.ts`). Sets shown are the
+  the client's last sets on it (`lib/lastTime.ts`). Reps and load are
+  stepped with − and +, or typed: a tap on the number opens the keypad
+  (7 Oct 2026, decimal for kg, comma or point). Sets shown are the
   week's, whichever day they were done. Two weekdays can trade places
   for the running week (30 Sep 2026, `client_day_moves`, `lib/dayMoves.ts`):
   "Échanger avec aujourd'hui" on another day's session, or two taps in the
@@ -157,7 +159,9 @@ check-in as read. Neither has messaging: WhatsApp is the channel.
   check-in day she can take them one after the other (`/bilans`, 1 Oct
   2026): the oldest unread first, "Lu, suivant" or "Passer", and at the
   end who has not filed, with the reminder written. She sets the due weekday in Admin
-  (`coaches.check_in_due_offset`); `checkInWindow` in src/lib/checkIns.ts,
+  (`coaches.check_in_due_offset`), and may give one client a day of their
+  own from their check-ins tab (7 Oct 2026, `clients.check_in_due_offset`,
+  null = hers; every reader goes through `dueOffsetFor`); `checkInWindow` in src/lib/checkIns.ts,
   mirrored by `CheckInFeed.open` on iOS, decides which week is asked for,
   when it opens (3 days before) and when it is late (2 days of grace after).
   The client's form is one question a screen (1 Oct 2026); a photo slot

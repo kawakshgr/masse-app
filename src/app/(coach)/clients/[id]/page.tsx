@@ -1,4 +1,4 @@
-import { DEFAULT_DUE_OFFSET, checkInWindow } from "@/lib/checkIns";
+import { DEFAULT_DUE_OFFSET, DUE_OFFSETS, checkInWindow, dueOffsetFor } from "@/lib/checkIns";
 import { addDays, localDay, weekdayOf } from "@/lib/clientData";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -9,7 +9,7 @@ import { MetricCard } from "@/components/MetricCard";
 import { SECTION_TITLE, SectionTitle } from "@/components/Pane";
 import { LinkSelect } from "@/components/LinkSelect";
 import { CheckInNudge } from "@/components/CheckInNudge";
-import { markCheckInReviewed } from "@/app/(coach)/clients/actions";
+import { markCheckInReviewed, setClientCheckInDue } from "@/app/(coach)/clients/actions";
 import { DayTypes } from "@/components/DayTypes";
 import { RecordPanel } from "@/components/RecordPanel";
 import { CallBanner } from "@/components/CallBanner";
@@ -701,7 +701,7 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
     .then(({ data }) => (data ?? []) as CheckInRow[]);
   const [{ checkIns, weeks }, { data: client }, { data: reminders }, dueOffset] = await Promise.all([
     loadReviewWeeks(supabase, clientId, rowsRead),
-    supabase.from("clients").select("first_name, name, whatsapp, phone, timezone").eq("id", clientId).maybeSingle(),
+    supabase.from("clients").select("first_name, name, whatsapp, phone, timezone, check_in_due_offset").eq("id", clientId).maybeSingle(),
     supabase.from("check_in_reminders").select("week_start_date, sent_at").eq("client_id", clientId),
     // Her own rule for when a check-in is due, set in Admin.
     authUser().then(async (user) => {
@@ -722,7 +722,10 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
   const weekday = weekdayOf(today);
   const monday = addDays(today, -weekday);
   const filedWeek = (week: string) => checkIns.find((row) => row.week_start_date === week);
-  const open = checkInWindow(monday, weekday, dueOffset);
+  // Their own day when she set one, else hers (7 Oct 2026).
+  const ownDue = client?.check_in_due_offset ?? null;
+  const open = checkInWindow(monday, weekday, dueOffsetFor(ownDue, dueOffset));
+  const tDue = await getTranslations("checkInDue");
   const { due, lastChance } = open;
   const openRow = filedWeek(open.weekStart) ?? null;
   const reminder = (reminders ?? []).find((row) => row.week_start_date === open.weekStart);
@@ -774,6 +777,29 @@ async function CheckInsTab({ clientId }: { clientId: string }) {
                 : tStatus("notFiled", { day: weekdayDay(due) })}
           </span>
         </div>
+
+        <form action={setClientCheckInDue} className="mt-3 flex flex-wrap items-center gap-2">
+          <input type="hidden" name="client_id" value={clientId} />
+          <label htmlFor="client-due" className="text-[12px] text-[var(--ink2)]">
+            {tStatus("dueLabel")}
+          </label>
+          <select
+            id="client-due"
+            name="check_in_due_offset"
+            defaultValue={ownDue ?? ""}
+            className="h-9 rounded-r2 border border-[var(--edge)] bg-[var(--glass2)] px-2.5 text-[13px] text-[var(--ink)]"
+          >
+            <option value="">{tStatus("dueDefault", { day: tDue(`o${dueOffset}`) })}</option>
+            {DUE_OFFSETS.map((offset) => (
+              <option key={offset} value={offset}>
+                {tDue(`o${offset}`)}
+              </option>
+            ))}
+          </select>
+          <button type="submit" className="glass2 h-9 rounded-r2 px-3 text-[12px] font-semibold text-[var(--ink)]">
+            {tDue("save")}
+          </button>
+        </form>
 
         {!openRow && !open.upcoming && (
           <>

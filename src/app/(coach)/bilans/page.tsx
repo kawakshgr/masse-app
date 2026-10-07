@@ -6,7 +6,7 @@ import { CheckInReview } from "@/components/CheckInReview";
 import { Icon } from "@/components/Icon";
 import { PaneHead, SectionTitle, Tile } from "@/components/Pane";
 import { addDays, localDay } from "@/lib/clientData";
-import { DEFAULT_DUE_OFFSET, checkInWindow, isFiled } from "@/lib/checkIns";
+import { checkInWindow, dueOffsetFor, isFiled } from "@/lib/checkIns";
 import { loadReviewWeeks } from "@/lib/reviewWeeks";
 import { messageWriter } from "@/lib/coachMessages";
 import { waLink } from "@/lib/whatsapp";
@@ -36,7 +36,7 @@ export default async function CheckInRunPage({ searchParams }: { searchParams: P
   const me = user?.id ?? "";
 
   const [{ data: clients }, { data: coach }] = await Promise.all([
-    supabase.from("clients").select("id, first_name, name, whatsapp, phone").eq("coach_id", me).eq("status", "active").order("name"),
+    supabase.from("clients").select("id, first_name, name, whatsapp, phone, check_in_due_offset").eq("coach_id", me).eq("status", "active").order("name"),
     supabase.from("coaches").select("check_in_due_offset").eq("id", me).maybeSingle(),
   ]);
   const ids = (clients ?? []).map((c) => c.id);
@@ -59,21 +59,29 @@ export default async function CheckInRunPage({ searchParams }: { searchParams: P
     new Date(iso.length === 10 ? `${iso}T12:00:00Z` : iso).toLocaleDateString(locale, { day: "numeric", month: "long" });
 
   if (!current) {
-    // Done: who has not filed the week asked yet.
+    // Done: who has not filed the week asked of them yet — each by their own
+    // due day, else hers (7 Oct 2026).
     const today = localDay("Europe/Paris");
     const weekday = (new Date(`${today}T12:00:00Z`).getUTCDay() + 6) % 7;
-    const window = checkInWindow(addDays(today, -weekday), weekday, coach?.check_in_due_offset ?? DEFAULT_DUE_OFFSET);
+    const monday = addDays(today, -weekday);
+    const windowOf = (offset: number | null) =>
+      checkInWindow(monday, weekday, dueOffsetFor(offset, coach?.check_in_due_offset));
     const { data: asked } = ids.length
       ? await supabase
           .from("check_ins")
           .select("*, check_in_photos(id)")
           .in("client_id", ids)
-          .eq("week_start_date", window.weekStart)
+          .in("week_start_date", [addDays(monday, -7), monday])
       : { data: [] };
     const filed = new Set(
-      (asked ?? []).filter((row) => isFiled(row as CheckInRow, row.check_in_photos?.length ?? 0)).map((row) => row.client_id),
+      (asked ?? [])
+        .filter((row) => isFiled(row as CheckInRow, row.check_in_photos?.length ?? 0))
+        .map((row) => `${row.client_id}:${row.week_start_date}`),
     );
-    const notYet = window.upcoming ? [] : (clients ?? []).filter((c) => !filed.has(c.id));
+    const notYet = (clients ?? []).filter((c) => {
+      const window = windowOf(c.check_in_due_offset);
+      return !window.upcoming && !filed.has(`${c.id}:${window.weekStart}`);
+    });
     const write = await messageWriter();
     const skipped = run.length;
 
@@ -109,7 +117,7 @@ export default async function CheckInRunPage({ searchParams }: { searchParams: P
               >
                 {t("notYet")}
               </SectionTitle>
-              <p className="mt-1 text-[12.5px] text-[var(--ink2)]">{t("notYetWeek", { date: day(window.weekStart) })}</p>
+              <p className="mt-1 text-[12.5px] text-[var(--ink2)]">{t("notYetWeek", { date: day(windowOf(null).weekStart) })}</p>
               <ul className="mt-3 flex flex-col gap-1.5">
                 {notYet.map((client) => {
                   const first = client.first_name ?? client.name.split(/\s+/)[0] ?? "";
